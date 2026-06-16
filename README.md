@@ -51,8 +51,14 @@ The application aims to:
 
 ## ⚠️ Status
 
-This repository contains only the **analysis and design phase** of the project.  
-Implementation will begin in later phases following iterative development.
+This repository currently contains only the **analysis and design phase** of the project.  
+Implementation will begin in later phases following an iterative and incremental development approach.
+
+The current progress and task tracking of the project can be consulted in the following GitHub Projects board:
+
+👉 [MyErasmusJourney Project Board](<https://github.com/orgs/codeurjc-students/projects/42>)
+
+This board is used to manage tasks, track development progress, and monitor the current state of each feature (e.g., To Do, In Progress, Done).
 
 ---
 
