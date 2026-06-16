@@ -4,11 +4,60 @@
 
 ## What is *MyErasmusJourney*?
 
-*MyErasmusJourney* is an application where students can share their own experiences during their Erasmus program, describing their problems with documentation or the great experience they had during a social event in their destination city.
+*MyErasmusJourney* is a web application where students can share their Erasmus experiences, describing problems they faced, useful documentation, and memorable social events during their stay abroad.
 
-Besides, it is also a place for the future students to find information. Future students will be able to learn about their destination city or, in case they haven't decided yet, discover all the countries and cities visited by other students and make up their minds on their favorite destination. 
+It also serves as a discovery platform for future Erasmus students, allowing them to explore destinations, read real experiences, and make informed decisions about their future mobility program.
 
-## Documentation
+⚠️ This project is currently in the **design and analysis phase**. No implementation has started yet.
 
-1.  [Functionalities](/docs/functionalities.md)
-2.  [Website Prototype](/docs/Website%20Prototype.md)
+---
+
+## 🎯 Project Objectives
+
+The main objective of *MyErasmusJourney* is to create a community-driven platform that connects current and future Erasmus students through shared experiences.
+
+The application aims to:
+- Facilitate the exchange of real Erasmus experiences
+- Help future students choose their destination
+- Provide useful information about cities and countries
+- Encourage interaction between users through posts and comments
+
+---
+
+## ⚙️ Technologies (planned)
+
+- Frontend: React
+- Backend: Spring Boot
+- Database: MySQL
+- Authentication: JWT-based system
+- External APIs: not yet decided.
+
+---
+
+## 📚 Documentation
+
+1. [Objectives](./docs/objectives.md)
+2. [Methodology](./docs/methodology.md)
+3. [Functionalities](./docs/Functionalities.md)
+4. [Entities](./docs/entities.md)
+5. [User permits](./docs/user-permits.md)
+6. [Web interface](./docs/website-prototype.md)
+7. [Analysis](./docs/analysis.md)
+8. [Changelog](./docs/changelog.md)
+9. [AI Usage](./docs/ai_usage.md)
+
+---
+
+## ⚠️ Status
+
+This repository contains only the **analysis and design phase** of the project.  
+Implementation will begin in later phases following iterative development.
+
+---
+
+## 👨‍💻 Author
+
+This project is being developed as part of a Final Degree Project (TFG) in the Degree in Computer Engineering at ETSII - URJC.
+
+- **Student:** Jaime Ochoa de Alda Cerdán
+- **Supervisor:** Michel Maes Bermejo
