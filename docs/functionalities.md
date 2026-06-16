@@ -1,3 +1,4 @@
+# Functionalities
 
 This document describes all the different functionalities which are going to be developed in this project. 
 ### Legend
