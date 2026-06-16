@@ -38,13 +38,14 @@ The application aims to:
 
 1. [Objectives](./docs/objectives.md)
 2. [Methodology](./docs/methodology.md)
-3. [Functionalities](./docs/Functionalities.md)
-4. [Entities](./docs/entities.md)
-5. [User permits](./docs/user-permits.md)
-6. [Web interface](./docs/website-prototype.md)
-7. [Analysis](./docs/analysis.md)
-8. [Changelog](./docs/changelog.md)
-9. [AI Usage](./docs/ai_usage.md)
+3. [Functionalities](./docs/functionalities.md)
+4. [Advanced Algorithms](./docs/advanced-algorithms.md)
+5. [Entities](./docs/entities.md)
+6. [User permits](./docs/user-permits.md)
+7. [Web interface](./docs/website-prototype.md)
+8. [Analysis](./docs/analysis.md)
+9. [Changelog](./docs/changelog.md)
+10. [AI Usage](./docs/ai_usage.md)
 
 ---
 
