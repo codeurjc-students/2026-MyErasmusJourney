@@ -1,125 +1,75 @@
 # Methodology
 
-This document describes the development methodology followed in the project *MyErasmusJourney*. The development process is structured in multiple phases following an iterative and incremental approach, aligned with agile principles and DevOps practices.
+The development of *MyErasmusJourney* follows an iterative and incremental methodology inspired by Agile principles and Kanban-based task management.
+
+The project is divided into several phases, each one focusing on a specific stage of the software lifecycle.
 
 ---
 
-## 🧭 Development Approach
+## 🧩 Phase 1: Functional Definition and Analysis
 
-The project follows an **iterative and incremental development model**, where functionality is added progressively in different versions of the application.
+- **Start date:** 2026-04-27  
+- **Estimated deadline:** 2026-06-15  
+- **Actual completion date:** Not completed yet  
 
-Each iteration improves the system by adding new features, refining architecture, and increasing system quality through testing and automation.
-
----
-
-## 🧱 Phase 1 – Functional Definition and Design
-
-- Definition of all system functionalities
-- Study of similar applications (state of the art)
-- Definition of system entities and relationships
-- Design of user roles and permissions
-- Design of UI wireframes (mockups)
-- Initial documentation setup (README and docs structure)
+This phase focuses on defining the functional requirements of the system, identifying entities, user roles, and analyzing similar existing applications. Wireframes and initial navigation design are also created.
 
 ---
 
-## ⚙️ Phase 2 – Repository, CI and Basic Setup
+## ⚙️ Phase 2: Repository Setup, Testing and CI
 
-This phase establishes the technical foundation of the project.
+- **Start date:** Not started yet
+- **Estimated deadline:** 2026-07-15  
+- **Actual completion date:** Not completed yet  
 
-### Main tasks:
-- GitHub repository setup
-- Backend project initialization (Spring Boot or equivalent)
-- Frontend project initialization (React or equivalent)
-- Basic integration between frontend and backend
-- Implementation of a minimal functional endpoint
-- First unit tests implementation
-- CI pipeline setup using GitHub Actions
-
-### Minimal functionality:
-- Display of sample data from the main entity (City / Experience)
-- No authentication system
-- No images or advanced UI
-- Simple plain HTML display
-- No entity relationships
+In this phase, the development environment is configured. The GitHub repository is initialized, backend and frontend projects are created, and Continuous Integration (CI) pipelines are configured. A minimal functional integration between frontend, backend, and database is implemented.
 
 ---
 
-## 🔁 Phase 3 – MVP (Version 0.1)
+## 🚀 Phase 3: Version 0.1 – Basic Functionality and Docker
 
-- Implementation of core functionalities
-- User authentication system
-- Basic CRUD operations for main entities
-- Image handling stored in database
-- REST API fully defined
-- Docker containerization
-- Initial deployment version (0.1.0)
-- First full CI/CD pipeline integration
+- **Start date:** Not started yet
+- **Estimated deadline:** 2026-09-15  
+- **Actual completion date:** 
+
+This phase introduces the first usable version (MVP). Basic functionalities such as user authentication, experience creation, and city browsing are implemented. Docker is introduced for containerization and deployment.
 
 ---
 
-## 🚀 Phase 4 – Intermediate Features (Version 0.2)
+## 🔧 Phase 4: Version 0.2 – Intermediate Features and Deployment
 
-- Advanced filtering and search features
-- Maps integration for cities and experiences
-- User interaction improvements
-- Deployment in external environment
-- HTTPS configuration
-- Continuous delivery pipeline improvements
+- **Start date:** Not started yet
+- **Estimated deadline:** 2026-10-15  
+- **Actual completion date:** Not completed yet  
 
----
-
-## 🌟 Phase 5 – Advanced Features (Version 1.0)
-
-- Advanced recommendation/ranking algorithms
-- Trending destinations system
-- Database migrations (Flyway or Liquibase)
-- Dependency updates and maintenance
-- Final production-ready version
+Intermediate features are implemented, such as filtering, maps visualization, multimedia support, and improved user interaction. The application is deployed in a production-like environment with HTTPS support.
 
 ---
 
-## 📦 Phase 6 – Documentation (Thesis)
+## 🚀 Phase 5: Version 1.0 – Advanced Features and Final Release
 
-- Writing of the final TFG report
-- Integration of system documentation
-- Inclusion of architecture diagrams
-- API documentation (OpenAPI)
-- Final project analysis
+- **Start date:** Not started yet
+- **Estimated deadline:** 2026-11-17  
+- **Actual completion date:** Not completed yet  
 
----
-
-## 🎓 Phase 7 – Defense Preparation
-
-- Preparation of presentation slides
-- Video demonstration of the system
-- Final review of documentation
-- Submission and defense of the project
+Advanced functionalities are implemented, including ranking algorithms, advanced city analytics, and system optimizations. Database migration tools are introduced and dependency updates are performed.
 
 ---
 
-## 🔄 Development Practices
+## 📚 Phase 6: Thesis Documentation
 
-### 🔧 Version Control
-- Git used as version control system
-- Feature-based branching strategy
-- Pull requests for integration into main branch
+- **Start date:** Not started yet
+- **Estimated deadline:** 2026-12-15  
+- **Actual completion date:** Not completed yet  
 
-### ⚙️ Continuous Integration
-- GitHub Actions used for CI
-- Automatic execution of:
-  - Backend tests
-  - Frontend tests
-  - Build verification
-
-### 📊 Quality Assurance
-- Unit tests
-- Integration tests
-- End-to-end tests (future phases)
-- Code coverage monitoring (minimum 70%)
+This phase focuses on writing the final TFG report, including system documentation, diagrams, testing analysis, and results.
 
 ---
 
-## 📌 Summary
+## 🎓 Phase 7: Final Defense Preparation
 
-The development process of *MyErasmusJourney* follows a structured and incremental methodology, starting from system design and progressing towards a fully functional production-ready web application with CI/CD, testing, and deployment pipelines.
+- **Start date:** Not started yet
+- **Estimated deadline:** 2027-01-15  
+- **Actual completion date:** Not completed yet  
+
+This final phase is dedicated to preparing the oral presentation and defense of the project.
