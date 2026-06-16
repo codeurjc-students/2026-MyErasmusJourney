@@ -18,7 +18,8 @@ Cities and destinations will be ranked using a combined scoring system based on:
 To ensure fair comparison between destinations, a reliability coefficient will be applied based on the number of published posts:
 
 - A destination with **less than 20 posts** will have low reliability
-- At **20 posts**, the destination is considered **80% reliable**
+-  At **20 posts**, the destination is considered **60% reliable**
+- At **30 posts**, the destination is considered **80% reliable**
 - As the number of posts increases, reliability approaches **100%**
 
 This ensures that destinations with very little data do not appear artificially high in rankings.
@@ -43,7 +44,7 @@ A second algorithm will be implemented to detect **trending cities over time**.
 
 This system will analyze:
 
-- Number of posts in the last 7–30 days
+- Number of posts in the last 7–14 days
 - Growth rate of new publications compared to previous periods
 - Recent user activity per destination
 
