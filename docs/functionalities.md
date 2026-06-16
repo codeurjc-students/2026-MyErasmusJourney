@@ -23,19 +23,21 @@ This document describes all the different functionalities which are going to be 
 | 11  | Show user's comments |      🔜       | Authenticated user / Administrator  | An authenticated user will be able to see its comments on its account page. Administrators can see anyone's comments. |
 ### Intermediate Functionalities ⚙️
 
-|     | Funcionalidad            | Estado | Usuarios con acceso  | Descripción                                                                                                     |
-| :-- | :----------------------- | :----: | :------------------- | :-------------------------------------------------------------------------------------------------------------- |
-| 1   | Filter posts             |   🔜   | Unauthenticated user | Any user has the option to filter the posts/experiences by date, city, rating, type...                          |
-| 2   | Add user's profile image |   🔜   | Authenticated user   | Every user with an account will have the opportunity upload a profile image.                                    |
-| 3   | Add multimedia to post   |   🔜   | Authenticated user   | Posts will have the possibility to attach multimedia files such as videos or images.                            |
-| 4   | Show city related posts  |   🔜   | Unauthenticated user | City page will show the posts related to the city, allowing any user to access this page.                       |
-| 5   | Show city average rating |   🔜   | Unauthenticated user | In the city page the average rating of the posts related to the city will be displayed.                         |
-| 6   | Share post               |   🔜   | Unauthenticated user | Users will be able to share the link to access a post through other social media applications such as WhatsApp. |
+|     | Funcionalidad              | Estado | Usuarios con acceso  | Descripción                                                                                                     |
+| :-- | :------------------------- | :----: | :------------------- | :-------------------------------------------------------------------------------------------------------------- |
+| 1   | Filter posts               |   🔜   | Unauthenticated user | Any user has the option to filter the posts/experiences by date, city, rating, type...                          |
+| 2   | Add user's profile image   |   🔜   | Authenticated user   | Every user with an account will have the opportunity upload a profile image.                                    |
+| 3   | Add multimedia to post     |   🔜   | Authenticated user   | Posts will have the possibility to attach multimedia files such as videos or images.                            |
+| 4   | Show city related posts    |   🔜   | Unauthenticated user | City page will show the posts related to the city, allowing any user to access this page.                       |
+| 5   | Show city average rating   |   🔜   | Unauthenticated user | In the city page the average rating of the posts related to the city will be displayed.                         |
+| 6   | Share post                 |   🔜   | Unauthenticated user | Users will be able to share the link to access a post through other social media applications such as WhatsApp. |
+| 7   | Show trending Destinations |   🔜   | Unauthenticated user | Cities pages will show a list sorted by the recent activity.                                                    |
 
 ### Advances Functionalities 🚀
-|     | Funcionalidad             | Estado | Usuarios con acceso  | Descripción                                                                                                                                            |
-| :-- | :------------------------ | :----: | :------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Reply comment             |   🔜   | Authenticated user   | Users will have the possibility to reply to a comment made in a post.                                                                                  |
-| 2   | Email verification        |   🔜   | Unauthenticated user | After filling up the register form a code will be sent to the provided email to verify the email and activate the account.                             |
-| 3   | Show experiences city map |   🔜   | Unauthenticated user | In the city page a map will be displayed. The map will show different pinpointed locations, each pin will show the experience related to the location. |
-| 4   | Show cities map           |   🔜   | Unauthenticated user | The cities page will show a map of Europe pinpointing the cities that have been added to the system.                                                   |
+|     | Funcionalidad             | Estado | Usuarios con acceso  | Descripción                                                                                                                                                                                                |
+| :-- | :------------------------ | :----: | :------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Reply comment             |   🔜   | Authenticated user   | Users will have the possibility to reply to a comment made in a post.                                                                                                                                      |
+| 2   | Email verification        |   🔜   | Unauthenticated user | After filling up the register form a code will be sent to the provided email to verify the email and activate the account.                                                                                 |
+| 3   | Show experiences city map |   🔜   | Unauthenticated user | In the city page a map will be displayed. The map will show different pinpointed locations, each pin will show the experience related to the location.                                                     |
+| 4   | Show cities map           |   🔜   | Unauthenticated user | The cities page will show a map of Europe pinpointing the cities that have been added to the system.                                                                                                       |
+| 5   | Ranking of destinations   |   🔜   | Authenticated users  | The destinations page is developed, ranking all the possible destinations according to the reliability and rating. The reliability will be calculated according to the number of experiences the city has. |
