@@ -37,3 +37,7 @@ From a technical perspective, the application aims to:
 ## 📌 Summary
 
 This project focuses on building both a social and informative platform for Erasmus students, combining community interaction with useful data about international mobility experiences. The objectives defined above establish the scope of the system before the implementation phase begins.
+
+---
+🏠 [Home](../README.md) | 📚 Documentation
+---

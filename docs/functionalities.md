@@ -41,3 +41,7 @@ This document describes all the different functionalities which are going to be 
 | 3   | Show experiences city map |   🔜   | Unauthenticated user | In the city page a map will be displayed. The map will show different pinpointed locations, each pin will show the experience related to the location.                                                     |
 | 4   | Show cities map           |   🔜   | Unauthenticated user | The cities page will show a map of Europe pinpointing the cities that have been added to the system.                                                                                                       |
 | 5   | Ranking of destinations   |   🔜   | Authenticated users  | The destinations page is developed, ranking all the possible destinations according to the reliability and rating. The reliability will be calculated according to the number of experiences the city has. |
+
+---
+🏠 [Home](../README.md) | 📚 Documentation
+---

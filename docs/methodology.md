@@ -73,3 +73,7 @@ This phase focuses on writing the final TFG report, including system documentati
 - **Actual completion date:** Not completed yet  
 
 This final phase is dedicated to preparing the oral presentation and defense of the project.
+
+---
+🏠 [Home](../README.md) | 📚 Documentation
+---

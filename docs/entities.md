@@ -92,7 +92,7 @@ The Multimedia entity represents files uploaded to the system (images or videos)
 ### Relationships:
 - A Multimedia item belongs to one Experience
 - A Multimedia item is uploaded by one User
-
+analysis
 ---
 
 ## 🔗 Entity Relationships Summary
@@ -103,3 +103,7 @@ The Multimedia entity represents files uploaded to the system (images or videos)
 - City → Experience (1:N)
 - Experience → Comment (1:N)
 - Experience → Multimedia (1:N)
+
+---
+🏠 [Home](../README.md) | 📚 Documentation
+---

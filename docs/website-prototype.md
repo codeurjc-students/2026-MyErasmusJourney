@@ -204,3 +204,7 @@ Allows users to edit their profile information. Password confirmation is require
 - User profile (after update)
 - Home
 - Home (if delete account selected)
+
+---
+🏠 [Home](../README.md) | 📚 Documentation
+---

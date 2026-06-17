@@ -56,3 +56,7 @@ Examples:
 - Barcelona ↑ (high recent growth)
 - Berlin ↑↑ (rapid growth trend)
 - Amsterdam ↓ (declining activity)
+
+---
+🏠 [Home](../README.md) | 📚 Documentation
+---

@@ -152,3 +152,7 @@ However, none of them combine:
 - Social interaction around Erasmus mobility in a unified system
 
 This gap justifies the development of *MyErasmusJourney* as a platform that integrates all these aspects into a single, structured and user-friendly application.
+
+---
+🏠 [Home](../README.md) | 📚 Documentation
+---

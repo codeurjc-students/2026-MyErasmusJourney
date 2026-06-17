@@ -61,3 +61,7 @@ The administrator is the highest privilege role and has full control over the sy
 | Delete any content | ❌         | ❌             | ✔️    |
 | Manage cities      | ❌         | ❌             | ✔️    |
 | Manage users       | ❌         | ❌             | ✔️    |
+
+---
+🏠 [Home](../README.md) | 📚 Documentation
+---

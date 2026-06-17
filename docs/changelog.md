@@ -54,3 +54,7 @@ All notable changes to this project will be documented in this file.
 
 - This version contains only analysis and design artifacts.
 - No functional implementation has been developed yet.
+
+---
+🏠 [Home](../README.md) | 📚 Documentation
+---
