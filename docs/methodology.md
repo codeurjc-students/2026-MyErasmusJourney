@@ -10,7 +10,7 @@ The project is divided into several phases, each one focusing on a specific stag
 
 - **Start date:** 2026-04-27  
 - **Estimated deadline:** 2026-06-15  
-- **Actual completion date:** Not completed yet  
+- **Actual completion date:** 2026-06-18
 
 This phase focuses on defining the functional requirements of the system, identifying entities, user roles, and analyzing similar existing applications. Wireframes and initial navigation design are also created.
 
@@ -18,7 +18,7 @@ This phase focuses on defining the functional requirements of the system, identi
 
 ## ⚙️ Phase 2: Repository Setup, Testing and CI
 
-- **Start date:** Not started yet
+- **Start date:** 2026-06-18
 - **Estimated deadline:** 2026-07-15  
 - **Actual completion date:** Not completed yet  
 
