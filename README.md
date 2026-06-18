@@ -30,7 +30,14 @@ The application aims to:
 - Backend: Spring Boot
 - Database: MySQL
 - Authentication: JWT-based system
-- External APIs: not yet decided.
+
+#### Complementary Technology
+
+- Interactive Maps and Geographical Visualization: A mapping solution will be integrated to display Erasmus destinations on a European map and experiences on city-level maps. The specific technology has not yet been selected and will be evaluated during the implementation phase.
+
+#### Additional Integrations
+
+- External APIs and third-party services: not yet decided.
 
 ---
 
