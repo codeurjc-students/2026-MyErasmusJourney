@@ -18,14 +18,17 @@ public class Experience {
     @CreationTimestamp
     private LocalDate date;
 
+    private Float rating;
+
     private String title;
 
     private String description;
 
     public Experience(){}
 
-    public Experience(String title, String description){
+    public Experience(String title, String description, Float rating){
         this.title = title;
+        this.rating = rating;
         this.description = description;
         this.date = LocalDate.now();
     }
@@ -36,6 +39,10 @@ public class Experience {
 
     public LocalDate getDate(){
         return this.date;
+    }
+
+    public Float getRating() {
+        return rating;
     }
 
     public String getTitle() {

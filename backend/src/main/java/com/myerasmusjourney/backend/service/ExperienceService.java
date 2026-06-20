@@ -24,10 +24,10 @@ public class ExperienceService {
     @Transactional
     public void init(){
         List<Experience> experiences = List.of(
-            new Experience("Experiencia 1", "Descripcion 1"),
-            new Experience("Experiencia 2", "Descripcion 2"),
-            new Experience("Experiencia 3", "Descripcion 3"),
-            new Experience("Experiencia 4", "Descripcion 4")
+            new Experience("Experiencia 1", "Descripcion 1", 9F),
+            new Experience("Experiencia 2", "Descripcion 2", 8.67F),
+            new Experience("Experiencia 3", "Descripcion 3", 5.4F),
+            new Experience("Experiencia 4", "Descripcion 4", 0.9F)
         );
         experienceRepository.saveAll(experiences);
     }
