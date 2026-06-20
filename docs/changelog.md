@@ -2,7 +2,64 @@
 
 All notable changes to this project will be documented in this file.
 
-## 0.0.2 - 2026-06-17
+## 0.0.2 - 2026-06-20
+
+### Added
+
+- OPEN API dependency to backend for endpoints documentation
+
+### Updated
+
+- Updating experience entity with rating field.
+
+### Notes
+
+- Backend minimal functionality is completed.
+- Frontend hasn't been developed yet for minimal functionality.
+
+## 0.0.2 - 2026-06-19
+
+### Added
+
+- Creation of experience entity.
+- Creation of experience service
+- Creation of experience repository
+- Creation of experience rest controller.
+- Creation of experience simple DTO.
+- Implementation of experience mapper from entity to simple DTO.
+- Docker container for MySQL database.
+
+### Updated
+
+- Updating pom.xml of API to read environment variables for database and adding mapstruct dependency.
+
+### Notes
+
+- Backend has almost achieved minimal functionality.
+- Frontend hasn't been developed yet for minimal functionality.
+
+## 0.0.2 - 2026-06-18
+
+### Added
+
+- Complementary technology; interactive maps to display either Erasmus destinations or city experiences.
+- Creation of backend folder and API project with Springboot.
+- Creation of frontend folder using a pnpm workspace and React proyect in web folder.
+
+### Updated
+
+- Phase change, end of analysis and design phase, beginning of creation of tests and workflows.
+
+### Documentation
+
+- Expanded planned technologies documentation.
+
+### Notes
+
+- Project advances to test creation.
+- No functional implementation has been developed yet.
+
+## 0.0.1 - 2026-06-17
 
 ### Added
 
