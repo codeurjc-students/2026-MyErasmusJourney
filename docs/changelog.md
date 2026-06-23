@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.0.2 - 2026-06-23
+
+### Added
+
+- Experiences page, shows the list of experiences saved in the database
+- Experience component, displays the summarized information of an experience
+- Environment variables for website allowing to never display sensitive information such as the API URL.
+- API Client file, it allows to create an instance with all the requests that can be made from the web to the API as methods.
+- Experience service, holds the method to obtain all the experiences and its constructor. The service is expected to be used in the same way as the API Client instance.
+- Routes constants, a translator for the router. This gives a quick access when needing to change the URL of a component or page.
+- Router, it makes sure to display the page or component correspondent to the URL without reloading the entire website giving a more fluent experience to the user.
+- ExperienceSimpleDTO, the same DTO as in the API but adapted to typescript so it's information can be displayed in components.
+
+### Notes
+
+- Minimal functionality has been completed
+- Environment variables have been implemented in website project
+
 ## 0.0.2 - 2026-06-20
 
 ### Added
