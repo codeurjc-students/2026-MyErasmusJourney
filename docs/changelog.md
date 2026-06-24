@@ -1,7 +1,20 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## 0.0.2 - 2026-06-23
 
+### Added
+
+- Experience entity unit tests
+- ExperienceMapper unit tests
+- ExperienceService unit tests
+- ExperienceRestController unit tests
+- ExperienceSimpoleDTO unit tests
+
+### Notes
+
+- Frontend doesn't have unit tests yet
+- All backends unit tests have been implemented with JUnit.
 ## 0.0.2 - 2026-06-23
 
 ### Added
