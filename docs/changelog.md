@@ -1,6 +1,43 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+
+## 0.0.2 - 2026-06-29
+
+### Added
+
+- *Vitest* configuration for unit testing website pages and components
+- Experiences page unit tests
+- Experience component unit tests
+
+### Updated
+
+- Web's dependencies, adding *Vitest*.
+- Experiences page to satisfy unit tests and handle services errors.
+
+### Notes
+
+- All unit tests have been implemented and passed
+- Website unit tests can be run with the following command:
+	`npx vitest
+
+## 0.0.2 - 2026-06-25
+
+### Added
+
+- *H2* database for server tests
+- Application properties file for tests
+
+### Updated
+
+- Backend dependencies, adding *H2* dependency
+
+### Notes
+
+- Frontend doesn't have unit tests yet
+- All backends unit tests have been implemented with JUnit and can be executed with:
+	`mvn run tests
+
 ## 0.0.2 - 2026-06-23
 
 ### Added
