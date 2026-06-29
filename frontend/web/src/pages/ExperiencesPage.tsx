@@ -16,10 +16,14 @@ export default function ExperiencesPage() {
     useEffect(() => {
         console.log("Inside Experiences...")
         const fetchData = async () => {
-            const data = await experienceService.getAll();
-            setExperiences(data)
+            try{
+                const data = await experienceService.getAll();
+                setExperiences(data)
+            }
+            catch(error){
+                console.error(error)
+            }
         }
-
         fetchData();
     }, [])
 
