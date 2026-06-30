@@ -1,6 +1,7 @@
 package com.myerasmusjourney.backend.unit;
 
 import com.myerasmusjourney.backend.domain.Experience;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+@Tag("unit")
 public class ExperienceTest {
 
     @Test

@@ -1,12 +1,14 @@
 package com.myerasmusjourney.backend.unit;
 
 import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Tag("unit")
 public class ExperienceSimpleDTOTest {
 
     @Test

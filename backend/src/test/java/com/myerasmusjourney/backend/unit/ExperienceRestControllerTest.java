@@ -3,6 +3,7 @@ package com.myerasmusjourney.backend.unit;
 import com.myerasmusjourney.backend.controller.ExperienceRestController;
 import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
 import com.myerasmusjourney.backend.service.ExperienceService;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@Tag("unit")
 public class ExperienceRestControllerTest {
 
     @Mock

@@ -3,6 +3,7 @@ package com.myerasmusjourney.backend.unit;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Tag("unit")
 public class ExperienceMapperTest {
 
     private final ExperienceMapper mapper = Mappers.getMapper(ExperienceMapper.class);
