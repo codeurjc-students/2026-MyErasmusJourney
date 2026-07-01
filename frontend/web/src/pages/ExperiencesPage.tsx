@@ -4,14 +4,16 @@ import Experience from "../components/Experience";
 import {API} from "../api/client"
 
 import type { ExperienceSimpleDTO } from "@shared/models/ExperienceSimpleDTO";
-import {createExperienceService} from "@shared/services/experience.service"
+import {createExperienceService, type ExperienceService} from "@shared/services/experience.service"
 
 
-export default function ExperiencesPage() {
+interface ExperiencesPageProps {
+    experienceService?: ExperienceService;
+}
+
+export default function ExperiencesPage({experienceService = createExperienceService(API)}: ExperiencesPageProps) {
 
     const [experiences, setExperiences] = useState<ExperienceSimpleDTO[]>([]);
-
-    const experienceService = createExperienceService(API);
 
     useEffect(() => {
         console.log("Inside Experiences...")

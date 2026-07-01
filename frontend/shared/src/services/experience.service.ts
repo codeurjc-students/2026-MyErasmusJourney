@@ -6,6 +6,9 @@
  *  expService = createExperienceService
  *  data = expService.getAll();
 **/
+
+export type ExperienceService = ReturnType<typeof createExperienceService>;
+
 export function createExperienceService(api:any) {
   return {
     getAll: () => getAllExperiences(api)
