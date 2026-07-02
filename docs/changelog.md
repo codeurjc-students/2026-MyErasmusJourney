@@ -1,6 +1,54 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## 0.0.2 - 2026-07-02
+
+### Updated
+
+- Experience service integration test to fix problem with test context.
+
+### Deleted
+
+- Backend application test file
+
+### Notes
+
+-  All test, unit and integration, of backend have been passed and can be executed with:
+		`mvn test` or `mvn clean test
+
+## 0.0.2 - 2026-07-01
+
+### Added
+
+- Get all experiences integration test with production API REST.
+- Experience service type for injection in components.
+
+### Updated
+
+- Experiences page component for service injection
+- Experiences page unit test because of component update
+
+### Notes
+
+- All unit tests have been implemented and passed
+- Website unit tests can be run with the following command:
+	`npx vitest
+## 0.0.2 - 2026-06-30
+
+### Added
+
+- ExperienceService integration test
+- Tests tags for backend
+- Docker TestContainers as database for integration tests in backend
+
+### Deletion
+
+- H2 Database for backend tests
+
+### Notes
+
+- Backend integration and unit tests have been implemented
+- Integration tests in server use docker instead of H2.
 
 ## 0.0.2 - 2026-06-29
 
@@ -18,8 +66,7 @@ All notable changes to this project will be documented in this file.
 ### Notes
 
 - All unit tests have been implemented and passed
-- Website unit tests can be run with the following command:
-	`npx vitest
+- Website unit tests can be run with the following command.
 
 ## 0.0.2 - 2026-06-25
 
