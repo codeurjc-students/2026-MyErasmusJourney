@@ -1,5 +1,6 @@
 package com.myerasmusjourney.backend.integration;
 
+import com.myerasmusjourney.backend.TestDataBase;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
@@ -9,11 +10,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.test.annotation.DirtiesContext;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -22,19 +18,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Testcontainers
 @SpringBootTest
 @Tag("integration")
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class ExperienceServiceTest {
-
-    @Container
-    @ServiceConnection
-    static MySQLContainer<?> mysql =
-            new MySQLContainer<>("mysql:8.4")
-                    .withDatabaseName("testdb")
-                    .withUsername("test")
-                    .withPassword("test");
+public class ExperienceServiceTest extends TestDataBase {
 
     @Autowired
     private ExperienceService experienceService;
