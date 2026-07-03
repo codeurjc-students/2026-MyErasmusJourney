@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { createExperienceService } from "@shared/services/experience.service";
+import { createExperienceService } from "../../../src/services/experience.service";
 
 describe("ExperienceService", () => {
   it("should return all experiences when the request succeeds", async () => {
