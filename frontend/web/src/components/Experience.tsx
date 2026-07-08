@@ -6,7 +6,7 @@ interface HeaderProps {experience:ExperienceSimpleDTO;}
 export default function Experience({experience}:HeaderProps){
 
     return(<>
-        <div>
+        <div id={`experience-${experience.id}`}>
             <h4>{experience.title}</h4>
             <p>{experience.date}</p>
             <p>{experience.rating}</p>
