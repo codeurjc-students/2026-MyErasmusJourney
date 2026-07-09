@@ -122,11 +122,14 @@ public abstract class BaseSeleniumTest extends TestDataBase {
         try {
             waitForApi();
             System.out.println("1. API ready");
+
             frontendProcess = processBuilder.start();
             System.out.println("2. Process started");
-            waitForFrontend(frontendProcess);
+
+            waitForFrontend();
             System.out.println("3. Frontend ready");
-        } catch (IOException e) {
+
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException("Unable to start frontend.", e);
         }
     }
