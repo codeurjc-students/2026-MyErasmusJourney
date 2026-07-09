@@ -38,7 +38,7 @@ public abstract class BaseSeleniumTest extends TestDataBase {
         String line;
 
         while ((line = reader.readLine()) != null) {
-
+            System.out.println("VITE> " + line);
             System.out.println(line);
 
             if (line.contains("Local:")) {
@@ -112,12 +112,12 @@ public abstract class BaseSeleniumTest extends TestDataBase {
         processBuilder.redirectErrorStream(true);
 
         try {
-            System.out.println("1. API ready");
             waitForApi();
-            System.out.println("2. Process started");
+            System.out.println("1. API ready");
             frontendProcess = processBuilder.start();
-            System.out.println("3. Frontend ready");
+            System.out.println("2. Process started");
             waitForFrontend(frontendProcess);
+            System.out.println("3. Frontend ready");
         } catch (IOException e) {
             throw new RuntimeException("Unable to start frontend.", e);
         }
