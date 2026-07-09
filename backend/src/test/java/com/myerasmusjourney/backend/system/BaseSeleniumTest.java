@@ -107,9 +107,12 @@ public abstract class BaseSeleniumTest extends TestDataBase {
     @BeforeAll
     void setUp() {
         ProcessBuilder processBuilder = new ProcessBuilder(
-                "bash",
-                "-ic",
-                "pnpm --filter web dev --port " + FRONTEND_PORT
+                "pnpm",
+                "--filter",
+                "web",
+                "dev",
+                "--port",
+                String.valueOf(FRONTEND_PORT)
         );
 
         processBuilder.directory(new File("../frontend"));
