@@ -53,5 +53,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run frontend unit tests
+      - name: Run web unit tests
         run: pnpm --filter web test tests/unit
+
+      - name: Run shared unit tests
+        run: pnpm --filter shared test tests/unit
