@@ -42,6 +42,7 @@ public abstract class BaseSeleniumTest extends TestDataBase {
             System.out.println(line);
 
             if (line.contains("Local:")) {
+                System.out.println("Returning from waitForFrontend()");
                 return;
             }
         }
