@@ -111,6 +111,8 @@ public abstract class BaseSeleniumTest extends TestDataBase {
                 "--filter",
                 "web",
                 "dev",
+                "--host",
+                "0.0.0.0",
                 "--port",
                 String.valueOf(FRONTEND_PORT)
         );
@@ -128,6 +130,12 @@ public abstract class BaseSeleniumTest extends TestDataBase {
 
             frontendProcess = processBuilder.start();
             System.out.println("2. Process started");
+
+            Thread.sleep(1000);
+
+            System.out.println("Frontend alive: " + frontendProcess.isAlive());
+            System.out.println("Frontend exit code: " +
+            (frontendProcess.isAlive() ? "running" : frontendProcess.exitValue()));
 
             waitForFrontend();
             System.out.println("3. Frontend ready");
