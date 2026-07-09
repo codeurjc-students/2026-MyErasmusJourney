@@ -1,6 +1,7 @@
 name: Full Test Suite
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
         - main
@@ -36,7 +37,7 @@ jobs:
             node-version: 24
             cache: pnpm
             cache-dependency-path: frontend/pnpm-lock.yaml
-            
+
       - name: Install frontend dependencies
         run: pnpm install
         working-directory: frontend
