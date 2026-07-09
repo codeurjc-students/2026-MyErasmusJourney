@@ -42,7 +42,17 @@ jobs:
         run: pnpm install
         working-directory: frontend
 
-      - name: Run backend unit tests
+      - name: Check Firefox
+        run: |
+            which firefox || true
+            firefox --version || true
+
+      - name: Check geckodriver
+        run: |
+            which geckodriver || true
+            geckodriver --version || true
+
+      - name: Run backend tests
         run: mvn clean test
 
   frontend:

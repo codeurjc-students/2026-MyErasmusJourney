@@ -51,9 +51,11 @@ public abstract class BaseSeleniumTest extends TestDataBase {
 
     private void startWebDriver(){
         try {
+            System.out.println("Creating FirefoxDriver...");
             FirefoxOptions options = new FirefoxOptions();
             options.addArguments("--headless");
             driver = new FirefoxDriver(options);
+            System.out.println("FirefoxDriver created.");
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
@@ -120,8 +122,10 @@ public abstract class BaseSeleniumTest extends TestDataBase {
 
     @BeforeEach
     void setUpWebDriver(){
+        System.out.println("Opening frontend...");
         startWebDriver();
         driver.get("http://localhost:" + FRONTEND_PORT);
+        System.out.println("Frontend opened.");
     }
 
 
