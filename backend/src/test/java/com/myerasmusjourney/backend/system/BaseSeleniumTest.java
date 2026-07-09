@@ -30,24 +30,31 @@ public abstract class BaseSeleniumTest extends TestDataBase {
 
     private Process frontendProcess;
 
-    private void waitForFrontend(Process process) throws IOException {
+    private void waitForFrontend() throws InterruptedException {
 
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(process.getInputStream()));
+        String url = "http://127.0.0.1:" + FRONTEND_PORT;
 
-        String line;
+        long timeout = System.currentTimeMillis() + 30_000;
 
-        while ((line = reader.readLine()) != null) {
-            System.out.println("VITE> " + line);
-            System.out.println(line);
+        while (System.currentTimeMillis() < timeout) {
+            try {
+                HttpURLConnection connection =
+                        (HttpURLConnection) new URL(url).openConnection();
 
-            if (line.contains("Local:")) {
-                System.out.println("Returning from waitForFrontend()");
+                connection.setConnectTimeout(1000);
+                connection.setReadTimeout(1000);
+
+                connection.getResponseCode();
+
                 return;
+
+            } catch (IOException ignored) {
             }
+
+            Thread.sleep(250);
         }
 
-        throw new IllegalStateException("Frontend terminated before becoming ready.");
+        throw new IllegalStateException("Frontend did not start.");
     }
 
     private void startWebDriver(){
