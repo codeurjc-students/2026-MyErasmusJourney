@@ -5,6 +5,7 @@ import com.myerasmusjourney.backend.TestDataBase;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
@@ -50,7 +51,9 @@ public abstract class BaseSeleniumTest extends TestDataBase {
 
     private void startWebDriver(){
         try {
-            driver = new FirefoxDriver();
+            FirefoxOptions options = new FirefoxOptions();
+            options.addArguments("--headless");
+            driver = new FirefoxDriver(options);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
