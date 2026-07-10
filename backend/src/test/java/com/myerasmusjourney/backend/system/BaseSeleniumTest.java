@@ -59,11 +59,9 @@ public abstract class BaseSeleniumTest extends TestDataBase {
 
     private void startWebDriver(){
         try {
-            System.out.println("4. Creating WebDriver");
             FirefoxOptions options = new FirefoxOptions();
             options.addArguments("--headless");
             driver = new FirefoxDriver(options);
-            System.out.println("FirefoxDriver created.");
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
@@ -126,19 +124,8 @@ public abstract class BaseSeleniumTest extends TestDataBase {
 
         try {
             waitForApi();
-            System.out.println("1. API ready");
-
             frontendProcess = processBuilder.start();
-            System.out.println("2. Process started");
-
-            Thread.sleep(1000);
-
-            System.out.println("Frontend alive: " + frontendProcess.isAlive());
-            System.out.println("Frontend exit code: " +
-            (frontendProcess.isAlive() ? "running" : frontendProcess.exitValue()));
-
             waitForFrontend();
-            System.out.println("3. Frontend ready");
 
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException("Unable to start frontend.", e);
@@ -148,9 +135,7 @@ public abstract class BaseSeleniumTest extends TestDataBase {
     @BeforeEach
     void setUpWebDriver(){
         startWebDriver();
-        System.out.println("5. Opening page");
         driver.get("http://localhost:" + FRONTEND_PORT);
-        System.out.println("6. Page opened");
     }
 
 
@@ -161,7 +146,6 @@ public abstract class BaseSeleniumTest extends TestDataBase {
 
     @AfterAll
     void tearDown() {
-        System.out.println("Stopping frontend...");
 
         if (frontendProcess != null) {
 
