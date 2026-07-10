@@ -130,6 +130,8 @@ jobs:
             done
         
         - name: Run web tests
+          env:
+            VITE_API_URL: "http://localhost:8080/api"
           run: pnpm --filter web test
 
         - name: Run shared tests
