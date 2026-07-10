@@ -5,13 +5,12 @@ import com.myerasmusjourney.backend.TestDataBase;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -29,28 +28,40 @@ public abstract class BaseSeleniumTest extends TestDataBase {
 
     private Process frontendProcess;
 
-    private void waitForFrontend(Process process) throws IOException {
+    private void waitForFrontend() throws InterruptedException {
 
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(process.getInputStream()));
+        String url = "http://127.0.0.1:" + FRONTEND_PORT;
 
-        String line;
+        long timeout = System.currentTimeMillis() + 30_000;
 
-        while ((line = reader.readLine()) != null) {
+        while (System.currentTimeMillis() < timeout) {
+            try {
+                HttpURLConnection connection =
+                        (HttpURLConnection) new URL(url).openConnection();
 
-            System.out.println(line);
+                connection.setRequestMethod("GET");
+                connection.setConnectTimeout(1000);
+                connection.setReadTimeout(1000);
 
-            if (line.contains("Local:")) {
+                int responseCode = connection.getResponseCode();
+                System.out.println("Frontend response: " + responseCode);
+
                 return;
+
+            } catch (IOException e) {
+                System.out.println("Frontend not ready: " + e.getMessage());
             }
+            Thread.sleep(250);
         }
 
-        throw new IllegalStateException("Frontend terminated before becoming ready.");
+        throw new IllegalStateException("Frontend did not start.");
     }
 
     private void startWebDriver(){
         try {
-            driver = new FirefoxDriver();
+            FirefoxOptions options = new FirefoxOptions();
+            options.addArguments("--headless");
+            driver = new FirefoxDriver(options);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
@@ -94,9 +105,14 @@ public abstract class BaseSeleniumTest extends TestDataBase {
     @BeforeAll
     void setUp() {
         ProcessBuilder processBuilder = new ProcessBuilder(
-                "bash",
-                "-ic",
-                "pnpm --filter web dev --port " + FRONTEND_PORT
+                "pnpm",
+                "--filter",
+                "web",
+                "dev",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                String.valueOf(FRONTEND_PORT)
         );
 
         processBuilder.directory(new File("../frontend"));
@@ -109,8 +125,9 @@ public abstract class BaseSeleniumTest extends TestDataBase {
         try {
             waitForApi();
             frontendProcess = processBuilder.start();
-            waitForFrontend(frontendProcess);
-        } catch (IOException e) {
+            waitForFrontend();
+
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException("Unable to start frontend.", e);
         }
     }
@@ -129,7 +146,6 @@ public abstract class BaseSeleniumTest extends TestDataBase {
 
     @AfterAll
     void tearDown() {
-        System.out.println("Stopping frontend...");
 
         if (frontendProcess != null) {
 
