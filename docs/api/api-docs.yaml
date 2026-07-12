@@ -1,0 +1,40 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /api/experiences/:
+    get:
+      tags:
+      - experience-rest-controller
+      operationId: getExperiences
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ExperienceSimpleDTO"
+components:
+  schemas:
+    ExperienceSimpleDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        date:
+          type: string
+          format: date
+        rating:
+          type: number
+          format: float
+        title:
+          type: string
+        description:
+          type: string
