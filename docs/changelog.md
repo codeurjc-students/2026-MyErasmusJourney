@@ -1,6 +1,101 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+
+## 0.0.2 - 2026-07-14
+
+## Added
+
+-  Postman Collection has been created with examples of requests that can be sent to the API.
+-  Development guide explaining architecture, quality assurance and how to execute the application.
+
+### Updated
+
+-  AI usage document with entries until the current date
+-  Readme with development guide
+
+### Notes
+
+-  Anyone can now execute the application in local and test the API with the Postman Collection
+
+## 0.0.2 - 2026-07-12
+
+## Added
+
+-  Architecture diagram
+- Client and Server class diagrams
+- Generating OPENAPI documentation
+
+### Notes
+
+-  Original architecture diagram has been reduced and divided into the class diagrams and the final architecture diagram.
+- API documentation can be found on the API folder inside the documentation folder.
+
+## 0.0.2 - 2026-07-10
+
+## Added
+
+- Environment variables in pull request workflow for integration tests of frontend.
+
+### Updated
+
+- Pull request workflow
+
+### Notes
+
+- Solved pull request endless waiting problem by forcing to website process to listen to all local petitions and adding environment variables for frontend integration tests in workflow.
+
+## 0.0.2 - 2026-07-09
+
+### Added
+
+- Commit workflow that executes unit tests of backend and frontend when commits are pushed to any branch of repository.
+- Pull request workflow to execute all tests when a pull request is made from the main branch.
+
+### Updated
+
+- Repository's workflows
+
+### Notes
+
+- Although commit workflow executes perfectly, pull request workflow doesn't seem to be able to execute the Selenium tests properly, it remains waiting to detect if the website is operational.
+
+## 0.0.2 - 2026-07-08
+
+### Added
+
+- Selenium test for experiences page.
+
+### Updated
+
+- Backend dependencies, adding Selenium.
+
+### Notes
+
+- Pnpm version mismatched between Intellij IDEA and terminal, giving trouble to start the frontend inside the Selenium test with a Process Builder.
+
+## 0.0.2 - 2026-07-03
+
+### Added
+
+- Web experience service unit test.
+- End to End test for /experiences/ endpoint.
+- Basic test database for backend tests with Docker Test Containers.
+- Scripts for web and shared folder's tests execution from frontend folder.
+
+### Updated
+
+- Backend dependencies, adding Rest Assured for end to end tests and JaCoCo for code coverage of tests.
+- Integration backend tests, implementing new basic test database.
+- Frontend dependencies, adding v8 for web and shared folder.
+- Shared folder, implementing Vitest.
+
+### Notes
+
+- Tests coverage has been generated correctly.
+- New test database on server makes easier to create new integration or E2E tests.
+- Shared and web folder in client need to remain separated, it makes testing simpler.
+
 ## 0.0.2 - 2026-07-02
 
 ### Updated
