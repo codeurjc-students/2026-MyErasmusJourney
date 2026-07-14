@@ -661,7 +661,7 @@ In order to test the API or try any of the example requests you need to install 
 
 Once installed you'll need to create an account or login and import the collection located in the API folder of this repository inside the documentation folder. Finally for the requests to work you need to start the database and the server, create an environment and set a variable called APIURL, the value must be almost identical to the one below, changing the port 8080 to whatever port you used to start up the server.
 
-![image](env_postman.png)
+![image](./images/env_postman.png)
 
 With the environment set, you may choose any of the requests and click the send button to test the API and check both the request's body and API's response.
 
