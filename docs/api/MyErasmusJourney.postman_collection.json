@@ -1,0 +1,28 @@
+{
+  "info": {
+    "_postman_id": "18fda9a2-6cb4-4a8b-8207-378fc17ec7ee",
+    "name": "MyErasmusJourney",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43276356"
+  },
+  "item": [
+    {
+      "name": "Experiences",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{APIURL}}/experiences/",
+          "host": [
+            "{{APIURL}}"
+          ],
+          "path": [
+            "experiences",
+            ""
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
