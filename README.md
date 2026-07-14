@@ -1,4 +1,4 @@
-# 2026-MyErasmusJourney
+# MyErasmusJourney: A web application for sharing Erasmus experiences
 
 ![image](/logo.png)
 
@@ -6,9 +6,11 @@
 
 *MyErasmusJourney* is a web application where students can share their Erasmus experiences, describing problems they faced, useful documentation, and memorable social events during their stay abroad.
 
+![image](./docs/Pages/Experiences.png)
+
 It also serves as a discovery platform for future Erasmus students, allowing them to explore destinations, read real experiences, and make informed decisions about their future mobility program.
 
-⚠️ This project is currently in the **design and analysis phase**. No implementation has started yet.
+⚠️ This project is currently in the **Repository Setup, Testing and CI Phase**. Minimal functionalities have been implemented.
 
 ---
 
@@ -53,6 +55,7 @@ The application aims to:
 8. [Analysis](./docs/analysis.md)
 9. [Changelog](./docs/changelog.md)
 10. [AI Usage](./docs/ai_usage.md)
+11. [Development Guide](./docs/development_guide.md)
 
 ---
 
