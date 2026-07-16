@@ -1,0 +1,15 @@
+header{
+    padding: 0.5rem;
+    padding-right: 1rem;
+    display: flex;
+    align-content: center;
+}
+
+header img{
+    max-height: 5rem;
+    left: 0;
+}
+
+nav{
+    text-decoration: underline;
+}
