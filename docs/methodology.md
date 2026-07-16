@@ -20,7 +20,7 @@ This phase focuses on defining the functional requirements of the system, identi
 
 - **Start date:** 2026-06-18
 - **Estimated deadline:** 2026-07-15  
-- **Actual completion date:** Not completed yet  
+- **Actual completion date:** 2026-07-14  
 
 In this phase, the development environment is configured. The GitHub repository is initialized, backend and frontend projects are created, and Continuous Integration (CI) pipelines are configured. A minimal functional integration between frontend, backend, and database is implemented.
 
@@ -28,9 +28,9 @@ In this phase, the development environment is configured. The GitHub repository 
 
 ## 🚀 Phase 3: Version 0.1 – Basic Functionality and Docker
 
-- **Start date:** Not started yet
+- **Start date:** 2026-07-15
 - **Estimated deadline:** 2026-09-15  
-- **Actual completion date:** 
+- **Actual completion date:** Not completed yet
 
 This phase introduces the first usable version (MVP). Basic functionalities such as user authentication, experience creation, and city browsing are implemented. Docker is introduced for containerization and deployment.
 
