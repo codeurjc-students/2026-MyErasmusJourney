@@ -26,6 +26,62 @@ All AI-generated outputs have been reviewed, understood and adapted before being
 
 # Usage Log
 
+## 2026-07-17
+
+### Phase
+
+Phase 3 — Basic Functionality and Docker
+
+### Objective
+
+Document and log today's agent-related actions: repository memory creation/modification, `docs/ai_usage.md` updates and verification of subagent usage.
+
+### Tool
+
+GitHub Copilot (IDE-integrated agent) — used to perform repository edits and memory updates. No external subagents were invoked today.
+
+### Version
+
+GPT-5 mini
+
+### Configuration
+
+- Model: GPT-5 mini
+- Interaction mode: IDE-integrated conversational
+- Reasoning: Standard
+- Agentic mode: Enabled
+- IDE integration: VS Code GitHub Copilot
+- Plugins/Skills: agent-customization, create-agent
+
+### How it was used
+
+- Created and updated repository memory `/memories/repo/agent-usage-documentation.md` with instructions to record subagent usage.
+- Updated `docs/ai_usage.md` to expand Tool Information, reorder the Usage Log to reverse-chronological order, and adjust the phase of previous entries.
+- Verified that no external subagents (e.g., Explore) were used during today’s session; therefore no separate subagent entries were added for today.
+
+### Complements
+
+None.
+
+### Context Files
+
+- `docs/ai_usage.md`
+
+### AI-assisted Development Files
+
+- `/memories/repo/agent-usage-documentation.md`
+
+### Files Affected
+
+- `docs/ai_usage.md`
+- `/memories/repo/agent-usage-documentation.md`
+
+### Human Review
+
+The updates were reviewed interactively with the user during the session.
+
+---
+
 ## 2026-07-16
 
 ### Phase
@@ -79,55 +135,6 @@ None.
 ### Human Review
 
 The workflow configuration was reviewed and validated by the user. The repository memory instructions provide clear guidelines for documenting future subagent usage aligned with existing documentation standards.
-
----
-
-## 2026-07-14
-
-### Phase
-Phase 2 – Repository Setup, Testing and Continuous Integration
-
-### Objective
-Complete and improve the technical documentation related to software quality assurance. The objective was to document the quality strategy followed during the project, describe the automated testing process, identify the technologies used for each type of test, define the relationship between tests and functional requirements, and document code metrics required by the project guidelines.
-
-### Tool
-ChatGPT
-
-### Version
-GPT-5.5
-
-### Configuration
-- Model: GPT-5.5
-- Interaction mode: Conversational chat
-- Reasoning: Standard
-- Agentic mode: Disabled
-
-### How it was used
-The existing documentation was provided to the AI together with the official TFG guidelines describing the expected contents of the Quality Assurance section.
-
-The AI was used to:
-
-- Review the documentation against the project requirements.
-- Expand the Quality Assurance section with a more structured explanation.
-- Describe the different automated testing levels implemented in the project.
-- Explain the purpose of each testing technology (JUnit, Mockito, Testcontainers, Rest Assured, Vitest, Testing Library, Selenium, JaCoCo and Istanbul).
-- Suggest the inclusion of traceability between functional requirements and automated tests.
-- Recommend the inclusion of execution statistics, code coverage reports and screenshots of the testing pipeline.
-- Recommend documenting static code analysis and software metrics.
-- Investigate different approaches for obtaining source code statistics by programming language.
-- Recommend the use of tools such as **cloc** to generate language-specific line counts and code metrics for the final documentation.
-
-### Complements
-None.
-
-### Context Files
-None.
-
-### AI-assisted Development Files
-No AI-specific context files (such as `CLAUDE.md`, Cursor Rules or Spec-Driven Development documents) were used during this task.
-
-### Human Review
-All generated documentation, recommendations and suggested improvements were manually reviewed, adapted and validated before being incorporated into the project documentation.
 
 ---
 
