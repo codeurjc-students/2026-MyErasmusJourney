@@ -19,7 +19,16 @@ public class ExperiencesPageTest extends BaseSeleniumTest {
 
     @Test
     void testRendersData(){
+
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.linkText("Experiences")
+        ));
+
+        WebElement linkToExperience = driver.findElement(By.linkText("Experiences"));
+
+        linkToExperience.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("experience-1")
@@ -27,8 +36,8 @@ public class ExperiencesPageTest extends BaseSeleniumTest {
 
         List<Integer> ids = List.of(1,2,3,4);
         for (int id: ids){
-            WebElement webElement = driver.findElement(By.id("experience-"+id)); //grabs experience from experiences page
-            String textContent = webElement.getText();
+            WebElement experienceDiv = driver.findElement(By.id("experience-"+id)); //grabs experience from experiences page
+            String textContent = experienceDiv.getText();
             assertTrue(textContent.contains("Experiencia " + id));
             assertTrue(textContent.contains(LocalDate.now().toString()));
             assertTrue(textContent.contains("Descripcion " + id));
