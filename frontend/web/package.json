@@ -14,6 +14,7 @@
     "test:coverage:ui": "vitest --ui --coverage"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.2.8",
     "@tailwindcss/vite": "^4.3.1",
     "axios": "^1.18.0",
     "react": "^19.2.6",
