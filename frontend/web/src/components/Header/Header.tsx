@@ -10,7 +10,7 @@ export default function Header(){
 
             <nav className="flex gap-8 items-center">
                 <Link to="/">Home</Link>
-                <Link to="/">About Us</Link>
+                <Link to="/about-us">About Us</Link>
                 <Link to="/">Cities</Link>
                 <Link to="/experiences">Experiences</Link>
                 <Link to="/">Log in</Link>

@@ -2,7 +2,7 @@ import { ROUTES } from "@shared/constants/routes";
 
 import ExperiencesPage from "../pages/ExperiencesPage";
 import HomePage from "../pages/HomePage/HomePage";
-import AboutUsPage from "src/pages/AboutUsPage/AboutUsPage";
+import AboutUsPage from "../pages/AboutUsPage/AboutUsPage";
 export const routes = [
   {
     path: ROUTES.HOME,

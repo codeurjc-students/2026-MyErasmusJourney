@@ -1,0 +1,30 @@
+.logo{
+    display:flex;
+    justify-content:center;
+    width:100%;
+    padding: 3rem;
+}
+
+.logo img{
+    max-width: 40rem;
+}
+
+.info{
+    width:100%;
+    justify-items:center;
+    padding: 2rem;
+}
+
+.containter{
+    width:100%;
+    margin:1rem;
+}
+
+.alternate-row{
+    width:100%;
+}
+
+.alternate-row h4,
+.alternate-row p{
+    text-align:right;
+}
