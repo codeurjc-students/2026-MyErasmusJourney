@@ -21,6 +21,7 @@
 # Build directories
 
 target/
+coverage/
 build/
 out/
 
