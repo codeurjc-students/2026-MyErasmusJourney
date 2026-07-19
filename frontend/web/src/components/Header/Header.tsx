@@ -14,7 +14,7 @@ export default function Header(){
                 <Link to="/">Cities</Link>
                 <Link to="/experiences">Experiences</Link>
                 <Link to="/">Log in</Link>
-                <Link to="/">Sign up</Link>
+                <Link to="/sign-up">Sign up</Link>
             </nav>
         </header>
     </>)
