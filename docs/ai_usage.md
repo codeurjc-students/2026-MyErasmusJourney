@@ -26,6 +26,60 @@ All AI-generated outputs have been reviewed, understood and adapted before being
 
 # Usage Log
 
+## 2026-07-19
+
+### Phase
+
+Phase 3 — Basic Functionality and Docker
+
+### Objective
+
+Assist with the Sign Up page form implementation in `frontend/web/src/pages/SignUpPage/SignUpPage.tsx`.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Reviewed the Sign Up page form structure and provided guidance on field layout, input validation, and state handling in `SignUpPage.tsx`.
+- Suggested a clean, user-friendly form approach with controlled React inputs, error handling, and form submission flow.
+
+### Complements
+
+None.
+
+### Context Files
+
+- `frontend/web/src/pages/SignUpPage/SignUpPage.tsx`
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- `frontend/web/src/pages/SignUpPage/SignUpPage.tsx`
+
+### Human Review
+
+The suggested Sign Up form improvements were reviewed by the user and are pending manual integration.
+
+---
+
 ## 2026-07-18
 
 ### Phase
