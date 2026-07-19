@@ -60,8 +60,7 @@ public class UserServiceTest {
         when(userRepository.findByEmail(newUser.email())).thenReturn(user);
 
         UserDTO userDTO = userService.createUser(newUser);
-        Long expected = -1L;
-        assertEquals(expected, userDTO.id());
+        assertNull(userDTO.id());
 
         verify(userRepository).findByEmail(newUser.email());
     }
