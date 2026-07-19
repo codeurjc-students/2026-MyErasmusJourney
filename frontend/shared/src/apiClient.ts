@@ -1,4 +1,5 @@
 
+export type ApiClient = ReturnType<typeof createApiClient>;
 //creates apiclient, an instance with all the methods to speaks with the API
 export function createApiClient(baseUrl: string) {
   console.log(baseUrl)

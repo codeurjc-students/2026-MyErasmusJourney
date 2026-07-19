@@ -7,15 +7,17 @@
  *  data = expService.getAll();
 **/
 
+import type { ApiClient } from "@shared/apiClient";
+
 export type ExperienceService = ReturnType<typeof createExperienceService>;
 
-export function createExperienceService(api:any) {
+export function createExperienceService(api:ApiClient) {
   return {
     getAll: () => getAllExperiences(api)
   };
 }
 
-async function getAllExperiences(api: any){
+async function getAllExperiences(api: ApiClient){
     const response = await api.get("/experiences/")
 
     if (!response.ok){
