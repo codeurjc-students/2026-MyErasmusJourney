@@ -10,10 +10,11 @@ export function createUserService(api:ApiClient) {
 }
 
 async function signUp(api: ApiClient, body:UserFormDTO){
-    const response = await api.post("/experiences/", body)
+    const response = await api.post("/users/", body)
 
     if (!response.ok){
-        throw new Error(response.body?.toString() || "Error signing up");
+      const error = await response.text();
+      throw new Error(error);
     }
 
     return response.json();
