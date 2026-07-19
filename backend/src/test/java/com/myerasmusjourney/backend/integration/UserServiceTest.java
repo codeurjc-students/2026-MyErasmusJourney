@@ -2,6 +2,7 @@ package com.myerasmusjourney.backend.integration;
 
 import com.myerasmusjourney.backend.TestDataBase;
 import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserFormDTO;
 import com.myerasmusjourney.backend.mapper.UserMapper;
 import com.myerasmusjourney.backend.repository.UserRepository;
@@ -47,32 +48,37 @@ public class UserServiceTest extends TestDataBase{
     @Test
     void testSuccessfulCreateUser(){
         UserFormDTO newUser = new UserFormDTO("test@gmail.com", "Test", "TestUser","password", "password" );
-        Long expected = userRepository.findAll().getLast().getId() + 1;
 
-        Long id = userService.createUser(newUser);
+        UserDTO userDTO = userService.createUser(newUser);
 
-        assertNotNull(id);
-        Long notExpected = -1L;
-        assertNotEquals(notExpected, id);
+        assertNotNull(userDTO);
+        User notExpectedUser = new User("Test", "TestUser", "test@gmail.com", "password");
+        notExpectedUser.setId(-1L);
+        UserDTO notExpected = userMapper.toDTO(notExpectedUser);
+        assertNotEquals(notExpected, userDTO);
 
-        assertEquals(expected, id);
+        Long expectedId = userRepository.findAll().getLast().getId() + 1;
+        User expectedUser = new User("Test", "TestUser", "test@gmail.com", "password");
+        expectedUser.setId(expectedId);
+        UserDTO expected = userMapper.toDTO(expectedUser);
+        assertEquals(expected, userDTO);
     }
 
     @Test
     void testEmailAlreadyRegistered(){
         UserFormDTO newUser = new UserFormDTO("user1@gmail.com", "Test", "TestUser","password", "password" );
-        Long id = userService.createUser(newUser);
+        UserDTO userDTO = userService.createUser(newUser);
 
-        assertNotNull(id);
+        assertNotNull(userDTO.id());
         Long expected = -1L;
-        assertEquals(expected, id);
+        assertEquals(expected, userDTO.id());
     }
 
     @Test
     void testPasswordMismatch(){
         UserFormDTO newUser = new UserFormDTO("user1@gmail.com", "Test", "TestUser","PaSsword", "password" );
-        Long id = userService.createUser(newUser);
+        UserDTO userDTO = userService.createUser(newUser);
 
-        assertNull(id);
+        assertNull(userDTO);
     }
 }

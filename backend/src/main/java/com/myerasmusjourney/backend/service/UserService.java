@@ -1,6 +1,7 @@
 package com.myerasmusjourney.backend.service;
 
 import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserFormDTO;
 import com.myerasmusjourney.backend.mapper.UserMapper;
 import com.myerasmusjourney.backend.repository.UserRepository;
@@ -18,12 +19,14 @@ public class UserService {
     private UserMapper userMapper;
 
     @Transactional
-    public Long createUser(UserFormDTO newUser){
-        if(!newUser.password().equals(newUser.passwordConfirmation())) return null;
-        User user = userRepository.findByEmail(newUser.email());
-        if (user != null) return -1L;
-        user = new User(newUser.fullName(), newUser.displayName(), newUser.email(), newUser.password());
-        User savedUser = userRepository.save(user);
-        return savedUser.getId();
+    public UserDTO createUser(UserFormDTO newUserDTO){
+        if(!newUserDTO.password().equals(newUserDTO.passwordConfirmation())) return null;
+
+        User user = userRepository.findByEmail(newUserDTO.email());
+        User newUser = new User(newUserDTO.fullName(), newUserDTO.displayName(), newUserDTO.email(), newUserDTO.password());
+        if (user != null) return userMapper.toDTO(newUser);
+
+        User savedUser = userRepository.save(newUser);
+        return userMapper.toDTO(savedUser);
     }
 }

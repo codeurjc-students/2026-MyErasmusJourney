@@ -1,6 +1,7 @@
 package com.myerasmusjourney.backend.unit;
 
 import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserFormDTO;
 import com.myerasmusjourney.backend.mapper.UserMapper;
 import com.myerasmusjourney.backend.repository.UserRepository;
@@ -40,9 +41,13 @@ public class UserServiceTest {
         savedUser.setId(1L);
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
-        Long userId = userService.createUser(newUser);
-        Long expected = 1L;
-        assertEquals(expected, userId);
+        UserDTO DTO = new UserDTO(1L, "TestUser", "Test", "password");
+        when(userMapper.toDTO(any(User.class))).thenReturn(DTO);
+
+        UserDTO userDTO = userService.createUser(newUser);
+        Long expectedId = 1L;
+        assertEquals(expectedId, userDTO.id());
+        assertEquals(DTO, userDTO);
 
         verify(userRepository).findByEmail(newUser.email());
         verify(userRepository).save(any(User.class));
@@ -54,9 +59,9 @@ public class UserServiceTest {
         User user = new User("Test", "TestUser", "test@gmail.com", "password");
         when(userRepository.findByEmail(newUser.email())).thenReturn(user);
 
-        Long userId = userService.createUser(newUser);
+        UserDTO userDTO = userService.createUser(newUser);
         Long expected = -1L;
-        assertEquals(expected, userId);
+        assertEquals(expected, userDTO.id());
 
         verify(userRepository).findByEmail(newUser.email());
     }
@@ -65,8 +70,8 @@ public class UserServiceTest {
     void testPasswordMismatch(){
         UserFormDTO newUser = new UserFormDTO("test@gmail.com", "Test", "TestUser","password", "pAssword" );
 
-        Long userId = userService.createUser(newUser);
-        assertNull(userId);
+        UserDTO userDTO = userService.createUser(newUser);
+        assertNull(userDTO);
     }
 
 }
