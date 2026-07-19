@@ -14,7 +14,7 @@ public class UserDTOTest {
         UserDTO dto = new UserDTO(1L, "John Doe", "jdoe", "john@example.com");
         assertEquals(Long.valueOf(1L), dto.id());
         assertEquals("John Doe", dto.fullName());
-        assertEquals("jdoe", dto.display());
+        assertEquals("jdoe", dto.displayName());
         assertEquals("john@example.com", dto.email());
     }
 }
