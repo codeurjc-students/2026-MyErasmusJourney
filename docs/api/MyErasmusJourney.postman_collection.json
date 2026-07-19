@@ -7,22 +7,59 @@
   },
   "item": [
     {
-      "name": "Experiences",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{APIURL}}/experiences/",
-          "host": [
-            "{{APIURL}}"
-          ],
-          "path": [
-            "experiences",
-            ""
-          ]
+      "name": "Experience",
+      "item": [
+        {
+          "name": "Experiences",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{APIURL}}/experiences/",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "experiences",
+                ""
+              ]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Sign up",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\":\"user@email.com\",\n    \"displayName\": \"User\",\n    \"fullName\": \"Postman User\",\n    \"password\": \"password\",\n    \"passwordConfirmation\": \"pAssword\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{APIURL}}/users/",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "users",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }
