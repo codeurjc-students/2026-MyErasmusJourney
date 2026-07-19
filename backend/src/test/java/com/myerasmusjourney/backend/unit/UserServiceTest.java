@@ -50,6 +50,7 @@ public class UserServiceTest {
         assertEquals(DTO, userDTO);
 
         verify(userRepository).findByEmail(newUser.email());
+        verify(userMapper).toDTO(any(User.class));
         verify(userRepository).save(any(User.class));
     }
 
@@ -59,10 +60,15 @@ public class UserServiceTest {
         User user = new User("Test", "TestUser", "test@gmail.com", "password");
         when(userRepository.findByEmail(newUser.email())).thenReturn(user);
 
+        UserDTO DTO = new UserDTO(null, "TestUser", "Test", "password");
+        when(userMapper.toDTO(any(User.class))).thenReturn(DTO);
+
         UserDTO userDTO = userService.createUser(newUser);
         assertNull(userDTO.id());
 
         verify(userRepository).findByEmail(newUser.email());
+        verify(userMapper).toDTO(any(User.class));
+
     }
 
     @Test
