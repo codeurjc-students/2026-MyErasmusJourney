@@ -32,3 +32,8 @@ h4{
               0.75rem 0.75rem 1rem rgba(213, 225, 238, 0.5);
 }
 
+img{
+    max-width: 100%;
+    height: auto;
+    display: block;
+}

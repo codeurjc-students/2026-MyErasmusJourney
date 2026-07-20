@@ -4,14 +4,14 @@ export default function AboutUsPage() {
     return(
         <>
             <div className="logo">
-                <img src="/images/logo.png" alt="Logo"/>
+                <img className="max-w-full h-auto" src="/images/logo.png" alt="Logo"/>
             </div>
-            <div className="grid-rows-3 grid gap-10 items-center info">
-                <div className="row-span-1 container grid grid-cols-12 gap-3">
-                    <div className="col-span-1">
-                        <img src="/images/who_are_we.png" alt="opened book with a quill inside a compass"/>
+            <div className="grid grid-cols-1 gap-10 items-center info">
+                <div className="row-span-1 container grid grid-cols-1 gap-3 md:grid-cols-12">
+                    <div className="col-span-1 md:col-span-1">
+                        <img  className="max-w-full h-auto" src="/images/who_are_we.png" alt="opened book with a quill inside a compass"/>
                     </div>
-                    <div className="col-span-11">
+                    <div className="col-span-1 md:col-span-11">
                         <h4>Who are we?</h4>
                         <p>
                                 I am a Computer Science student at King Juan Carlos University in Madrid, Spain. 
@@ -21,8 +21,8 @@ export default function AboutUsPage() {
                         </p>
                     </div>
                 </div>
-                <div className="row-span-1 container grid grid-cols-12 gap-3 ">
-                    <div className="col-span-11 alternate-row">
+                <div className="row-span-1 container grid grid-cols-1 gap-3 md:grid-cols-12 ">
+                    <div className="col-span-1 md:col-span-11 alternate-row">
                         <h4>What can you do in MyErasmusJourney?</h4>
                         <p>
                             MyErasmusJourney offers a wide range of features designed to help students make the most of their Erasmus experience.
@@ -32,15 +32,15 @@ export default function AboutUsPage() {
                             Erasmus documentation and personal adventures.
                         </p>
                     </div>
-                    <div className="col-span-1">
-                        <img src="/images/what_can_you_do.png" alt=""/>
+                    <div className="col-span-1 md:col-span-1">
+                        <img className="max-w-full h-auto" src="/images/what_can_you_do.png" alt=""/>
                     </div>
                 </div>
-                <div className="row-span-1 container grid grid-cols-12 gap-3">
-                    <div className="col-span-1">
-                        <img src="/images/why_develop_myerasmusjourney.png" alt="opened book with a quill inside a compass"/>
+                <div className="row-span-1 container grid grid-cols-1 gap-3 md:grid-cols-12">
+                    <div className="col-span-1 md:col-span-1">
+                        <img className="max-w-full h-auto" src="/images/why_develop_myerasmusjourney.png" alt="opened book with a quill inside a compass"/>
                     </div>
-                    <div className="col-span-11">
+                    <div className="col-span-1 md:col-span-11">
                         <h4>Why develop MyErasmusJourney?</h4>
                         <p>
                             When I was preparing for my Erasmus experience, I found it difficult to find the information 

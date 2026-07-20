@@ -3,12 +3,12 @@ import "./Header.css";
 
 export default function Header(){
     return (<>
-        <header className="flex items-center justify-between">
+        <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <Link to="/">
                 <img src="/images/logo.png" alt="Logo" />
             </Link>
 
-            <nav className="flex gap-8 items-center">
+            <nav className="flex flex-wrap gap-4 items-center justify-center md:justify-end">
                 <Link to="/">Home</Link>
                 <Link to="/about-us">About Us</Link>
                 <Link to="/">Cities</Link>
