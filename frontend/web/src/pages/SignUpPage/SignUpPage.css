@@ -1,0 +1,17 @@
+.profileImage{
+    max-width: 20rem;
+}
+
+.title{
+    text-align: center;
+    padding: 1rem;
+    max-width: 100%;
+}
+
+.containter{
+    padding: 1rem;
+}
+
+p{
+    font-size: 1.1rem;
+}

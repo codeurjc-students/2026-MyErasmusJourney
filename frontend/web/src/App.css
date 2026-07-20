@@ -3,20 +3,28 @@
 :root{
   background-color: #DCEFFD;
   font-family: "Inter", sans-serif;
-}
-
-h2, h4, p{
   color: #1E3A5F;
   text-align: left;
 }
 
-h2{
+p{
+  color: #1E3A5F;
+  text-align: left;
+}
+
+h2, h3, h4{
   font-weight: bold;
+}
+
+h2{
   font-size: 3rem;
 }
 
+h3{
+  font-size: 2rem;
+}
+
 h4{
-  font-weight: bold;
   font-size: 1.5rem;
 }
 
@@ -36,4 +44,28 @@ img{
     max-width: 100%;
     height: auto;
     display: block;
+}
+
+label{
+  font-size: 1.1rem;
+  margin-left: 0.75rem;
+  margin-bottom: -0.5rem;
+  text-decoration: underline;
+}
+
+input{
+  padding: 0.25rem;
+  margin-bottom: 0.25rem;
+  background-color: #F7FBFF;
+  border-radius: 1.25rem;
+  border: 0.1rem solid #D5E1EE;
+  box-shadow: 0.4rem 0.4rem 0.85rem rgba(213, 225, 238, 0.95),
+              0.9rem 0.9rem 1.1rem rgba(213, 225, 238, 0.6);
+}
+
+button{
+  background-color: #4A90D9;
+  padding: 0.5rem 1rem;
+  border-radius: 1.25rem;
+  color: white;
 }
