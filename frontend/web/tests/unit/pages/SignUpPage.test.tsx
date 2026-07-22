@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
 import "@testing-library/jest-dom";
 import SignUpPage from "../../../src/pages/SignUpPage/SignUpPage";
 import type { UserService } from "@shared/services/user.service";
@@ -32,12 +32,12 @@ describe("SignUpPage", () => {
       signUp: mockSignUp,
     };
 
-    delete (window as any).location;
-    window.location = { href: "" } as Location;
-
     render(
-      <MemoryRouter>
-        <SignUpPage userService={mockService} />
+      <MemoryRouter initialEntries={["/signup"]}>
+        <Routes>
+          <Route path="/signup" element={<SignUpPage userService={mockService} />} />
+          <Route path="/" element={<div>Home page</div>} />
+        </Routes>
       </MemoryRouter>
     );
 
@@ -64,9 +64,10 @@ describe("SignUpPage", () => {
         password: "password123",
         passwordConfirmation: "password123",
       });
+
+      expect(screen.getByText("Home page")).toBeInTheDocument();
     });
 
-    expect(window.location.href).toBe("/");
   });
 
   it("should show alert when passwords do not match", async () => {
