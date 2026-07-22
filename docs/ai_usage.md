@@ -26,6 +26,120 @@ All AI-generated outputs have been reviewed, understood and adapted before being
 
 # Usage Log
 
+## 2026-07-22
+
+### Phase
+
+Phase 3 — Basic Functionality and Docker
+
+### Objective
+
+Support and fix integration tests for the Sign Up page, including a new Sign Up integration test and a repaired existing `SignUpPage` integration test.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Helped implement a new integration test for the Sign Up flow.
+- Fixed an existing Sign Up page integration test by correcting test setup and assertions.
+
+### Complements
+
+None.
+
+### Context Files
+
+- `frontend/web/src/pages/SignUpPage/SignUpPage.tsx`
+- Existing Sign Up integration test files in the frontend test suite.
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- `frontend/web/src/tests/unit/SignUpPage.test.tsx`
+- `frontend/web/src/tests/integration/SignUpPage.integration.test.tsx`
+
+### Human Review
+
+The integration test guidance and fix were reviewed by the user and are ready for validation.
+
+---
+
+## 2026-07-20
+
+### Phase
+
+Phase 3 — Basic Functionality and Docker
+
+### Objective
+
+Provide responsive styles for the Sign Up form and create Vitest unit tests for `userService` and `SignUpPage`.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Provided CSS and responsive rules for the Sign Up form (`SignUpPage`), covering layout, validation UI, and mobile-first breakpoints to ensure full responsiveness.
+- Implemented Vitest unit test examples for `userService` and `SignUpPage` (component rendering, form interactions and mocked API calls), and provided test files and setup guidance.
+
+### Complements
+
+None.
+
+### Context Files
+
+- `frontend/web/src/pages/SignUpPage/SignUpPage.tsx`
+- `frontend/web/src/pages/SignUpPage/SignUpPage.css`
+
+### AI-assisted Development Files
+
+- `frontend/web/src/tests/userService.test.ts`
+- `frontend/web/src/pages/SignUpPage/SignUpPage.test.tsx`
+
+### Files Affected
+
+- `frontend/web/src/pages/SignUpPage/SignUpPage.css`
+- `frontend/web/src/tests/userService.test.ts`
+- `frontend/web/src/pages/SignUpPage/SignUpPage.test.tsx`
+
+### Human Review
+
+The responsive styles and Vitest tests were reviewed by the user and are ready for integration.
+
+---
+
 ## 2026-07-19
 
 ### Phase

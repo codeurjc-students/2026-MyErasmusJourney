@@ -10,7 +10,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: backend
+        working-directory: unit backend
 
     steps:
       - name: Clone repository
@@ -32,7 +32,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: frontend
+        working-directory: unit frontend
 
     steps:
       - name: Clone repository
