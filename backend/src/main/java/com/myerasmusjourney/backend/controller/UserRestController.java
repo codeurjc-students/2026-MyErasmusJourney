@@ -25,7 +25,7 @@ public class UserRestController {
         UserDTO userDTO = userService.createUser(newUser);
         if (userDTO == null){
             return ResponseEntity.badRequest().body("Passwords don't match");
-        }
+        }   
         if (userDTO.id() == null) {
             return ResponseEntity.badRequest().body("Email already registered");
         }
