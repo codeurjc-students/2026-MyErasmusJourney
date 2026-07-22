@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserTest {
 
     @Test
-    void constructorSetsFieldsAndDefaultRole() {
+    void testconstructorSetsFieldsAndDefaultRole() {
         User u = new User("John Doe", "jdoe", "john@example.com", "secret");
         assertNull(u.getId());
         assertEquals("John Doe", u.getFullName());
@@ -24,9 +24,25 @@ public class UserTest {
     }
 
     @Test
-    void constructorWithRolesUsesProvidedRoles() {
+    void testconstructorWithRolesUsesProvidedRoles() {
         var roles = Arrays.asList("ADMIN", "USER");
         User u = new User("Jane", "jane", "jane@example.com", "pw", roles);
         assertEquals(roles, u.getRoles());
+    }
+
+    @Test
+    void testEmptyConstructor() {
+        User u = new User();
+        u.setEmail("john@example.com");
+        u.setDisplayName("jdoe");
+        u.setFullName("John Doe");
+        u.setPassword("secret");
+        assertNull(u.getId());
+        assertEquals("John Doe", u.getFullName());
+        assertEquals("jdoe", u.getDisplayName());
+        assertEquals("john@example.com", u.getEmail());
+        assertEquals("secret", u.getPassword());
+        assertNotNull(u.getRoles());
+        assertTrue(u.getRoles().contains("USER"));
     }
 }

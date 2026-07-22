@@ -23,7 +23,9 @@ public class User {
 
     private List<String> roles = new ArrayList<>();
 
-    public User(){}
+    public User(){
+        this.roles.add("USER");
+    }
 
     public User(String name, String display, String email, String password){
         this.fullName = name;
