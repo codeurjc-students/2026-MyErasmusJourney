@@ -7,6 +7,7 @@ import com.myerasmusjourney.backend.mapper.UserMapper;
 import com.myerasmusjourney.backend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,12 +19,15 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Transactional
     public UserDTO createUser(UserFormDTO newUserDTO){
         if(!newUserDTO.password().equals(newUserDTO.passwordConfirmation())) return null;
 
         User user = userRepository.findByEmail(newUserDTO.email());
-        User newUser = new User(newUserDTO.fullName(), newUserDTO.displayName(), newUserDTO.email(), newUserDTO.password());
+        User newUser = new User(newUserDTO.fullName(), newUserDTO.displayName(), newUserDTO.email(), passwordEncoder.encode(newUserDTO.password()));
         if (user != null) return userMapper.toDTO(newUser);
 
         User savedUser = userRepository.save(newUser);
