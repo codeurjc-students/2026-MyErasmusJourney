@@ -6,7 +6,7 @@ export default function HomePage(){
     return(<>
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-12"> 
             <div className="col-span-1 lg:col-span-8 mainInfo">
-                <h2>Share your own <br/>Erasmus Experiences</h2>
+                <h2 data-testid="HomeTitle">Share your own <br/>Erasmus Experiences</h2>
                 <p>
                     Every Erasmus journey tells a different story. 
                     Discover experiences shared by students from universities across Europe, 
