@@ -49,6 +49,10 @@ public class UserServiceTest extends TestDataBase{
     void testSuccessfulCreateUser(){
         UserFormDTO newUser = new UserFormDTO("test@gmail.com", "Test", "TestUser","password", "password" );
 
+        Long expectedId = userRepository.findAll().getLast().getId() + 1;
+        User expectedUser = new User("TestUser", "Test", "test@gmail.com", "password");
+        expectedUser.setId(expectedId);
+
         UserDTO userDTO = userService.createUser(newUser);
 
         assertNotNull(userDTO);
@@ -57,9 +61,7 @@ public class UserServiceTest extends TestDataBase{
         UserDTO notExpected = userMapper.toDTO(notExpectedUser);
         assertNotEquals(notExpected, userDTO);
 
-        Long expectedId = userRepository.findAll().getLast().getId() + 1;
-        User expectedUser = new User("Test", "TestUser", "test@gmail.com", "password");
-        expectedUser.setId(expectedId);
+
         UserDTO expected = userMapper.toDTO(expectedUser);
         assertEquals(expected, userDTO);
     }
@@ -67,11 +69,12 @@ public class UserServiceTest extends TestDataBase{
     @Test
     void testEmailAlreadyRegistered(){
         UserFormDTO newUser = new UserFormDTO("user1@gmail.com", "Test", "TestUser","password", "password" );
+
+        userService.createUser(newUser);
+
         UserDTO userDTO = userService.createUser(newUser);
 
-        assertNotNull(userDTO.id());
-        Long expected = -1L;
-        assertEquals(expected, userDTO.id());
+        assertNull(userDTO.id());
     }
 
     @Test
