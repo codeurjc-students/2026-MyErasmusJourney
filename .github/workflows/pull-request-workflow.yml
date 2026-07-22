@@ -13,8 +13,8 @@ jobs:
 
     defaults:
       run:
-        working-directory: full backend testing
-
+        working-directory: backend
+        
     steps:
       - name: Clone repository
         uses: actions/checkout@v6
@@ -67,7 +67,7 @@ jobs:
 
     defaults:
         run:
-            working-directory: full frontend testing
+            working-directory: frontend
 
     steps:
 

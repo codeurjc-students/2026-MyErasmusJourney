@@ -4,13 +4,13 @@ on:
   push:
 
 jobs:
-  backend:
+  backend-unit:
 
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: unit backend
+        working-directory: backend
 
     steps:
       - name: Clone repository
@@ -26,13 +26,13 @@ jobs:
       - name: Run backend unit tests
         run: mvn clean test -Dgroups=unit
 
-  frontend:
+  frontend-unit:
 
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: unit frontend
+        working-directory: frontend
 
     steps:
       - name: Clone repository
