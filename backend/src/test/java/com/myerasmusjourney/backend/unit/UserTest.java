@@ -18,7 +18,7 @@ public class UserTest {
         assertEquals("John Doe", u.getFullName());
         assertEquals("jdoe", u.getDisplayName());
         assertEquals("john@example.com", u.getEmail());
-        assertEquals("secret", u.getPassword());
+        assertEquals("secret", u.getEncodedPassword());
         assertNotNull(u.getRoles());
         assertTrue(u.getRoles().contains("USER"));
     }
@@ -36,12 +36,12 @@ public class UserTest {
         u.setEmail("john@example.com");
         u.setDisplayName("jdoe");
         u.setFullName("John Doe");
-        u.setPassword("secret");
+        u.setEncodedPassword("secret");
         assertNull(u.getId());
         assertEquals("John Doe", u.getFullName());
         assertEquals("jdoe", u.getDisplayName());
         assertEquals("john@example.com", u.getEmail());
-        assertEquals("secret", u.getPassword());
+        assertEquals("secret", u.getEncodedPassword());
         assertNotNull(u.getRoles());
         assertTrue(u.getRoles().contains("USER"));
     }

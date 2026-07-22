@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "UserInfo")
 public class User {
 
     @Id
@@ -21,7 +22,6 @@ public class User {
 
     private String encodedPassword;
 
-    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
     public User(){
