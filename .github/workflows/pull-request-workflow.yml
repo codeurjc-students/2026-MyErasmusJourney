@@ -124,14 +124,14 @@ jobs:
         
         - name: Wait for API REST
           run: |
-            until curl -f http://localhost:8080/api/experiences/ > /dev/null; do
+            until curl -f http://localhost:8080/api/v1/experiences/ > /dev/null; do
             echo "Waiting for API REST..."
             sleep 2
             done
         
         - name: Run web tests
           env:
-            VITE_API_URL: "http://localhost:8080/api"
+            VITE_API_URL: "http://localhost:8080/v1/api"
           run: pnpm --filter web test
 
         - name: Run shared tests
