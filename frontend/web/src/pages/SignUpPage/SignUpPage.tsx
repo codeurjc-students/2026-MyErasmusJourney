@@ -2,13 +2,15 @@ import { createUserService, type UserService } from "@shared/services/user.servi
 import { API } from "../../api/client";
 import type { FormEvent } from "react";
 import "./SignUpPage.css";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 interface SignUpPageProps {
     userService?: UserService;
 }
 
 export default function SignUpPage({userService = createUserService(API)}: SignUpPageProps) {
+
+    const navigate = useNavigate();
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -38,8 +40,7 @@ export default function SignUpPage({userService = createUserService(API)}: SignU
         try{
             await userService.signUp(userFormDTO);
             console.log("User signed up successfully");
-            window.location.href = "/";
-
+            navigate("/");
         }
         catch(error){
             console.log(`Error signing up: ${error}`);
