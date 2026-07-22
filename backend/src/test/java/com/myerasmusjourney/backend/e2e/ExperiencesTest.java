@@ -27,7 +27,7 @@ class ExperiencesTest extends TestDataBase {
     void testGetExperiences() {
 
         when()
-                .get("/api/experiences/")
+                .get("/api/v1/experiences/")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
