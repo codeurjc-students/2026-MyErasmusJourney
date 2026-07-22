@@ -7,7 +7,7 @@
  *  data = expService.getAll();
 **/
 
-import type { ApiClient } from "@shared/apiClient";
+import type { ApiClient } from "../apiClient";
 
 export type ExperienceService = ReturnType<typeof createExperienceService>;
 
