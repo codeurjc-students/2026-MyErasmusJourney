@@ -1,12 +1,15 @@
 .logo{
     display:flex;
     justify-content:center;
-    width:100%;
+    width: 100%;
     padding: 3rem;
 }
 
 .logo img{
     max-width: 40rem;
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
 .info{
@@ -27,4 +30,10 @@
 .alternate-row h4,
 .alternate-row p{
     text-align:right;
+}
+
+img{
+    max-width: 100%;
+    height: auto;
+    display: block;
 }

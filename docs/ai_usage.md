@@ -26,6 +26,248 @@ All AI-generated outputs have been reviewed, understood and adapted before being
 
 # Usage Log
 
+## 2026-07-22
+
+### Phase
+
+Phase 3 — Basic Functionality and Docker
+
+### Objective
+
+Support and fix integration tests for the Sign Up page, including a new Sign Up integration test and a repaired existing `SignUpPage` integration test.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Helped implement a new integration test for the Sign Up flow.
+- Fixed an existing Sign Up page integration test by correcting test setup and assertions.
+
+### Complements
+
+None.
+
+### Context Files
+
+- `frontend/web/src/pages/SignUpPage/SignUpPage.tsx`
+- Existing Sign Up integration test files in the frontend test suite.
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- `frontend/web/src/tests/unit/SignUpPage.test.tsx`
+- `frontend/web/src/tests/integration/SignUpPage.integration.test.tsx`
+
+### Human Review
+
+The integration test guidance and fix were reviewed by the user and are ready for validation.
+
+---
+
+## 2026-07-20
+
+### Phase
+
+Phase 3 — Basic Functionality and Docker
+
+### Objective
+
+Provide responsive styles for the Sign Up form and create Vitest unit tests for `userService` and `SignUpPage`.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Provided CSS and responsive rules for the Sign Up form (`SignUpPage`), covering layout, validation UI, and mobile-first breakpoints to ensure full responsiveness.
+- Implemented Vitest unit test examples for `userService` and `SignUpPage` (component rendering, form interactions and mocked API calls), and provided test files and setup guidance.
+
+### Complements
+
+None.
+
+### Context Files
+
+- `frontend/web/src/pages/SignUpPage/SignUpPage.tsx`
+- `frontend/web/src/pages/SignUpPage/SignUpPage.css`
+
+### AI-assisted Development Files
+
+- `frontend/web/src/tests/userService.test.ts`
+- `frontend/web/src/pages/SignUpPage/SignUpPage.test.tsx`
+
+### Files Affected
+
+- `frontend/web/src/pages/SignUpPage/SignUpPage.css`
+- `frontend/web/src/tests/userService.test.ts`
+- `frontend/web/src/pages/SignUpPage/SignUpPage.test.tsx`
+
+### Human Review
+
+The responsive styles and Vitest tests were reviewed by the user and are ready for integration.
+
+---
+
+## 2026-07-19
+
+### Phase
+
+Phase 3 — Basic Functionality and Docker
+
+### Objective
+
+Assist with the Sign Up page form implementation in `frontend/web/src/pages/SignUpPage/SignUpPage.tsx`.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Reviewed the Sign Up page form structure and provided guidance on field layout, input validation, and state handling in `SignUpPage.tsx`.
+- Suggested a clean, user-friendly form approach with controlled React inputs, error handling, and form submission flow.
+
+### Complements
+
+None.
+
+### Context Files
+
+- `frontend/web/src/pages/SignUpPage/SignUpPage.tsx`
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- `frontend/web/src/pages/SignUpPage/SignUpPage.tsx`
+
+### Human Review
+
+The suggested Sign Up form improvements were reviewed by the user and are pending manual integration.
+
+---
+
+## 2026-07-18
+
+### Phase
+
+Phase 3 — Basic Functionality and Docker
+
+### Objective
+
+Provide CSS styles for the About Us page and generate unit test suggestions for `User`, `UserDTO` and `UserFormDTO`.
+
+### Tool
+
+ChatGPT (assistant)
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Provided CSS snippets and structure for the About Us page including hero section, team grid, responsive breakpoints, utility classes and accessibility considerations.
+- Provided example unit test code (JUnit 5 + Mockito) and test case descriptions for `User`, `UserDTO` and `UserFormDTO` focusing on mapping, validation and basic behaviour (getters/setters, equals/hashCode where applicable).
+
+### Complements
+
+None.
+
+### Context Files
+
+- Conversation design brief and existing frontend HTML/CSS structure (conversation context)
+
+### AI-assisted Development Files
+
+None (snippets and test examples provided; no files modified automatically).
+
+### Files Affected
+
+- Suggested integration targets (manual):
+	- `frontend/src/styles/about.css`
+	- `backend/src/test/java/com/myerasmusjourney/backend/unit/UserTest.java`
+	- `backend/src/test/java/com/myerasmusjourney/backend/unit/UserDTOTest.java`
+	- `backend/src/test/java/com/myerasmusjourney/backend/unit/UserFormDTOTest.java`
+
+### Human Review
+
+The CSS and test suggestions were reviewed by the user and are pending manual integration into the codebase.
+
+---
+
+- User-provided design brief and current Home page wireframe (conversation context)
+
+### AI-assisted Development Files
+
+None (snippets provided; no files were modified automatically).
+
+### Files Affected
+
+None (manual integration recommended: e.g., `frontend/src/styles/home.css`).
+
+### Human Review
+
+The CSS suggestions were reviewed by the user and accepted for manual integration.
+
+---
+
 ## 2026-07-17
 
 ### Phase
@@ -34,30 +276,29 @@ Phase 3 — Basic Functionality and Docker
 
 ### Objective
 
-Document and log today's agent-related actions: repository memory creation/modification, `docs/ai_usage.md` updates and verification of subagent usage.
+Provide CSS styles for the About Us page, including layout, typography, responsive sections and team card presentation.
 
 ### Tool
 
-GitHub Copilot (IDE-integrated agent) — used to perform repository edits and memory updates. No external subagents were invoked today.
+ChatGPT
 
 ### Version
 
-GPT-5 mini
+GPT-5.5
 
 ### Configuration
 
-- Model: GPT-5 mini
-- Interaction mode: IDE-integrated conversational
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
 - Reasoning: Standard
-- Agentic mode: Enabled
-- IDE integration: VS Code GitHub Copilot
-- Plugins/Skills: agent-customization, create-agent
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
 
 ### How it was used
 
-- Created and updated repository memory `/memories/repo/agent-usage-documentation.md` with instructions to record subagent usage.
-- Updated `docs/ai_usage.md` to expand Tool Information, reorder the Usage Log to reverse-chronological order, and adjust the phase of previous entries.
-- Verified that no external subagents (e.g., Explore) were used during today’s session; therefore no separate subagent entries were added for today.
+- The assistant generated styles for the About Us page structure, including hero section layout, team member cards, responsive grid behaviour and utility spacing classes.
+- The suggestions included color contrast guidance, mobile-first breakpoints, and accessible typography for page headings and body text.
 
 ### Complements
 
@@ -65,20 +306,19 @@ None.
 
 ### Context Files
 
-- `docs/ai_usage.md`
+- Conversation context describing the About Us page design requirements.
 
 ### AI-assisted Development Files
 
-- `/memories/repo/agent-usage-documentation.md`
+None.
 
 ### Files Affected
 
-- `docs/ai_usage.md`
-- `/memories/repo/agent-usage-documentation.md`
+- `frontend/web/src/pages/AboutUs/AboutUs.css` (suggested target for manual CSS integration)
 
 ### Human Review
 
-The updates were reviewed interactively with the user during the session.
+The user reviewed and accepted the About Us CSS suggestions for manual implementation.
 
 ---
 
@@ -90,30 +330,29 @@ Phase 3 — Basic Functionality and Docker
 
 ### Objective
 
-Configure automated agent documentation workflow to maintain a complete record of AI tool usage, including subagent invocations throughout the project development.
+Request initial set of styles for the Home page (layout, typography, color palette and base components).
 
 ### Tool
 
-GitHub Copilot (create-agent skill)
+ChatGPT
 
 ### Version
 
-Claude Haiku 4.5
+GPT-5.5
 
 ### Configuration
 
-- Model: Claude Haiku 4.5
-- Interaction mode: IDE-integrated conversational
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
 - Reasoning: Standard
-- Agentic mode: Enabled
-- IDE integration: VS Code GitHub Copilot
-- Plugins/Skills: create-agent, agent-customization
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
 
 ### How it was used
 
-The create-agent skill was used to establish an automated documentation workflow for tracking subagent usage. The AI reviewed the project's AI usage documentation patterns and created instructions in repository memory (`/memories/repo/agent-usage-documentation.md`) to ensure consistent logging of all future subagent invocations.
-
-The AI also updated the Tool Information section to reflect the expanded capability scope, including multiple models in use (GPT-5.5 and Claude Haiku 4.5), IDE-integrated subagents (Explore agent), and the plugin/skill infrastructure being leveraged.
+- The assistant provided an initial CSS baseline for the Home page including grid/flex layout, typography scale, color variables, and base component styles (cards, buttons, header).
+- The user reviewed the suggestions and requested further refinements (see 2026-07-17 entry).
 
 ### Complements
 
@@ -121,20 +360,19 @@ None.
 
 ### Context Files
 
-- `docs/ai_usage.md` (existing documentation)
-- Project repository structure and recent AI usage patterns
+- User-provided design brief (conversation context)
 
 ### AI-assisted Development Files
 
-- `/memories/repo/agent-usage-documentation.md` (created)
+None.
 
 ### Files Affected
 
-- `docs/ai_usage.md` (Tool Information section expanded)
+None (snippets provided; integration pending).
 
 ### Human Review
 
-The workflow configuration was reviewed and validated by the user. The repository memory instructions provide clear guidelines for documenting future subagent usage aligned with existing documentation standards.
+The initial styles were reviewed by the user; further refinements were requested and provided on 2026-07-17.
 
 ---
 
