@@ -10,6 +10,8 @@ import com.myerasmusjourney.backend.service.UserService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -28,11 +30,13 @@ public class UserServiceTest extends TestDataBase{
     @Autowired
     private UserMapper userMapper;
 
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     List<User> users = List.of(
-            new User("TestUser1", "User1", "user1@gmail.com","password"),
-            new User("TestUser2", "User2", "user2@gmail.com","password"),
-            new User("TestUser3", "User3", "user3@gmail.com","password"),
-            new User("TestUser4", "User4", "user4@gmail.com","password")
+            new User("TestUser1", "User1", "user1@gmail.com",passwordEncoder.encode("password")),
+            new User("TestUser2", "User2", "user2@gmail.com",passwordEncoder.encode("password")),
+            new User("TestUser3", "User3", "user3@gmail.com",passwordEncoder.encode("password")),
+            new User("TestUser4", "User4", "user4@gmail.com",passwordEncoder.encode("password"))
     );
 
     @BeforeEach
@@ -50,13 +54,13 @@ public class UserServiceTest extends TestDataBase{
         UserFormDTO newUser = new UserFormDTO("test@gmail.com", "Test", "TestUser","password", "password" );
 
         Long expectedId = userRepository.findAll().getLast().getId() + 1;
-        User expectedUser = new User("TestUser", "Test", "test@gmail.com", "password");
+        User expectedUser = new User("TestUser", "Test", "test@gmail.com", passwordEncoder.encode("password"));
         expectedUser.setId(expectedId);
 
         UserDTO userDTO = userService.createUser(newUser);
 
         assertNotNull(userDTO);
-        User notExpectedUser = new User("Test", "TestUser", "test@gmail.com", "password");
+        User notExpectedUser = new User("Test", "TestUser", "test@gmail.com", passwordEncoder.encode("password"));
         notExpectedUser.setId(-1L);
         UserDTO notExpected = userMapper.toDTO(notExpectedUser);
         assertNotEquals(notExpected, userDTO);

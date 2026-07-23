@@ -108,6 +108,8 @@ jobs:
             DB_PASSWORD: root
             DB_MODE: create-drop
             PORT: 8080
+            SSL_ENABLED: false
+
           run: |
             cd ../backend
             java -jar target/*.jar &

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "UserInfo")
 public class User {
 
     @Id
@@ -19,7 +20,7 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    private String password;
+    private String encodedPassword;
 
     private List<String> roles = new ArrayList<>();
 
@@ -27,19 +28,19 @@ public class User {
         this.roles.add("USER");
     }
 
-    public User(String name, String display, String email, String password){
+    public User(String name, String display, String email, String encodedPassword){
         this.fullName = name;
         this.displayName = display;
         this.email = email;
-        this.password = password;
+        this.encodedPassword = encodedPassword;
         this.roles.add("USER");
     }
 
-    public User(String name, String display, String email, String password, List<String> roles){
+    public User(String name, String display, String email, String encodedPassword, List<String> roles){
         this.fullName = name;
         this.displayName = display;
         this.email = email;
-        this.password = password;
+        this.encodedPassword = encodedPassword;
         this.roles = roles;
     }
 
@@ -59,8 +60,8 @@ public class User {
         this.email = email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setEncodedPassword(String encodedPassword) {
+        this.encodedPassword = encodedPassword;
     }
 
     public void setRoles(List<String> roles) {
@@ -83,8 +84,8 @@ public class User {
         return email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getEncodedPassword() {
+        return encodedPassword;
     }
 
     public List<String> getRoles() {
