@@ -1,4 +1,4 @@
-package es.zenith.levelestapi.security;
+package com.myerasmusjourney.backend.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.csrf.CsrfToken;
