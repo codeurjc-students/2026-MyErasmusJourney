@@ -1,6 +1,6 @@
 export interface UserSimpleDTO{
     id: number;
-    diplayName: String;
+    displayName: String;
     fullName: String;
     email: String;
 }
