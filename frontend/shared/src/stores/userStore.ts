@@ -1,5 +1,5 @@
 import {create} from "zustand";
-import { UserSimpleDTO } from "../models/UserSImpleDTO";
+import type { UserSimpleDTO } from "../models/UserSimpleDTO";
 
 interface UserStore{
     user: UserSimpleDTO | null;

@@ -2,13 +2,19 @@ import type { authServiceProps } from "@shared/interfaces/authServiceProps";
 import type { FormEvent } from "react";
 import { API } from "../../api/client";
 import { createAuthService } from "@shared/services/auth.service";
+import {useUserStore} from "@shared/stores/userStore";
 import "./LogInPage.css";
 import { Link, useNavigate } from "react-router-dom";
+import { createUserService } from "@shared/services/user.service";
 
 
 export default function LogInPage({authService = createAuthService(API)}: authServiceProps){
 
     const navigate = useNavigate();
+
+    const { setUser } = useUserStore();
+
+    const userService = createUserService(API);
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -37,6 +43,8 @@ export default function LogInPage({authService = createAuthService(API)}: authSe
         
         try{
             await authService.logIn(loginRequest);
+            const user = await userService.getUserInfo();
+            setUser(user);
             navigate("/");
         }
         catch(error){
