@@ -7,6 +7,9 @@ import com.myerasmusjourney.backend.mapper.UserMapper;
 import com.myerasmusjourney.backend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,14 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    private User getLoggedUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && !(auth instanceof AnonymousAuthenticationToken)) {
+            return userRepository.findByEmail(auth.getName());
+        }
+        return null;
+    }
+
     @Transactional
     public UserSimpleDTO createUser(UserFormDTO newUserDTO){
         if(!newUserDTO.password().equals(newUserDTO.passwordConfirmation())) return null;
@@ -32,5 +43,9 @@ public class UserService {
 
         User savedUser = userRepository.save(newUser);
         return userMapper.toSimpleDTO(savedUser);
+    }
+
+    public UserSimpleDTO getUserInfo() {
+        return userMapper.toSimpleDTO(this.getLoggedUser());
     }
 }
