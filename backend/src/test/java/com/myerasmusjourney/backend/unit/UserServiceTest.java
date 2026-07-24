@@ -1,8 +1,8 @@
 package com.myerasmusjourney.backend.unit;
 
 import com.myerasmusjourney.backend.domain.User;
-import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserFormDTO;
+import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import com.myerasmusjourney.backend.mapper.UserMapper;
 import com.myerasmusjourney.backend.repository.UserRepository;
 import com.myerasmusjourney.backend.service.UserService;
@@ -45,18 +45,18 @@ public class UserServiceTest {
         savedUser.setId(1L);
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
-        UserDTO DTO = new UserDTO(1L, "TestUser", "Test", "password");
-        when(userMapper.toDTO(any(User.class))).thenReturn(DTO);
+        UserSimpleDTO DTO = new UserSimpleDTO(1L, "TestUser", "Test", "password");
+        when(userMapper.toSimpleDTO(any(User.class))).thenReturn(DTO);
 
         when(passwordEncoder.encode(any(String.class))).thenReturn("encodedPassword");
 
-        UserDTO userDTO = userService.createUser(newUser);
+        UserSimpleDTO userDTO = userService.createUser(newUser);
         Long expectedId = 1L;
         assertEquals(expectedId, userDTO.id());
         assertEquals(DTO, userDTO);
 
         verify(userRepository).findByEmail(newUser.email());
-        verify(userMapper).toDTO(any(User.class));
+        verify(userMapper).toSimpleDTO(any(User.class));
         verify(userRepository).save(any(User.class));
     }
 
@@ -66,14 +66,14 @@ public class UserServiceTest {
         User user = new User("Test", "TestUser", "test@gmail.com", "password");
         when(userRepository.findByEmail(newUser.email())).thenReturn(user);
 
-        UserDTO DTO = new UserDTO(null, "TestUser", "Test", "password");
-        when(userMapper.toDTO(any(User.class))).thenReturn(DTO);
+        UserSimpleDTO DTO = new UserSimpleDTO(null, "TestUser", "Test", "password");
+        when(userMapper.toSimpleDTO(any(User.class))).thenReturn(DTO);
 
-        UserDTO userDTO = userService.createUser(newUser);
+        UserSimpleDTO userDTO = userService.createUser(newUser);
         assertNull(userDTO.id());
 
         verify(userRepository).findByEmail(newUser.email());
-        verify(userMapper).toDTO(any(User.class));
+        verify(userMapper).toSimpleDTO(any(User.class));
 
     }
 
@@ -81,7 +81,7 @@ public class UserServiceTest {
     void testPasswordMismatch(){
         UserFormDTO newUser = new UserFormDTO("test@gmail.com", "Test", "TestUser","password", "pAssword" );
 
-        UserDTO userDTO = userService.createUser(newUser);
+        UserSimpleDTO userDTO = userService.createUser(newUser);
         assertNull(userDTO);
     }
 

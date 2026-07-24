@@ -1,7 +1,7 @@
 package com.myerasmusjourney.backend.controller;
 
-import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserFormDTO;
+import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import com.myerasmusjourney.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class UserRestController {
 
     @PostMapping("/")
     public ResponseEntity<Object> createUser(@RequestBody UserFormDTO newUser){
-        UserDTO userDTO = userService.createUser(newUser);
+        UserSimpleDTO userDTO = userService.createUser(newUser);
         if (userDTO == null){
             return ResponseEntity.badRequest().body("Passwords don't match");
         }   

@@ -2,8 +2,8 @@ package com.myerasmusjourney.backend.integration;
 
 import com.myerasmusjourney.backend.TestDataBase;
 import com.myerasmusjourney.backend.domain.User;
-import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserFormDTO;
+import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import com.myerasmusjourney.backend.mapper.UserMapper;
 import com.myerasmusjourney.backend.repository.UserRepository;
 import com.myerasmusjourney.backend.service.UserService;
@@ -57,16 +57,16 @@ public class UserServiceTest extends TestDataBase{
         User expectedUser = new User("TestUser", "Test", "test@gmail.com", passwordEncoder.encode("password"));
         expectedUser.setId(expectedId);
 
-        UserDTO userDTO = userService.createUser(newUser);
+        UserSimpleDTO userDTO = userService.createUser(newUser);
 
         assertNotNull(userDTO);
         User notExpectedUser = new User("Test", "TestUser", "test@gmail.com", passwordEncoder.encode("password"));
         notExpectedUser.setId(-1L);
-        UserDTO notExpected = userMapper.toDTO(notExpectedUser);
+        UserSimpleDTO notExpected = userMapper.toSimpleDTO(notExpectedUser);
         assertNotEquals(notExpected, userDTO);
 
 
-        UserDTO expected = userMapper.toDTO(expectedUser);
+        UserSimpleDTO expected = userMapper.toSimpleDTO(expectedUser);
         assertEquals(expected, userDTO);
     }
 
@@ -76,7 +76,7 @@ public class UserServiceTest extends TestDataBase{
 
         userService.createUser(newUser);
 
-        UserDTO userDTO = userService.createUser(newUser);
+        UserSimpleDTO userDTO = userService.createUser(newUser);
 
         assertNull(userDTO.id());
     }
@@ -84,7 +84,7 @@ public class UserServiceTest extends TestDataBase{
     @Test
     void testPasswordMismatch(){
         UserFormDTO newUser = new UserFormDTO("user1@gmail.com", "Test", "TestUser","PaSsword", "password" );
-        UserDTO userDTO = userService.createUser(newUser);
+        UserSimpleDTO userDTO = userService.createUser(newUser);
 
         assertNull(userDTO);
     }
