@@ -69,3 +69,9 @@ button{
   border-radius: 1.25rem;
   color: white;
 }
+
+.title{
+    text-align: center;
+    padding: 1rem;
+    max-width: 100%;
+}
