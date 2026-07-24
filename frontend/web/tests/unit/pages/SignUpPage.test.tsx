@@ -36,7 +36,7 @@ describe("SignUpPage", () => {
       <MemoryRouter initialEntries={["/signup"]}>
         <Routes>
           <Route path="/signup" element={<SignUpPage userService={mockService} />} />
-          <Route path="/" element={<div>Home page</div>} />
+          <Route path="/log-in" element={<div>Log In</div>} />
         </Routes>
       </MemoryRouter>
     );
@@ -65,7 +65,7 @@ describe("SignUpPage", () => {
         passwordConfirmation: "password123",
       });
 
-      expect(screen.getByText("Home page")).toBeInTheDocument();
+      expect(screen.getByText("Log In")).toBeInTheDocument();
     });
 
   });
