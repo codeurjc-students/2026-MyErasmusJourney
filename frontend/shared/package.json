@@ -15,5 +15,8 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:coverage:ui": "vitest --ui --coverage"
+  },
+  "dependencies": {
+    "zustand": "^5.0.14"
   }
 }
