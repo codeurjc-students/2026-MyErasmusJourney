@@ -10,8 +10,8 @@ This document describes all the different functionalities which are going to be 
 
 |     | Funcitonality        | Current State | User access                         | Description                                                                                                           |
 | :-- | :------------------- | :-----------: | :---------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
-| 1   | Create an account    |      🔜       | Unauthenticated user                | Generate an account with an email, a nickname and a password.                                                         |
-| 2   | Log in               |      🔜       | Unauthenticated user                | Authenticate an user, by sending                                                                                      |
+| 1   | Create an account    |       ✅       | Unauthenticated user                | Generate an account with an email, a nickname and a password.                                                         |
+| 2   | Log in               |      🏗️      | Unauthenticated user                | Authenticate an user, by sending email and password. The user receives a token through cookies.                       |
 | 3   | Update user          |      🔜       | Authenticated user / Administrator  | The user can update its account information                                                                           |
 | 4   | Delete user          |      🔜       | Authenticated user /  Administrator | User can delete its own account or it can be deleted by an administrator.                                             |
 | 5   | Post experience      |      🔜       | Authenticated user                  | Create and publish a post with information provided by the user                                                       |
@@ -21,6 +21,7 @@ This document describes all the different functionalities which are going to be 
 | 9   | Add city             |      🔜       | Administrator                       | Administrator user can add a city therefore an authenticated user can post experiences related to the new city.       |
 | 10  | Show user's posts    |      🔜       | Authenticated user / Administrator  | An authenticated user will be able to see its posts on its account page. Administrators can see anyone's posts.       |
 | 11  | Show user's comments |      🔜       | Authenticated user / Administrator  | An authenticated user will be able to see its comments on its account page. Administrators can see anyone's comments. |
+
 ### Intermediate Functionalities ⚙️
 
 |     | Funcionalidad              | Estado | Usuarios con acceso  | Descripción                                                                                                     |
