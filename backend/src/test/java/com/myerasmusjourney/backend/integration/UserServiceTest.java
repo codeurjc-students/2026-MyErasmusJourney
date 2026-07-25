@@ -10,12 +10,19 @@ import com.myerasmusjourney.backend.service.UserService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @Tag("integration")
@@ -87,5 +94,40 @@ public class UserServiceTest extends TestDataBase{
         UserSimpleDTO userDTO = userService.createUser(newUser);
 
         assertNull(userDTO);
+    }
+
+
+    @Test
+    void testGetUserInfo(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken("user1@gmail.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserSimpleDTO result = userService.getUserInfo();
+
+        User user = new User("TestUser1", "User1", "user1@gmail.com",passwordEncoder.encode("password"));
+        user.setId(result.id());
+        UserSimpleDTO expected = userMapper.toSimpleDTO(user);
+
+        assertNotNull(result);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void testGetUnregisteredUserInfo(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken("unregistered@gmail.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserSimpleDTO result = userService.getUserInfo();
+
+        assertNull(result);
+    }
+
+    @Test
+    void testNullAuthentication(){
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        UserSimpleDTO result = userService.getUserInfo();
+
+        assertNull(result);
     }
 }
