@@ -13,3 +13,9 @@ header img{
 nav{
     text-decoration: underline;
 }
+
+.profileImage{
+    max-height: 3rem;
+    max-width: 3rem;
+    border-radius: 100%;
+}

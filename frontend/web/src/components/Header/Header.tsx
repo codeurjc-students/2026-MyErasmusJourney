@@ -21,7 +21,7 @@ export default function Header(){
                 {user !== null
                 ?(
                     <div className="flex flex-wrap gap-1 items-center justify-center md:justify-end">
-                        <img src={`https://${APIURL}/users/${user?.id}/image`} alt="img"/>
+                        <img  className="profileImage" src={`https://${APIURL}/users/${user?.id}/image`} alt="image"/>
                         <Link to="/">{user.displayName}</Link>
                     </div>
                 ):(
