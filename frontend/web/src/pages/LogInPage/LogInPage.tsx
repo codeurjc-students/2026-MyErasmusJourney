@@ -6,15 +6,14 @@ import {useUserStore} from "@shared/stores/userStore";
 import "./LogInPage.css";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserService } from "@shared/services/user.service";
+import type { userServiceProps } from "@shared/interfaces/userServiceProps";
 
 
-export default function LogInPage({authService = createAuthService(API)}: authServiceProps){
+export default function LogInPage({ authService = createAuthService(API), userService = createUserService(API) }: authServiceProps & userServiceProps) {
 
     const navigate = useNavigate();
 
     const { setUser } = useUserStore();
-
-    const userService = createUserService(API);
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -57,14 +56,14 @@ export default function LogInPage({authService = createAuthService(API)}: authSe
     return(<>
         <div className="container mx-auto max-w-4xl p-6 grid gap-10 items-center">
             <div className="row-span-1 title">
-                <h3>Log In</h3>
+                <h3 data-testid="title">Log In</h3>
             </div>
             <div className="row-span-1">
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <label htmlFor="email">Email</label>
-                    <input type="email" id="email" name="email" required />
+                    <input type="email" id="email" name="email" />
                     <label htmlFor="password">Password</label>
-                    <input type="password" id="password" name="password" required />
+                    <input type="password" id="password" name="password" />
                     <button type="submit" className="mx-auto mt-4">Sign Up</button>
                 </form>
             </div>
