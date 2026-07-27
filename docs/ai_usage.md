@@ -26,6 +26,126 @@ All AI-generated outputs have been reviewed, understood and adapted before being
 
 # Usage Log
 
+## 2026-07-27
+
+### Phase
+
+Phase 3 — Basic Functionality and Docker
+
+### Objective
+
+Update and improve unit tests for the Log in feature to increase reliability and coverage.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Reviewed existing Log in unit tests and updated test cases to match current component behaviour.
+- Fixed mock API responses, corrected assertions, and added edge-case checks to improve coverage.
+- Provided concrete test code snippets and guidance for integrating the updates with Vitest.
+
+### Complements
+
+None.
+
+### Context Files
+
+- `frontend/web/src/pages/LoginPage/LoginPage.tsx`
+- Existing Log in unit test files in the frontend test suite.
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- `frontend/web/src/tests/login.test.ts`
+- `frontend/web/src/pages/LoginPage/LoginPage.test.tsx`
+
+### Human Review
+
+The updated Log in unit tests were reviewed by the user and are ready for validation.
+
+---
+
+## 2026-07-23
+
+### Phase
+
+Phase 3 — Basic Functionality and Docker
+
+### Objective
+
+Improve the application's authentication mechanism by migrating JWT management to HTTP cookies and document the implementation decision regarding the use of self-signed SSL certificates during development and Continuous Integration.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Reviewed the implications of using self-signed SSL certificates in development, production and GitHub Actions workflows.
+- Assisted in evaluating different alternatives for handling HTTPS during Continuous Integration.
+- Helped document the implementation decision explaining why SSL is disabled in CI while remaining enabled for production deployments.
+- Assisted in updating the frontend API requests to include credentials, allowing the browser to automatically manage JWT authentication cookies.
+- Reviewed the advantages of using HTTP-only cookies over manually storing JWT tokens in the client.
+
+### Complements
+
+None.
+
+### Context Files
+
+- Backend security configuration.
+- GitHub Actions workflow files.
+- Frontend API client implementation.
+- Implementation decision documentation.
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- Frontend API client (`frontend/shared/...`)
+- Backend security configuration.
+- GitHub Actions workflow files.
+- `docs/implementation-decisions.md`
+
+### Human Review
+
+The proposed authentication changes and the implementation decision were reviewed, adapted and validated by the user before being incorporated into the project.
+
+---
+
 ## 2026-07-22
 
 ### Phase
