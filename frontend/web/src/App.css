@@ -54,8 +54,9 @@ label{
 }
 
 input{
-  padding: 0.25rem;
+  padding: 0.4rem;
   margin-bottom: 0.25rem;
+  max-width: 30rem;
   background-color: #F7FBFF;
   border-radius: 1.25rem;
   border: 0.1rem solid #D5E1EE;

@@ -59,7 +59,7 @@ export default function LogInPage({ authService = createAuthService(API), userSe
                 <h3 data-testid="title">Log In</h3>
             </div>
             <div className="row-span-1">
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-md mx-auto">
                     <label htmlFor="email">Email</label>
                     <input type="email" id="email" name="email" />
                     <label htmlFor="password">Password</label>
