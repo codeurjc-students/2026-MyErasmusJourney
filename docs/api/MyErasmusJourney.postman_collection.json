@@ -39,7 +39,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"email\":\"user@email.com\",\n    \"displayName\": \"User\",\n    \"fullName\": \"Postman User\",\n    \"password\": \"password\",\n    \"passwordConfirmation\": \"pAssword\"\n}",
+              "raw": "{\n    \"email\":\"user@email.com\",\n    \"displayName\": \"User\",\n    \"fullName\": \"Postman User\",\n    \"password\": \"password\",\n    \"passwordConfirmation\": \"password\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -54,6 +54,46 @@
               "path": [
                 "users",
                 ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "User info",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Log in",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\":\"test@email.com\",\n    \"password\": \"password\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{APIURL}}/auth/login",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
               ]
             }
           },

@@ -2,20 +2,27 @@ package com.myerasmusjourney.backend.integration;
 
 import com.myerasmusjourney.backend.TestDataBase;
 import com.myerasmusjourney.backend.domain.User;
-import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserFormDTO;
+import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import com.myerasmusjourney.backend.mapper.UserMapper;
 import com.myerasmusjourney.backend.repository.UserRepository;
 import com.myerasmusjourney.backend.service.UserService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @Tag("integration")
@@ -57,16 +64,16 @@ public class UserServiceTest extends TestDataBase{
         User expectedUser = new User("TestUser", "Test", "test@gmail.com", passwordEncoder.encode("password"));
         expectedUser.setId(expectedId);
 
-        UserDTO userDTO = userService.createUser(newUser);
+        UserSimpleDTO userDTO = userService.createUser(newUser);
 
         assertNotNull(userDTO);
         User notExpectedUser = new User("Test", "TestUser", "test@gmail.com", passwordEncoder.encode("password"));
         notExpectedUser.setId(-1L);
-        UserDTO notExpected = userMapper.toDTO(notExpectedUser);
+        UserSimpleDTO notExpected = userMapper.toSimpleDTO(notExpectedUser);
         assertNotEquals(notExpected, userDTO);
 
 
-        UserDTO expected = userMapper.toDTO(expectedUser);
+        UserSimpleDTO expected = userMapper.toSimpleDTO(expectedUser);
         assertEquals(expected, userDTO);
     }
 
@@ -76,7 +83,7 @@ public class UserServiceTest extends TestDataBase{
 
         userService.createUser(newUser);
 
-        UserDTO userDTO = userService.createUser(newUser);
+        UserSimpleDTO userDTO = userService.createUser(newUser);
 
         assertNull(userDTO.id());
     }
@@ -84,8 +91,43 @@ public class UserServiceTest extends TestDataBase{
     @Test
     void testPasswordMismatch(){
         UserFormDTO newUser = new UserFormDTO("user1@gmail.com", "Test", "TestUser","PaSsword", "password" );
-        UserDTO userDTO = userService.createUser(newUser);
+        UserSimpleDTO userDTO = userService.createUser(newUser);
 
         assertNull(userDTO);
+    }
+
+
+    @Test
+    void testGetUserInfo(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken("user1@gmail.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserSimpleDTO result = userService.getUserInfo();
+
+        User user = new User("TestUser1", "User1", "user1@gmail.com",passwordEncoder.encode("password"));
+        user.setId(result.id());
+        UserSimpleDTO expected = userMapper.toSimpleDTO(user);
+
+        assertNotNull(result);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void testGetUnregisteredUserInfo(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken("unregistered@gmail.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserSimpleDTO result = userService.getUserInfo();
+
+        assertNull(result);
+    }
+
+    @Test
+    void testNullAuthentication(){
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        UserSimpleDTO result = userService.getUserInfo();
+
+        assertNull(result);
     }
 }

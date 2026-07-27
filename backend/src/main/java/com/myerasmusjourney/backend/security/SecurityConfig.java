@@ -62,6 +62,7 @@ public class SecurityConfig {
 		http
 			.authorizeHttpRequests(authorize -> authorize
                     // PRIVATE ENDPOINTS
+                    .requestMatchers(HttpMethod.GET, "/users/me").hasRole("USER")
 					// PUBLIC ENDPOINTS
 					.anyRequest().permitAll()
 			);

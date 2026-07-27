@@ -2,11 +2,15 @@ package com.myerasmusjourney.backend.e2e;
 
 import com.myerasmusjourney.backend.TestDataBase;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
@@ -17,12 +21,35 @@ import static org.hamcrest.Matchers.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UsersTest extends TestDataBase {
 
+    private static final Logger log = LoggerFactory.getLogger(UsersTest.class);
     @LocalServerPort
     private int port;
 
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+    }
+
+    private String token = null;
+
+    private void obtainToken() throws JSONException {
+        if(token != null) return;
+
+        JSONObject body = new JSONObject();
+        body.put("username","test@email.com");
+        body.put("password", "password");
+
+        Response response =
+                given()
+                        .contentType("application/json")
+                        .body(body.toString()).
+                        when()
+                        .post("/api/v1/auth/login");
+
+        System.out.println(response.getHeaders());
+        System.out.println(response.getCookies());
+
+        this.token = response.getCookie("AuthToken");
     }
 
     @Test
@@ -89,5 +116,28 @@ public class UsersTest extends TestDataBase {
                 .post("/api/v1/users/")
                 .then()
                 .statusCode(400);
+    }
+
+    @Test
+    void testGetUserInfo(){
+        try {
+            obtainToken();
+        } catch (Exception e) {
+            log.error("e: ", e);
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+            .when()
+                .get("/api/v1/users/me")
+                .then()
+                .statusCode(200)
+                .contentType("application/json")
+                .body("id", notNullValue())
+                .body("id", greaterThan(0))
+                .body("fullName", notNullValue())
+                .body("displayName", notNullValue())
+                .body("email", notNullValue());
     }
 }

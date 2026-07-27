@@ -5,8 +5,8 @@ import "@testing-library/jest-dom";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { APIURL } from "src/config/env";
 import SignUpPage from "src/pages/SignUpPage/SignUpPage";
-import HomePage from "src/pages/HomePage/HomePage";
 import { describe, expect, it, vi } from "vitest";
+import LogInPage from "src/pages/LogInPage/LogInPage";
 
 const testAPI = createApiClient(APIURL);
 const testService = createUserService(testAPI);
@@ -17,7 +17,7 @@ describe("SignUpPage", () => {
     render(
       <MemoryRouter initialEntries={["/signup"]}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/log-in" element={<LogInPage />} />
           <Route path="/signup" element={<SignUpPage userService={testService} />} />
         </Routes>
       </MemoryRouter>
@@ -39,7 +39,7 @@ describe("SignUpPage", () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByTestId("HomeTitle")).toBeInTheDocument();
+      expect(screen.getByText(/log in/i)).toBeInTheDocument();
     });
   });
   
@@ -51,7 +51,7 @@ describe("SignUpPage", () => {
     render(
       <MemoryRouter initialEntries={["/signup"]}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/log-in" element={<LogInPage />} />
           <Route path="/signup" element={<SignUpPage userService={testService} />} />
         </Routes>
       </MemoryRouter>
@@ -83,7 +83,7 @@ describe("SignUpPage", () => {
     render(
       <MemoryRouter initialEntries={["/signup"]}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/log-in" element={<LogInPage />} />
           <Route path="/signup" element={<SignUpPage userService={testService} />} />
         </Routes>
       </MemoryRouter>
@@ -111,6 +111,6 @@ describe("SignUpPage", () => {
       );
     });
 
-    expect(window.location.href).not.toBe("/");
+    expect(window.location.href).not.toBe("/log-in");
   });
 });

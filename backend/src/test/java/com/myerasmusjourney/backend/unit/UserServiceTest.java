@@ -1,8 +1,8 @@
 package com.myerasmusjourney.backend.unit;
 
 import com.myerasmusjourney.backend.domain.User;
-import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserFormDTO;
+import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import com.myerasmusjourney.backend.mapper.UserMapper;
 import com.myerasmusjourney.backend.repository.UserRepository;
 import com.myerasmusjourney.backend.service.UserService;
@@ -12,13 +12,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @Tag("unit")
@@ -45,18 +46,18 @@ public class UserServiceTest {
         savedUser.setId(1L);
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
-        UserDTO DTO = new UserDTO(1L, "TestUser", "Test", "password");
-        when(userMapper.toDTO(any(User.class))).thenReturn(DTO);
+        UserSimpleDTO DTO = new UserSimpleDTO(1L, "TestUser", "Test", "password");
+        when(userMapper.toSimpleDTO(any(User.class))).thenReturn(DTO);
 
         when(passwordEncoder.encode(any(String.class))).thenReturn("encodedPassword");
 
-        UserDTO userDTO = userService.createUser(newUser);
+        UserSimpleDTO userDTO = userService.createUser(newUser);
         Long expectedId = 1L;
         assertEquals(expectedId, userDTO.id());
         assertEquals(DTO, userDTO);
 
         verify(userRepository).findByEmail(newUser.email());
-        verify(userMapper).toDTO(any(User.class));
+        verify(userMapper).toSimpleDTO(any(User.class));
         verify(userRepository).save(any(User.class));
     }
 
@@ -66,14 +67,14 @@ public class UserServiceTest {
         User user = new User("Test", "TestUser", "test@gmail.com", "password");
         when(userRepository.findByEmail(newUser.email())).thenReturn(user);
 
-        UserDTO DTO = new UserDTO(null, "TestUser", "Test", "password");
-        when(userMapper.toDTO(any(User.class))).thenReturn(DTO);
+        UserSimpleDTO DTO = new UserSimpleDTO(null, "TestUser", "Test", "password");
+        when(userMapper.toSimpleDTO(any(User.class))).thenReturn(DTO);
 
-        UserDTO userDTO = userService.createUser(newUser);
+        UserSimpleDTO userDTO = userService.createUser(newUser);
         assertNull(userDTO.id());
 
         verify(userRepository).findByEmail(newUser.email());
-        verify(userMapper).toDTO(any(User.class));
+        verify(userMapper).toSimpleDTO(any(User.class));
 
     }
 
@@ -81,8 +82,73 @@ public class UserServiceTest {
     void testPasswordMismatch(){
         UserFormDTO newUser = new UserFormDTO("test@gmail.com", "Test", "TestUser","password", "pAssword" );
 
-        UserDTO userDTO = userService.createUser(newUser);
+        UserSimpleDTO userDTO = userService.createUser(newUser);
         assertNull(userDTO);
+    }
+
+    @Test
+    void testGetUserInfo(){
+        UserSimpleDTO userSimpleDTO = new UserSimpleDTO(1L, "test", "testUser", "test@email.com");
+        User user = new User("test", "testUser", "test@email.com", "password");
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("test@email.com");
+        when (userRepository.findByEmail(any(String.class))). thenReturn(user);
+        when(userMapper.toSimpleDTO(any(User.class))).thenReturn(userSimpleDTO);
+
+        UserSimpleDTO result = userService.getUserInfo();
+
+        assertNotNull(result);
+        assertEquals(userSimpleDTO, result);
+
+        verify(securityContext).getAuthentication();
+        verify(authentication).getName();
+        verify(userRepository).findByEmail(any(String.class));
+        verify(userMapper).toSimpleDTO(any(User.class));
+    }
+
+    @Test
+    void testGetUnregisteredUserInfo(){
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("");
+        when (userRepository.findByEmail(any(String.class))). thenReturn(null);
+        when(userMapper.toSimpleDTO(null)).thenReturn(null);
+
+        UserSimpleDTO result = userService.getUserInfo();
+
+        assertNull(result);
+
+        verify(securityContext).getAuthentication();
+        verify(authentication).getName();
+        verify(userRepository).findByEmail(any(String.class));
+        verify(userMapper).toSimpleDTO(null);
+    }
+
+    @Test
+    void testNullAuthentication(){
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(null);
+        when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(null);
+        when(userMapper.toSimpleDTO(null)).thenReturn(null);
+
+        UserSimpleDTO result = userService.getUserInfo();
+
+        assertNull(result);
+
+        verify(securityContext).getAuthentication();
+        verify(userMapper).toSimpleDTO(null);
     }
 
 }

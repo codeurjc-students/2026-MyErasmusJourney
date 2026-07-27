@@ -1,14 +1,12 @@
-import { createUserService, type UserService } from "@shared/services/user.service";
+import { createUserService } from "@shared/services/user.service";
+import type { userServiceProps } from "@shared/interfaces/userServiceProps";
 import { API } from "../../api/client";
 import type { FormEvent } from "react";
 import "./SignUpPage.css";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-interface SignUpPageProps {
-    userService?: UserService;
-}
 
-export default function SignUpPage({userService = createUserService(API)}: SignUpPageProps) {
+export default function SignUpPage({userService = createUserService(API)}: userServiceProps) {
 
     const navigate = useNavigate();
 
@@ -40,7 +38,7 @@ export default function SignUpPage({userService = createUserService(API)}: SignU
         try{
             await userService.signUp(userFormDTO);
             console.log("User signed up successfully");
-            navigate("/");
+            navigate("/log-in");
         }
         catch(error){
             console.log(`Error signing up: ${error}`);
@@ -75,7 +73,7 @@ export default function SignUpPage({userService = createUserService(API)}: SignU
                 </div>
             </div>
             <div className="row-span-1 flex justify-center">
-                <p>Do you have an account? <Link to={"/"} className="link">Log in →</Link></p>
+                <p>Do you have an account? <Link to={"/log-in"} className="link">Log in →</Link></p>
             </div>
         </div>
     </>)

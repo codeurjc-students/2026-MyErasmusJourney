@@ -2,6 +2,115 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.0.3 - 2026-07-27
+
+### Added
+
+- Log in page unit and integration tests.
+- Log in End to End tests
+- Log in page Selenium test
+- Authentication service unit tests for log in.
+
+### Updated
+
+- Sign up integration tests in client side, taking into account the log in page.
+- Log in page, completing the styles.
+- Postman collection adding log in and get user information requests.
+- User service unit tests, adding get user information test and a before all method to obtain credentials.
+
+
+### Notes
+
+- I have noticed selenium tests for the About us  and home page are missing, styles on the log in page are finally completed.
+
+## 0.0.3 - 2026-07-25
+
+### Updated
+
+-  User service integration and unit tests, implementing tests to check the get user information functionality.
+
+### Notes
+
+- Selenium and end to end tests are still missing, as well as integration tests in client side.
+
+## 0.0.3 - 2026-07-24
+
+### Added
+
+- Log in page component in client, with initial styles method to retrieve information from form and structure
+- Authentication service in client, implementing log in request from client to server.
+- User store, to store the user credentials after successful log in, being used for example by the header to show the main information of user.
+- User simple DTO, it holds the basic and main information of the user.
+
+### Updated
+
+- Router and routes in client, adding log in page route
+- Global styles, adding more common styles between components.
+- User service, implementing the call to *"/users/me"* endpoint to obtain user's main information.
+- Client dependencies, implementing zustand.
+- Header component, swapping the sign up and log in links by the user's information after log in.
+- Sign up unit test in client and component adding the link to log in.
+
+### Notes
+
+- Styles in the log in component are not definitive and the user store is working, the header updates without needing to reload the site.
+
+## 0.0.3 - 2026-07-23
+
+### Added
+
+- Implementation Decision 002, to solve self-signed certificate testing dilemma
+- Self-signed certificate for server
+
+### Updated
+
+- Security configuration allowing secure connections
+- Api Client in client, allowing to use and receive Json Web Tokens as credentials. 
+
+### Notes
+
+- Security has been implemented, but there are not many endpoints so it's mostly empty.
+
+## 0.0.3 - 2026-07-22
+
+### Added
+
+- Client user service unit tests
+- Sign up page unit tests
+- Sign up Selenium test
+- Json Web tokens folder to create, refresh and delete JWT
+- Security configuration file, setting the type of users allowed to use the existing endpoints.
+- Password Encoder to encode the user's passwords when created.
+- Authentication controller implementing the endpoints to login and logout with JWT.
+
+### Updated
+
+- Home page, About us page and experiences page styles making them responsive.
+- Sign up page giving it styles and making it responsive.
+- GitHub Actions workflows  for the new "v1" version of the API URLs
+- Experiences Selenium test
+- User unit tests implementing a specific test for entity's setters.
+- Backend dependencies, adding Json Web Tokens and Spring Security
+- User service tests, taking into account the new password encoder.
+### Notes
+
+- Some sign up integration tests have been giving some trouble, specially the "email already registered" test
+
+## 0.0.3 - 2026-07-20
+
+### Added
+
+- Client user service unit tests
+- Sign up page unit tests
+
+### Updated
+
+- Home page, About us page and experiences page styles making them responsive.
+- Sign up page giving it styles and making it responsive.
+### Notes
+
+- Integration tests on the client side are still due but in production mode sign up works as it should.
+
 ## 0.0.3 - 2026-07-19
 
 ### Added
