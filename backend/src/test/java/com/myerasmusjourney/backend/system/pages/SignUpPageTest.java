@@ -43,5 +43,9 @@ public class SignUpPageTest extends BaseSeleniumTest {
         password.sendKeys("password");
         passwordConfirmation.sendKeys("password");
         submit.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.className("title")
+        ));
     }
 }
