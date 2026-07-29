@@ -1,7 +1,7 @@
 package com.myerasmusjourney.backend.service;
 
-import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserFormDTO;
 import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import com.myerasmusjourney.backend.mapper.UserMapper;
@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
@@ -32,7 +33,7 @@ public class UserService {
     @PostConstruct
     @Transactional
     public void init(){
-        User user = new User("test", "testUser", "test@email.com", passwordEncoder.encode("password"));
+        User user = new User("test", "testUser", "test@email.com", passwordEncoder.encode("password"), List.of("USER", "ADMIN"));
         userRepository.save(user);
     }
 
@@ -42,6 +43,10 @@ public class UserService {
             return userRepository.findByEmail(auth.getName());
         }
         return null;
+    }
+
+    private boolean isActionAllowed(User user, long id){
+        return user.getRoles().contains("ADMIN") || user.getId().equals(id);
     }
 
     @Transactional
@@ -58,5 +63,13 @@ public class UserService {
 
     public UserSimpleDTO getUserInfo() {
         return userMapper.toSimpleDTO(this.getLoggedUser());
+    }
+
+    public UserDTO getUserById(Long id) {
+        User user = getLoggedUser();
+        if (user == null) return null;
+        if (!isActionAllowed(user, id)) return null;
+        User savedUser = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));;
+        return userMapper.toDTO(savedUser);
     }
 }
