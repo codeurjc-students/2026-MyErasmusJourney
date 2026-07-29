@@ -2,6 +2,7 @@ package com.myerasmusjourney.backend.integration;
 
 import com.myerasmusjourney.backend.TestDataBase;
 import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserFormDTO;
 import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import com.myerasmusjourney.backend.mapper.UserMapper;
@@ -12,17 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @Tag("integration")
@@ -129,5 +127,62 @@ public class UserServiceTest extends TestDataBase{
         UserSimpleDTO result = userService.getUserInfo();
 
         assertNull(result);
+    }
+
+    @Test
+    void testGetUserByIdNotAuthenticated() {
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        UserDTO result = userService.getUserById(1L);
+
+        assertNull(result);
+    }
+
+    @Test
+    void testGetUserByIdForbidden() {
+        userRepository.save(new User("test", "integrationTestUser", "integration@test.com", passwordEncoder.encode("password")));
+        Authentication authentication = new UsernamePasswordAuthenticationToken("integration@test.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserDTO result = userService.getUserById(1L);
+
+        assertNull(result);
+
+    }
+
+    @Test
+    void testGetUserByIdSuccess() {
+        User user = userRepository.save(new User("test", "integrationTestUser", "integration@test.com", passwordEncoder.encode("password")));
+        Authentication authentication = new UsernamePasswordAuthenticationToken("integration@test.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserDTO result = userService.getUserById(user.getId());
+
+        assertNotNull(result);
+        assertEquals(user.getId(), result.id());
+
+    }
+
+    @Test
+    void testGetUserByIdNotFound() {
+        Authentication authentication = new UsernamePasswordAuthenticationToken("test@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        try{
+            userService.getUserById(0L);
+        } catch (NoSuchElementException e){
+            assert(true);
+        }
+    }
+
+    @Test
+    void testGetUserByIdAdmin() {
+        Authentication authentication = new UsernamePasswordAuthenticationToken("test@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserDTO result = userService.getUserById(1L);
+
+        assertNotNull(result);
+        Long expectedId = 1L;
+        assertEquals(expectedId, result.id());
     }
 }
