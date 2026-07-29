@@ -2,10 +2,10 @@ package com.myerasmusjourney.backend.e2e;
 
 import com.myerasmusjourney.backend.TestDataBase;
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -30,13 +30,19 @@ public class UsersTest extends TestDataBase {
         RestAssured.port = port;
     }
 
+    @AfterEach
+    void deleteCredentials(){
+        this.token = null;
+    }
+
     private String token = null;
 
-    private void obtainToken() throws JSONException {
+    private void obtainToken(boolean admin) throws JSONException {
         if(token != null) return;
 
         JSONObject body = new JSONObject();
-        body.put("username","test@email.com");
+        if (!admin) body.put("username","test@email.com");
+        else body.put("username","testadmin@email.com");
         body.put("password", "password");
 
         Response response =
@@ -45,9 +51,6 @@ public class UsersTest extends TestDataBase {
                         .body(body.toString()).
                         when()
                         .post("/api/v1/auth/login");
-
-        System.out.println(response.getHeaders());
-        System.out.println(response.getCookies());
 
         this.token = response.getCookie("AuthToken");
     }
@@ -121,7 +124,7 @@ public class UsersTest extends TestDataBase {
     @Test
     void testGetUserInfo(){
         try {
-            obtainToken();
+            obtainToken(false);
         } catch (Exception e) {
             log.error("e: ", e);
             throw new RuntimeException(e);
@@ -139,5 +142,61 @@ public class UsersTest extends TestDataBase {
                 .body("fullName", notNullValue())
                 .body("displayName", notNullValue())
                 .body("email", notNullValue());
+    }
+
+    @Test
+    void testGetUserByIdSuccess(){
+        try {
+            obtainToken(false);
+        } catch (Exception e) {
+            log.error("e: ", e);
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .when()
+                .get("/api/v1/users/2")
+                .then()
+                .statusCode(200)
+                .contentType("application/json")
+                .body("id", notNullValue())
+                .body("id", equalTo(2))
+                .body("fullName", notNullValue())
+                .body("displayName", notNullValue())
+                .body("email", notNullValue());
+    }
+
+    @Test
+    void testGetUserByIdNotFound(){
+        try {
+            obtainToken(true);
+        } catch (Exception e) {
+            log.error("e: ", e);
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .when()
+                .get("/api/v1/users/0")
+                .then()
+                .statusCode(404);
+    }
+    @Test
+    void testGetUserByIdFail(){
+        try {
+            obtainToken(false);
+        } catch (Exception e) {
+            log.error("e: ", e);
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .when()
+                .get("/api/v1/users/1")
+                .then()
+                .statusCode(403);
     }
 }

@@ -33,7 +33,9 @@ public class UserService {
     @PostConstruct
     @Transactional
     public void init(){
-        User user = new User("test", "testUser", "test@email.com", passwordEncoder.encode("password"), List.of("USER", "ADMIN"));
+        User admin = new User("test", "testUser", "testadmin@email.com", passwordEncoder.encode("password"), List.of("USER", "ADMIN"));
+        User user = new User("test", "testUser", "test@email.com", passwordEncoder.encode("password"));
+        userRepository.save(admin);
         userRepository.save(user);
     }
 
