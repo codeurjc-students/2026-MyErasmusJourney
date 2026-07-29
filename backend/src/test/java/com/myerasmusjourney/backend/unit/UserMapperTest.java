@@ -1,6 +1,7 @@
 package com.myerasmusjourney.backend.unit;
 
 import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import com.myerasmusjourney.backend.mapper.UserMapper;
 import org.junit.jupiter.api.Tag;
@@ -28,5 +29,16 @@ public class UserMapperTest {
     @Test
     void nullSourceReturnsNull() {
         assertNull(mapper.toSimpleDTO(null));
+    }
+
+    @Test
+    void testToDTO() {
+        User u = new User("John Doe", "jdoe", "john@example.com", "secret");
+
+        UserDTO expected = new UserDTO(null, "John Doe", "jdoe", "john@example.com");
+
+        UserDTO result = mapper.toDTO(u);
+
+        assertEquals(expected, result);
     }
 }
