@@ -12,21 +12,35 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserTest {
 
     @Test
-    void testconstructorSetsFieldsAndDefaultRole() {
-        User u = new User("John Doe", "jdoe", "john@example.com", "secret");
+    void testConstructorSetsFieldsAndDefaultRole() {
+        User u = new User("John Doe", "jdoe", "john@example.com", "secret", "Munich", "Germany");
         assertNull(u.getId());
         assertEquals("John Doe", u.getFullName());
         assertEquals("jdoe", u.getDisplayName());
         assertEquals("john@example.com", u.getEmail());
         assertEquals("secret", u.getEncodedPassword());
+        assertEquals("Munich, Germany", u.getStudyLocation());
         assertNotNull(u.getRoles());
         assertTrue(u.getRoles().contains("USER"));
     }
 
     @Test
-    void testconstructorWithRolesUsesProvidedRoles() {
+    void testConstructorWithNullCityAndCountry() {
+        User u = new User("John Doe", "jdoe", "john@example.com", "secret", null, null);
+        assertNull(u.getId());
+        assertEquals("John Doe", u.getFullName());
+        assertEquals("jdoe", u.getDisplayName());
+        assertEquals("john@example.com", u.getEmail());
+        assertEquals("secret", u.getEncodedPassword());
+        assertNull(u.getStudyLocation());
+        assertNotNull(u.getRoles());
+        assertTrue(u.getRoles().contains("USER"));
+    }
+
+    @Test
+    void testConstructorWithRolesUsesProvidedRoles() {
         var roles = Arrays.asList("ADMIN", "USER");
-        User u = new User("Jane", "jane", "jane@example.com", "pw", roles);
+        User u = new User("Jane", "jane", "jane@example.com", "pw", "Munich", "Germany", roles);
         assertEquals(roles, u.getRoles());
     }
 
