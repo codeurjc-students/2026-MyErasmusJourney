@@ -8,13 +8,14 @@ describe("UserService", () => {
       fullName: "Test User",
       displayName: "testuser",
       email: "test@example.com",
+      city: "Madrid",
+      country: "Spain",
       password: "password123",
       passwordConfirmation: "password123",
     };
 
     const responseData = {
       id: 1,
-      fullName: "Test User",
       displayName: "testuser",
       email: "test@example.com",
     };
@@ -40,6 +41,8 @@ describe("UserService", () => {
       fullName: "Test User",
       displayName: "testuser",
       email: "test@example.com",
+      city: "Madrid",
+      country: "Spain",
       password: "password123",
       passwordConfirmation: "password123",
     };
@@ -59,14 +62,14 @@ describe("UserService", () => {
     await expect(service.signUp(userFormData)).rejects.toThrow(errorMessage);
     expect(mockApi.post).toHaveBeenCalledWith("/users/", userFormData);
   });
-fullName:String;
-    displayName: String;
-    email: String;
+
   it("should pass the correct request body to the API", async () => {
     const userFormData: UserFormDTO = {
       fullName: "New User",
       displayName: "newuser",
       email: "newuser@example.com",
+      city: "Seville",
+      country: "Spain",
       password: "securePass456",
       passwordConfirmation: "securePass456",
     };
@@ -80,6 +83,7 @@ fullName:String;
     };
 
     const service = createUserService(mockApi);
+
     await service.signUp(userFormData);
 
     expect(mockApi.post).toHaveBeenCalledWith("/users/", userFormData);
@@ -90,6 +94,8 @@ fullName:String;
       fullName: "Test User",
       displayName: "testuser",
       email: "test@example.com",
+      city: "Madrid",
+      country: "Spain",
       password: "password123",
       passwordConfirmation: "password123",
     };
@@ -109,86 +115,86 @@ fullName:String;
 
     try {
       await service.signUp(userFormData);
-    } catch (e) {
+    } catch {
       expect(textMock).toHaveBeenCalled();
     }
   });
 
   it("should successfully return the logged user information", async () => {
-  const responseData = {
-    fullName: "Test User",
-    displayName: "testuser",
-    email: "test@example.com",
-  };
+    const responseData = {
+      id: 1,
+      displayName: "testuser",
+      email: "test@example.com",
+    };
 
-  const mockApi = {
-    get: vi.fn().mockResolvedValue({
-      ok: true,
-      json: vi.fn().mockResolvedValue(responseData),
-      text: vi.fn(),
-    }),
-  };
+    const mockApi = {
+      get: vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue(responseData),
+        text: vi.fn(),
+      }),
+    };
 
-  const service = createUserService(mockApi);
+    const service = createUserService(mockApi);
 
-  const result = await service.getUserInfo();
+    const result = await service.getUserInfo();
 
-  expect(mockApi.get).toHaveBeenCalledTimes(1);
-  expect(mockApi.get).toHaveBeenCalledWith("/users/me");
-  expect(result).toEqual(responseData);
-});
+    expect(mockApi.get).toHaveBeenCalledTimes(1);
+    expect(mockApi.get).toHaveBeenCalledWith("/users/me");
+    expect(result).toEqual(responseData);
+  });
 
-it("should throw an error when getUserInfo request fails", async () => {
-  const errorMessage = "Unauthorized";
+  it("should throw an error when getUserInfo request fails", async () => {
+    const errorMessage = "Unauthorized";
 
-  const mockApi = {
-    get: vi.fn().mockResolvedValue({
-      ok: false,
-      text: vi.fn().mockResolvedValue(errorMessage),
-      json: vi.fn(),
-    }),
-  };
+    const mockApi = {
+      get: vi.fn().mockResolvedValue({
+        ok: false,
+        text: vi.fn().mockResolvedValue(errorMessage),
+        json: vi.fn(),
+      }),
+    };
 
-  const service = createUserService(mockApi);
+    const service = createUserService(mockApi);
 
-  await expect(service.getUserInfo()).rejects.toThrow(errorMessage);
+    await expect(service.getUserInfo()).rejects.toThrow(errorMessage);
 
-  expect(mockApi.get).toHaveBeenCalledWith("/users/me");
-});
+    expect(mockApi.get).toHaveBeenCalledWith("/users/me");
+  });
 
-it("should call the text method to get the error message from failed getUserInfo response", async () => {
-  const textMock = vi.fn().mockResolvedValue("Unauthorized");
+  it("should call the text method to get the error message from failed getUserInfo response", async () => {
+    const textMock = vi.fn().mockResolvedValue("Unauthorized");
 
-  const mockApi = {
-    get: vi.fn().mockResolvedValue({
-      ok: false,
-      text: textMock,
-      json: vi.fn(),
-    }),
-  };
+    const mockApi = {
+      get: vi.fn().mockResolvedValue({
+        ok: false,
+        text: textMock,
+        json: vi.fn(),
+      }),
+    };
 
-  const service = createUserService(mockApi);
+    const service = createUserService(mockApi);
 
-  try {
+    try {
+      await service.getUserInfo();
+    } catch {
+      expect(textMock).toHaveBeenCalled();
+    }
+  });
+
+  it("should call the correct endpoint when requesting user information", async () => {
+    const mockApi = {
+      get: vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue({}),
+        text: vi.fn(),
+      }),
+    };
+
+    const service = createUserService(mockApi);
+
     await service.getUserInfo();
-  } catch {
-    expect(textMock).toHaveBeenCalled();
-  }
-});
 
-it("should call the correct endpoint when requesting user information", async () => {
-  const mockApi = {
-    get: vi.fn().mockResolvedValue({
-      ok: true,
-      json: vi.fn().mockResolvedValue({}),
-      text: vi.fn(),
-    }),
-  };
-
-  const service = createUserService(mockApi);
-
-  await service.getUserInfo();
-
-  expect(mockApi.get).toHaveBeenCalledWith("/users/me");
-});
+    expect(mockApi.get).toHaveBeenCalledWith("/users/me");
+  });
 });
