@@ -17,9 +17,9 @@ public class UserMapperTest {
 
     @Test
     void testToSimpleDTO() {
-        User u = new User("John Doe", "jdoe", "john@example.com", "secret");
+        User u = new User("John Doe", "jdoe", "john@example.com", "secret", "Munich", "Germany");
 
-        UserSimpleDTO expected = new UserSimpleDTO(null, "John Doe", "jdoe", "john@example.com");
+        UserSimpleDTO expected = new UserSimpleDTO(null, "jdoe", "john@example.com");
 
         UserSimpleDTO result = mapper.toSimpleDTO(u);
 
@@ -33,9 +33,9 @@ public class UserMapperTest {
 
     @Test
     void testToDTO() {
-        User u = new User("John Doe", "jdoe", "john@example.com", "secret");
+        User u = new User("John Doe", "jdoe", "john@example.com", "secret", "Munich", "Germany");
 
-        UserDTO expected = new UserDTO(null, "John Doe", "jdoe", "john@example.com");
+        UserDTO expected = new UserDTO(null, "John Doe", "jdoe", "john@example.com", "Munich, Germany");
 
         UserDTO result = mapper.toDTO(u);
 

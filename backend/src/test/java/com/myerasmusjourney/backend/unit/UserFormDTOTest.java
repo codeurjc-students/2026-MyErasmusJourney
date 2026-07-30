@@ -13,6 +13,8 @@ public class UserFormDTOTest {
                 "alice@example.com",
                 "alice",
                 "Alice Example",
+                "Munich",
+                "Germany",
                 "s3cr3t",
                 "s3cr3t"
         );
@@ -22,5 +24,7 @@ public class UserFormDTOTest {
         assertEquals("Alice Example", dto.fullName());
         assertEquals("s3cr3t", dto.password());
         assertEquals("s3cr3t", dto.passwordConfirmation());
+        assertEquals("Munich", dto.city());
+        assertEquals("Munich", dto.country());
     }
 }
