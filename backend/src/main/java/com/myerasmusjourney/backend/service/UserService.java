@@ -33,8 +33,8 @@ public class UserService {
     @PostConstruct
     @Transactional
     public void init(){
-        User admin = new User("test", "testUser", "testadmin@email.com", passwordEncoder.encode("password"), List.of("USER", "ADMIN"));
-        User user = new User("test", "testUser", "test@email.com", passwordEncoder.encode("password"));
+        User admin = new User("test", "testUser", "testadmin@email.com", passwordEncoder.encode("password"),"Munich", "Germany", List.of("USER", "ADMIN"));
+        User user = new User("test", "testUser", "test@email.com", passwordEncoder.encode("password"), null, "Germany");
         userRepository.save(admin);
         userRepository.save(user);
     }
@@ -56,7 +56,7 @@ public class UserService {
         if(!newUserDTO.password().equals(newUserDTO.passwordConfirmation())) return null;
 
         User user = userRepository.findByEmail(newUserDTO.email());
-        User newUser = new User(newUserDTO.fullName(), newUserDTO.displayName(), newUserDTO.email(), passwordEncoder.encode(newUserDTO.password()));
+        User newUser = new User(newUserDTO.fullName(), newUserDTO.displayName(), newUserDTO.email(), passwordEncoder.encode(newUserDTO.password()), newUserDTO.city(), newUserDTO.country());
         if (user != null) return userMapper.toSimpleDTO(newUser);
 
         User savedUser = userRepository.save(newUser);
@@ -71,7 +71,7 @@ public class UserService {
         User user = getLoggedUser();
         if (user == null) return null;
         if (!isActionAllowed(user, id)) return null;
-        User savedUser = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));;
+        User savedUser = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
         return userMapper.toDTO(savedUser);
     }
 }
