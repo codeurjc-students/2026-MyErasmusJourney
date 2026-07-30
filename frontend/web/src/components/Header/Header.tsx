@@ -22,7 +22,7 @@ export default function Header(){
                 ?(
                     <div className="flex flex-wrap gap-1 items-center justify-center md:justify-end">
                         <img  className="profileImage" src={`https://${APIURL}/users/${user?.id}/image`} alt="image"/>
-                        <Link to="/">{user.displayName}</Link>
+                        <Link to="/account">{user.displayName}</Link>
                     </div>
                 ):(
                     <div className="flex flex-wrap gap-4 items-center justify-center md:justify-end">

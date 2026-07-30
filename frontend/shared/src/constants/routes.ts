@@ -4,4 +4,5 @@ export const ROUTES = {
     EXPERIENCES: "/experiences",
     SIGN_UP: "/sign-up",
     LOG_IN: "/log-in",
+    USER: "/account",
 };
