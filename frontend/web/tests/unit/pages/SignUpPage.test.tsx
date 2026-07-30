@@ -61,6 +61,8 @@ describe("SignUpPage", () => {
         fullName: "John Doe",
         displayName: "johndoe",
         email: "john@example.com",
+        city:null,
+        country:null,
         password: "password123",
         passwordConfirmation: "password123",
       });
@@ -223,6 +225,170 @@ describe("SignUpPage", () => {
 
     await waitFor(() => {
       expect(global.console.log).toHaveBeenCalledWith("User signed up successfully");
+    });
+  });
+
+  it("should submit city and country when they are provided", async () => {
+    const mockSignUp = vi.fn().mockResolvedValue({
+      id: 1,
+      displayName: "johndoe",
+      email: "john@example.com",
+    });
+
+    const mockService: UserService = {
+      signUp: mockSignUp,
+      getUserInfo: vi.fn(),
+      getUserById: vi.fn(),
+    };
+
+    render(
+      <MemoryRouter>
+        <SignUpPage userService={mockService} />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText(/full name/i), {
+      target: { value: "John Doe" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/public name/i), {
+      target: { value: "johndoe" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/destination city/i), {
+      target: { value: "Madrid" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/destination country/i), {
+      target: { value: "Spain" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: "john@example.com" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/^password$/i), {
+      target: { value: "password123" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/repeat password/i), {
+      target: { value: "password123" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: /sign up/i }));
+
+    await waitFor(() => {
+      expect(mockSignUp).toHaveBeenCalledWith({
+        fullName: "John Doe",
+        displayName: "johndoe",
+        city: "Madrid",
+        country: "Spain",
+        email: "john@example.com",
+        password: "password123",
+        passwordConfirmation: "password123",
+      });
+    });
+  });
+
+  it("should submit null city and country when they are left empty", async () => {
+    const mockSignUp = vi.fn().mockResolvedValue({});
+
+    const mockService: UserService = {
+      signUp: mockSignUp,
+      getUserInfo: vi.fn(),
+      getUserById: vi.fn(),
+    };
+
+    render(
+      <MemoryRouter>
+        <SignUpPage userService={mockService} />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText(/full name/i), {
+      target: { value: "John Doe" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/public name/i), {
+      target: { value: "johndoe" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: "john@example.com" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/^password$/i), {
+      target: { value: "password123" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/repeat password/i), {
+      target: { value: "password123" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: /sign up/i }));
+
+    await waitFor(() => {
+      expect(mockSignUp).toHaveBeenCalledWith(
+        expect.objectContaining({
+          city: null,
+          country: null,
+        })
+      );
+    });
+  });
+
+  it("should trim city and country before submitting", async () => {
+    const mockSignUp = vi.fn().mockResolvedValue({});
+
+    const mockService: UserService = {
+      signUp: mockSignUp,
+      getUserInfo: vi.fn(),
+      getUserById: vi.fn(),
+    };
+
+    render(
+      <MemoryRouter>
+        <SignUpPage userService={mockService} />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText(/full name/i), {
+      target: { value: "John Doe" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/public name/i), {
+      target: { value: "johndoe" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/destination city/i), {
+      target: { value: "   Madrid   " },
+    });
+
+    fireEvent.change(screen.getByLabelText(/destination country/i), {
+      target: { value: "   Spain   " },
+    });
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: "john@example.com" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/^password$/i), {
+      target: { value: "password123" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/repeat password/i), {
+      target: { value: "password123" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: /sign up/i }));
+
+    await waitFor(() => {
+      expect(mockSignUp).toHaveBeenCalledWith(
+        expect.objectContaining({
+          city: "Madrid",
+          country: "Spain",
+        })
+      );
     });
   });
 });

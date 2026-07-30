@@ -38,10 +38,10 @@ public class UserServiceTest extends TestDataBase{
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     List<User> users = List.of(
-            new User("TestUser1", "User1", "user1@gmail.com",passwordEncoder.encode("password")),
-            new User("TestUser2", "User2", "user2@gmail.com",passwordEncoder.encode("password")),
-            new User("TestUser3", "User3", "user3@gmail.com",passwordEncoder.encode("password")),
-            new User("TestUser4", "User4", "user4@gmail.com",passwordEncoder.encode("password"))
+            new User("TestUser1", "User1", "user1@gmail.com",passwordEncoder.encode("password"), "Munich", "Germany"),
+            new User("TestUser2", "User2", "user2@gmail.com",passwordEncoder.encode("password"), "Munich", "Germany"),
+            new User("TestUser3", "User3", "user3@gmail.com",passwordEncoder.encode("password"), "Munich", "Germany"),
+            new User("TestUser4", "User4", "user4@gmail.com",passwordEncoder.encode("password"), "Munich", "Germany")
     );
 
     @BeforeEach
@@ -56,16 +56,37 @@ public class UserServiceTest extends TestDataBase{
 
     @Test
     void testSuccessfulCreateUser(){
-        UserFormDTO newUser = new UserFormDTO("test@gmail.com", "Test", "TestUser","password", "password" );
+        UserFormDTO newUser = new UserFormDTO("test@gmail.com", "Test", "TestUser","Munich", "Germany", "password", "password" );
 
         Long expectedId = userRepository.findAll().getLast().getId() + 1;
-        User expectedUser = new User("TestUser", "Test", "test@gmail.com", passwordEncoder.encode("password"));
+        User expectedUser = new User("TestUser", "Test", "test@gmail.com", passwordEncoder.encode("password"), "Munich", "Germany");
         expectedUser.setId(expectedId);
 
         UserSimpleDTO userDTO = userService.createUser(newUser);
 
         assertNotNull(userDTO);
-        User notExpectedUser = new User("Test", "TestUser", "test@gmail.com", passwordEncoder.encode("password"));
+        User notExpectedUser = new User("Test", "TestUser", "test@gmail.com", passwordEncoder.encode("password"), "Munich", "Germany");
+        notExpectedUser.setId(-1L);
+        UserSimpleDTO notExpected = userMapper.toSimpleDTO(notExpectedUser);
+        assertNotEquals(notExpected, userDTO);
+
+
+        UserSimpleDTO expected = userMapper.toSimpleDTO(expectedUser);
+        assertEquals(expected, userDTO);
+    }
+
+    @Test
+    void testSuccessfulCreateUserNoStudyLocation(){
+        UserFormDTO newUser = new UserFormDTO("test@gmail.com", "Test", "TestUser","Munich", null, "password", "password" );
+
+        Long expectedId = userRepository.findAll().getLast().getId() + 1;
+        User expectedUser = new User("TestUser", "Test", "test@gmail.com", passwordEncoder.encode("password"), "Munich", null);
+        expectedUser.setId(expectedId);
+
+        UserSimpleDTO userDTO = userService.createUser(newUser);
+
+        assertNotNull(userDTO);
+        User notExpectedUser = new User("Test", "TestUser", "test@gmail.com", passwordEncoder.encode("password"), "Munich", null);
         notExpectedUser.setId(-1L);
         UserSimpleDTO notExpected = userMapper.toSimpleDTO(notExpectedUser);
         assertNotEquals(notExpected, userDTO);
@@ -77,7 +98,7 @@ public class UserServiceTest extends TestDataBase{
 
     @Test
     void testEmailAlreadyRegistered(){
-        UserFormDTO newUser = new UserFormDTO("user1@gmail.com", "Test", "TestUser","password", "password" );
+        UserFormDTO newUser = new UserFormDTO("user1@gmail.com", "Test", "TestUser", "Munich", "Germany", "password", "password" );
 
         userService.createUser(newUser);
 
@@ -88,7 +109,7 @@ public class UserServiceTest extends TestDataBase{
 
     @Test
     void testPasswordMismatch(){
-        UserFormDTO newUser = new UserFormDTO("user1@gmail.com", "Test", "TestUser","PaSsword", "password" );
+        UserFormDTO newUser = new UserFormDTO("user1@gmail.com", "Test", "TestUser","Munich", "Germany", "PaSsword", "password" );
         UserSimpleDTO userDTO = userService.createUser(newUser);
 
         assertNull(userDTO);
@@ -102,7 +123,7 @@ public class UserServiceTest extends TestDataBase{
 
         UserSimpleDTO result = userService.getUserInfo();
 
-        User user = new User("TestUser1", "User1", "user1@gmail.com",passwordEncoder.encode("password"));
+        User user = new User("TestUser1", "User1", "user1@gmail.com",passwordEncoder.encode("password"), "Munich", "Germany");
         user.setId(result.id());
         UserSimpleDTO expected = userMapper.toSimpleDTO(user);
 
@@ -140,7 +161,7 @@ public class UserServiceTest extends TestDataBase{
 
     @Test
     void testGetUserByIdForbidden() {
-        userRepository.save(new User("test", "integrationTestUser", "integration@test.com", passwordEncoder.encode("password")));
+        userRepository.save(new User("test", "integrationTestUser", "integration@test.com", passwordEncoder.encode("password"), "Munich", "Germany"));
         Authentication authentication = new UsernamePasswordAuthenticationToken("integration@test.com",null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -152,7 +173,7 @@ public class UserServiceTest extends TestDataBase{
 
     @Test
     void testGetUserByIdSuccess() {
-        User user = userRepository.save(new User("test", "integrationTestUser", "integration@test.com", passwordEncoder.encode("password")));
+        User user = userRepository.save(new User("test", "integrationTestUser", "integration@test.com", passwordEncoder.encode("password"), "Munich", "Germany"));
         Authentication authentication = new UsernamePasswordAuthenticationToken("integration@test.com",null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -176,7 +197,7 @@ public class UserServiceTest extends TestDataBase{
 
     @Test
     void testGetUserByIdAdmin() {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("test@email.com",null, List.of());
+        Authentication authentication = new UsernamePasswordAuthenticationToken("testadmin@email.com",null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserDTO result = userService.getUserById(1L);

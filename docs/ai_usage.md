@@ -26,6 +26,64 @@ All AI-generated outputs have been reviewed, understood and adapted before being
 
 # Usage Log
 
+## 2026-07-29
+
+### Phase
+
+Phase 3 — Basic Functionality and Docker
+
+### Objective
+
+Implement and complete the unit tests for the `UserService#getUserById()` method, ensuring the correct behaviour for authorization checks, repository interactions and exception handling.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Assisted in designing the unit tests for the `getUserById()` service method.
+- Reviewed the different execution paths depending on the authenticated user and authorization rules.
+- Adapted the tests to the repository implementation using `findById()` returning an `Optional`.
+- Suggested test cases covering successful retrieval, unauthorized access, unauthenticated users and missing users resulting in exceptions.
+- Reviewed the mocking strategy for the repository and dependent methods to ensure the service logic was tested in isolation.
+
+### Complements
+
+None.
+
+### Context Files
+
+- `backend/src/main/java/.../service/UserService.java`
+- `backend/src/test/java/.../service/UserServiceTest.java`
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- `backend/src/test/java/.../service/UserServiceTest.java`
+
+### Human Review
+
+The proposed unit tests and testing strategy were reviewed, adapted and validated by the user before being incorporated into the project.
+
+---
+
 ## 2026-07-27
 
 ### Phase

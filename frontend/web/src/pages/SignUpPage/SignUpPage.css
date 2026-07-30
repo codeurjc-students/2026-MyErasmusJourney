@@ -1,11 +1,11 @@
-.profileImage{
-    max-width: 20rem;
-}
-
 .containter{
     padding: 1rem;
 }
 
 p{
     font-size: 1.1rem;
+}
+
+.profileImg{
+    max-width: 20rem;
 }

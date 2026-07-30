@@ -4,5 +4,6 @@ public record UserDTO(
         Long id,
         String fullName,
         String displayName,
-        String email
+        String email,
+        String studyLocation
 ) {}

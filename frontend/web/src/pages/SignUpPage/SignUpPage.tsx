@@ -19,6 +19,8 @@ export default function SignUpPage({userService = createUserService(API)}: userS
         const fullName = formData.get("fullName") as string;
         const displayName = formData.get("displayName") as string;
         const email = formData.get("email") as string;
+        const city = (formData.get("city") as string).trim()||null;
+        const country = (formData.get("country") as string).trim()||null;
         const password = formData.get("password") as string;
         const passwordConfirmation = formData.get("passwordConfirmation") as string;
 
@@ -31,6 +33,8 @@ export default function SignUpPage({userService = createUserService(API)}: userS
             fullName,
             displayName,
             email,
+            city,
+            country,
             password,
             passwordConfirmation
         };
@@ -59,6 +63,10 @@ export default function SignUpPage({userService = createUserService(API)}: userS
                         <input type="text" id="fullName" name="fullName" required />
                         <label htmlFor="displayName">Public name</label>
                         <input type="text" id="displayName" name="displayName" required />
+                        <label htmlFor="city">Destination City</label>
+                        <input type="text" id="city" name="city" />
+                        <label htmlFor="country">Destination Country</label>
+                        <input type="text" id="country" name="country" />
                         <label htmlFor="email">Email</label>
                         <input type="email" id="email" name="email" required />
                         <label htmlFor="password">Password</label>
@@ -69,7 +77,7 @@ export default function SignUpPage({userService = createUserService(API)}: userS
                     </form>
                 </div>
                 <div className="col-span-1 md:col-span-1 flex justify-center">
-                    <img className="max-w-full h-auto profileImage" src="/images/available_soon.png" alt="opened book with a quill inside a compass"/>
+                    <img className="max-w-full h-auto profileImg" src="/images/available_soon.png" alt="opened book with a quill inside a compass"/>
                 </div>
             </div>
             <div className="row-span-1 flex justify-center">

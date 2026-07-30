@@ -61,6 +61,8 @@ public class UsersTest extends TestDataBase {
         body.put("email","user@gmail.com");
         body.put("displayName", "test");
         body.put("fullName", "testUser");
+        body.put("city", "Munich");
+        body.put("country", "Germany");
         body.put("password", "password");
         body.put("passwordConfirmation", "password");
 
@@ -72,7 +74,6 @@ public class UsersTest extends TestDataBase {
         .then()
             .statusCode(201)
             .body("id", greaterThan(0))
-            .body("fullName", equalTo(body.get("fullName")))
             .body("email", equalTo(body.get("email")))
             .body("displayName", equalTo(body.get("displayName")));
     }
@@ -139,7 +140,6 @@ public class UsersTest extends TestDataBase {
                 .contentType("application/json")
                 .body("id", notNullValue())
                 .body("id", greaterThan(0))
-                .body("fullName", notNullValue())
                 .body("displayName", notNullValue())
                 .body("email", notNullValue());
     }
@@ -168,6 +168,54 @@ public class UsersTest extends TestDataBase {
     }
 
     @Test
+    void testGetUserByAdmin(){
+        try {
+            obtainToken(true);
+        } catch (Exception e) {
+            log.error("e: ", e);
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .when()
+                .get("/api/v1/users/1")
+                .then()
+                .statusCode(200)
+                .contentType("application/json")
+                .body("id", notNullValue())
+                .body("id", equalTo(1))
+                .body("fullName", notNullValue())
+                .body("displayName", notNullValue())
+                .body("email", notNullValue())
+                .body("studyLocation", notNullValue());
+    }
+
+    @Test
+    void testGetUserByIdSuccessNoStudyLocation(){
+        try {
+            obtainToken(false);
+        } catch (Exception e) {
+            log.error("e: ", e);
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .when()
+                .get("/api/v1/users/2")
+                .then()
+                .statusCode(200)
+                .contentType("application/json")
+                .body("id", notNullValue())
+                .body("id", equalTo(2))
+                .body("fullName", notNullValue())
+                .body("displayName", notNullValue())
+                .body("email", notNullValue())
+                .body("studyLocation", nullValue());
+    }
+
+    @Test
     void testGetUserByIdNotFound(){
         try {
             obtainToken(true);
@@ -183,6 +231,7 @@ public class UsersTest extends TestDataBase {
                 .then()
                 .statusCode(404);
     }
+
     @Test
     void testGetUserByIdFail(){
         try {

@@ -113,4 +113,49 @@ describe("SignUpPage", () => {
 
     expect(window.location.href).not.toBe("/log-in");
   });
+
+  it("should successfully submit the form with city and country filled", async () => {
+    render(
+      <MemoryRouter initialEntries={["/signup"]}>
+        <Routes>
+          <Route path="/log-in" element={<LogInPage />} />
+          <Route path="/signup" element={<SignUpPage userService={testService} />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText(/full name/i), {
+      target: { value: "John Doe" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/public name/i), {
+      target: { value: "johndoe" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/destination city/i), {
+      target: { value: "Madrid" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/destination country/i), {
+      target: { value: "Spain" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: "john@example.com" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/^password$/i), {
+      target: { value: "password123" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/repeat password/i), {
+      target: { value: "password123" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: /sign up/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/log in/i)).toBeInTheDocument();
+    });
+  });
 });
