@@ -6,7 +6,8 @@ export type UserService = ReturnType<typeof createUserService>;
 export function createUserService(api:ApiClient) {
   return {
     signUp: (body: UserFormDTO) => signUp(api, body),
-    getUserInfo: () => getUserInfo(api)
+    getUserInfo: () => getUserInfo(api),
+    getUserById: (id: number) => getUserById(api, id)
   };
 }
 
@@ -23,6 +24,18 @@ async function signUp(api: ApiClient, body:UserFormDTO){
 
 async function getUserInfo(api:ApiClient) {
   const response = await api.get("/users/me")
+
+    if (!response.ok){
+      const error = await response.text();
+      throw new Error(error);
+    }
+
+    return response.json();
+}
+
+async function getUserById(api:ApiClient, id:number){
+
+  const response = await api.get(`/users/${id}`)
 
     if (!response.ok){
       const error = await response.text();
