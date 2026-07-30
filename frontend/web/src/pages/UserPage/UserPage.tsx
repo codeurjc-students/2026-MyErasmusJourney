@@ -67,7 +67,7 @@ export default function UserPage({userService = createUserService(API)}: userSer
             </div>
 
             <div className="flex flex-col justify-center items-center gap-8">
-                <img src="/images/available_soon.png" alt="profile image" className="mainImage rounded-full object-cover"/>
+                <img src="/images/available_soon.png" alt="profile image" className="mainProfileImage rounded-full object-cover"/>
                 <button className="button">Change Picture</button>
             </div>
 
