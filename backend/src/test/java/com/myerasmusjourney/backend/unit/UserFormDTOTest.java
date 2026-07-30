@@ -25,6 +25,6 @@ public class UserFormDTOTest {
         assertEquals("s3cr3t", dto.password());
         assertEquals("s3cr3t", dto.passwordConfirmation());
         assertEquals("Munich", dto.city());
-        assertEquals("Munich", dto.country());
+        assertEquals("Germany", dto.country());
     }
 }
