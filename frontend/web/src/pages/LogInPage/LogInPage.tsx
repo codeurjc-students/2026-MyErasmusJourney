@@ -44,7 +44,7 @@ export default function LogInPage({ authService = createAuthService(API), userSe
             await authService.logIn(loginRequest);
             const user = await userService.getUserInfo();
             setUser(user);
-            navigate("/");
+            navigate("/account");
         }
         catch(error){
             console.log(`Error logging in: ${error}`);
