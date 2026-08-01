@@ -21,10 +21,10 @@ async function logIn(api: ApiClient, body: LoginRequest){
 }
 
 async function logOut(api:ApiClient){
-  const response = await api.get("/auth/logout");
+  const response = await api.post("/auth/logout", null);
 
     if (!response.ok){
-        throw new Error("Error loggin in");
+      throw new Error("Error loggin out");
     }
 
     return response.json();
