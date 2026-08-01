@@ -72,4 +72,44 @@ describe("AuthService", () => {
     expect(mockApi.post).toHaveBeenCalledWith("/auth/login", loginRequest);
   });
 
+  it("should successfully log out when the request succeeds", async () => {
+
+    const responseData = {
+      message: "success",
+    };
+
+    const mockApi = {
+      post: vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue(responseData),
+      }),
+    };
+
+    const service = createAuthService(mockApi);
+
+    const result = await service.logOut();
+
+    expect(mockApi.post).toHaveBeenCalledTimes(1);
+    expect(mockApi.post).toHaveBeenCalledWith("/auth/logout", null);
+    expect(result).toEqual(responseData);
+  });
+
+  it("should throw an error when the log out request fails", async () => {
+
+    const mockApi = {
+      post: vi.fn().mockResolvedValue({
+        ok: false,
+        json: vi.fn(),
+      }),
+    };
+
+    const service = createAuthService(mockApi);
+
+    await expect(service.logOut()).rejects.toThrow(
+      "Error loggin out"
+    );
+
+    expect(mockApi.post).toHaveBeenCalledWith("/auth/logout", null);
+  });
+
 });
