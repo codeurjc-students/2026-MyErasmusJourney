@@ -1,6 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { createUserService } from "../../../src/services/user.service";
 import type { UserFormDTO } from "../../../src/models/UserFormDTO";
+import type { UserDTO } from "../../../src/models/UserDTO";
+
 
 describe("UserService", () => {
   it("should successfully sign up a user when the request succeeds", async () => {
@@ -197,4 +199,86 @@ describe("UserService", () => {
 
     expect(mockApi.get).toHaveBeenCalledWith("/users/me");
   });
+
+  it("should successfully return the user information", async () => {
+    const responseData: UserDTO = {
+      id: 1,
+      displayName: "testuser",
+      fullName: "Test User",
+      email: "test@email.com",
+      studyLocation: "Munich, Germany"
+    }
+
+    const mockApi = {
+      get: vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue(responseData),
+        text: vi.fn(),
+      }),
+    };
+
+    const service = createUserService(mockApi);
+
+    const result = await service.getUserById(1);
+
+    expect(mockApi.get).toHaveBeenCalledTimes(1);
+    expect(mockApi.get).toHaveBeenCalledWith("/users/1");
+    expect(result).toEqual(responseData);
+  });
+
+  it("should throw an error when getUserById request fails", async () => {
+    const errorMessage = "Unauthorized";
+
+    const mockApi = {
+      get: vi.fn().mockResolvedValue({
+        ok: false,
+        text: vi.fn().mockResolvedValue(errorMessage),
+        json: vi.fn(),
+      }),
+    };
+
+    const service = createUserService(mockApi);
+
+    await expect(service.getUserById(1)).rejects.toThrow(errorMessage);
+
+    expect(mockApi.get).toHaveBeenCalledWith("/users/1");
+  });
+
+  it("should call the text method to get the error message when user does not exist", async () => {
+    const textMock = vi.fn().mockResolvedValue("User not found");
+
+    const mockApi = {
+      get: vi.fn().mockResolvedValue({
+        ok: false,
+        text: textMock,
+        json: vi.fn(),
+      }),
+    };
+
+    const service = createUserService(mockApi);
+
+    try {
+      await service.getUserById(-1);
+    } catch {
+      expect(textMock).toHaveBeenCalled();
+    }
+  });
+
+  it("should call the correct endpoint when requesting user information", async () => {
+    const mockApi = {
+      get: vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue({}),
+        text: vi.fn(),
+      }),
+    };
+
+    const service = createUserService(mockApi);
+
+    await service.getUserById(5);
+
+    expect(mockApi.get).toHaveBeenCalledWith("/users/5");
+  });
+
+  
 });
