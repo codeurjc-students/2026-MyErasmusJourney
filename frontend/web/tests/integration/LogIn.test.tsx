@@ -4,10 +4,10 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { APIURL } from "src/config/env";
-import HomePage from "src/pages/HomePage/HomePage";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import LogInPage from "src/pages/LogInPage/LogInPage";
 import { createAuthService } from "@shared/services/auth.service";
+import UserPage from "src/pages/UserPage/UserPage";
 
 const testAPI = createApiClient(APIURL);
 const testUserService = createUserService(testAPI);
@@ -20,6 +20,8 @@ describe("LogInPage", () => {
         fullName: "VitestTestUser",
         displayName: "VitestUser",
         email: "vitest@email.com",
+        city:"Munich",
+        country: "Germany",
         password: "password",
         passwordConfirmation: "password"
       }
@@ -30,7 +32,7 @@ describe("LogInPage", () => {
     render(
       <MemoryRouter initialEntries={["/log-in"]}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/account" element={<UserPage />} />
           <Route path="/log-in" element={<LogInPage authService={testAuthService} userService={testUserService} />} />
         </Routes>
       </MemoryRouter>
@@ -46,7 +48,7 @@ describe("LogInPage", () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByTestId("title")).toBeInTheDocument();
+      expect(screen.getByText("Profile")).toBeInTheDocument();
     });
   });
   
@@ -58,7 +60,7 @@ describe("LogInPage", () => {
     render(
       <MemoryRouter initialEntries={["/log-in"]}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/account" element={<UserPage />} />
           <Route path="/log-in" element={<LogInPage authService={testAuthService} userService={testUserService} />} />
         </Routes>
       </MemoryRouter>
@@ -85,7 +87,7 @@ describe("LogInPage", () => {
     render(
       <MemoryRouter initialEntries={["/log-in"]}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/account" element={<UserPage />} />
           <Route path="/log-in" element={<LogInPage authService={testAuthService} userService={testUserService} />} />
         </Routes>
       </MemoryRouter>
@@ -106,6 +108,6 @@ describe("LogInPage", () => {
       );
     });
 
-    expect(window.location.href).not.toBe("/");
+    expect(window.location.href).not.toBe("/account");
   });
 });
