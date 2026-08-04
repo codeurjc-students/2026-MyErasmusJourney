@@ -54,7 +54,7 @@ export default function SignUpPage({userService = createUserService(API)}: userS
     return(<>
         <div className="container mx-auto max-w-4xl p-6 grid gap-10 items-center">
             <div className="row-span-1 title">
-                <h3>Sign Up</h3>
+                <h3 id="signUpTitle">Sign Up</h3>
             </div>
             <div className="row-span-1 grid grid-cols-1 gap-6 md:grid-cols-2 items-start">
                 <div className="col-span-1 md:col-span-1">

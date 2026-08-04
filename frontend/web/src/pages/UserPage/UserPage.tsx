@@ -51,7 +51,8 @@ export default function UserPage({ authService = createAuthService(API), userSer
     }
 
     return(<>
-        <div className="container relative mx-auto max-w-6xl rounded-3xl bg-white shadow-2xl p-10">            <h3 className="text-center mb-10">Profile</h3>
+        <div className="container relative mx-auto max-w-6xl rounded-3xl bg-white shadow-2xl p-10">
+            <h3 className="text-center mb-10" id="profileTitle">Profile</h3>
             <button onClick={logOut} className="button absolute top-8 right-8">Log out</button>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
 
