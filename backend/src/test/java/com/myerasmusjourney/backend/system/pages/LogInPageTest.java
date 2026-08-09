@@ -39,7 +39,32 @@ public class LogInPageTest extends BaseSeleniumTest {
         button.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("/html/body/div/div[1]/div[1]/h2")
+                By.id("profileTitle")
+        ));
+    }
+
+    @Test
+    void movingToSignUpPage(){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.linkText("Log in")
+        ));
+
+        WebElement linkToLogIn = driver.findElement(By.linkText("Log in"));
+
+        linkToLogIn.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("email")
+        ));
+
+        WebElement linkToSignUp = driver.findElement(By.linkText("Sign up →"));
+
+        linkToSignUp.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("signUpTitle")
         ));
     }
 }

@@ -27,7 +27,7 @@ public class SignUpPageTest extends BaseSeleniumTest {
         linkToSignUp.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("fullName")
+                By.id("signUpTitle")
         ));
 
         WebElement fullName = driver.findElement(By.id("fullName"));
@@ -39,13 +39,13 @@ public class SignUpPageTest extends BaseSeleniumTest {
 
         fullName.sendKeys("TestUser");
         displayName.sendKeys("Test");
-        email.sendKeys("test@email.com");
+        email.sendKeys("seleniumTest@email.com");
         password.sendKeys("password");
         passwordConfirmation.sendKeys("password");
         submit.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.className("title")
+                By.id("loginTitle")
         ));
     }
 }
