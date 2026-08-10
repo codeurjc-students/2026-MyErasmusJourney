@@ -25,12 +25,12 @@ async function signUp(api: ApiClient, body:UserFormDTO){
 async function getUserInfo(api:ApiClient) {
   const response = await api.get("/users/me")
 
-    if (!response.ok){
+    if (!response.ok) {
       const error = await response.text();
       throw new Error(error);
     }
 
-    return response.json();
+    return  response.json();
 }
 
 async function getUserById(api:ApiClient, id:number){

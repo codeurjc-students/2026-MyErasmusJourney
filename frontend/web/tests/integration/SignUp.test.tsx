@@ -99,7 +99,7 @@ describe("SignUpPage", () => {
 
     fireEvent.change(fullNameInput, { target: { value: "John Doe" } });
     fireEvent.change(displayNameInput, { target: { value: "johndoe" } });
-    fireEvent.change(emailInput, { target: { value: "john@example.com" } });
+    fireEvent.change(emailInput, { target: { value: "test@email.com" } });
     fireEvent.change(passwordInput, { target: { value: "password123" } });
     fireEvent.change(passwordConfirmInput, { target: { value: "password123" } });
 

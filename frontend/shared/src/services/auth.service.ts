@@ -13,11 +13,13 @@ export function createAuthService(api:ApiClient) {
 async function logIn(api: ApiClient, body: LoginRequest){
     const response = await api.post("/auth/login", body);
 
-    if (!response.ok){
+    const data =  await response.json();
+    
+    if (!response.ok || data.status !== "SUCCESS"){
         throw new Error("Error loggin in");
     }
 
-    return response.json();
+    return data;
 }
 
 async function logOut(api:ApiClient){
