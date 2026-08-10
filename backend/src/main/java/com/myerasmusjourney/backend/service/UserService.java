@@ -1,7 +1,7 @@
 package com.myerasmusjourney.backend.service;
 
-import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserFormDTO;
 import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import com.myerasmusjourney.backend.mapper.UserMapper;
@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
@@ -32,7 +33,9 @@ public class UserService {
     @PostConstruct
     @Transactional
     public void init(){
-        User user = new User("test", "testUser", "test@email.com", passwordEncoder.encode("password"));
+        User admin = new User("test", "testUser", "testadmin@email.com", passwordEncoder.encode("password"),"Munich", "Germany", List.of("USER", "ADMIN"));
+        User user = new User("test", "testUser", "test@email.com", passwordEncoder.encode("password"), null, "Germany");
+        userRepository.save(admin);
         userRepository.save(user);
     }
 
@@ -44,12 +47,16 @@ public class UserService {
         return null;
     }
 
+    private boolean isActionAllowed(User user, long id){
+        return user.getRoles().contains("ADMIN") || user.getId().equals(id);
+    }
+
     @Transactional
     public UserSimpleDTO createUser(UserFormDTO newUserDTO){
         if(!newUserDTO.password().equals(newUserDTO.passwordConfirmation())) return null;
 
         User user = userRepository.findByEmail(newUserDTO.email());
-        User newUser = new User(newUserDTO.fullName(), newUserDTO.displayName(), newUserDTO.email(), passwordEncoder.encode(newUserDTO.password()));
+        User newUser = new User(newUserDTO.fullName(), newUserDTO.displayName(), newUserDTO.email(), passwordEncoder.encode(newUserDTO.password()), newUserDTO.city(), newUserDTO.country());
         if (user != null) return userMapper.toSimpleDTO(newUser);
 
         User savedUser = userRepository.save(newUser);
@@ -58,5 +65,13 @@ public class UserService {
 
     public UserSimpleDTO getUserInfo() {
         return userMapper.toSimpleDTO(this.getLoggedUser());
+    }
+
+    public UserDTO getUserById(Long id) {
+        User user = getLoggedUser();
+        if (user == null) return null;
+        if (!isActionAllowed(user, id)) return null;
+        User savedUser = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
+        return userMapper.toDTO(savedUser);
     }
 }

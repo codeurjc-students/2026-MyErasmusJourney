@@ -1,8 +1,6 @@
-package com.myerasmusjourney.backend.system.pages;
+package com.myerasmusjourney.backend.system;
 
-import com.myerasmusjourney.backend.system.BaseSeleniumTest;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -10,11 +8,17 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-@Tag("system")
-public class LogInPageTest extends BaseSeleniumTest {
+public class AuthenticatedSeleniumTest extends BaseSeleniumTest{
 
-    @Test
-    void testSuccessfulLogIn(){
+    @Override
+    @BeforeEach
+    void setUpWebDriver(){
+        startWebDriver();
+        driver.get("http://localhost:" + FRONTEND_PORT);
+        authenticateTest();
+    }
+
+    private void authenticateTest(){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -40,31 +44,6 @@ public class LogInPageTest extends BaseSeleniumTest {
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("profileTitle")
-        ));
-    }
-
-    @Test
-    void movingToSignUpPage(){
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.linkText("Log in")
-        ));
-
-        WebElement linkToLogIn = driver.findElement(By.linkText("Log in"));
-
-        linkToLogIn.click();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("email")
-        ));
-
-        WebElement linkToSignUp = driver.findElement(By.linkText("Sign up →"));
-
-        linkToSignUp.click();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("signUpTitle")
         ));
     }
 }

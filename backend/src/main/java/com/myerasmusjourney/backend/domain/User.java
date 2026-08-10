@@ -22,25 +22,29 @@ public class User {
 
     private String encodedPassword;
 
+    private String studyLocation = null;
+
     private List<String> roles = new ArrayList<>();
 
     public User(){
         this.roles.add("USER");
     }
 
-    public User(String name, String display, String email, String encodedPassword){
+    public User(String name, String display, String email, String encodedPassword, String city, String country){
         this.fullName = name;
         this.displayName = display;
         this.email = email;
         this.encodedPassword = encodedPassword;
         this.roles.add("USER");
+        if(city != null && country != null) this.studyLocation = city + ", " + country;
     }
 
-    public User(String name, String display, String email, String encodedPassword, List<String> roles){
+    public User(String name, String display, String email, String encodedPassword, String city, String country, List<String> roles){
         this.fullName = name;
         this.displayName = display;
         this.email = email;
         this.encodedPassword = encodedPassword;
+        if(city != null && country != null) this.studyLocation = city + ", " + country;
         this.roles = roles;
     }
 
@@ -62,6 +66,10 @@ public class User {
 
     public void setEncodedPassword(String encodedPassword) {
         this.encodedPassword = encodedPassword;
+    }
+
+    public void setStudyLocation(String studyLocation) {
+        this.studyLocation = studyLocation;
     }
 
     public void setRoles(List<String> roles) {
@@ -90,5 +98,9 @@ public class User {
 
     public List<String> getRoles() {
         return roles;
+    }
+
+    public String getStudyLocation() {
+        return studyLocation;
     }
 }

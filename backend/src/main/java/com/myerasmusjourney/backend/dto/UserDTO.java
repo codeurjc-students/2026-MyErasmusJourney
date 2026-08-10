@@ -1,0 +1,9 @@
+package com.myerasmusjourney.backend.dto;
+
+public record UserDTO(
+        Long id,
+        String fullName,
+        String displayName,
+        String email,
+        String studyLocation
+) {}

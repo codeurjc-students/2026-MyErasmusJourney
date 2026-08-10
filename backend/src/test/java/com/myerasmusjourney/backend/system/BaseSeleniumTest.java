@@ -24,7 +24,7 @@ public abstract class BaseSeleniumTest extends TestDataBase {
 
     protected WebDriver driver;
 
-    private static final int FRONTEND_PORT = 4173;
+    protected static final int FRONTEND_PORT = 4173;
 
     private Process frontendProcess;
 
@@ -57,7 +57,7 @@ public abstract class BaseSeleniumTest extends TestDataBase {
         throw new IllegalStateException("Frontend did not start.");
     }
 
-    private void startWebDriver(){
+    protected void startWebDriver(){
         try {
             FirefoxOptions options = new FirefoxOptions();
             options.addArguments("--headless");

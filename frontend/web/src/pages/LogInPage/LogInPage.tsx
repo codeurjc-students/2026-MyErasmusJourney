@@ -44,7 +44,7 @@ export default function LogInPage({ authService = createAuthService(API), userSe
             await authService.logIn(loginRequest);
             const user = await userService.getUserInfo();
             setUser(user);
-            navigate("/");
+            navigate("/account");
         }
         catch(error){
             console.log(`Error logging in: ${error}`);
@@ -56,7 +56,7 @@ export default function LogInPage({ authService = createAuthService(API), userSe
     return(<>
         <div className="container mx-auto max-w-4xl p-6 grid gap-10 items-center">
             <div className="row-span-1 title">
-                <h3 data-testid="title">Log In</h3>
+                <h3 data-testid="title" id="loginTitle">Log In</h3>
             </div>
             <div className="row-span-1">
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-md mx-auto">

@@ -5,6 +5,7 @@ import HomePage from "../pages/HomePage/HomePage";
 import AboutUsPage from "../pages/AboutUsPage/AboutUsPage";
 import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import LogInPage from "../pages/LogInPage/LogInPage";
+import UserPage from "../pages/UserPage/UserPage";
 export const routes = [
   {
     path: ROUTES.HOME,
@@ -22,9 +23,12 @@ export const routes = [
     path: ROUTES.LOG_IN,
     element: <LogInPage />
   },
-
   {
     path: ROUTES.EXPERIENCES,
     element: <ExperiencesPage />
+  },
+  {
+    path: ROUTES.USER,
+    element: <UserPage />
   }
 ];

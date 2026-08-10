@@ -52,7 +52,7 @@ describe("Log In page", () => {
       <MemoryRouter initialEntries={["/log-in"]}>
         <Routes>
           <Route path="/log-in" element={<LogInPage authService={mockAuthService} userService={mockUserService} />} />
-          <Route path="/" element={<div>Home page</div>} />
+          <Route path="/account" element={<div><p>Profile Page</p></div>} />
         </Routes>
       </MemoryRouter>
     );
@@ -63,7 +63,7 @@ describe("Log In page", () => {
     await waitFor(() => {
       expect(mockLogIn).toHaveBeenCalledWith({ username: "john@example.com", password: "password123" });
       expect(mockGetUserInfo).toHaveBeenCalled();
-      expect(screen.getByText("Home page")).toBeInTheDocument();
+      expect(screen.getByText("Profile Page")).toBeInTheDocument();
     });
   });
 

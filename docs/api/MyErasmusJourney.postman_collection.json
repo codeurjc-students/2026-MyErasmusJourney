@@ -66,6 +66,34 @@
             "header": []
           },
           "response": []
+        },
+        {
+          "name": "Get User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{APIURL}}/users/2",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "users",
+                "2"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -94,6 +122,38 @@
               "path": [
                 "auth",
                 "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Log out",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{APIURL}}/auth/logout",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
               ]
             }
           },

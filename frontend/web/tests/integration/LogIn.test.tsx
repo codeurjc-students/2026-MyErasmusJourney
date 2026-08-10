@@ -4,10 +4,11 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { APIURL } from "src/config/env";
-import HomePage from "src/pages/HomePage/HomePage";
-import { beforeAll, describe, expect, it, vi } from "vitest";
+import UserPage from "src/pages/UserPage/UserPage";
+import { afterAll, describe, expect, it, vi } from "vitest";
 import LogInPage from "src/pages/LogInPage/LogInPage";
 import { createAuthService } from "@shared/services/auth.service";
+import { useUserStore } from "@shared/stores/userStore";
 
 const testAPI = createApiClient(APIURL);
 const testUserService = createUserService(testAPI);
@@ -15,22 +16,11 @@ const testAuthService = createAuthService(testAPI);
 
 describe("LogInPage", () => {
 
-    beforeAll(async ()=>{
-      const userFormDTO = {
-        fullName: "VitestTestUser",
-        displayName: "VitestUser",
-        email: "vitest@email.com",
-        password: "password",
-        passwordConfirmation: "password"
-      }
-      await testUserService.signUp(userFormDTO)
-    })
-
   it("should successfully submit the form with valid data and render home page", async () => {
     render(
       <MemoryRouter initialEntries={["/log-in"]}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/account" element={<UserPage />} />
           <Route path="/log-in" element={<LogInPage authService={testAuthService} userService={testUserService} />} />
         </Routes>
       </MemoryRouter>
@@ -40,7 +30,7 @@ describe("LogInPage", () => {
     const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
     const submitButton = screen.getByRole("button", { name: /sign up/i });
 
-    fireEvent.change(emailInput, { target: { value: "vitest@email.com" } });
+    fireEvent.change(emailInput, { target: { value: "test@email.com" } });
     fireEvent.change(passwordInput, { target: { value: "password" } });
 
     fireEvent.click(submitButton);
@@ -58,7 +48,6 @@ describe("LogInPage", () => {
     render(
       <MemoryRouter initialEntries={["/log-in"]}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
           <Route path="/log-in" element={<LogInPage authService={testAuthService} userService={testUserService} />} />
         </Routes>
       </MemoryRouter>
@@ -85,7 +74,6 @@ describe("LogInPage", () => {
     render(
       <MemoryRouter initialEntries={["/log-in"]}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
           <Route path="/log-in" element={<LogInPage authService={testAuthService} userService={testUserService} />} />
         </Routes>
       </MemoryRouter>
@@ -108,4 +96,9 @@ describe("LogInPage", () => {
 
     expect(window.location.href).not.toBe("/");
   });
+
+  afterAll(() => {
+    const setUser = useUserStore.getState().setUser;
+    setUser(null);
+  })
 });

@@ -295,12 +295,18 @@ importers:
       eslint-plugin-react-refresh:
         specifier: ^0.5.2
         version: 0.5.3(eslint@10.5.0(jiti@2.7.0))
+      fetch-cookie:
+        specifier: ^3.2.0
+        version: 3.2.0
       globals:
         specifier: ^17.6.0
         version: 17.6.0
       jsdom:
         specifier: ^29.1.1
         version: 29.1.1
+      tough-cookie:
+        specifier: ^6.0.2
+        version: 6.0.2
       typescript:
         specifier: ~6.0.2
         version: 6.0.3
@@ -1196,6 +1202,9 @@ packages:
       picomatch:
         optional: true
 
+  fetch-cookie@3.2.0:
+    resolution: {integrity: sha512-n61pQIxP25C6DRhcJxn7BDzgHP/+S56Urowb5WFxtcRMpU6drqXD90xjyAsVQYsNSNNVbaCcYY1DuHsdkZLuiA==}
+
   fflate@0.8.3:
     resolution: {integrity: sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA==}
 
@@ -1727,6 +1736,10 @@ packages:
 
   tough-cookie@6.0.1:
     resolution: {integrity: sha512-LktZQb3IeoUWB9lqR5EWTHgW/VTITCXg4D21M+lvybRVdylLrRMnqaIONLVb5mav8vM19m44HIcGq4qASeu2Qw==}
+    engines: {node: '>=16'}
+
+  tough-cookie@6.0.2:
+    resolution: {integrity: sha512-exgYmnmL/sJpR3upZfXG5PoatXQii55xAiXGXzY+sROLZ/Y+SLcp9PgJNI9Vz37HpQ74WvDcLT8eqm+kV3FzrA==}
     engines: {node: '>=16'}
 
   tr46@6.0.0:
@@ -2829,6 +2842,11 @@ snapshots:
     optionalDependencies:
       picomatch: 4.0.4
 
+  fetch-cookie@3.2.0:
+    dependencies:
+      set-cookie-parser: 2.7.2
+      tough-cookie: 6.0.1
+
   fflate@0.8.3: {}
 
   file-entry-cache@8.0.0:
@@ -3295,6 +3313,10 @@ snapshots:
   totalist@3.0.1: {}
 
   tough-cookie@6.0.1:
+    dependencies:
+      tldts: 7.4.4
+
+  tough-cookie@6.0.2:
     dependencies:
       tldts: 7.4.4
 
