@@ -16,7 +16,7 @@ export default function Header(){
             <nav className="flex flex-wrap gap-4 items-center justify-center md:justify-end">
                 <Link to="/">Home</Link>
                 <Link to="/about-us">About Us</Link>
-                <Link to="/">Cities</Link>
+                <Link to="/available-soon">Cities</Link>
                 <Link to="/experiences">Experiences</Link>
                 {user !== null
                 ?(
