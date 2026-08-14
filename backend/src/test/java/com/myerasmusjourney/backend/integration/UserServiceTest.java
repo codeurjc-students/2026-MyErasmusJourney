@@ -124,10 +124,12 @@ public class UserServiceTest extends TestDataBase{
         UserSimpleDTO result = userService.getUserInfo();
 
         User user = new User("TestUser1", "User1", "user1@gmail.com",passwordEncoder.encode("password"), "Munich", "Germany");
+
+        assertNotNull(result);
+
         user.setId(result.id());
         UserSimpleDTO expected = userMapper.toSimpleDTO(user);
 
-        assertNotNull(result);
         assertEquals(expected, result);
     }
 
