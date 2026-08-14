@@ -17,6 +17,10 @@ export default function UserPage({ authService = createAuthService(API), userSer
 
     const navigate = useNavigate();
 
+    function notAvailable() {
+        navigate("/available-soon");
+    }
+
     useEffect(() => {
             
             const fetchUser = async () => {
@@ -79,15 +83,15 @@ export default function UserPage({ authService = createAuthService(API), userSer
                     </div>
 
                     <div className="flex justify-center gap-8 mt-10">
-                        <button className="button">Edit Profile</button>
-                        <button className="button">New Experience</button>
+                        <button className="button" onClick={notAvailable}>Edit Profile</button>
+                        <button className="button" onClick={notAvailable}>New Experience</button>
                     </div>
 
                 </div>
 
                 <div className="flex flex-col justify-center items-center gap-8">
                     <img src="/images/available_soon.png" alt="profile image" className="mainProfileImage rounded-full object-cover"/>
-                    <button className="button">Change Picture</button>
+                    <button className="button" onClick={notAvailable}>Change Picture</button>
                 </div>
 
             </div>

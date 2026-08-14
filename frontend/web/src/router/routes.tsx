@@ -6,6 +6,8 @@ import AboutUsPage from "../pages/AboutUsPage/AboutUsPage";
 import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import LogInPage from "../pages/LogInPage/LogInPage";
 import UserPage from "../pages/UserPage/UserPage";
+import AvailableSoonPage from "../pages/AvailableSoonPage/AvailableSoonPage";
+
 export const routes = [
   {
     path: ROUTES.HOME,
@@ -30,5 +32,9 @@ export const routes = [
   {
     path: ROUTES.USER,
     element: <UserPage />
+  },
+  {
+    path: ROUTES.AVAILABLE_SOON,
+    element: <AvailableSoonPage />
   }
 ];
