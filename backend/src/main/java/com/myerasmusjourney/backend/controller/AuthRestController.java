@@ -3,6 +3,7 @@ package com.myerasmusjourney.backend.controller;
 import com.myerasmusjourney.backend.security.jwt.AuthResponse;
 import com.myerasmusjourney.backend.security.jwt.LoginRequest;
 import com.myerasmusjourney.backend.security.jwt.UserLoginService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +34,10 @@ public class AuthRestController {
 
     @PostMapping("/logout")
     public ResponseEntity<AuthResponse> logOut(
+            HttpServletRequest request,
             HttpServletResponse response
     ) {
-        return ResponseEntity.ok(new AuthResponse(AuthResponse.Status.SUCCESS, userLoginService.logout(response)));
+        return ResponseEntity.ok(new AuthResponse(AuthResponse.Status.SUCCESS, userLoginService.logout(request, response)));
     }
 
 }
