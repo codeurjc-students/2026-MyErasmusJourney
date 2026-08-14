@@ -1,5 +1,5 @@
 import type { authServiceProps } from "@shared/interfaces/authServiceProps";
-import type { FormEvent } from "react";
+import { useEffect, type FormEvent } from "react";
 import { API } from "../../api/client";
 import { createAuthService } from "@shared/services/auth.service";
 import {useUserStore} from "@shared/stores/userStore";
@@ -13,7 +13,13 @@ export default function LogInPage({ authService = createAuthService(API), userSe
 
     const navigate = useNavigate();
 
-    const { setUser } = useUserStore();
+    const { user, setUser } = useUserStore();
+
+    useEffect(() => {
+        if (user !== null) {
+            navigate("/account");
+        }
+    })
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
