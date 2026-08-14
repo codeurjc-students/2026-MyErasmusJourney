@@ -35,7 +35,7 @@ public class UserServiceTest extends TestDataBase{
     @Autowired
     private UserMapper userMapper;
 
-    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     List<User> users = List.of(
             new User("TestUser1", "User1", "user1@gmail.com",passwordEncoder.encode("password"), "Munich", "Germany"),
