@@ -218,7 +218,7 @@ public class UserServiceTest extends TestDataBase{
 
         assertNotNull(user);
         assertTrue(user.getId()>0L);
-
+        System.out.println("failing test");
         UserDTO result = userService.getUserById(user.getId());
 
         UserDTO expected = userMapper.toDTO(user);
