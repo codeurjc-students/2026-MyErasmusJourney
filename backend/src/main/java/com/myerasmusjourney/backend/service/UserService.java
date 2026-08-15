@@ -70,8 +70,11 @@ public class UserService {
     public UserDTO getUserById(Long id) {
         User user = getLoggedUser();
         if (user == null) return null;
+        System.out.println("Logged user obtained: " + user.getEmail());
         if (!isActionAllowed(user, id)) return null;
+        System.out.println("Action was allowed");
         User savedUser = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
+        System.out.println("User is not null: " + savedUser!=null);
         return userMapper.toDTO(savedUser);
     }
 }
