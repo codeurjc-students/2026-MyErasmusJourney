@@ -123,13 +123,11 @@ public class UserServiceTest extends TestDataBase{
 
         UserSimpleDTO result = userService.getUserInfo();
 
-        User user = new User("TestUser1", "User1", "user1@gmail.com",passwordEncoder.encode("password"), "Munich", "Germany");
-
+        User persisted = userRepository.findByEmail("user1@gmail.com");
         assertNotNull(result);
+        assertNotNull(persisted);
 
-        user.setId(result.id());
-        UserSimpleDTO expected = userMapper.toSimpleDTO(user);
-
+        UserSimpleDTO expected = userMapper.toSimpleDTO(persisted);
         assertEquals(expected, result);
     }
 
@@ -176,13 +174,14 @@ public class UserServiceTest extends TestDataBase{
     @Test
     void testGetUserByIdSuccess() {
         User user = userRepository.save(new User("test", "integrationTestUser", "integration@test.com", passwordEncoder.encode("password"), "Munich", "Germany"));
-        Authentication authentication = new UsernamePasswordAuthenticationToken("integration@test.com",null, List.of());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(),null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserDTO result = userService.getUserById(user.getId());
 
         assertNotNull(result);
         assertEquals(user.getId(), result.id());
+        assertEquals(userMapper.toDTO(user), result);
 
     }
 
@@ -198,14 +197,16 @@ public class UserServiceTest extends TestDataBase{
     }
 
     @Test
-    void testGetUserByIdAdmin() {
+    void testGetUserByIdAdmin(){
+
+        User target = userRepository.save(new User("target", "targetUser", "target@test.com", passwordEncoder.encode("password"), "Munich", "Germany"));
+
         Authentication authentication = new UsernamePasswordAuthenticationToken("testadmin@email.com",null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        UserDTO result = userService.getUserById(1L);
+        UserDTO result = userService.getUserById(target.getId());
 
         assertNotNull(result);
-        Long expectedId = 1L;
-        assertEquals(expectedId, result.id());
+        assertEquals(target.getId(), result.id());
     }
 }
