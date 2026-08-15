@@ -209,19 +209,12 @@ public class UserServiceTest extends TestDataBase{
 
     @Test
     void testGetUserByIdAdmin() {
-        System.out.println("failing test");
 
         User newAdmin = new User("admin", "TestAdmin", "integrationAdmin@email.com", passwordEncoder.encode("password"), "", "", List.of("USER", "ADMIN"));
         userRepository.save(newAdmin);
 
-        System.out.println("BEFORE SET: " + SecurityContextHolder.getContext().getAuthentication());
-
         Authentication authentication = new UsernamePasswordAuthenticationToken("integrationAdmin@email.com",null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        System.out.println("AFTER SET: " + SecurityContextHolder.getContext().getAuthentication());
-
-        System.out.println("AFTER SET NAME: " + SecurityContextHolder.getContext().getAuthentication().getName());
 
         User authenticatedUser = userRepository.findByEmail("integrationAdmin@email.com");
 
@@ -237,7 +230,7 @@ public class UserServiceTest extends TestDataBase{
 
         UserDTO expected = userMapper.toDTO(user);
 
-        assertNotNull(result); //falla aqui
+        assertNotNull(result);
         assertEquals(expected, result);
     }
 }
