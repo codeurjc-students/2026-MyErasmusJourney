@@ -1,5 +1,7 @@
 package com.myerasmusjourney.backend.security.jwt;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -73,11 +75,17 @@ public class UserLoginService {
         }
     }
 
-    public String logout(HttpServletResponse response) {
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
         SecurityContextHolder.clearContext();
+
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            session.invalidate();
+        }
+
         response.addCookie(removeTokenCookie(TokenType.ACCESS));
         response.addCookie(removeTokenCookie(TokenType.REFRESH));
-
         return "logout successfully";
     }
 
