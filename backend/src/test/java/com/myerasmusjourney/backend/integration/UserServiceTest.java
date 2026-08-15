@@ -202,7 +202,10 @@ public class UserServiceTest extends TestDataBase{
 
     @Test
     void testGetUserByIdAdmin() {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("testadmin@email.com",null, List.of());
+        User newAdmin = new User("admin", "TestAdmin", "integrationAdmin@email.com", passwordEncoder.encode("password"), "", "", List.of("USER", "ADMIN"));
+        userRepository.save(newAdmin);
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken("integrationAdmin@email.com",null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         User user = userRepository.findByEmail("user1@gmail.com");
