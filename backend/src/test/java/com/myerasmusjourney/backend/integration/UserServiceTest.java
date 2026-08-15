@@ -35,7 +35,7 @@ public class UserServiceTest extends TestDataBase{
     @Autowired
     private UserMapper userMapper;
 
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     List<User> users = List.of(
             new User("TestUser1", "User1", "user1@gmail.com",passwordEncoder.encode("password"), "Munich", "Germany"),
@@ -52,6 +52,7 @@ public class UserServiceTest extends TestDataBase{
     @AfterEach
     void deleteUser(){
         userRepository.deleteAll();
+        SecurityContextHolder.clearContext();
     }
 
     @Test
@@ -117,17 +118,18 @@ public class UserServiceTest extends TestDataBase{
 
 
     @Test
-    void testGetUserInfo(){
-        Authentication authentication = new UsernamePasswordAuthenticationToken("user1@gmail.com",null, List.of());
+    void testGetUserInfo() {
+        Authentication authentication = new UsernamePasswordAuthenticationToken("user1@gmail.com", null, List.of());
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User expectedUser = userRepository.findByEmail("user1@gmail.com");
 
         UserSimpleDTO result = userService.getUserInfo();
 
-        User persisted = userRepository.findByEmail("user1@gmail.com");
-        assertNotNull(result);
-        assertNotNull(persisted);
+        UserSimpleDTO expected = userMapper.toSimpleDTO(expectedUser);
 
-        UserSimpleDTO expected = userMapper.toSimpleDTO(persisted);
+        assertNotNull(result);
         assertEquals(expected, result);
     }
 
@@ -173,15 +175,17 @@ public class UserServiceTest extends TestDataBase{
 
     @Test
     void testGetUserByIdSuccess() {
-        User user = userRepository.save(new User("test", "integrationTestUser", "integration@test.com", passwordEncoder.encode("password"), "Munich", "Germany"));
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(),null, List.of());
+        Authentication authentication = new UsernamePasswordAuthenticationToken("user1@gmail.com",null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User user = userRepository.findByEmail("user1@gmail.com");
 
         UserDTO result = userService.getUserById(user.getId());
 
+        UserDTO expected = userMapper.toDTO(user);
+
         assertNotNull(result);
-        assertEquals(user.getId(), result.id());
-        assertEquals(userMapper.toDTO(user), result);
+        assertEquals(expected, result);
 
     }
 
@@ -197,16 +201,17 @@ public class UserServiceTest extends TestDataBase{
     }
 
     @Test
-    void testGetUserByIdAdmin(){
-
-        User target = userRepository.save(new User("target", "targetUser", "target@test.com", passwordEncoder.encode("password"), "Munich", "Germany"));
-
+    void testGetUserByIdAdmin() {
         Authentication authentication = new UsernamePasswordAuthenticationToken("testadmin@email.com",null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        UserDTO result = userService.getUserById(target.getId());
+        User user = userRepository.findByEmail("user1@gmail.com");
+
+        UserDTO result = userService.getUserById(user.getId());
+
+        UserDTO expected = userMapper.toDTO(user);
 
         assertNotNull(result);
-        assertEquals(target.getId(), result.id());
+        assertEquals(expected, result);
     }
 }
