@@ -208,6 +208,12 @@ public class UserServiceTest extends TestDataBase{
         Authentication authentication = new UsernamePasswordAuthenticationToken("integrationAdmin@email.com",null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        User authenticatedUser = userRepository.findByEmail("integrationAdmin@email.com");
+
+        assertNotNull(authenticatedUser);
+        assertEquals(newAdmin.getId(), authenticatedUser.getId());
+        assertTrue(authenticatedUser.getRoles().contains("ADMIN"));
+
         User user = userRepository.findByEmail("user1@gmail.com");
 
         UserDTO result = userService.getUserById(user.getId());
