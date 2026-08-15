@@ -47,6 +47,9 @@ public class UserServiceTest extends TestDataBase{
     @BeforeEach
     void saveUsers(){
         userRepository.saveAll(users);
+        SecurityContextHolder.clearContext();
+
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
     }
 
     @AfterEach
