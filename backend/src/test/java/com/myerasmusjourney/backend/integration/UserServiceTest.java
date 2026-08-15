@@ -216,11 +216,14 @@ public class UserServiceTest extends TestDataBase{
 
         User user = userRepository.findByEmail("user1@gmail.com");
 
+        assertNotNull(user);
+        assertTrue(user.getId()>0L);
+
         UserDTO result = userService.getUserById(user.getId());
 
         UserDTO expected = userMapper.toDTO(user);
 
-        assertNotNull(result);
+        assertNotNull(result); //falla aqui
         assertEquals(expected, result);
     }
 }
