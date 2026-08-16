@@ -70,7 +70,7 @@ export default function LogInPage({ authService = createAuthService(API), userSe
                     <input type="email" id="email" name="email" />
                     <label htmlFor="password">Password</label>
                     <input type="password" id="password" name="password" />
-                    <button type="submit" className="mx-auto mt-4">Sign Up</button>
+                    <button type="submit" className="mx-auto mt-4">Sign In</button>
                 </form>
             </div>
              <div className="row-span-1 flex justify-center">
