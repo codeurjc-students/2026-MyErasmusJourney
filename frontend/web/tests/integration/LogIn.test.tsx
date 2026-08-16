@@ -28,7 +28,7 @@ describe("LogInPage", () => {
 
     const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
     const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
-    const submitButton = screen.getByRole("button", { name: /sign up/i });
+    const submitButton = screen.getByRole("button", { name: /sign in/i });
 
     fireEvent.change(emailInput, { target: { value: "test@email.com" } });
     fireEvent.change(passwordInput, { target: { value: "password" } });
@@ -56,7 +56,7 @@ describe("LogInPage", () => {
 
     const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
     const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
-    const submitButton = screen.getByRole("button", { name: /sign up/i });
+    const submitButton = screen.getByRole("button", { name: /sign in/i });
 
     fireEvent.change(emailInput, { target: { value: "" } });
     fireEvent.change(passwordInput, { target: { value: "password" } });
@@ -81,7 +81,7 @@ describe("LogInPage", () => {
 
     const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
     const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
-    const submitButton = screen.getByRole("button", { name: /sign up/i });
+    const submitButton = screen.getByRole("button", { name: /sign in/i });
     
     fireEvent.change(emailInput, { target: { value: "vitest@email.com" } });
     fireEvent.change(passwordInput, { target: { value: "password123" } });
