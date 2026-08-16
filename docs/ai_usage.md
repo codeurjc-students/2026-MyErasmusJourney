@@ -26,6 +26,319 @@ All AI-generated outputs have been reviewed, understood and adapted before being
 
 # Usage Log
 
+## 2026-08-15
+
+### Phase
+
+Phase 3 — Basic Functionality and Docker
+
+### Objective
+
+Complete and improve the automated test coverage of the user and city-related backend components, including services, entities, DTOs and mappers.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Investigated and fixed problems in `UserService` unit tests related to the Spring Security context.
+- Reviewed how the authenticated user is obtained from the `SecurityContext` during unit testing.
+- Assisted in configuring the security context correctly in the tests without requiring the complete Spring application context.
+- Designed and implemented unit tests for the `CityService`.
+- Designed and implemented integration tests for city-related functionality.
+- Added and reviewed tests for the `City` entity.
+- Added tests for the city DTOs to verify their behaviour and data handling.
+- Added and reviewed tests for the `CityMapper` to ensure the correct transformation between DTOs and domain entities.
+- Reviewed the test structure to maintain isolation between unit tests and integration tests.
+
+### Complements
+
+None.
+
+### Context Files
+
+- `backend/src/main/java/.../service/UserService.java`
+- `backend/src/test/java/.../service/UserServiceTest.java`
+- `backend/src/main/java/.../service/CityService.java`
+- `backend/src/main/java/.../domain/City.java`
+- City DTO classes.
+- `CityMapper` implementation.
+- Existing backend unit and integration test suites.
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- `backend/src/test/java/.../service/UserServiceTest.java`
+- `backend/src/test/java/.../service/CityServiceTest.java`
+- `backend/src/test/java/.../domain/CityTest.java`
+- City DTO test files.
+- `backend/src/test/java/.../mapper/CityMapperTest.java`
+- Related backend integration test files.
+
+### Human Review
+
+All proposed test cases, security context configuration and testing strategies were reviewed, adapted and validated by the user before being incorporated into the project.
+
+## 2026-08-14
+
+### Phase
+
+Phase 3 — Basic Functionality and Docker
+
+### Objective
+
+Improve the application's authentication persistence after a browser page reload, ensuring that an authenticated user can be restored without requiring the user to log in again.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Analysed the authentication lifecycle in the React application.
+- Identified that the in-memory `userStore` was cleared when the page was reloaded.
+- Designed a React hook in the `App` component to retrieve the authenticated user's information from the backend when the application starts.
+- Used the existing authentication cookie to allow the backend to identify the user without requiring the credentials to be entered again.
+- Helped integrate the retrieved user information back into the application's user state.
+- Reviewed the solution to ensure that normal navigation and initial application loading continued to work correctly.
+
+### Complements
+
+None.
+
+### Context Files
+
+- `frontend/web/src/App.tsx`
+- Frontend user store implementation.
+- Frontend authentication service.
+- Backend `/users/me` endpoint.
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- `frontend/web/src/App.tsx`
+
+### Human Review
+
+The proposed hook and authentication flow were reviewed, adapted and validated by the user before being incorporated into the project.
+
+## 2026-08-11
+
+### Phase
+
+Phase 3 — Basic Functionality and Docker
+
+### Objective
+
+Improve the visual design and layout of the Sign Up page to provide a cleaner and more consistent user interface.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Reviewed the existing Sign Up page component and its current layout.
+- Suggested and implemented improvements to the page structure and visual presentation.
+- Adjusted the React component's styling classes to improve spacing, alignment, sizing and overall layout.
+- Helped maintain consistency between the Sign Up page and the rest of the application's visual design.
+- The styling changes were implemented directly through the React component without modifying the associated CSS file.
+
+### Complements
+
+None.
+
+### Context Files
+
+- `frontend/web/src/pages/SignUpPage/SignUpPage.tsx`
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- `frontend/web/src/pages/SignUpPage/SignUpPage.tsx`
+
+### Human Review
+
+The proposed styling changes were reviewed and adapted by the user before being incorporated into the project. The user also verified that the changes only affected the React component and did not require modifications to the CSS file.
+
+## 2026-08-10
+
+### Phase
+
+Phase 3 — Basic Functionality and Docker
+
+### Objective
+
+Help implement and debug integration tests for the User Profile page, including real authentication flow testing with cookies and asynchronous rendering assertions.
+
+### Tool
+
+ChatGPT / GitHub Copilot
+
+### Version
+
+GPT-5.5 / Claude Haiku 4.5
+
+### Configuration
+
+- Model: GPT-5.5 / Claude Haiku 4.5
+- Interaction mode: Conversational chat / IDE integration
+- Reasoning: Standard
+- Agentic mode: Enabled
+- IDE integration: VS Code GitHub Copilot
+- Plugins/Skills: agent-customization, create-agent
+
+### How it was used
+
+- Assisted in creating integration tests for the User page using the real API instead of mocks.
+- Helped configure the tests to use a cookie-aware fetch layer so the login cookies from the backend were preserved for the follow-up profile request.
+- Suggested logging points to inspect the login response, cookie headers and profile fetch behavior during test execution.
+- Helped diagnose the failure caused by the page loading profile data asynchronously and recommended waiting for the rendered content before asserting.
+
+### Complements
+
+None.
+
+### Context Files
+
+- `frontend/web/tests/integration/User.test.tsx`
+- `frontend/shared/src/services/auth.service.ts`
+- `frontend/shared/src/services/user.service.ts`
+- `frontend/web/src/pages/UserPage/UserPage.tsx`
+
+### AI-assisted Development Files
+
+- `frontend/web/tests/integration/User.test.tsx`
+
+### Files Affected
+
+- `frontend/web/tests/integration/User.test.tsx`
+
+### Human Review
+
+All proposed test changes and debugging steps were reviewed and adapted by the user before being incorporated into the project.
+
+---
+
+## 2026-07-30
+
+### Phase
+
+Phase 3 — Basic Functionality and Docker
+
+### Objective
+
+Extend the automated test suite for both the backend and frontend while improving the user profile interface and maintaining the project documentation.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Assisted in implementing the missing unit tests for the `UserService#getUserById()` method, covering successful retrieval, unauthorized access, unauthenticated users and missing users.
+- Helped complete the frontend unit and integration tests for the Sign Up page after recent implementation changes.
+- Assisted in implementing additional frontend tests for the `UserService`, adapting them to the latest service implementation.
+- Reviewed the mocking strategy for frontend services to improve test isolation and maintainability.
+- Suggested improvements to the styling and layout of the User Profile page to achieve a cleaner and more consistent interface.
+- Assisted in maintaining the project documentation by generating AI usage records following the project's established documentation format.
+
+### Complements
+
+None.
+
+### Context Files
+
+- `backend/src/main/java/.../service/UserService.java`
+- `backend/src/test/java/.../service/UserServiceTest.java`
+- `frontend/web/src/pages/SignUpPage/SignUpPage.tsx`
+- Frontend Sign Up test files.
+- Frontend `UserService` test files.
+- User Profile page components and styles.
+- `docs/AI_USAGE.md`
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- `backend/src/test/java/.../service/UserServiceTest.java`
+- `frontend/web/src/tests/unit/SignUpPage.test.tsx`
+- `frontend/web/src/tests/integration/SignUpPage.integration.test.tsx`
+- `frontend/shared/src/services/user.service.ts`
+- Frontend `UserService` test files.
+- User Profile page components and styles.
+- `docs/AI_USAGE.md`
+
+### Human Review
+
+All proposed tests, UI improvements and documentation updates were reviewed, adapted and validated by the user before being incorporated into the project.
+
+---
+
 ## 2026-07-29
 
 ### Phase

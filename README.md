@@ -61,8 +61,8 @@ The application aims to:
 
 ## ⚠️ Status
 
-This repository currently contains only the **analysis and design phase** of the project.  
-Implementation will begin in later phases following an iterative and incremental development approach.
+This repository its currently at the **base functionality and Docker** phase of the project.  
+Implementation has begun but it is still in an early stage, very few functionalities have been implemented.
 
 The current progress and task tracking of the project can be consulted in the following GitHub Projects board:
 
