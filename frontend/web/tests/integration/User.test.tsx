@@ -20,8 +20,8 @@ const testUserService = createUserService(testAPI);
 describe("UserPage", () => {
   let authenticatedUser: UserSimpleDTO;
 
-  beforeAll(() => {
-    authenticatedUser = authenticateUser(false);
+  beforeAll(async() => {
+    authenticatedUser = await authenticateUser(false);
   });
 
   beforeEach(() => {
@@ -70,5 +70,22 @@ describe("UserPage", () => {
     fireEvent.click(await screen.findByRole("button", { name: /log out/i }));
 
     expect(await screen.findByText("Home page")).toBeInTheDocument();
+  });
+
+  it("redirects to city form", async () => {
+    authenticatedUser = await authenticateUser(true);
+    render(
+      <MemoryRouter initialEntries={["/profile"]}>
+        <Routes>
+          <Route path="/cities/new" element={<div>City Form</div>} />
+          <Route path="/profile" element={<UserPage userService={testUserService} authService={testAuthService}/>} />
+          <Route path="/log-in" element={<div>Log in page</div>} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    fireEvent.click(await screen.findByRole("button", { name: /add city/i }));
+
+    expect(await screen.findByText("City Form")).toBeInTheDocument();
   });
 });

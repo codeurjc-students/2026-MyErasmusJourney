@@ -36,7 +36,8 @@ describe("UserPage", () => {
       displayName: "john",
       fullName: "John Doe",
       email: "john@test.com",
-      studyLocation: "Madrid, Spain"
+      studyLocation: "Madrid, Spain",
+      roles: ["USER"]
     };
 
     const mockGetUser = vi.fn().mockResolvedValue(fakeUser);
@@ -77,7 +78,8 @@ describe("UserPage", () => {
       displayName: "john",
       fullName: "John Doe",
       email: "john@test.com",
-      studyLocation: ""
+      studyLocation: "",
+      roles: ["USER"]
     };
 
     const mockGetUser = vi.fn().mockResolvedValue(fakeUser);
@@ -156,7 +158,8 @@ describe("UserPage", () => {
       displayName: "john",
       fullName: "John Doe",
       email: "john@test.com",
-      studyLocation: "Madrid"
+      studyLocation: "Madrid",
+      roles: ["USER"]
     };
 
     const mockGetUser = vi.fn().mockResolvedValue(fakeUser);
@@ -201,7 +204,8 @@ describe("UserPage", () => {
       displayName: "john",
       fullName: "John Doe",
       email: "john@test.com",
-      studyLocation: "Madrid"
+      studyLocation: "Madrid",
+      roles: ["USER"]
     };
 
     const mockService: UserService = {
@@ -223,6 +227,83 @@ describe("UserPage", () => {
       expect(screen.getByRole("button", { name: /new experience/i })).toBeInTheDocument();
       expect(screen.getByRole("button", { name: /change picture/i })).toBeInTheDocument();
     });
+  });
+
+  it("renders all admin buttons", async () => {
+
+    const fakeUser = {
+      id: 1,
+      displayName: "john",
+      fullName: "John Doe",
+      email: "john@test.com",
+      studyLocation: "Madrid",
+      roles: ["USER", "ADMIN"]
+    };
+
+    const mockService: UserService = {
+      signUp: vi.fn(),
+      getUserInfo: vi.fn(),
+      getUserById: vi.fn().mockResolvedValue(fakeUser)
+    };
+
+    (useUserStore as any).mockReturnValue({
+      user: { id: 1 },
+      setUser: vi.fn()
+    });
+
+    render(<UserPage userService={mockService}/>);
+
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: /log out/i })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /edit profile/i })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /new experience/i })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /change picture/i })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /add city/i })).toBeInTheDocument();
+    });
+  });
+
+  it("redirects to city form", async () => {
+
+    const fakeUser = {
+      id: 1,
+      displayName: "john",
+      fullName: "John Doe",
+      email: "john@test.com",
+      studyLocation: "Madrid",
+      roles: ["USER", "ADMIN"]
+    };
+
+    const mockGetUser = vi.fn().mockResolvedValue(fakeUser);
+
+    const mockLogOut = vi.fn();
+
+    const setUser = vi.fn();
+
+    const mockService: UserService = {
+      signUp: vi.fn(),
+      getUserInfo: vi.fn(),
+      getUserById: mockGetUser
+    };
+
+    const mockAuth: AuthService = {
+      logIn: vi.fn(),
+      logOut: mockLogOut
+    };
+
+    (useUserStore as any).mockReturnValue({
+      user: { id: 1 },
+      setUser
+    });
+
+    render(<UserPage authService={mockAuth} userService={mockService}/>);
+
+    await waitFor(() => {
+      expect(mockGetUser).toHaveBeenCalled();
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: /add city/i }));
+
+    expect(mockNavigate).toHaveBeenCalledWith("/cities/new");
   });
 
 });

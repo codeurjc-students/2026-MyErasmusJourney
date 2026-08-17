@@ -4,4 +4,5 @@ export interface UserDTO{
     fullName: String;
     email: String;
     studyLocation: String;
+    roles: Array<String>;
 }

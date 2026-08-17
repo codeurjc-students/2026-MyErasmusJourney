@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
@@ -124,7 +126,8 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .body("id", equalTo(2))
                 .body("fullName", notNullValue())
                 .body("displayName", notNullValue())
-                .body("email", notNullValue());
+                .body("email", notNullValue())
+                .body("roles", equalTo(List.of("USER")));
     }
 
     @Test
@@ -148,7 +151,8 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .body("fullName", notNullValue())
                 .body("displayName", notNullValue())
                 .body("email", notNullValue())
-                .body("studyLocation", notNullValue());
+                .body("studyLocation", notNullValue())
+                .body("roles", equalTo(List.of("USER", "ADMIN")));
     }
 
     @Test
@@ -172,7 +176,8 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .body("fullName", notNullValue())
                 .body("displayName", notNullValue())
                 .body("email", notNullValue())
-                .body("studyLocation", nullValue());
+                .body("studyLocation", nullValue())
+                .body("roles", equalTo(List.of("USER")));
     }
 
     @Test

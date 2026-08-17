@@ -21,6 +21,10 @@ export default function UserPage({ authService = createAuthService(API), userSer
         navigate("/available-soon");
     }
 
+    function addCity() {
+        navigate("/cities/new");
+    }
+
     useEffect(() => {
             
             const fetchUser = async () => {
@@ -83,6 +87,12 @@ export default function UserPage({ authService = createAuthService(API), userSer
                     </div>
 
                     <div className="flex justify-center gap-8 mt-10">
+                        {(userDTO?.roles.includes("ADMIN"))
+                            ?(
+                                <button className="button" onClick={addCity}>Add City</button>
+                            )
+                            :null
+                        }
                         <button className="button" onClick={notAvailable}>Edit Profile</button>
                         <button className="button" onClick={notAvailable}>New Experience</button>
                     </div>
