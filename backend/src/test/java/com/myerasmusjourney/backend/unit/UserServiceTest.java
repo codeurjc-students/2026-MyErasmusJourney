@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -209,7 +210,8 @@ public class UserServiceTest {
                 "John",
                 "john",
                 "john@email.com",
-                "Munich, Germany"
+                "Munich, Germany",
+                List.of("USER")
         );
 
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -251,7 +253,8 @@ public class UserServiceTest {
                 "John",
                 "john",
                 "john@email.com",
-                null
+                null,
+                List.of("USER")
         );
 
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -322,7 +325,8 @@ public class UserServiceTest {
                 "John",
                 "john",
                 "john@email.com",
-                "Munich, Germany"
+                "Munich, Germany",
+                List.of("USER")
         );
 
         SecurityContext securityContext = mock(SecurityContext.class);

@@ -18,7 +18,7 @@ This document describes all the different functionalities which are going to be 
 | 6   | Delete experience    |      🔜       | Authenticated user / Administrator  | The author of a post as well as an administrator can delete the post.                                                 |
 | 7   | Comment post         |      🔜       | Authenticated user                  | Any user can comment in any post                                                                                      |
 | 8   | Delete comment       |      🔜       | Authenticated user / Administrator  | Comments can be deleted by their author or an administrator.                                                          |
-| 9   | Add city             |      🔜       | Administrator                       | Administrator user can add a city therefore an authenticated user can post experiences related to the new city.       |
+| 9   | Add city             |      🏗️       | Administrator                       | Administrator user can add a city therefore an authenticated user can post experiences related to the new city.       |
 | 10  | Show user's posts    |      🔜       | Authenticated user / Administrator  | An authenticated user will be able to see its posts on its account page. Administrators can see anyone's posts.       |
 | 11  | Show user's comments |      🔜       | Authenticated user / Administrator  | An authenticated user will be able to see its comments on its account page. Administrators can see anyone's comments. |
 

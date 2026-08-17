@@ -7,6 +7,7 @@ import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import LogInPage from "../pages/LogInPage/LogInPage";
 import UserPage from "../pages/UserPage/UserPage";
 import AvailableSoonPage from "../pages/AvailableSoonPage/AvailableSoonPage";
+import CityFormPage from "../pages/CityFormPage/CityFormPage";
 
 export const routes = [
   {
@@ -36,5 +37,9 @@ export const routes = [
   {
     path: ROUTES.AVAILABLE_SOON,
     element: <AvailableSoonPage />
+  },
+  {
+    path: ROUTES.CITY_FORM,
+    element: <CityFormPage />
   }
 ];

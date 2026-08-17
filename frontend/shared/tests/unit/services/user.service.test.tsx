@@ -206,7 +206,8 @@ describe("UserService", () => {
       displayName: "testuser",
       fullName: "Test User",
       email: "test@email.com",
-      studyLocation: "Munich, Germany"
+      studyLocation: "Munich, Germany",
+      roles: ["USER"]
     }
 
     const mockApi = {
