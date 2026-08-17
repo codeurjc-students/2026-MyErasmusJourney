@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CityService {
@@ -23,15 +25,26 @@ public class CityService {
     @Autowired
     private CityMapper cityMapper;
 
+    private String formatName(String value){
+        if(value == null || value.isEmpty()){
+            return value;
+        }
+        value = value.trim().toLowerCase();
+        return Arrays.stream(value.trim().toLowerCase().split("\\s+"))
+                .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1))
+                .collect(Collectors.joining(" "));
+    }
+
     @Transactional
     public ResponseEntity<CityDTO> addCity(CityFormDTO cityFormDTO){
-        List<City> cities = cityRepository.findByName(cityFormDTO.name());
-
+        String cityName = formatName(cityFormDTO.name());
+        List<City> cities = cityRepository.findByName(cityName);
+        String countryName = formatName(cityFormDTO.country());
         for(City c: cities){
-            if(c.getCountry().equals(cityFormDTO.country())) return ResponseEntity.ok(cityMapper.toDTO(c));
+            if(c.getCountry().equals(countryName)) return ResponseEntity.ok(cityMapper.toDTO(c));
         }
 
-        City city = new City(cityFormDTO.name(), cityFormDTO.country(), cityFormDTO.description());
+        City city = new City(cityName, countryName, cityFormDTO.description());
         City savedCity = cityRepository.save(city);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedCity.getId()).toUri();
