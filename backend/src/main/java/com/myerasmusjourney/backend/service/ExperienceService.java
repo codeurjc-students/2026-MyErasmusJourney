@@ -2,6 +2,7 @@ package com.myerasmusjourney.backend.service;
 
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
+import com.myerasmusjourney.backend.enumeration.Categories;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import com.myerasmusjourney.backend.repository.ExperienceRepository;
 import jakarta.annotation.PostConstruct;
@@ -34,5 +35,9 @@ public class ExperienceService {
 
     public List<ExperienceSimpleDTO> getAllExperiences() {
         return experienceMapper.toDTOs(experienceRepository.findAll());
+    }
+
+    public Categories[] getCategories() {
+        return Categories.values();
     }
 }

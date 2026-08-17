@@ -26,6 +26,41 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Get Categories",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{APIURL}}/experiences/categories",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "experiences",
+                "categories"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },

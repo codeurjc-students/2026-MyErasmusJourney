@@ -1,6 +1,7 @@
 package com.myerasmusjourney.backend.controller;
 
 import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
+import com.myerasmusjourney.backend.enumeration.Categories;
 import com.myerasmusjourney.backend.service.ExperienceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,5 +20,10 @@ public class ExperienceRestController {
     @GetMapping("/")
     public List<ExperienceSimpleDTO> getExperiences(){
         return experienceService.getAllExperiences();
+    }
+
+    @GetMapping("/categories")
+    public Categories[] getCategories(){
+        return experienceService.getCategories();
     }
 }

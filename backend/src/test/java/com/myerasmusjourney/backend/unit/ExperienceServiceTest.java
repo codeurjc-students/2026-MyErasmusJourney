@@ -2,6 +2,7 @@ package com.myerasmusjourney.backend.unit;
 
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
+import com.myerasmusjourney.backend.enumeration.Categories;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import com.myerasmusjourney.backend.repository.ExperienceRepository;
 import com.myerasmusjourney.backend.service.ExperienceService;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -88,5 +90,14 @@ public class ExperienceServiceTest {
         verify(experienceRepository).findAll();
         verify(experienceMapper).toDTOs(experiences);
 
+    }
+
+    @Test
+    void testGetExperiences(){
+        Categories[] result = experienceService.getCategories();
+
+        for (Categories c: result){
+            assertNotNull(Categories.valueOf(c.toString()));
+        }
     }
 }
