@@ -3,8 +3,10 @@ package com.myerasmusjourney.backend.service;
 import com.myerasmusjourney.backend.domain.City;
 import com.myerasmusjourney.backend.dto.CityDTO;
 import com.myerasmusjourney.backend.dto.CityFormDTO;
+import com.myerasmusjourney.backend.dto.CitySimpleDTO;
 import com.myerasmusjourney.backend.mapper.CityMapper;
 import com.myerasmusjourney.backend.repository.CityRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +38,16 @@ public class CityService {
                 .collect(Collectors.joining(" "));
     }
 
+    @PostConstruct
+    public void init(){
+        List<City> cities = List.of(
+                new City(formatName("valencia"), formatName("spain"),""),
+                new City(formatName("london"), formatName("united kingdom"),"")
+        );
+
+        cityRepository.saveAll(cities);
+    }
+
     @Transactional
     public ResponseEntity<CityDTO> addCity(CityFormDTO cityFormDTO){
         String cityName = formatName(cityFormDTO.name());
@@ -49,5 +62,10 @@ public class CityService {
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedCity.getId()).toUri();
         return ResponseEntity.created(location).body(cityMapper.toDTO(savedCity));
+    }
+
+    public Collection<CitySimpleDTO> getCities() {
+        List<City> cities = cityRepository.findAll();
+        return cityMapper.toSimpleDTOs(cities);
     }
 }
