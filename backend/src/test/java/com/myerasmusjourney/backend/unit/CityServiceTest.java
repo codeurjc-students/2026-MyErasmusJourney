@@ -3,6 +3,7 @@ package com.myerasmusjourney.backend.unit;
 import com.myerasmusjourney.backend.domain.City;
 import com.myerasmusjourney.backend.dto.CityDTO;
 import com.myerasmusjourney.backend.dto.CityFormDTO;
+import com.myerasmusjourney.backend.dto.CitySimpleDTO;
 import com.myerasmusjourney.backend.mapper.CityMapper;
 import com.myerasmusjourney.backend.repository.CityRepository;
 import com.myerasmusjourney.backend.service.CityService;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -140,5 +142,48 @@ public class CityServiceTest {
         verify(cityRepository).findByName("Munich");
         verify(cityRepository).save(any(City.class));
         verify(cityMapper).toDTO(savedCity);
+    }
+
+    @Test
+    void testGetCities() {
+        List<City> cities = List.of(
+                new City("Madrid", "Spain", "Madrid description"),
+                new City("Rome", "Italy", "Rome description"),
+                new City("Berlin", "Germany", "Berlin description")
+        );
+
+        List<CitySimpleDTO> expected = List.of(
+                new CitySimpleDTO(null, "Madrid", "", "Spain"),
+                new CitySimpleDTO(null, "Rome","",  "Italy"),
+                new CitySimpleDTO(null, "Berlin", "", "Germany")
+        );
+
+        when(cityRepository.findAll()).thenReturn(cities);
+        when(cityMapper.toSimpleDTOs(cities)).thenReturn(expected);
+
+        Collection<CitySimpleDTO> result = cityService.getCities();
+
+        assertNotNull(result);
+        assertEquals(expected, result);
+
+        verify(cityRepository).findAll();
+        verify(cityMapper).toSimpleDTOs(cities);
+    }
+
+    @Test
+    void testGetCitiesEmpty() {
+        List<City> cities = List.of();
+        List<CitySimpleDTO> expected = List.of();
+
+        when(cityRepository.findAll()).thenReturn(cities);
+        when(cityMapper.toSimpleDTOs(cities)).thenReturn(expected);
+
+        Collection<CitySimpleDTO> result = cityService.getCities();
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+
+        verify(cityRepository).findAll();
+        verify(cityMapper).toSimpleDTOs(cities);
     }
 }

@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
+import static io.restassured.RestAssured.when;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.notNullValue;
 
 @Tag("e2e")
 public class CitiesTest extends AuthenticatedE2ETest {
@@ -124,5 +125,20 @@ public class CitiesTest extends AuthenticatedE2ETest {
                 .post("/api/v1/cities/")
                 .then()
                 .statusCode(403);
+    }
+
+    @Test
+    void testGetCities() {
+
+        when()
+                .get("/api/v1/cities/")
+                .then()
+                .statusCode(200)
+                .contentType("application/json")
+                .body("", hasSize(greaterThan(0)))
+                .body("[0].id", notNullValue())
+                .body("[0].name", notNullValue())
+                .body("[0].country", notNullValue())
+                .body("[0].description", notNullValue());
     }
 }
