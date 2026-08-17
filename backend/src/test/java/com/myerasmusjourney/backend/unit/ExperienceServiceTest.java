@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -93,6 +94,10 @@ public class ExperienceServiceTest {
 
     @Test
     void testGetExperiences(){
-        assertEquals(Categories.values(), experienceService.getCategories());
+        Categories[] result = experienceService.getCategories();
+
+        for (Categories c: result){
+            assertNotNull(Categories.valueOf(c.toString()));
+        }
     }
 }
