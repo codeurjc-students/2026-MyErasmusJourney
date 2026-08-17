@@ -220,6 +220,41 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Get cities",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{APIURL}}/cities/",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "cities",
+                ""
+              ]
+            }
+          },
+          "response": []
         }
       ]
     }
