@@ -2,6 +2,7 @@ package com.myerasmusjourney.backend.unit;
 
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
+import com.myerasmusjourney.backend.enumeration.Categories;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import com.myerasmusjourney.backend.repository.ExperienceRepository;
 import com.myerasmusjourney.backend.service.ExperienceService;
@@ -88,5 +89,10 @@ public class ExperienceServiceTest {
         verify(experienceRepository).findAll();
         verify(experienceMapper).toDTOs(experiences);
 
+    }
+
+    @Test
+    void testGetExperiences(){
+        assertEquals(Categories.values(), experienceService.getCategories());
     }
 }
