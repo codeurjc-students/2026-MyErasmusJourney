@@ -4,6 +4,7 @@ import com.myerasmusjourney.backend.TestDataBase;
 import com.myerasmusjourney.backend.domain.City;
 import com.myerasmusjourney.backend.dto.CityDTO;
 import com.myerasmusjourney.backend.dto.CityFormDTO;
+import com.myerasmusjourney.backend.dto.CitySimpleDTO;
 import com.myerasmusjourney.backend.mapper.CityMapper;
 import com.myerasmusjourney.backend.repository.CityRepository;
 import com.myerasmusjourney.backend.service.CityService;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Collection;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -131,5 +133,40 @@ public class CityServiceTest extends TestDataBase {
 
         assertEquals("Munich in Germany", germanCity.getDescription());
         assertEquals("Another Munich", americanCity.getDescription());
+    }
+
+    @Test
+    void testGetCities() {
+        Collection<CitySimpleDTO> result = cityService.getCities();
+
+        assertNotNull(result);
+        assertEquals(3, result.size());
+
+        List<CitySimpleDTO> cities = result.stream().toList();
+
+        assertTrue(cities.stream()
+                .anyMatch(city ->
+                        city.name().equals("Madrid") &&
+                                city.country().equals("Spain")));
+
+        assertTrue(cities.stream()
+                .anyMatch(city ->
+                        city.name().equals("Rome") &&
+                                city.country().equals("Italy")));
+
+        assertTrue(cities.stream()
+                .anyMatch(city ->
+                        city.name().equals("Berlin") &&
+                                city.country().equals("Germany")));
+    }
+
+    @Test
+    void testGetCitiesEmpty() {
+        cityRepository.deleteAll();
+
+        Collection<CitySimpleDTO> result = cityService.getCities();
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
     }
 }
