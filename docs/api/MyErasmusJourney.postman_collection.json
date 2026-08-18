@@ -61,6 +61,43 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Post Experience",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"rating\": 9.2,\n    \"title\": \"Postman Experience\",\n    \"description\": \"This is an experience created with the postman\",\n    \"category\": \"Accommodation\",\n    \"cityId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{APIURL}}/experiences/",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "experiences",
+                ""
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
