@@ -1,28 +1,18 @@
 package com.myerasmusjourney.backend.e2e;
 
-import com.myerasmusjourney.backend.TestDataBase;
+
 import com.myerasmusjourney.backend.enumeration.Category;
-import io.restassured.RestAssured;
-import org.junit.jupiter.api.BeforeEach;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 
+import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.*;
 
 @Tag("e2e")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ExperiencesTest extends TestDataBase {
-
-    @LocalServerPort
-    private int port;
-
-    @BeforeEach
-    void setUp() {
-        RestAssured.port = port;
-    }
+class ExperiencesTest extends AuthenticatedE2ETest {
 
     @Test
     void testGetExperiences() {
@@ -55,5 +45,72 @@ class ExperiencesTest extends TestDataBase {
                 .body("[2]", equalTo(Category.Documentation.toString()))
                 .body("[3]", equalTo(Category.Gastronomy.toString()))
                 .body("[4]", equalTo(Category.Personal_Experience.toString()));
+    }
+
+    @Test
+    void testPostExperience() throws JSONException {
+        JSONObject body = new JSONObject();
+        body.put("title", "Experience");
+        body.put("cityId", 1L);
+        body.put("description", "Whatever user wants");
+        body.put("rating", 5.2F);
+        body.put("category", "Transportation");
+
+        obtainToken(false);
+
+        given()
+                .cookie("AuthToken", this.token)
+                .contentType("application/json")
+                .body(body.toString()).
+                when()
+                .post("/api/v1/experiences/")
+                .then()
+                .statusCode(201)
+                .body("id", greaterThan(0))
+                .body("title", equalTo(body.get("title")))
+                .body("description", equalTo(body.get("description")))
+                .body("rating", equalTo(5.2F))
+                .body("city.id", equalTo(1));
+    }
+
+    @Test
+    void testPostExperienceWithoutAuthentication() throws JSONException {
+        JSONObject body = new JSONObject();
+        body.put("title", "Experience");
+        body.put("cityId", 1L);
+        body.put("description", "Whatever user wants");
+        body.put("rating", 5.2F);
+        body.put("category", "Transportation");
+
+
+        given()
+                .cookie("AuthToken", this.token)
+                .contentType("application/json")
+                .body(body.toString()).
+                when()
+                .post("/api/v1/experiences/")
+                .then()
+                .statusCode(401);
+    }
+
+    @Test
+    void testPostExperienceWithoutValidCity() throws JSONException {
+        JSONObject body = new JSONObject();
+        body.put("title", "Experience");
+        body.put("cityId", 0L);
+        body.put("description", "Whatever user wants");
+        body.put("rating", 5.2F);
+        body.put("category", "Transportation");
+
+        obtainToken(false);
+
+        given()
+                .cookie("AuthToken", this.token)
+                .contentType("application/json")
+                .body(body.toString()).
+                when()
+                .post("/api/v1/experiences/")
+                .then()
+                .statusCode(404);
     }
 }
