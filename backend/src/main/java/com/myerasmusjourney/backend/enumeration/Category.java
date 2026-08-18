@@ -1,6 +1,6 @@
 package com.myerasmusjourney.backend.enumeration;
 
-public enum Categories {
+public enum Category {
     Accommodation,
     Culture,
     Documentation,
