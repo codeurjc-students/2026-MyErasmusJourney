@@ -2,6 +2,7 @@ package com.myerasmusjourney.backend.unit;
 
 import com.myerasmusjourney.backend.dto.CityDTO;
 import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
+import com.myerasmusjourney.backend.enumeration.Category;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class CityDTOTest {
     @Test
     void testCityDTO() {
-        ExperienceSimpleDTO experience = new ExperienceSimpleDTO(1L, LocalDate.now(), 5F, "Ttitle", "Description");
+        ExperienceSimpleDTO experience = new ExperienceSimpleDTO(1L, LocalDate.now(), 5F, "Ttitle", "Description", Category.Accommodation);
 
         List<ExperienceSimpleDTO> experiences = List.of(experience);
 

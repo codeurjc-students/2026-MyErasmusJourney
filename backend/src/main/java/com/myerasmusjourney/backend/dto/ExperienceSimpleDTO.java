@@ -1,6 +1,8 @@
 package com.myerasmusjourney.backend.dto;
 
 
+import com.myerasmusjourney.backend.enumeration.Category;
+
 import java.time.LocalDate;
 
 public record ExperienceSimpleDTO (
@@ -8,5 +10,6 @@ public record ExperienceSimpleDTO (
         LocalDate date,
         Float rating,
         String title,
-        String description
+        String description,
+        Category category
 ){}

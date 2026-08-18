@@ -1,6 +1,7 @@
 package com.myerasmusjourney.backend.unit;
 
 import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
+import com.myerasmusjourney.backend.enumeration.Category;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +14,7 @@ public class ExperienceSimpleDTOTest {
 
     @Test
     void testDTOCreation() {
-        ExperienceSimpleDTO exp = new ExperienceSimpleDTO(3L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1");
+        ExperienceSimpleDTO exp = new ExperienceSimpleDTO(3L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1", Category.Personal_Experience);
         assertNotNull(exp);
         assertEquals(3L, exp.id());
         assertEquals(LocalDate.of(2024, 3, 26), exp.date());
@@ -22,7 +23,7 @@ public class ExperienceSimpleDTOTest {
         assertNotEquals("Description2", exp.description());
         assertEquals("Descripción1", exp.description());
 
-        exp = new ExperienceSimpleDTO(null, LocalDate.of(2026, 1, 15), 4.7F, "Tittle", "Description");
+        exp = new ExperienceSimpleDTO(null, LocalDate.of(2026, 1, 15), 4.7F, "Tittle", "Description", Category.Personal_Experience);
 
         assertNull(exp.id());
         assertEquals(LocalDate.of(2026, 1, 15), exp.date());
@@ -33,9 +34,9 @@ public class ExperienceSimpleDTOTest {
 
     @Test
     void testComparingDTOs() {
-        ExperienceSimpleDTO exp = new ExperienceSimpleDTO(3L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1");
-        ExperienceSimpleDTO exp2 = new ExperienceSimpleDTO(3L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1");
-        ExperienceSimpleDTO exp3 = new ExperienceSimpleDTO(4L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1");
+        ExperienceSimpleDTO exp = new ExperienceSimpleDTO(3L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1", Category.Personal_Experience);
+        ExperienceSimpleDTO exp2 = new ExperienceSimpleDTO(3L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1", Category.Personal_Experience);
+        ExperienceSimpleDTO exp3 = new ExperienceSimpleDTO(4L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1", Category.Personal_Experience);
 
         assertEquals(exp, exp2);
         assertNotEquals(exp, exp3);

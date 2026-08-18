@@ -3,6 +3,7 @@ package com.myerasmusjourney.backend.integration;
 import com.myerasmusjourney.backend.TestDataBase;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
+import com.myerasmusjourney.backend.enumeration.Category;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import com.myerasmusjourney.backend.repository.ExperienceRepository;
 import com.myerasmusjourney.backend.service.ExperienceService;
@@ -41,10 +42,10 @@ public class ExperienceServiceTest extends TestDataBase {
         }
 
         List<Experience> experiences = List.of(
-                new Experience("Experiencia 1", "Descripcion 1", 9F),
-                new Experience("Experiencia 2", "Descripcion 2", 8.67F),
-                new Experience("Experiencia 3", "Descripcion 3", 5.4F),
-                new Experience("Experiencia 4", "Descripcion 4", 0.9F)
+                new Experience("Experiencia 1", "Descripcion 1", 9F, Category.Documentation.toString(), null, null),
+                new Experience("Experiencia 2", "Descripcion 2", 8.67F, Category.Personal_Experience.toString(), null, null),
+                new Experience("Experiencia 3", "Descripcion 3", 5.4F, Category.Gastronomy.toString(), null, null),
+                new Experience("Experiencia 4", "Descripcion 4", 0.9F, Category.Accommodation.toString(), null, null)
         );
         experienceRepository.saveAll(experiences);
 
@@ -78,10 +79,10 @@ public class ExperienceServiceTest extends TestDataBase {
 
         assertEquals(expected.size(), result.size());
 
-        Experience experience = new Experience("Experience 5", "Descripcion 5", 2.4F);
+        Experience experience = new Experience("Experience 5", "Descripcion 5", 2.4F, Category.Social_Events.toString(),null, null);
         Experience savedExperience = experienceRepository.save(experience);
 
-        ExperienceSimpleDTO savedDTO = new ExperienceSimpleDTO(savedExperience.getId(), savedExperience.getDate(), savedExperience.getRating(), savedExperience.getTitle(), savedExperience.getDescription());
+        ExperienceSimpleDTO savedDTO = new ExperienceSimpleDTO(savedExperience.getId(), savedExperience.getDate(), savedExperience.getRating(), savedExperience.getTitle(), savedExperience.getDescription(), savedExperience.getCategory());
         expected.add(savedDTO);
 
         result = experienceService.getAllExperiences();

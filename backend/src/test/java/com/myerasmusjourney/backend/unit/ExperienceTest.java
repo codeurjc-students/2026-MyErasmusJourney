@@ -1,6 +1,7 @@
 package com.myerasmusjourney.backend.unit;
 
 import com.myerasmusjourney.backend.domain.Experience;
+import com.myerasmusjourney.backend.enumeration.Category;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -14,13 +15,16 @@ public class ExperienceTest {
 
     @Test
     void testContrsuctor(){
-        Experience experience = new Experience("Titulo","Descripcion",3.4F);
+        Experience experience = new Experience("Titulo","Descripcion",3.4F, Category.Personal_Experience.toString(), null, null);
 
         assertNull(experience.getId());
         assertEquals(LocalDate.now(), experience.getDate());
         assertEquals("Titulo", experience.getTitle());
         assertEquals("Descripcion", experience.getDescription());
         assertEquals(3.4F, experience.getRating());
+        assertNull(experience.getAuthor());
+        assertNull(experience.getCity());
+        assertEquals(Category.Personal_Experience, experience.getCategory());
     }
 
     @Test

@@ -1,7 +1,7 @@
 package com.myerasmusjourney.backend.e2e;
 
 import com.myerasmusjourney.backend.TestDataBase;
-import com.myerasmusjourney.backend.enumeration.Categories;
+import com.myerasmusjourney.backend.enumeration.Category;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -37,6 +37,7 @@ class ExperiencesTest extends TestDataBase {
                 .body("[0].date", notNullValue())
                 .body("[0].rating", notNullValue())
                 .body("[0].title", notNullValue())
+                .body("[0].category", notNullValue())
                 .body("[0].description", notNullValue());
     }
 
@@ -49,10 +50,10 @@ class ExperiencesTest extends TestDataBase {
                 .statusCode(200)
                 .contentType("application/json")
                 .body("", hasSize(greaterThan(0)))
-                .body("[0]", equalTo(Categories.Accommodation.toString()))
-                .body("[1]", equalTo(Categories.Culture.toString()))
-                .body("[2]", equalTo(Categories.Documentation.toString()))
-                .body("[3]", equalTo(Categories.Gastronomy.toString()))
-                .body("[4]", equalTo(Categories.Personal_Experience.toString()));
+                .body("[0]", equalTo(Category.Accommodation.toString()))
+                .body("[1]", equalTo(Category.Culture.toString()))
+                .body("[2]", equalTo(Category.Documentation.toString()))
+                .body("[3]", equalTo(Category.Gastronomy.toString()))
+                .body("[4]", equalTo(Category.Personal_Experience.toString()));
     }
 }

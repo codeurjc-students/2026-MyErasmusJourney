@@ -2,7 +2,7 @@ package com.myerasmusjourney.backend.unit;
 
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
-import com.myerasmusjourney.backend.enumeration.Categories;
+import com.myerasmusjourney.backend.enumeration.Category;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import com.myerasmusjourney.backend.repository.ExperienceRepository;
 import com.myerasmusjourney.backend.service.ExperienceService;
@@ -54,24 +54,24 @@ public class ExperienceServiceTest {
     @Test
     void testGetAllExperiences(){
         List<Experience> experiences = List.of(
-                new Experience("Experiencia 1", "Descripcion 1", 9F),
-                new Experience("Experiencia 2", "Descripcion 2", 8.67F),
-                new Experience("Experiencia 3", "Descripcion 3", 5.4F),
-                new Experience("Experiencia 4", "Descripcion 4", 0.9F)
+                new Experience("Experiencia 1", "Descripcion 1", 9F, Category.Personal_Experience.toString(), null, null),
+                new Experience("Experiencia 2", "Descripcion 2", 8.67F, Category.Social_Events.toString(), null, null),
+                new Experience("Experiencia 3", "Descripcion 3", 5.4F, Category.Culture.toString(), null, null),
+                new Experience("Experiencia 4", "Descripcion 4", 0.9F, Category.Transportation.toString(), null, null)
         );
 
         List<ExperienceSimpleDTO> mapped = List.of(
-                new ExperienceSimpleDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 5.4F, "Experiencia 3", "Descripcion 3"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4")
+                new ExperienceSimpleDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", Category.Personal_Experience),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", Category.Social_Events),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 5.4F, "Experiencia 3", "Descripcion 3", Category.Culture),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4", Category.Transportation)
         );
 
         List<ExperienceSimpleDTO> expected = List.of(
-                new ExperienceSimpleDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 5.4F, "Experiencia 3", "Descripcion 3"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4")
+                new ExperienceSimpleDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", Category.Personal_Experience),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", Category.Social_Events),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 5.4F, "Experiencia 3", "Descripcion 3", Category.Culture),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4", Category.Transportation)
         );
 
         when(experienceRepository.findAll()).thenReturn(experiences);
@@ -94,10 +94,10 @@ public class ExperienceServiceTest {
 
     @Test
     void testGetExperiences(){
-        Categories[] result = experienceService.getCategories();
+        Category[] result = experienceService.getCategories();
 
-        for (Categories c: result){
-            assertNotNull(Categories.valueOf(c.toString()));
+        for (Category c: result){
+            assertNotNull(Category.valueOf(c.toString()));
         }
     }
 }
