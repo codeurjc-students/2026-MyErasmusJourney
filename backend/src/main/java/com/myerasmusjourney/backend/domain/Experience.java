@@ -25,9 +25,11 @@ public class Experience {
     private Category category;
 
     @ManyToOne
+    @JoinColumn(name = "city_id")
     private City city;
 
     @ManyToOne
+    @JoinColumn(name = "author_id")
     private User author;
 
     public Experience(){}
