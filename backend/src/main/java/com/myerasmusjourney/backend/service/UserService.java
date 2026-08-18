@@ -40,7 +40,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    protected User getLoggedUser() {
+    public User getLoggedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && !(auth instanceof AnonymousAuthenticationToken)) {
             return userRepository.findByEmail(auth.getName());

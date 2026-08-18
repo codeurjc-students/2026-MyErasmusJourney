@@ -71,7 +71,7 @@ public class CityService {
         return cityMapper.toSimpleDTOs(cities);
     }
 
-    protected City findById(Long id) {
+    public City findById(Long id) {
         return cityRepository.findById(id).orElseThrow(() -> new NoSuchElementException("City not found"));
     }
 

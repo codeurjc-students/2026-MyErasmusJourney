@@ -2,9 +2,7 @@ package com.myerasmusjourney.backend.integration;
 
 import com.myerasmusjourney.backend.TestDataBase;
 import com.myerasmusjourney.backend.domain.City;
-import com.myerasmusjourney.backend.dto.CityDTO;
-import com.myerasmusjourney.backend.dto.CityFormDTO;
-import com.myerasmusjourney.backend.dto.CitySimpleDTO;
+import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.mapper.CityMapper;
 import com.myerasmusjourney.backend.repository.CityRepository;
 import com.myerasmusjourney.backend.service.CityService;
@@ -19,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.Collection;
 import java.util.List;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("integration")

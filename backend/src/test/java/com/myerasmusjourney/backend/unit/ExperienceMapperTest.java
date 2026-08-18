@@ -1,7 +1,12 @@
 package com.myerasmusjourney.backend.unit;
 
+import com.myerasmusjourney.backend.domain.City;
 import com.myerasmusjourney.backend.domain.Experience;
+import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.dto.CitySimpleDTO;
+import com.myerasmusjourney.backend.dto.ExperienceDTO;
 import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
+import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import com.myerasmusjourney.backend.enumeration.Category;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import org.junit.jupiter.api.Tag;
@@ -48,5 +53,26 @@ public class ExperienceMapperTest {
 
         assertTrue(result.isEmpty());
         assertNotNull(result);
+    }
+
+    @Test
+    void testToDTO(){
+        City city = new City("Madrid", "Spain", "description");
+        User user = new User("test", "test", "test@gmail.com", "password", "valencia", "spain");
+        Experience exp = new Experience("Title", "Description", 6.8F, Category.Accommodation.toString(), city, user);
+
+        CitySimpleDTO citySimpleDTO = new CitySimpleDTO(null, "Madrid", "description", "Spain");
+        UserSimpleDTO userSimpleDTO = new UserSimpleDTO(null, "test", "test@gmail.com");
+        ExperienceDTO dto = new ExperienceDTO(null, LocalDate.now(), 6.8F, "Title", "Description", Category.Accommodation, citySimpleDTO, userSimpleDTO);
+
+        ExperienceDTO result = mapper.toDTO(exp);
+
+        assertEquals(dto, result);
+
+        exp = null;
+
+        result = mapper.toDTO(exp);
+
+        assertNull(result);
     }
 }

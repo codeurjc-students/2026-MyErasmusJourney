@@ -1,21 +1,30 @@
 package com.myerasmusjourney.backend.integration;
 
 import com.myerasmusjourney.backend.TestDataBase;
+import com.myerasmusjourney.backend.domain.City;
 import com.myerasmusjourney.backend.domain.Experience;
-import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
+import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.enumeration.Category;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import com.myerasmusjourney.backend.repository.ExperienceRepository;
+import com.myerasmusjourney.backend.service.CityService;
 import com.myerasmusjourney.backend.service.ExperienceService;
+import com.myerasmusjourney.backend.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -31,6 +40,12 @@ public class ExperienceServiceTest extends TestDataBase {
 
     @Autowired
     private ExperienceMapper experienceMapper;
+
+    @Autowired
+    private CityService cityService;
+
+    @Autowired
+    private UserService userService;
 
     private List<ExperienceSimpleDTO> expected;
 
@@ -105,5 +120,88 @@ public class ExperienceServiceTest extends TestDataBase {
         List<ExperienceSimpleDTO> result = experienceService.getAllExperiences();
 
         assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void testCreateExperience(){
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken("test@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        ExperienceFormDTO formDTO = new ExperienceFormDTO(
+                5.0f,
+                "Erasmus party",
+                "Great Erasmus party",
+                "Social_Events",
+                1L
+        );
+
+        City city = cityService.findById(1L);
+        User user = userService.getLoggedUser();
+
+        Experience savedExperience = new Experience(
+                formDTO.title(),
+                formDTO.description(),
+                formDTO.rating(),
+                formDTO.category(),
+                city,
+                user
+        );
+
+        CitySimpleDTO cityDTO = new CitySimpleDTO(
+                city.getId(),
+                city.getName(),
+                city.getDescription(),
+                city.getCountry()
+        );
+
+        UserSimpleDTO userDTO = new UserSimpleDTO(
+                user.getId(),
+                user.getDisplayName(),
+                user.getEmail()
+        );
+
+        ExperienceDTO result = experienceService.createExperience(formDTO);
+
+        ExperienceDTO expectedDTO = new ExperienceDTO(
+                result.id(),
+                savedExperience.getDate(),
+                savedExperience.getRating(),
+                savedExperience.getTitle(),
+                savedExperience.getDescription(),
+                savedExperience.getCategory(),
+                cityDTO,
+                userDTO
+        );
+
+        assertNotNull(result);
+        assertEquals(expectedDTO, result);
+
+        assertEquals(formDTO.title(), result.title());
+        assertEquals(formDTO.description(), result.description());
+        assertEquals(formDTO.rating(), result.rating());
+        assertEquals(formDTO.category(), result.category().name());
+        assertEquals(cityDTO, result.city());
+        assertEquals(userDTO, result.author());
+    }
+
+    @Test
+    void testCreateExperienceCityDoesntExist(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken("test@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        ExperienceFormDTO formDTO = new ExperienceFormDTO(
+                5.0f,
+                "Erasmus party",
+                "Great Erasmus party",
+                "Social_Events",
+                0L
+        );
+
+        try{
+            experienceService.createExperience(formDTO);
+        } catch (NoSuchElementException exception){
+            assertTrue(true);
+        }
     }
 }
