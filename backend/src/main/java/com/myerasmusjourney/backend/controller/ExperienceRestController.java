@@ -1,13 +1,16 @@
 package com.myerasmusjourney.backend.controller;
 
+import com.myerasmusjourney.backend.dto.ExperienceDTO;
+import com.myerasmusjourney.backend.dto.ExperienceFormDTO;
 import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
-import com.myerasmusjourney.backend.enumeration.Categories;
+import com.myerasmusjourney.backend.enumeration.Category;
 import com.myerasmusjourney.backend.service.ExperienceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -22,8 +25,15 @@ public class ExperienceRestController {
         return experienceService.getAllExperiences();
     }
 
+    @PostMapping("/")
+    public ResponseEntity<ExperienceDTO> createExperience(@RequestBody ExperienceFormDTO experienceFormDTO){
+        ExperienceDTO experienceDTO = experienceService.createExperience(experienceFormDTO);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(experienceDTO.id()).toUri();
+        return ResponseEntity.created(location).body(experienceDTO);
+    }
+
     @GetMapping("/categories")
-    public Categories[] getCategories(){
+    public Category[] getCategories(){
         return experienceService.getCategories();
     }
 }
