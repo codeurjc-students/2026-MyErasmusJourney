@@ -68,4 +68,8 @@ public class City {
     public void setExperiences(List<Experience> experiences) {
         this.experiences = experiences;
     }
+
+    public void addExperience(Experience experience){
+        this.experiences.add(experience);
+    }
 }

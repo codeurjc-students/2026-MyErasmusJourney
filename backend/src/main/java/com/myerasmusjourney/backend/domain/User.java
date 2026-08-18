@@ -3,6 +3,7 @@ package com.myerasmusjourney.backend.domain;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,9 @@ public class User {
     private String studyLocation = null;
 
     private List<String> roles = new ArrayList<>();
+
+    @OneToMany
+    private List<Experience> experiences = new LinkedList<>();
 
     public User(){
         this.roles.add("USER");
@@ -102,5 +106,13 @@ public class User {
 
     public String getStudyLocation() {
         return studyLocation;
+    }
+
+    public List<Experience> getExperiences() {
+        return experiences;
+    }
+
+    public void addExperience(Experience experience){
+        this.experiences.add(experience);
     }
 }
