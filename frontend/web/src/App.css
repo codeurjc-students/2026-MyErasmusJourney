@@ -53,7 +53,7 @@ label{
   text-decoration: underline;
 }
 
-input, textarea{
+input, textarea, select{
   padding: 0.4rem;
   margin-bottom: 0.25rem;
   max-width: 30rem;

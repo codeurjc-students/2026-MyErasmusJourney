@@ -25,6 +25,10 @@ export default function UserPage({ authService = createAuthService(API), userSer
         navigate("/cities/new");
     }
 
+    function addExperience() {
+        navigate("/experiences/new");
+    }
+
     useEffect(() => {
             
             const fetchUser = async () => {
@@ -94,7 +98,7 @@ export default function UserPage({ authService = createAuthService(API), userSer
                             :null
                         }
                         <button className="button" onClick={notAvailable}>Edit Profile</button>
-                        <button className="button" onClick={notAvailable}>New Experience</button>
+                        <button className="button" onClick={addExperience}>New Experience</button>
                     </div>
 
                 </div>
