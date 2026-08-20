@@ -27,10 +27,10 @@ public class ExperienceMapperTest {
     void testToDTOs() {
 
         List<Experience> experiences = List.of(
-                new Experience("Experiencia 1", "Descripcion 1", 9F, List.of("Gastronomy", "Documentation"), null, null),
-                new Experience("Experiencia 2", "Descripcion 2", 8.67F, List.of("Transportation", "Documentation"), null, null),
-                new Experience("Experiencia 3", "Descripcion 3", 5.4F, List.of("Gastronomy", "Social_Events"), null, null),
-                new Experience("Experiencia 4", "Descripcion 4", 0.9F, List.of("Culture", "Transportation"), null, null)
+                new Experience("Experiencia 1", "Descripcion 1", 9F, null, List.of("Gastronomy", "Documentation"), null, null),
+                new Experience("Experiencia 2", "Descripcion 2", 8.67F, null, List.of("Transportation", "Documentation"), null, null),
+                new Experience("Experiencia 3", "Descripcion 3", 5.4F, null, List.of("Gastronomy", "Social_Events"), null, null),
+                new Experience("Experiencia 4", "Descripcion 4", 0.9F, null, List.of("Culture", "Transportation"), null, null)
         );
 
         List<ExperienceSimpleDTO> expected = List.of(
@@ -67,7 +67,7 @@ public class ExperienceMapperTest {
     void testToDTO(){
         City city = new City("Madrid", "Spain", "description");
         User user = new User("test", "test", "test@gmail.com", "password", "valencia", "spain");
-        Experience exp = new Experience("Title", "Description", 6.8F, List.of("Gastronomy", "Documentation"), city, user);
+        Experience exp = new Experience("Title", "Description", 6.8F, null, List.of("Gastronomy", "Documentation"), city, user);
 
         CitySimpleDTO citySimpleDTO = new CitySimpleDTO(null, "Madrid", "description", "Spain");
         UserSimpleDTO userSimpleDTO = new UserSimpleDTO(null, "test", "test@gmail.com");

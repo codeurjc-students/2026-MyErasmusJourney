@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class ExperienceService {
@@ -35,16 +36,17 @@ public class ExperienceService {
     @Transactional
     public void init(){
         List<Experience> experiences = List.of(
-            new Experience("Experiencia 1", "Descripcion 1", 9F, List.of("Accommodation", "Transportation"), null, null),
-            new Experience("Experiencia 2", "Descripcion 2", 8.67F, List.of("Gastronomy", "Social_Events"), null, null),
-            new Experience("Experiencia 3", "Descripcion 3", 5.4F, List.of("Culture", "Transportation"), null, null),
-            new Experience("Experiencia 4", "Descripcion 4", 0.9F, List.of("Studies", "Documentation"), null, null)
+            new Experience("Experiencia 1", "Descripcion 1", 9F, null, List.of("Accommodation", "Transportation"), null, null),
+            new Experience("Experiencia 2", "Descripcion 2", 8.67F, null, List.of("Gastronomy", "Social_Events"), null, null),
+            new Experience("Experiencia 3", "Descripcion 3", 5.4F, null, List.of("Culture", "Transportation"), null, null),
+            new Experience("Experiencia 4", "Descripcion 4", 0.9F, null, List.of("Studies", "Documentation"), null, null)
         );
         experienceRepository.saveAll(experiences);
     }
 
     public List<ExperienceSimpleDTO> getAllExperiences() {
-        return experienceMapper.toDTOs(experienceRepository.findAll());
+        List<Experience> experiences = experienceRepository.findAll();
+        return experienceMapper.toDTOs(experiences);
     }
 
     public Category[] getCategories() {
@@ -59,15 +61,11 @@ public class ExperienceService {
         }
         City city = cityService.findById(experienceFormDTO.cityId());
         User user = userService.getLoggedUser();
-        System.out.println("Checkpoint 1");
-        Experience experience = new Experience(experienceFormDTO.title(), experienceFormDTO.description(), experienceFormDTO.rating(), experienceFormDTO.categories(), city, user);
-        if(experienceFormDTO.date() != null) experience.setDate(experienceFormDTO.date());
-        System.out.println("Checkpoint 2");
+        Experience experience = new Experience(experienceFormDTO.title(), experienceFormDTO.description(), experienceFormDTO.rating(), experienceFormDTO.date(), experienceFormDTO.categories(), city, user);
         Experience savedExperience = experienceRepository.save(experience);
-        System.out.println("Checkpoint 3");
         cityService.addExperience(savedExperience, city);
         userService.addExperience(savedExperience, user);
-        System.out.println("Checkpoint 4");
-        return experienceMapper.toDTO(experience);
+        savedExperience = experienceRepository.findById(savedExperience.getId()).orElseThrow(() -> new NoSuchElementException("Experience not found"));
+        return experienceMapper.toDTO(savedExperience);
     }
 }

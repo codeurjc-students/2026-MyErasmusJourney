@@ -58,10 +58,10 @@ public class ExperienceServiceTest extends TestDataBase {
         }
 
         List<Experience> experiences = List.of(
-                new Experience("Experiencia 1", "Descripcion 1", 9F, List.of(Category.Studies.name(), Category.Documentation.name()), null, null),
-                new Experience("Experiencia 2", "Descripcion 2", 8.67F, List.of(Category.Personal_Experience.name(), Category.Transportation.name()), null, null),
-                new Experience("Experiencia 3", "Descripcion 3", 5.4F, List.of(Category.Social_Events.name(), Category.Culture.name()), null, null),
-                new Experience("Experiencia 4", "Descripcion 4", 0.9F, List.of(Category.Accommodation.name(), Category.Documentation.name()), null, null)
+                new Experience("Experiencia 1", "Descripcion 1", 9F, null, List.of(Category.Studies.name(), Category.Documentation.name()), null, null),
+                new Experience("Experiencia 2", "Descripcion 2", 8.67F, null, List.of(Category.Personal_Experience.name(), Category.Transportation.name()), null, null),
+                new Experience("Experiencia 3", "Descripcion 3", 5.4F, null, List.of(Category.Social_Events.name(), Category.Culture.name()), null, null),
+                new Experience("Experiencia 4", "Descripcion 4", 0.9F, null, List.of(Category.Accommodation.name(), Category.Documentation.name()), null, null)
         );
         experienceRepository.saveAll(experiences);
 
@@ -95,7 +95,7 @@ public class ExperienceServiceTest extends TestDataBase {
 
         assertEquals(expected.size(), result.size());
 
-        Experience experience = new Experience("Experience 5", "Descripcion 5", 2.4F, List.of(Category.Personal_Experience.name()),null, null);
+        Experience experience = new Experience("Experience 5", "Descripcion 5", 2.4F, null, List.of(Category.Personal_Experience.name()),null, null);
         Experience savedExperience = experienceRepository.save(experience);
 
         ExperienceSimpleDTO savedDTO = new ExperienceSimpleDTO(savedExperience.getId(), savedExperience.getDate(), savedExperience.getRating(), savedExperience.getTitle(), savedExperience.getDescription(), savedExperience.getCategories());
@@ -150,6 +150,7 @@ public class ExperienceServiceTest extends TestDataBase {
                 formDTO.title(),
                 formDTO.description(),
                 formDTO.rating(),
+                null,
                 formDTO.categories(),
                 city,
                 user

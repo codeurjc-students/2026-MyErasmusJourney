@@ -17,14 +17,14 @@ public class ExperienceTest {
 
     @Test
     void testConstructor(){
-        Experience experience = new Experience("Titulo","Descripcion",3.4F, List.of("Personal_Experience"), null, null);
+        Experience experience = new Experience("Titulo","Descripcion",3.4F, LocalDate.of(2022, 12, 10), List.of("Personal_Experience"), null, null);
 
         assertNull(experience.getId());
         assertEquals(LocalDate.now(), experience.getDate());
         assertEquals("Titulo", experience.getTitle());
         assertEquals("Descripcion", experience.getDescription());
         assertEquals(3.4F, experience.getRating());
-        assertEquals(LocalDate.now(), experience.getDate());
+        assertEquals(LocalDate.of(2022, 12, 10), experience.getDate());
         assertNull(experience.getAuthor());
         assertNull(experience.getCity());
         assertTrue(experience.getCategories().contains(Category.Personal_Experience));

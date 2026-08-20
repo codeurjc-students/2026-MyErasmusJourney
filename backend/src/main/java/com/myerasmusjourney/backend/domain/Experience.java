@@ -15,8 +15,7 @@ public class Experience {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @CreationTimestamp
+    
     private LocalDate date;
 
     private Float rating;
@@ -37,11 +36,16 @@ public class Experience {
 
     public Experience(){}
 
-    public Experience(String title, String description, Float rating, List<String> categories, City city, User user){
+    public Experience(String title, String description, Float rating, LocalDate date, List<String> categories, City city, User user){
         this.title = title;
         this.rating = rating;
         this.description = description;
-        this.date = LocalDate.now();
+        if (date != null){
+            this.date = date;
+        }
+        else{
+            this.date = LocalDate.now();
+        }
         this.city = city;
         this.author = user;
         for(String c: categories){
