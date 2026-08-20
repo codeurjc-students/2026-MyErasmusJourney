@@ -79,7 +79,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"rating\": 9.2,\n    \"title\": \"Postman Experience\",\n    \"description\": \"This is an experience created with the postman\",\n    \"category\": \"Accommodation\",\n    \"cityId\": 1\n}",
+              "raw": "{\n    \"rating\": 9.2,\n    \"title\": \"Postman Experience\",\n    \"description\": \"This is an experience created with the postman\",\n    \"categories\": [\"Accommodation\",\"Studies\"],\n    \"date\": \"2026-08-20\",\n    \"cityId\": 1\n}",
               "options": {
                 "raw": {
                   "language": "json"
