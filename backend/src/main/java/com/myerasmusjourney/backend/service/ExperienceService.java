@@ -56,7 +56,6 @@ public class ExperienceService {
     @Transactional
     public ExperienceDTO createExperience(ExperienceFormDTO experienceFormDTO){
         if(experienceFormDTO.categories().isEmpty() || experienceFormDTO.categories().size()>3){
-            System.out.println("Categories not valid");
             return null;
         }
         City city = cityService.findById(experienceFormDTO.cityId());
@@ -65,7 +64,6 @@ public class ExperienceService {
         Experience savedExperience = experienceRepository.save(experience);
         cityService.addExperience(savedExperience, city);
         userService.addExperience(savedExperience, user);
-        savedExperience = experienceRepository.findById(savedExperience.getId()).orElseThrow(() -> new NoSuchElementException("Experience not found"));
         return experienceMapper.toDTO(savedExperience);
     }
 }

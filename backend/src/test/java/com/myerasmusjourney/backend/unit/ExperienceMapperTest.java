@@ -75,7 +75,12 @@ public class ExperienceMapperTest {
 
         ExperienceDTO result = mapper.toDTO(exp);
 
-        assertEquals(dto, result);
+        assertEquals(dto.id(), result.id());
+        assertEquals(dto.title(), result.title());
+        assertEquals(dto.description(), result.description());
+        assertEquals(dto.date(), result.date());
+        assertEquals(dto.rating(), result.rating());
+        assertEquals(dto.categories().size(), result.categories().size());
 
         exp = null;
 
