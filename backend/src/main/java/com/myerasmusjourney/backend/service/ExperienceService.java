@@ -35,10 +35,10 @@ public class ExperienceService {
     @Transactional
     public void init(){
         List<Experience> experiences = List.of(
-            new Experience("Experiencia 1", "Descripcion 1", 9F, Category.Social_Events.toString(), null, null),
-            new Experience("Experiencia 2", "Descripcion 2", 8.67F, Category.Personal_Experience.toString(), null, null),
-            new Experience("Experiencia 3", "Descripcion 3", 5.4F, Category.Accommodation.toString(), null, null),
-            new Experience("Experiencia 4", "Descripcion 4", 0.9F, Category.Gastronomy.toString(), null, null)
+            new Experience("Experiencia 1", "Descripcion 1", 9F, List.of("Accommodation", "Transportation"), null, null),
+            new Experience("Experiencia 2", "Descripcion 2", 8.67F, List.of("Gastronomy", "Social_Events"), null, null),
+            new Experience("Experiencia 3", "Descripcion 3", 5.4F, List.of("Culture", "Transportation"), null, null),
+            new Experience("Experiencia 4", "Descripcion 4", 0.9F, List.of("Studies", "Documentation"), null, null)
         );
         experienceRepository.saveAll(experiences);
     }
@@ -53,12 +53,21 @@ public class ExperienceService {
 
     @Transactional
     public ExperienceDTO createExperience(ExperienceFormDTO experienceFormDTO){
+        if(experienceFormDTO.categories().isEmpty() || experienceFormDTO.categories().size()>3){
+            System.out.println("Categories not valid");
+            return null;
+        }
         City city = cityService.findById(experienceFormDTO.cityId());
         User user = userService.getLoggedUser();
-        Experience experience = new Experience(experienceFormDTO.title(), experienceFormDTO.description(), experienceFormDTO.rating(), experienceFormDTO.category(), city, user);
+        System.out.println("Checkpoint 1");
+        Experience experience = new Experience(experienceFormDTO.title(), experienceFormDTO.description(), experienceFormDTO.rating(), experienceFormDTO.categories(), city, user);
+        if(experienceFormDTO.date() != null) experience.setDate(experienceFormDTO.date());
+        System.out.println("Checkpoint 2");
         Experience savedExperience = experienceRepository.save(experience);
+        System.out.println("Checkpoint 3");
         cityService.addExperience(savedExperience, city);
         userService.addExperience(savedExperience, user);
+        System.out.println("Checkpoint 4");
         return experienceMapper.toDTO(experience);
     }
 }

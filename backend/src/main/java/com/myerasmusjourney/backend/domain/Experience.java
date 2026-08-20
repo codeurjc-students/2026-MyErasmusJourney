@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Experience {
@@ -22,7 +25,7 @@ public class Experience {
 
     private String description;
 
-    private Category category;
+    private final Set<Category> categories = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "city_id")
@@ -34,14 +37,16 @@ public class Experience {
 
     public Experience(){}
 
-    public Experience(String title, String description, Float rating, String category, City city, User user){
+    public Experience(String title, String description, Float rating, List<String> categories, City city, User user){
         this.title = title;
         this.rating = rating;
         this.description = description;
         this.date = LocalDate.now();
-        this.category = Category.valueOf(category);
         this.city = city;
         this.author = user;
+        for(String c: categories){
+            this.categories.add(Category.valueOf(c));
+        }
     }
 
     public void setId(Long id) {
@@ -100,11 +105,13 @@ public class Experience {
         this.author = author;
     }
 
-    public Category getCategory() {
-        return category;
+    public Set<Category> getCategories() {
+        return categories;
     }
 
-    public void setCategory(String category) {
-        this.category = Category.valueOf(category);
+    public void setCategories(List<String> categories) {
+        for(String c: categories){
+            this.categories.add(Category.valueOf(c));
+        }
     }
 }

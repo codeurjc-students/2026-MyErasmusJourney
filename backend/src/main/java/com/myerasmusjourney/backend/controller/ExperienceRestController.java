@@ -26,8 +26,9 @@ public class ExperienceRestController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<ExperienceDTO> createExperience(@RequestBody ExperienceFormDTO experienceFormDTO){
+    public ResponseEntity<Object> createExperience(@RequestBody ExperienceFormDTO experienceFormDTO){
         ExperienceDTO experienceDTO = experienceService.createExperience(experienceFormDTO);
+        if (experienceDTO == null) return ResponseEntity.badRequest().body("At least 1 category is needed and an experience can't have more than 3 categories.");
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(experienceDTO.id()).toUri();
         return ResponseEntity.created(location).body(experienceDTO);
     }

@@ -7,5 +7,6 @@ public enum Category {
     Gastronomy,
     Personal_Experience,
     Social_Events,
+    Studies,
     Transportation
 }
