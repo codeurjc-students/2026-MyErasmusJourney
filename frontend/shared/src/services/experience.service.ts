@@ -44,7 +44,7 @@ async function postExperience(api: ApiClient, body: ExperienceFormDTO) {
   const response = await api.post("/experiences/", body);
 
   if (!response.ok) {
-    throw new Error("Error creating new experience: " + response.body)
+    throw new Error("Error posting new experience")
   }
 
   return response.json();
