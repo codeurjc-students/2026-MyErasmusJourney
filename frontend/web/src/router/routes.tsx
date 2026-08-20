@@ -8,6 +8,7 @@ import LogInPage from "../pages/LogInPage/LogInPage";
 import UserPage from "../pages/UserPage/UserPage";
 import AvailableSoonPage from "../pages/AvailableSoonPage/AvailableSoonPage";
 import CityFormPage from "../pages/CityFormPage/CityFormPage";
+import ExperienceFormPage from "../pages/ExperienceFormPage/ExperienceFormPage";
 
 export const routes = [
   {
@@ -41,5 +42,9 @@ export const routes = [
   {
     path: ROUTES.CITY_FORM,
     element: <CityFormPage />
+  },
+  {
+    path: ROUTES.EXPERIENCES_FORM,
+    element: <ExperienceFormPage />
   }
 ];
