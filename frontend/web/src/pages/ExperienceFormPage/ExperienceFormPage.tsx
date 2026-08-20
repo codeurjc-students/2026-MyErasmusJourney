@@ -128,7 +128,7 @@ export default function ExperienceFormPage({ experienceService = createExperienc
                         <label htmlFor="location">Location</label>
                         <select id="location" name="location" required>
                             {cities.map(city => (
-                                <option value={city.id}>{city.name}, {city.country}</option>
+                                <option key={city.id} value={city.id}>{city.name}, {city.country}</option>
                             ))}
                         </select>
                     </div>
