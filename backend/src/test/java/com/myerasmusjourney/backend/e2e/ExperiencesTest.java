@@ -2,10 +2,14 @@ package com.myerasmusjourney.backend.e2e;
 
 
 import com.myerasmusjourney.backend.enumeration.Category;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
@@ -27,7 +31,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .body("[0].date", notNullValue())
                 .body("[0].rating", notNullValue())
                 .body("[0].title", notNullValue())
-                .body("[0].category", notNullValue())
+                .body("[0].categories", notNullValue())
                 .body("[0].description", notNullValue());
     }
 
@@ -49,12 +53,17 @@ class ExperiencesTest extends AuthenticatedE2ETest {
 
     @Test
     void testPostExperience() throws JSONException {
+        JSONArray categories = new JSONArray();
+        categories.put("Transportation");
+        categories.put("Studies");
+
         JSONObject body = new JSONObject();
         body.put("title", "Experience");
         body.put("cityId", 1L);
         body.put("description", "Whatever user wants");
         body.put("rating", 5.2F);
-        body.put("category", "Transportation");
+        body.put("categories", categories);
+        body.put("date", LocalDate.of(2022, 1, 13));
 
         obtainToken(false);
 
@@ -70,17 +79,24 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .body("title", equalTo(body.get("title")))
                 .body("description", equalTo(body.get("description")))
                 .body("rating", equalTo(5.2F))
-                .body("city.id", equalTo(1));
+                .body("city.id", equalTo(1))
+                .body("date", equalTo(LocalDate.of(2022, 1, 13).toString()))
+                .body("categories", hasSize(2));
     }
 
     @Test
     void testPostExperienceWithoutAuthentication() throws JSONException {
+        JSONArray categories = new JSONArray();
+        categories.put("Transportation");
+        categories.put("Studies");
+
         JSONObject body = new JSONObject();
         body.put("title", "Experience");
         body.put("cityId", 1L);
         body.put("description", "Whatever user wants");
         body.put("rating", 5.2F);
-        body.put("category", "Transportation");
+        body.put("categories", categories);
+        body.put("date", LocalDate.of(2022, 1, 13).toString());
 
 
         given()
@@ -95,12 +111,17 @@ class ExperiencesTest extends AuthenticatedE2ETest {
 
     @Test
     void testPostExperienceWithoutValidCity() throws JSONException {
+        JSONArray categories = new JSONArray();
+        categories.put("Transportation");
+        categories.put("Studies");
+
         JSONObject body = new JSONObject();
         body.put("title", "Experience");
         body.put("cityId", 0L);
         body.put("description", "Whatever user wants");
         body.put("rating", 5.2F);
-        body.put("category", "Transportation");
+        body.put("categories", categories);
+        body.put("date", JSONObject.NULL);
 
         obtainToken(false);
 

@@ -21,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -67,24 +68,24 @@ public class ExperienceServiceTest {
     @Test
     void testGetAllExperiences(){
         List<Experience> experiences = List.of(
-                new Experience("Experiencia 1", "Descripcion 1", 9F, Category.Personal_Experience.toString(), null, null),
-                new Experience("Experiencia 2", "Descripcion 2", 8.67F, Category.Social_Events.toString(), null, null),
-                new Experience("Experiencia 3", "Descripcion 3", 5.4F, Category.Culture.toString(), null, null),
-                new Experience("Experiencia 4", "Descripcion 4", 0.9F, Category.Transportation.toString(), null, null)
+                new Experience("Experiencia 1", "Descripcion 1", 9F, List.of("Personal_Experience", "Documentation"), null, null),
+                new Experience("Experiencia 2", "Descripcion 2", 8.67F, List.of("Social_Events", "Culture"), null, null),
+                new Experience("Experiencia 3", "Descripcion 3", 5.4F, List.of("Culture", "Gastronomy"), null, null),
+                new Experience("Experiencia 4", "Descripcion 4", 0.9F, List.of("Transportation"), null, null)
         );
 
         List<ExperienceSimpleDTO> mapped = List.of(
-                new ExperienceSimpleDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", Category.Personal_Experience),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", Category.Social_Events),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 5.4F, "Experiencia 3", "Descripcion 3", Category.Culture),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4", Category.Transportation)
+                new ExperienceSimpleDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", List.of(Category.Personal_Experience, Category.Documentation)),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", List.of(Category.Social_Events, Category.Culture)),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 5.4F, "Experiencia 3", "Descripcion 3", List.of(Category.Culture, Category.Gastronomy)),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4", List.of(Category.Transportation))
         );
 
         List<ExperienceSimpleDTO> expected = List.of(
-                new ExperienceSimpleDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", Category.Personal_Experience),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", Category.Social_Events),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 5.4F, "Experiencia 3", "Descripcion 3", Category.Culture),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4", Category.Transportation)
+                new ExperienceSimpleDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", List.of(Category.Personal_Experience, Category.Documentation)),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", List.of(Category.Social_Events, Category.Culture)),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 5.4F, "Experiencia 3", "Descripcion 3", List.of(Category.Culture, Category.Gastronomy)),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4", List.of(Category.Transportation))
         );
 
         when(experienceRepository.findAll()).thenReturn(experiences);
@@ -120,7 +121,8 @@ public class ExperienceServiceTest {
                 5.0f,
                 "Erasmus party",
                 "Great Erasmus party",
-                "Social_Events",
+                LocalDate.now(),
+                List.of("Social_Events", "Studies"),
                 1L
         );
 
@@ -145,7 +147,7 @@ public class ExperienceServiceTest {
                 formDTO.title(),
                 formDTO.description(),
                 formDTO.rating(),
-                formDTO.category(),
+                formDTO.categories(),
                 city,
                 user
         );
@@ -170,7 +172,7 @@ public class ExperienceServiceTest {
                 savedExperience.getRating(),
                 savedExperience.getTitle(),
                 savedExperience.getDescription(),
-                savedExperience.getCategory(),
+                savedExperience.getCategories(),
                 cityDTO,
                 userDTO
         );
@@ -195,7 +197,7 @@ public class ExperienceServiceTest {
         assertEquals(formDTO.title(), createdExperience.getTitle());
         assertEquals(formDTO.description(), createdExperience.getDescription());
         assertEquals(formDTO.rating(), createdExperience.getRating());
-        assertEquals(formDTO.category(), createdExperience.getCategory().name());
+        assertEquals(formDTO.categories().size(), createdExperience.getCategories().size());
         assertEquals(city, createdExperience.getCity());
         assertEquals(user, createdExperience.getAuthor());
 
@@ -205,5 +207,35 @@ public class ExperienceServiceTest {
         verify(cityService).addExperience(savedExperience, city);
         verify(userService).addExperience(savedExperience, user);
         verify(experienceMapper).toDTO(any(Experience.class));
+    }
+
+    @Test
+    void testCreateExperienceWithoutCategories(){
+        ExperienceFormDTO formDTO = new ExperienceFormDTO(
+                5.0f,
+                "Erasmus party",
+                "Great Erasmus party",
+                null,
+                List.of(),
+                1L
+        );
+
+        ExperienceDTO result = experienceService.createExperience(formDTO);
+        assertNull(result);
+    }
+
+    @Test
+    void testCreateExperienceWithToManyCategories(){
+        ExperienceFormDTO formDTO = new ExperienceFormDTO(
+                5.0f,
+                "Erasmus party",
+                "Great Erasmus party",
+                null,
+                List.of("Culture", "Gastronomy", "Social_Events", "Transportation"),
+                1L
+        );
+
+        ExperienceDTO result = experienceService.createExperience(formDTO);
+        assertNull(result);
     }
 }

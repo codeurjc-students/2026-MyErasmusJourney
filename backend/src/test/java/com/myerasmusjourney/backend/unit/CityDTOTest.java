@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class CityDTOTest {
     @Test
     void testCityDTO() {
-        ExperienceSimpleDTO experience = new ExperienceSimpleDTO(1L, LocalDate.now(), 5F, "Ttitle", "Description", Category.Accommodation);
+        ExperienceSimpleDTO experience = new ExperienceSimpleDTO(1L, LocalDate.now(), 5F, "Ttitle", "Description", List.of(Category.Accommodation));
 
         List<ExperienceSimpleDTO> experiences = List.of(experience);
 

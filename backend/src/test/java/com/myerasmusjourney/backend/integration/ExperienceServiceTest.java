@@ -21,6 +21,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -57,10 +58,10 @@ public class ExperienceServiceTest extends TestDataBase {
         }
 
         List<Experience> experiences = List.of(
-                new Experience("Experiencia 1", "Descripcion 1", 9F, Category.Documentation.toString(), null, null),
-                new Experience("Experiencia 2", "Descripcion 2", 8.67F, Category.Personal_Experience.toString(), null, null),
-                new Experience("Experiencia 3", "Descripcion 3", 5.4F, Category.Gastronomy.toString(), null, null),
-                new Experience("Experiencia 4", "Descripcion 4", 0.9F, Category.Accommodation.toString(), null, null)
+                new Experience("Experiencia 1", "Descripcion 1", 9F, List.of(Category.Studies.name(), Category.Documentation.name()), null, null),
+                new Experience("Experiencia 2", "Descripcion 2", 8.67F, List.of(Category.Personal_Experience.name(), Category.Transportation.name()), null, null),
+                new Experience("Experiencia 3", "Descripcion 3", 5.4F, List.of(Category.Social_Events.name(), Category.Culture.name()), null, null),
+                new Experience("Experiencia 4", "Descripcion 4", 0.9F, List.of(Category.Accommodation.name(), Category.Documentation.name()), null, null)
         );
         experienceRepository.saveAll(experiences);
 
@@ -94,10 +95,10 @@ public class ExperienceServiceTest extends TestDataBase {
 
         assertEquals(expected.size(), result.size());
 
-        Experience experience = new Experience("Experience 5", "Descripcion 5", 2.4F, Category.Social_Events.toString(),null, null);
+        Experience experience = new Experience("Experience 5", "Descripcion 5", 2.4F, List.of(Category.Personal_Experience.name()),null, null);
         Experience savedExperience = experienceRepository.save(experience);
 
-        ExperienceSimpleDTO savedDTO = new ExperienceSimpleDTO(savedExperience.getId(), savedExperience.getDate(), savedExperience.getRating(), savedExperience.getTitle(), savedExperience.getDescription(), savedExperience.getCategory());
+        ExperienceSimpleDTO savedDTO = new ExperienceSimpleDTO(savedExperience.getId(), savedExperience.getDate(), savedExperience.getRating(), savedExperience.getTitle(), savedExperience.getDescription(), savedExperience.getCategories());
         expected.add(savedDTO);
 
         result = experienceService.getAllExperiences();
@@ -107,7 +108,12 @@ public class ExperienceServiceTest extends TestDataBase {
         for(int i = 0; i<expected.size(); i++){
             ExperienceSimpleDTO exp = expected.get(i);
             ExperienceSimpleDTO res = result.get(i);
-            assert(exp.equals(res));
+            assertEquals(exp.id(), res.id());
+            assertEquals(exp.description(), res.description());
+            assertEquals(exp.title(), res.title());
+            assertEquals(exp.date(), res.date());
+            assertEquals(exp.rating(), res.rating());
+            assertEquals(exp.categories().size(), res.categories().size());
             assertEquals(id, res.id());
             id++;
         }
@@ -132,7 +138,8 @@ public class ExperienceServiceTest extends TestDataBase {
                 5.0f,
                 "Erasmus party",
                 "Great Erasmus party",
-                "Social_Events",
+                LocalDate.of(2022, 1, 13),
+                List.of("Social_Events", "Gastronomy"),
                 1L
         );
 
@@ -143,10 +150,12 @@ public class ExperienceServiceTest extends TestDataBase {
                 formDTO.title(),
                 formDTO.description(),
                 formDTO.rating(),
-                formDTO.category(),
+                formDTO.categories(),
                 city,
                 user
         );
+
+        savedExperience.setDate(formDTO.date());
 
         CitySimpleDTO cityDTO = new CitySimpleDTO(
                 city.getId(),
@@ -169,18 +178,26 @@ public class ExperienceServiceTest extends TestDataBase {
                 savedExperience.getRating(),
                 savedExperience.getTitle(),
                 savedExperience.getDescription(),
-                savedExperience.getCategory(),
+                savedExperience.getCategories(),
                 cityDTO,
                 userDTO
         );
 
         assertNotNull(result);
-        assertEquals(expectedDTO, result);
+
+        assertEquals(expectedDTO.id(), result.id());
+        assertEquals(expectedDTO.description(), result.description());
+        assertEquals(expectedDTO.title(), result.title());
+        assertEquals(expectedDTO.date(), result.date());
+        assertEquals(expectedDTO.rating(), result.rating());
+        assertEquals(expectedDTO.city(), result.city());
+        assertEquals(expectedDTO.author(), result.author());
+        assertEquals(expectedDTO.categories().size(), result.categories().size());
 
         assertEquals(formDTO.title(), result.title());
         assertEquals(formDTO.description(), result.description());
         assertEquals(formDTO.rating(), result.rating());
-        assertEquals(formDTO.category(), result.category().name());
+        assertEquals(formDTO.categories().size(), result.categories().size());
         assertEquals(cityDTO, result.city());
         assertEquals(userDTO, result.author());
     }
@@ -194,7 +211,8 @@ public class ExperienceServiceTest extends TestDataBase {
                 5.0f,
                 "Erasmus party",
                 "Great Erasmus party",
-                "Social_Events",
+                null,
+                List.of("Social_Events"),
                 0L
         );
 

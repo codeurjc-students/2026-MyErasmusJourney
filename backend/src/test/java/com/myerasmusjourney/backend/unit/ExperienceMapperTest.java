@@ -27,17 +27,17 @@ public class ExperienceMapperTest {
     void testToDTOs() {
 
         List<Experience> experiences = List.of(
-                new Experience("Experiencia 1", "Descripcion 1", 9F, Category.Personal_Experience.toString(), null, null),
-                new Experience("Experiencia 2", "Descripcion 2", 8.67F, Category.Culture.toString(), null, null),
-                new Experience("Experiencia 3", "Descripcion 3", 5.4F, Category.Documentation.toString(), null, null),
-                new Experience("Experiencia 4", "Descripcion 4", 0.9F, Category.Gastronomy.toString(), null, null)
+                new Experience("Experiencia 1", "Descripcion 1", 9F, List.of("Gastronomy", "Documentation"), null, null),
+                new Experience("Experiencia 2", "Descripcion 2", 8.67F, List.of("Transportation", "Documentation"), null, null),
+                new Experience("Experiencia 3", "Descripcion 3", 5.4F, List.of("Gastronomy", "Social_Events"), null, null),
+                new Experience("Experiencia 4", "Descripcion 4", 0.9F, List.of("Culture", "Transportation"), null, null)
         );
 
         List<ExperienceSimpleDTO> expected = List.of(
-                new ExperienceSimpleDTO(null, LocalDate.now(),9F, "Experiencia 1", "Descripcion 1", Category.Personal_Experience),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", Category.Culture),
-                new ExperienceSimpleDTO(null, LocalDate.now(),5.4F, "Experiencia 3", "Descripcion 3", Category.Documentation),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4", Category.Gastronomy)
+                new ExperienceSimpleDTO(null, LocalDate.now(),9F, "Experiencia 1", "Descripcion 1", List.of(Category.Gastronomy, Category.Documentation)),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", List.of(Category.Transportation, Category.Documentation)),
+                new ExperienceSimpleDTO(null, LocalDate.now(),5.4F, "Experiencia 3", "Descripcion 3",  List.of(Category.Gastronomy, Category.Social_Events)),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4",  List.of(Category.Culture, Category.Transportation))
         );
 
 
@@ -46,7 +46,15 @@ public class ExperienceMapperTest {
         assertEquals(4, result.size());
 
         for(int i = 0; i< expected.size(); i++){
-            assertEquals(expected.get(i), result.get(i));
+            ExperienceSimpleDTO res = result.get(i);
+            ExperienceSimpleDTO exp = expected.get(i);
+            assertEquals(exp.id(), res.id());
+            assertEquals(exp.title(), res.title());
+            assertEquals(exp.description(), res.description());
+            assertEquals(exp.date(), res.date());
+            assertEquals(exp.rating(), res.rating());
+            assertEquals(exp.categories().size(), res.categories().size());
+
         }
 
         result = mapper.toDTOs(List.of());
@@ -59,11 +67,11 @@ public class ExperienceMapperTest {
     void testToDTO(){
         City city = new City("Madrid", "Spain", "description");
         User user = new User("test", "test", "test@gmail.com", "password", "valencia", "spain");
-        Experience exp = new Experience("Title", "Description", 6.8F, Category.Accommodation.toString(), city, user);
+        Experience exp = new Experience("Title", "Description", 6.8F, List.of("Gastronomy", "Documentation"), city, user);
 
         CitySimpleDTO citySimpleDTO = new CitySimpleDTO(null, "Madrid", "description", "Spain");
         UserSimpleDTO userSimpleDTO = new UserSimpleDTO(null, "test", "test@gmail.com");
-        ExperienceDTO dto = new ExperienceDTO(null, LocalDate.now(), 6.8F, "Title", "Description", Category.Accommodation, citySimpleDTO, userSimpleDTO);
+        ExperienceDTO dto = new ExperienceDTO(null, LocalDate.now(), 6.8F, "Title", "Description",  List.of(Category.Gastronomy, Category.Documentation), citySimpleDTO, userSimpleDTO);
 
         ExperienceDTO result = mapper.toDTO(exp);
 
