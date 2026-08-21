@@ -2,6 +2,7 @@ package com.myerasmusjourney.backend.unit;
 
 import com.myerasmusjourney.backend.controller.ExperienceRestController;
 import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
+import com.myerasmusjourney.backend.enumeration.Category;
 import com.myerasmusjourney.backend.service.ExperienceService;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -30,17 +31,17 @@ public class ExperienceRestControllerTest {
     @Test
     void testGetExperiences(){
         List<ExperienceSimpleDTO> mapped = List.of(
-                new ExperienceSimpleDTO(null, LocalDate.now(), 6F, "Experiencia 1", "Descripcion 1"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 5.1F, "Experiencia 3", "Descripcion 3"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 1.9F, "Experiencia 4", "Descripcion 4")
+                new ExperienceSimpleDTO(null, LocalDate.now(), 6F, "Experiencia 1", "Descripcion 1", List.of(Category.Accommodation)),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", List.of(Category.Culture)),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 5.1F, "Experiencia 3", "Descripcion 3", List.of(Category.Personal_Experience)),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 1.9F, "Experiencia 4", "Descripcion 4", List.of(Category.Social_Events))
         );
 
         List<ExperienceSimpleDTO> expected = List.of(
-                new ExperienceSimpleDTO(null, LocalDate.now(), 6F, "Experiencia 1", "Descripcion 1"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 5.1F, "Experiencia 3", "Descripcion 3"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 1.9F, "Experiencia 4", "Descripcion 4")
+                new ExperienceSimpleDTO(null, LocalDate.now(), 6F, "Experiencia 1", "Descripcion 1", List.of(Category.Accommodation)),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", List.of(Category.Culture)),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 5.1F, "Experiencia 3", "Descripcion 3", List.of(Category.Personal_Experience)),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 1.9F, "Experiencia 4", "Descripcion 4", List.of(Category.Social_Events))
         );
 
         when(experienceService.getAllExperiences()).thenReturn(mapped);

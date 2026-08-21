@@ -18,7 +18,7 @@ public class City {
 
     private String description;
 
-    @OneToMany
+    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Experience> experiences = new LinkedList<>();
 
     public City(){}
@@ -67,5 +67,9 @@ public class City {
 
     public void setExperiences(List<Experience> experiences) {
         this.experiences = experiences;
+    }
+
+    public void addExperience(Experience experience){
+        this.experiences.add(experience);
     }
 }

@@ -93,12 +93,16 @@ public class CityTest {
         Experience experience1 = new Experience();
         Experience experience2 = new Experience();
 
-        List<Experience> experiences = List.of(experience1, experience2);
-
-        city.setExperiences(experiences);
+        city.addExperience(experience1);
+        city.addExperience(experience2);
 
         assertEquals(2, city.getExperiences().size());
         assertEquals(experience1, city.getExperiences().get(0));
         assertEquals(experience2, city.getExperiences().get(1));
+
+        city.addExperience(experience1);
+
+        assertEquals(3, city.getExperiences().size());
+        assertEquals(experience1, city.getExperiences().get(2));
     }
 }

@@ -1,6 +1,7 @@
 package com.myerasmusjourney.backend.service;
 
 import com.myerasmusjourney.backend.domain.City;
+import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.dto.CityDTO;
 import com.myerasmusjourney.backend.dto.CityFormDTO;
 import com.myerasmusjourney.backend.dto.CitySimpleDTO;
@@ -17,6 +18,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,5 +69,15 @@ public class CityService {
     public Collection<CitySimpleDTO> getCities() {
         List<City> cities = cityRepository.findAll();
         return cityMapper.toSimpleDTOs(cities);
+    }
+
+    public City findById(Long id) {
+        return cityRepository.findById(id).orElseThrow(() -> new NoSuchElementException("City not found"));
+    }
+
+    @Transactional
+    public void addExperience(Experience savedExperience, City city) {
+        city.addExperience(savedExperience);
+        cityRepository.save(city);
     }
 }

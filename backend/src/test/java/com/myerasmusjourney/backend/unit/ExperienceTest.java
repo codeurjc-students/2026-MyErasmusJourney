@@ -1,11 +1,14 @@
 package com.myerasmusjourney.backend.unit;
 
 import com.myerasmusjourney.backend.domain.Experience;
+import com.myerasmusjourney.backend.enumeration.Category;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -13,14 +16,18 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class ExperienceTest {
 
     @Test
-    void testContrsuctor(){
-        Experience experience = new Experience("Titulo","Descripcion",3.4F);
+    void testConstructor(){
+        Experience experience = new Experience("Titulo","Descripcion",3.4F, LocalDate.of(2022, 12, 10), List.of("Personal_Experience"), null, null);
 
         assertNull(experience.getId());
-        assertEquals(LocalDate.now(), experience.getDate());
+        assertEquals(LocalDate.of(2022, 12, 10), experience.getDate());
         assertEquals("Titulo", experience.getTitle());
         assertEquals("Descripcion", experience.getDescription());
         assertEquals(3.4F, experience.getRating());
+        assertEquals(LocalDate.of(2022, 12, 10), experience.getDate());
+        assertNull(experience.getAuthor());
+        assertNull(experience.getCity());
+        assertTrue(experience.getCategories().contains(Category.Personal_Experience));
     }
 
     @Test

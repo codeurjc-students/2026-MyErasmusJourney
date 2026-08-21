@@ -1,5 +1,6 @@
 package com.myerasmusjourney.backend.service;
 
+import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
 import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserFormDTO;
@@ -39,7 +40,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    private User getLoggedUser() {
+    public User getLoggedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && !(auth instanceof AnonymousAuthenticationToken)) {
             return userRepository.findByEmail(auth.getName());
@@ -73,5 +74,10 @@ public class UserService {
         if (!isActionAllowed(user, id)) return null;
         User savedUser = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
         return userMapper.toDTO(savedUser);
+    }
+
+    public void addExperience(Experience savedExperience, User user) {
+        user.addExperience(savedExperience);
+        userRepository.save(user);
     }
 }

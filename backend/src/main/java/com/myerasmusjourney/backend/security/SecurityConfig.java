@@ -64,6 +64,7 @@ public class SecurityConfig {
                     // PRIVATE ENDPOINTS
                     .requestMatchers(HttpMethod.GET, "/api/v1/users/me").hasRole("USER")
                     .requestMatchers(HttpMethod.GET, "/api/v1/users/{id}").hasRole("USER")
+                    .requestMatchers(HttpMethod.POST, "/api/v1/experiences/").hasRole("USER")
                     .requestMatchers(HttpMethod.POST, "/api/v1/cities/").hasRole("ADMIN")
                     // PUBLIC ENDPOINTS
 					.anyRequest().permitAll()

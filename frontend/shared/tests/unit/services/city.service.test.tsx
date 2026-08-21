@@ -161,4 +161,42 @@ describe("CityService", () => {
     expect(fakeResponse.json).toHaveBeenCalledTimes(1);
   });
 
+  it("should return all cities from API", async () => {
+
+    const cities = [
+      {name: "Madrid", country: "Spain"}, {name: "London", country: "United Kingdom"}
+    ];
+
+    const mockApi = {
+      get: vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue(cities),
+      }),
+    };
+
+    const service = createCityService(mockApi);
+
+    const result = await service.getAll();
+
+    expect(mockApi.get).toHaveBeenCalledTimes(1);
+    expect(mockApi.get).toHaveBeenCalledWith("/cities/");
+    expect(result).toEqual(cities);
+  });
+
+  it("should throw an error when obtaining cities request fails", async () => {
+      
+      const mockApi = {
+        get: vi.fn().mockResolvedValue({
+          ok: false,
+        }),
+      };
+  
+      const service = createCityService(mockApi);
+  
+      await expect(service.getAll()).rejects.toThrow(
+        "Error getting cities"
+      );
+  
+      expect(mockApi.get).toHaveBeenCalledWith("/cities/");
+    });
 });
