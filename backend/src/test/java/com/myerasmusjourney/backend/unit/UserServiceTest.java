@@ -337,8 +337,7 @@ public class UserServiceTest {
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getName()).thenReturn("admin@email.com");
 
-        when(userRepository.findByEmail("admin@email.com"))
-                .thenReturn(admin);
+        when(userRepository.findByEmail("admin@email.com")).thenReturn(admin);
 
         when(userRepository.findById(1L))
                 .thenReturn(Optional.of(targetUser));
@@ -347,6 +346,110 @@ public class UserServiceTest {
                 .thenReturn(dto);
 
         UserDTO result = userService.getUserById(1L);
+
+        assertEquals(dto, result);
+
+        verify(userRepository).findByEmail("admin@email.com");
+        verify(userRepository).findById(1L);
+        verify(userMapper).toDTO(targetUser);
+    }
+
+    @Test
+    void testDeleteUserByIdSuccess() {
+        User loggedUser = new User("Test", "user", "test@email.com", "password", "Munich", "Germany");
+        loggedUser.setId(1L);
+
+        User targetUser = new User("John", "john", "john@email.com", "password", null, "Germany");
+        targetUser.setId(1L);
+
+        UserDTO dto = new UserDTO(
+                1L,
+                "John",
+                "john",
+                "john@email.com",
+                null,
+                List.of("USER")
+        );
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("test@email.com");
+
+        when(userRepository.findByEmail("test@email.com")).thenReturn(loggedUser);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(targetUser));
+
+        when(userMapper.toDTO(targetUser)).thenReturn(dto);
+
+        UserDTO result = userService.deleteUser(1L);
+
+        assertEquals(dto, result);
+
+        verify(userRepository).findByEmail("test@email.com");
+        verify(userRepository).findById(1L);
+        verify(userMapper).toDTO(targetUser);
+    }
+
+    @Test
+    void testDeleteUserByIdNotFound() {
+        User loggedUser = new User("Test", "user", "test@email.com", "password", "Munich", "Germany");
+        loggedUser.setId(1L);
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("test@email.com");
+
+        when(userRepository.findByEmail("test@email.com")).thenReturn(loggedUser);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> userService.deleteUser(1L));
+
+        verify(userRepository).findById(1L);
+        verifyNoInteractions(userMapper);
+    }
+
+    @Test
+    void testDeleteUserByIdAdmin() {
+        User admin = new User("Admin", "admin", "admin@email.com", "password", "Munich", "Germany");
+        admin.setId(99L);
+        admin.getRoles().add("ADMIN");
+
+        User targetUser = new User("John", "john", "john@email.com", "password", "Munich", "Germany");
+        targetUser.setId(1L);
+
+        UserDTO dto = new UserDTO(
+                1L,
+                "John",
+                "john",
+                "john@email.com",
+                "Munich, Germany",
+                List.of("USER")
+        );
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("admin@email.com");
+
+        when(userRepository.findByEmail("admin@email.com")).thenReturn(admin);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(targetUser));
+
+        when(userMapper.toDTO(targetUser)).thenReturn(dto);
+
+        UserDTO result = userService.deleteUser(1L);
 
         assertEquals(dto, result);
 

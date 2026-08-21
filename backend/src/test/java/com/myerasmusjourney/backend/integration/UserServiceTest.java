@@ -35,7 +35,7 @@ public class UserServiceTest extends TestDataBase{
     @Autowired
     private UserMapper userMapper;
 
-    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     List<User> users = List.of(
             new User("TestUser1", "User1", "user1@gmail.com",passwordEncoder.encode("password"), "Munich", "Germany"),
@@ -117,7 +117,7 @@ public class UserServiceTest extends TestDataBase{
 
     @Test
     void testPasswordMismatch(){
-        UserFormDTO newUser = new UserFormDTO("user1@gmail.com", "Test", "TestUser","Munich", "Germany", "PaSsword", "password" );
+        UserFormDTO newUser = new UserFormDTO("user1@gmail.com", "Test", "TestUser","Munich", "Germany", "Pasword", "password" );
         UserSimpleDTO userDTO = userService.createUser(newUser);
 
         assertNull(userDTO);
@@ -232,5 +232,60 @@ public class UserServiceTest extends TestDataBase{
 
         assertNotNull(result);
         assertEquals(expected, result);
+    }
+
+    @Test
+    void testDeleteUserByIdSuccess() {
+        Authentication authentication = new UsernamePasswordAuthenticationToken("user1@gmail.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User user = userRepository.findByEmail("user1@gmail.com");
+
+        UserDTO result = userService.deleteUser(user.getId());
+
+        UserDTO expected = userMapper.toDTO(user);
+
+        assertNotNull(result);
+        assertEquals(expected, result);
+        assertNull(userRepository.findByEmail(user.getEmail()));
+    }
+
+    @Test
+    void testDeleteUserByIdNotFound() {
+        Authentication authentication = new UsernamePasswordAuthenticationToken("test@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        try{
+            userService.deleteUser(0L);
+        } catch (NoSuchElementException e){
+            assert(true);
+        }
+    }
+
+    @Test
+    void testDeleteUserByIdAdmin() {
+
+        User newAdmin = new User("admin", "TestAdmin", "integrationAdmin@email.com", passwordEncoder.encode("password"), "", "", List.of("USER", "ADMIN"));
+        userRepository.save(newAdmin);
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken("integrationAdmin@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User authenticatedUser = userRepository.findByEmail("integrationAdmin@email.com");
+
+        assertNotNull(authenticatedUser);
+        assertEquals(newAdmin.getId(), authenticatedUser.getId());
+        assertTrue(authenticatedUser.getRoles().contains("ADMIN"));
+
+        User user = userRepository.findByEmail("user1@gmail.com");
+
+        assertNotNull(user);
+        assertTrue(user.getId()>0L);
+        UserDTO result = userService.deleteUser(user.getId());
+
+        UserDTO expected = userMapper.toDTO(user);
+
+        assertNotNull(result);
+        assertEquals(expected, result);
+        assertNull(userRepository.findByEmail(user.getEmail()));
     }
 }
