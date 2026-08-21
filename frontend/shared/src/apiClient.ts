@@ -15,6 +15,11 @@ export function createApiClient(baseUrl: string) {
         credentials: "include",
         method: "POST",
         body: JSON.stringify(body)
+      }),
+    delete: async (path: string) =>
+      fetch(`${baseUrl}${path}`, {
+        credentials: "include",
+        method: "DELETE"
       })
   };
 }
