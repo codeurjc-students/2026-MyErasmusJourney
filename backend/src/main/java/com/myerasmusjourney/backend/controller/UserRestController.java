@@ -43,4 +43,11 @@ public class UserRestController {
         if (dto == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         return ResponseEntity.ok(dto);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<UserDTO> deleteUser (@PathVariable Long id){
+        UserDTO userDTO = userService.deleteUser(id);
+        if (userDTO == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        return ResponseEntity.ok(userDTO);
+    }
 }
