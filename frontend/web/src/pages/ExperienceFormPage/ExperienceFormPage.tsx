@@ -94,7 +94,7 @@ export default function ExperienceFormPage({ experienceService = createExperienc
     return(<>
         <div className="container mx-auto max-w-6xl rounded-3xl bg-white shadow-2xl p-6 md:p-10">
 
-        <h3 className="text-center mb-10">New Experience</h3>
+        <h3 id="experienceFormTitle" className="text-center mb-10">New Experience</h3>
 
         <form onSubmit={handleSubmit} className="mx-auto grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
             <div className="flex flex-col gap-6">
