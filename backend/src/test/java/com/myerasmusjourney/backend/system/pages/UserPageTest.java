@@ -53,6 +53,8 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
 
     @Test
     void deleteUserBtn(){
+        authenticateDeleteUserTest();
+
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -81,7 +83,6 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
 
     @Test
     void deleteUserBtnAndCancellingDelete(){
-        authenticateAdminTest();
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
