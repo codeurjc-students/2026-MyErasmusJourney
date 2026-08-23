@@ -4,4 +4,7 @@ export interface ExperienceSimpleDTO{
     date: String;
     rating: number;
     description: String;
+    cityName: String;
+    country: String;
+    authorName: String;
 }

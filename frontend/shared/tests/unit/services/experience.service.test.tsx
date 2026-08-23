@@ -2,13 +2,14 @@ import { describe, expect, it, vi } from "vitest";
 import { createExperienceService } from "../../../src/services/experience.service";
 
 import type {ExperienceFormDTO} from "../../../src/models/ExperienceFormDTO"
+import type {ExperienceSimpleDTO} from "../../../src/models/ExperienceSimpleDTO"
 
 describe("ExperienceService", () => {
   it("should return all experiences when the request succeeds", async () => {
 
-    const experiences = [
-      { id: 1, title: "Experience 1" },
-      { id: 2, title: "Experience 2" },
+    const experiences: ExperienceSimpleDTO[] = [
+      { id: 1, title: "Experience 1",description: "description 1", date:"2022-02-12", rating:9.1, cityName: "Paris", country: "France", authorName: "author1"  },
+      { id: 2, title: "Experience 2",description: "description 2", date:"2025-03-01", rating:1.5, cityName: "Rome", country: "Italy", authorName: "author2"  }
     ];
 
     const mockApi = {
