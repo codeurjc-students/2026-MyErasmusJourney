@@ -80,4 +80,13 @@ public class UserService {
         user.addExperience(savedExperience);
         userRepository.save(user);
     }
+
+    @Transactional
+    public UserDTO deleteUser(long id){
+        User user = getLoggedUser();
+        if (user == null || !isActionAllowed(user, id)) return null;
+        User userToDelete = userRepository.findById(id).orElseThrow(()-> new NoSuchElementException("User not found"));
+        userRepository.delete(userToDelete);
+        return userMapper.toDTO(userToDelete);
+    }
 }

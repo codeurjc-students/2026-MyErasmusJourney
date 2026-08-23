@@ -6,6 +6,7 @@ import { createUserService } from "@shared/services/user.service";
 import { useUserStore } from "@shared/stores/userStore";
 import { APIURL } from "src/config/env";
 import makeFetchCookie from "fetch-cookie";
+import type { UserFormDTO } from "@shared/models/UserFormDTO";
 
 
 const originalFetch = globalThis.fetch;
@@ -15,6 +16,34 @@ const testAuthService = createAuthService(testAPI);
 const testUserService = createUserService(testAPI);
 
 const setUser = useUserStore.getState().setUser;
+
+export async function authenticateUserToDelete(): Promise<UserSimpleDTO>{
+    
+    setupFetchWithCookies();
+
+    const signUpForm: UserFormDTO = {
+        fullName: "John Doe",
+        displayName: "johndoe",
+        email: "john@example.com",
+        city:null,
+        country:null,
+        password: "password123",
+        passwordConfirmation: "password123",
+    }
+
+    try{
+        await testUserService.signUp(signUpForm);
+    } catch(error){
+        console.error(error);
+    }
+    const loginRequest: LoginRequest = {username: "john@example.com", password: "password123"}
+
+    const user = await obtainAuthenticatedUser(loginRequest);
+
+    setUser(user);
+
+    return user;
+}
 
 export async function authenticateUser(admin: boolean): Promise<UserSimpleDTO> {
 

@@ -31,34 +31,41 @@ export default function UserPage({ authService = createAuthService(API), userSer
 
     useEffect(() => {
             
-            const fetchUser = async () => {
-                if(user != null){
-                    try{
-                        
-                        {
-                            const data = await userService.getUserById(user.id);
-                            setUserDTO(data);
-                        }
-                    }
-                    catch(error){
-                        console.error(error)
-                        navigate("/log-in")
+        const fetchUser = async () => {
+            if(user != null){
+                try{
+                    
+                    {
+                        const data = await userService.getUserById(user.id);
+                        setUserDTO(data);
                     }
                 }
-                else{
+                catch(error){
+                    console.error(error)
                     navigate("/log-in")
                 }
             }
-            fetchUser();
-        }, [])
+            else{
+                navigate("/log-in")
+            }
+        }
+        fetchUser();
+    }, [])
 
     async function logOut(){
-        try{
-            authService.logOut();
-            setUser(null);
-            navigate("/");
-        }catch{
+        authService.logOut();
+        setUser(null);
+        navigate("/");
+    }
 
+    async function deleteAccount(){
+        const confirmed = window.confirm("This account is going to be deleted. This action cannot be undone. Are you certain?");
+        if (!confirmed) {
+            return;
+        }
+        if (user?.id) {
+            await userService.deleteUserById(user.id);
+            await logOut();
         }
     }
 
@@ -98,6 +105,7 @@ export default function UserPage({ authService = createAuthService(API), userSer
                             :null
                         }
                         <button className="button" onClick={notAvailable}>Edit Profile</button>
+                        <button className="button" onClick={deleteAccount}>Delete Profile</button>
                         <button className="button" onClick={addExperience}>New Experience</button>
                     </div>
 

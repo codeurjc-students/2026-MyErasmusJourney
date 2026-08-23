@@ -186,6 +186,38 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"rating\": 9.2,\n    \"title\": \"Postman Experience\",\n    \"description\": \"This is an experience created with the postman\",\n    \"categories\": [\"Accommodation\",\"Studies\"],\n    \"date\": \"2026-08-20\",\n    \"cityId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{APIURL}}/users/1",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },

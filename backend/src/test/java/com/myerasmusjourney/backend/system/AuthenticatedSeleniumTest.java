@@ -93,4 +93,71 @@ public class AuthenticatedSeleniumTest extends BaseSeleniumTest{
                 By.id("profileTitle")
         ));
     }
+
+    private void createUserToDelete(){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.linkText("Sign up")
+        ));
+
+        WebElement linkToSignUp = driver.findElement(By.linkText("Sign up"));
+
+        linkToSignUp.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("signUpTitle")
+        ));
+
+        WebElement fullName = driver.findElement(By.id("fullName"));
+        WebElement displayName = driver.findElement(By.id("displayName"));
+        WebElement email = driver.findElement(By.id("email"));
+        WebElement password = driver.findElement(By.id("password"));
+        WebElement passwordConfirmation = driver.findElement(By.id("passwordConfirmation"));
+        WebElement submit = driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/form/div[9]/button"));
+
+        fullName.sendKeys("TestUser");
+        displayName.sendKeys("Test");
+        email.sendKeys("delete@email.com");
+        password.sendKeys("password");
+        passwordConfirmation.sendKeys("password");
+        submit.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("loginTitle")
+        ));
+    }
+
+    protected void authenticateDeleteUserTest(){
+        logOutUser();
+
+        createUserToDelete();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.linkText("Log in")
+        ));
+
+        WebElement linkToLogIn = driver.findElement(By.linkText("Log in"));
+
+        linkToLogIn.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("email")
+        ));
+
+        WebElement email = driver.findElement(By.id("email"));
+        WebElement password = driver.findElement(By.id("password"));
+
+        email.sendKeys("delete@email.com");
+        password.sendKeys("password");
+
+        WebElement button = driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/form/button"));
+        button.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("profileTitle")
+        ));
+    }
 }

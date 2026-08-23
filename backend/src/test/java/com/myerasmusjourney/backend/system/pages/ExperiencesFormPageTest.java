@@ -22,7 +22,7 @@ public class ExperiencesFormPageTest extends AuthenticatedSeleniumTest {
                 By.id("profileTitle")
         ));
 
-        WebElement buttonToAddExperience = driver.findElement(By.xpath("/html/body/div/div/div[1]/div[1]/div[2]/button[2]"));
+        WebElement buttonToAddExperience = driver.findElement(By.xpath("/html/body/div/div/div[1]/div[1]/div[2]/button[3]"));
 
         buttonToAddExperience.click();
 
