@@ -28,7 +28,7 @@ public class User {
     private List<String> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Experience> experiences = new LinkedList<>();
+    private final List<Experience> experiences = new LinkedList<>();
 
     public User(){
         this.roles.add("USER");
