@@ -3,6 +3,7 @@ package com.myerasmusjourney.backend.system.pages;
 import com.myerasmusjourney.backend.system.AuthenticatedSeleniumTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -10,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("system")
@@ -46,6 +48,62 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.linkText("Log in")
+        ));
+    }
+
+    @Test
+    void deleteUserBtn(){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("profileTitle")
+        ));
+
+        WebElement deleteButton = driver.findElement(By.xpath("/html/body/div/div/div[1]/div[1]/div[2]/button[2]"));
+
+        deleteButton.click();
+
+        wait.until(ExpectedConditions.alertIsPresent());
+
+        Alert alert = driver.switchTo().alert();
+
+        assertEquals(
+                "This account is going to be deleted. This action cannot be undone. Are you certain?",
+                alert.getText()
+        );
+
+        alert.accept();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.className("mainInfo")
+        ));
+    }
+
+    @Test
+    void deleteUserBtnAndCancellingDelete(){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("profileTitle")
+        ));
+
+        WebElement deleteButton = driver.findElement(By.xpath("/html/body/div/div/div[1]/div[1]/div[2]/button[2]"));
+
+        deleteButton.click();
+
+        wait.until(ExpectedConditions.alertIsPresent());
+
+        Alert alert = driver.switchTo().alert();
+
+        assertEquals(
+                "This account is going to be deleted. This action cannot be undone. Are you certain?",
+                alert.getText()
+        );
+
+        alert.dismiss();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("profileTitle")
         ));
     }
 }
