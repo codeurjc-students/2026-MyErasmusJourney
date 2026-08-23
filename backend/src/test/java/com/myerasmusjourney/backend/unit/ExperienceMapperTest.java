@@ -25,19 +25,26 @@ public class ExperienceMapperTest {
 
     @Test
     void testToDTOs() {
+        User author1 = new User("author1","author1", "author1@email.com", "password", null, null);
+        User author2 = new User("author2","author2", "author2@email.com", "password", null, null);
+
+        City city1 = new City("Madrid", "Spain", "description");
+        City city2 = new City("Toledo", "Spain", "description");
+
+
 
         List<Experience> experiences = List.of(
-                new Experience("Experiencia 1", "Descripcion 1", 9F, null, List.of("Gastronomy", "Documentation"), null, null),
-                new Experience("Experiencia 2", "Descripcion 2", 8.67F, null, List.of("Transportation", "Documentation"), null, null),
-                new Experience("Experiencia 3", "Descripcion 3", 5.4F, null, List.of("Gastronomy", "Social_Events"), null, null),
-                new Experience("Experiencia 4", "Descripcion 4", 0.9F, null, List.of("Culture", "Transportation"), null, null)
+                new Experience("Experiencia 1", "Descripcion 1", 9F, null, List.of("Gastronomy", "Documentation"), city1, author1),
+                new Experience("Experiencia 2", "Descripcion 2", 8.67F, null, List.of("Transportation", "Documentation"), city2, author2),
+                new Experience("Experiencia 3", "Descripcion 3", 5.4F, null, List.of("Gastronomy", "Social_Events"), city1, author1),
+                new Experience("Experiencia 4", "Descripcion 4", 0.9F, null, List.of("Culture", "Transportation"), city2, author2)
         );
 
         List<ExperienceSimpleDTO> expected = List.of(
-                new ExperienceSimpleDTO(null, LocalDate.now(),9F, "Experiencia 1", "Descripcion 1", List.of(Category.Gastronomy, Category.Documentation)),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", List.of(Category.Transportation, Category.Documentation)),
-                new ExperienceSimpleDTO(null, LocalDate.now(),5.4F, "Experiencia 3", "Descripcion 3",  List.of(Category.Gastronomy, Category.Social_Events)),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4",  List.of(Category.Culture, Category.Transportation))
+                new ExperienceSimpleDTO(null, LocalDate.now(),9F, "Experiencia 1", "Descripcion 1", List.of(Category.Gastronomy, Category.Documentation), "Madrid", "Spain", "author1"),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", List.of(Category.Transportation, Category.Documentation), "Toledo", "Spain", "author2"),
+                new ExperienceSimpleDTO(null, LocalDate.now(),5.4F, "Experiencia 3", "Descripcion 3",  List.of(Category.Gastronomy, Category.Social_Events), "Madrid", "Spain", "author1"),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4",  List.of(Category.Culture, Category.Transportation), "Toledo", "Spain", "author2")
         );
 
 
@@ -54,7 +61,9 @@ public class ExperienceMapperTest {
             assertEquals(exp.date(), res.date());
             assertEquals(exp.rating(), res.rating());
             assertEquals(exp.categories().size(), res.categories().size());
-
+            assertEquals(exp.cityName(), res.cityName());
+            assertEquals(exp.country(), res.country());
+            assertEquals(exp.authorName(), res.authorName());
         }
 
         result = mapper.toDTOs(List.of());
@@ -87,5 +96,36 @@ public class ExperienceMapperTest {
         result = mapper.toDTO(exp);
 
         assertNull(result);
+    }
+
+    @Test
+    void toSimpleDTO_shouldMapExperienceWithCityAndAuthor() {
+        City city = new City();
+        city.setName("Madrid");
+        city.setCountry("Spain");
+
+        User author = new User();
+        author.setDisplayName("Author");
+
+        Experience experience = new Experience();
+        experience.setId(1L);
+        experience.setDate(LocalDate.of(2026, 8, 23));
+        experience.setRating(4.5f);
+        experience.setTitle("My experience in Madrid");
+        experience.setDescription("A wonderful experience");
+        experience.setCity(city);
+        experience.setAuthor(author);
+
+        ExperienceSimpleDTO result = mapper.toSimpleDTO(experience);
+
+        assertEquals(1L, result.id());
+        assertEquals(LocalDate.of(2026, 8, 23), result.date());
+        assertEquals(4.5f, result.rating());
+        assertEquals("My experience in Madrid", result.title());
+        assertEquals("A wonderful experience", result.description());
+
+        assertEquals("Madrid", result.cityName());
+        assertEquals("Spain", result.country());
+        assertEquals("Author", result.authorName());
     }
 }

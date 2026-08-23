@@ -75,17 +75,17 @@ public class ExperienceServiceTest {
         );
 
         List<ExperienceSimpleDTO> mapped = List.of(
-                new ExperienceSimpleDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", List.of(Category.Personal_Experience, Category.Documentation)),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", List.of(Category.Social_Events, Category.Culture)),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 5.4F, "Experiencia 3", "Descripcion 3", List.of(Category.Culture, Category.Gastronomy)),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4", List.of(Category.Transportation))
+                new ExperienceSimpleDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", List.of(Category.Personal_Experience, Category.Documentation), "London", "United Kingdom", "user"),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", List.of(Category.Social_Events, Category.Culture), "Berlin", "Germany", "user2"),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 5.4F, "Experiencia 3", "Descripcion 3", List.of(Category.Culture, Category.Gastronomy), "London", "United Kingdom", "user"),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4", List.of(Category.Transportation), "Berlin", "Germany", "user2")
         );
 
         List<ExperienceSimpleDTO> expected = List.of(
-                new ExperienceSimpleDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", List.of(Category.Personal_Experience, Category.Documentation)),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", List.of(Category.Social_Events, Category.Culture)),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 5.4F, "Experiencia 3", "Descripcion 3", List.of(Category.Culture, Category.Gastronomy)),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4", List.of(Category.Transportation))
+                new ExperienceSimpleDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", List.of(Category.Personal_Experience, Category.Documentation), "London", "United Kingdom", "user"),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", List.of(Category.Social_Events, Category.Culture), "Berlin", "Germany", "user2"),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 5.4F, "Experiencia 3", "Descripcion 3", List.of(Category.Culture, Category.Gastronomy), "London", "United Kingdom", "user"),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4", List.of(Category.Transportation), "Berlin", "Germany", "user2")
         );
 
         when(experienceRepository.findAll()).thenReturn(experiences);

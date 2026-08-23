@@ -52,16 +52,21 @@ public class ExperienceServiceTest extends TestDataBase {
 
     @BeforeEach
     void setup(){
+        User author1 = new User("author1","author1", "author1@email.com", "password", null, null);
+        User author2 = new User("author2","author2", "author2@email.com", "password", null, null);
+
+        City city1 = new City("Madrid", "Spain", "description");
+        City city2 = new City("Toledo", "Spain", "description");
 
         if (experienceRepository.count() > 0){
             resetDatabase();
         }
 
         List<Experience> experiences = List.of(
-                new Experience("Experiencia 1", "Descripcion 1", 9F, null, List.of(Category.Studies.name(), Category.Documentation.name()), null, null),
-                new Experience("Experiencia 2", "Descripcion 2", 8.67F, null, List.of(Category.Personal_Experience.name(), Category.Transportation.name()), null, null),
-                new Experience("Experiencia 3", "Descripcion 3", 5.4F, null, List.of(Category.Social_Events.name(), Category.Culture.name()), null, null),
-                new Experience("Experiencia 4", "Descripcion 4", 0.9F, null, List.of(Category.Accommodation.name(), Category.Documentation.name()), null, null)
+                new Experience("Experiencia 1", "Descripcion 1", 9F, null, List.of(Category.Studies.name(), Category.Documentation.name()), city1, author1),
+                new Experience("Experiencia 2", "Descripcion 2", 8.67F, null, List.of(Category.Personal_Experience.name(), Category.Transportation.name()), city2, author1),
+                new Experience("Experiencia 3", "Descripcion 3", 5.4F, null, List.of(Category.Social_Events.name(), Category.Culture.name()), city1, author2),
+                new Experience("Experiencia 4", "Descripcion 4", 0.9F, null, List.of(Category.Accommodation.name(), Category.Documentation.name()), city2, author2)
         );
         experienceRepository.saveAll(experiences);
 
@@ -98,7 +103,7 @@ public class ExperienceServiceTest extends TestDataBase {
         Experience experience = new Experience("Experience 5", "Descripcion 5", 2.4F, null, List.of(Category.Personal_Experience.name()),null, null);
         Experience savedExperience = experienceRepository.save(experience);
 
-        ExperienceSimpleDTO savedDTO = new ExperienceSimpleDTO(savedExperience.getId(), savedExperience.getDate(), savedExperience.getRating(), savedExperience.getTitle(), savedExperience.getDescription(), savedExperience.getCategories());
+        ExperienceSimpleDTO savedDTO = new ExperienceSimpleDTO(savedExperience.getId(), savedExperience.getDate(), savedExperience.getRating(), savedExperience.getTitle(), savedExperience.getDescription(), savedExperience.getCategories(), "Berlin", "Germany", "user2");
         expected.add(savedDTO);
 
         result = experienceService.getAllExperiences();
@@ -115,6 +120,9 @@ public class ExperienceServiceTest extends TestDataBase {
             assertEquals(exp.rating(), res.rating());
             assertEquals(exp.categories().size(), res.categories().size());
             assertEquals(id, res.id());
+            assertEquals(exp.authorName(), res.authorName());
+            assertEquals(exp.cityName(), res.cityName());
+            assertEquals(exp.country(), res.country());
             id++;
         }
     }
