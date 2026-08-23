@@ -5,6 +5,7 @@ import UserPage from "src/pages/UserPage/UserPage";
 import type { UserService } from "@shared/services/user.service";
 import type { AuthService } from "@shared/services/auth.service";
 import { useUserStore } from "@shared/stores/userStore";
+import type { UserDTO } from "@shared/models/UserDTO";
 
 // ---------- mocks ----------
 
@@ -304,6 +305,126 @@ describe("UserPage", () => {
     fireEvent.click(screen.getByRole("button", { name: /add city/i }));
 
     expect(mockNavigate).toHaveBeenCalledWith("/cities/new");
+  });
+
+  it("deletes user and calls logout ", async () => {
+
+    const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(true);
+
+    const fakeUser = {
+      id: 1,
+      displayName: "john",
+      fullName: "John Doe",
+      email: "john@test.com",
+      studyLocation: "Madrid",
+      roles: ["USER", "ADMIN"]
+    };
+
+    const fakeUserDTO: UserDTO = {
+        id: 1,
+        displayName: "test",
+        fullName: "userTest",
+        email: "test@email.com",
+        studyLocation: "To be filled",
+        roles: ["USER"]
+    }
+
+    const mockGetUser = vi.fn().mockResolvedValue(fakeUser);
+
+    const mockLogOut = vi.fn();
+
+    const setUser = vi.fn();
+
+    const mockDeleteUserById = vi.fn().mockResolvedValue(fakeUserDTO);
+
+
+    const mockService: UserService = {
+      signUp: vi.fn(),
+      getUserInfo: vi.fn(),
+      getUserById: mockGetUser,
+      deleteUserById: mockDeleteUserById
+    };
+
+    const mockAuth: AuthService = {
+      logIn: vi.fn(),
+      logOut: mockLogOut
+    };
+
+    (useUserStore as any).mockReturnValue({
+      user: { id: 1 },
+      setUser
+    });
+
+    render(<UserPage authService={mockAuth} userService={mockService}/>);
+
+    await waitFor(() => {
+      expect(mockGetUser).toHaveBeenCalled();
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: /delete profile/i }));
+
+    expect(confirmSpy).toHaveBeenCalledWith("This account is going to be deleted. This action cannot be undone. Are you certain?");
+    expect(mockDeleteUserById).toHaveBeenCalledTimes(1);
+  });
+
+  it("cancels delete user ", async () => {
+
+    const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(false);
+
+    const fakeUser = {
+      id: 1,
+      displayName: "john",
+      fullName: "John Doe",
+      email: "john@test.com",
+      studyLocation: "Madrid",
+      roles: ["USER", "ADMIN"]
+    };
+
+    const fakeUserDTO: UserDTO = {
+        id: 1,
+        displayName: "test",
+        fullName: "userTest",
+        email: "test@email.com",
+        studyLocation: "To be filled",
+        roles: ["USER"]
+    }
+
+    const mockGetUser = vi.fn().mockResolvedValue(fakeUser);
+
+    const mockLogOut = vi.fn();
+
+    const setUser = vi.fn();
+
+    const mockDeleteUserById = vi.fn().mockResolvedValue(fakeUserDTO);
+
+
+    const mockService: UserService = {
+      signUp: vi.fn(),
+      getUserInfo: vi.fn(),
+      getUserById: mockGetUser,
+      deleteUserById: mockDeleteUserById
+    };
+
+    const mockAuth: AuthService = {
+      logIn: vi.fn(),
+      logOut: mockLogOut
+    };
+
+    (useUserStore as any).mockReturnValue({
+      user: { id: 1 },
+      setUser
+    });
+
+    render(<UserPage authService={mockAuth} userService={mockService}/>);
+
+    await waitFor(() => {
+      expect(mockGetUser).toHaveBeenCalled();
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: /delete profile/i }));
+
+    expect(confirmSpy).toHaveBeenCalled();
+    expect(mockDeleteUserById).not.toHaveBeenCalled();
   });
 
 });
