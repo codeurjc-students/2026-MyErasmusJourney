@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
@@ -22,17 +21,18 @@ class ExperiencesTest extends AuthenticatedE2ETest {
     void testGetExperiences() {
 
         when()
-                .get("/api/v1/experiences/")
+                .get("/api/v1/experiences/?page=0&size=3")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
-                .body("", hasSize(greaterThan(0)))
-                .body("[0].id", notNullValue())
-                .body("[0].date", notNullValue())
-                .body("[0].rating", notNullValue())
-                .body("[0].title", notNullValue())
-                .body("[0].categories", notNullValue())
-                .body("[0].description", notNullValue());
+                .body("content", hasSize(greaterThan(0)))
+                .body("content", hasSize(lessThanOrEqualTo(3)))
+                .body("content[0].id", notNullValue())
+                .body("content[0].date", notNullValue())
+                .body("content[0].rating", notNullValue())
+                .body("content[0].title", notNullValue())
+                .body("content[0].categories", notNullValue())
+                .body("content[0].description", notNullValue());
     }
 
     @Test

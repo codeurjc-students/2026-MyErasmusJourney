@@ -7,7 +7,9 @@ import com.myerasmusjourney.backend.domain.User;
 import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.enumeration.Category;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
+import com.myerasmusjourney.backend.repository.CityRepository;
 import com.myerasmusjourney.backend.repository.ExperienceRepository;
+import com.myerasmusjourney.backend.repository.UserRepository;
 import com.myerasmusjourney.backend.service.CityService;
 import com.myerasmusjourney.backend.service.ExperienceService;
 import com.myerasmusjourney.backend.service.UserService;
@@ -17,6 +19,9 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,7 +42,16 @@ public class ExperienceServiceTest extends TestDataBase {
     private ExperienceService experienceService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private ExperienceRepository experienceRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CityRepository cityRepository;
 
     @Autowired
     private ExperienceMapper experienceMapper;
@@ -45,29 +59,90 @@ public class ExperienceServiceTest extends TestDataBase {
     @Autowired
     private CityService cityService;
 
-    @Autowired
-    private UserService userService;
+
 
     private List<ExperienceSimpleDTO> expected;
 
     @BeforeEach
     void setup(){
-        User author1 = new User("author1","author1", "author1@email.com", "password", null, null);
-        User author2 = new User("author2","author2", "author2@email.com", "password", null, null);
-
-        City city1 = new City("Madrid", "Spain", "description");
-        City city2 = new City("Toledo", "Spain", "description");
 
         if (experienceRepository.count() > 0){
-            resetDatabase();
+            experienceRepository.deleteAll();
         }
 
+        List<User> users = userRepository.findAll();
+
+        User author1 = users.getFirst();
+        User author2 = users.get(1);
+
+        List<City> cities = cityRepository.findAll();
+
+        City city1 = cities.getFirst();
+        City city2 = cities.get(1);
+
         List<Experience> experiences = List.of(
-                new Experience("Experiencia 1", "Descripcion 1", 9F, null, List.of(Category.Studies.name(), Category.Documentation.name()), city1, author1),
-                new Experience("Experiencia 2", "Descripcion 2", 8.67F, null, List.of(Category.Personal_Experience.name(), Category.Transportation.name()), city2, author1),
-                new Experience("Experiencia 3", "Descripcion 3", 5.4F, null, List.of(Category.Social_Events.name(), Category.Culture.name()), city1, author2),
-                new Experience("Experiencia 4", "Descripcion 4", 0.9F, null, List.of(Category.Accommodation.name(), Category.Documentation.name()), city2, author2)
+                new Experience(
+                        "Experiencia 1", "Descripcion 1", 9F, null,
+                        List.of(Category.Studies.name(), Category.Documentation.name()),
+                        city1, author1
+                ),
+                new Experience(
+                        "Experiencia 2", "Descripcion 2", 8.67F, null,
+                        List.of(Category.Personal_Experience.name(), Category.Transportation.name()),
+                        city2, author1
+                ),
+                new Experience(
+                        "Experiencia 3", "Descripcion 3", 5.4F, null,
+                        List.of(Category.Social_Events.name(), Category.Culture.name()),
+                        city1, author2
+                ),
+                new Experience(
+                        "Experiencia 4", "Descripcion 4", 0.9F, null,
+                        List.of(Category.Accommodation.name(), Category.Documentation.name()),
+                        city2, author2
+                ),
+                new Experience(
+                        "Experiencia 5", "Descripcion 5", 7.5F, null,
+                        List.of(Category.Studies.name()),
+                        city1, author1
+                ),
+                new Experience(
+                        "Experiencia 6", "Descripcion 6", 6.8F, null,
+                        List.of(Category.Culture.name()),
+                        city2, author1
+                ),
+                new Experience(
+                        "Experiencia 7", "Descripcion 7", 9.2F, null,
+                        List.of(Category.Gastronomy.name()),
+                        city1, author2
+                ),
+                new Experience(
+                        "Experiencia 8", "Descripcion 8", 4.3F, null,
+                        List.of(Category.Accommodation.name()),
+                        city2, author2
+                ),
+                new Experience(
+                        "Experiencia 9", "Descripcion 9", 8.1F, null,
+                        List.of(Category.Social_Events.name()),
+                        city1, author1
+                ),
+                new Experience(
+                        "Experiencia 10", "Descripcion 10", 7.9F, null,
+                        List.of(Category.Transportation.name()),
+                        city2, author1
+                ),
+                new Experience(
+                        "Experiencia 11", "Descripcion 11", 5.7F, null,
+                        List.of(Category.Personal_Experience.name()),
+                        city1, author2
+                ),
+                new Experience(
+                        "Experiencia 12", "Descripcion 12", 3.6F, null,
+                        List.of(Category.Documentation.name()),
+                        city2, author2
+                )
         );
+
         experienceRepository.saveAll(experiences);
 
         this.expected = experienceMapper.toDTOs(experiences);
@@ -80,39 +155,75 @@ public class ExperienceServiceTest extends TestDataBase {
 
     @Test
     void testGetAll(){
-        List<ExperienceSimpleDTO> result = experienceService.getAllExperiences();
 
-        assertEquals(expected.size(), result.size());
-        Long id = result.getFirst().id();
-        for(int i = 0; i<expected.size(); i++){
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Page<ExperienceSimpleDTO> result =
+                experienceService.getAllExperiences(pageable);
+
+        assertEquals(expected.size(), result.getTotalElements());
+        assertEquals(10, result.getNumberOfElements());
+
+        Long id = result.getContent().getFirst().id();
+
+        for(int i = 0; i < 10; i++){
             ExperienceSimpleDTO exp = expected.get(i);
-            ExperienceSimpleDTO res = result.get(i);
-            assert(exp.equals(res));
+            ExperienceSimpleDTO res = result.getContent().get(i);
+
+            assertEquals(exp, res);
             assertEquals(id, res.id());
+
             id++;
         }
-
     }
 
     @Test
     void testGetAllDynamic(){
-        List<ExperienceSimpleDTO> result = experienceService.getAllExperiences();
 
-        assertEquals(expected.size(), result.size());
+        Pageable pageable = PageRequest.of(0, 10);
 
-        Experience experience = new Experience("Experience 5", "Descripcion 5", 2.4F, null, List.of(Category.Personal_Experience.name()),null, null);
+        Page<ExperienceSimpleDTO> result =
+                experienceService.getAllExperiences(pageable);
+
+        assertEquals(expected.size(), result.getTotalElements());
+
+        Experience experience = new Experience(
+                "Experience 5",
+                "Descripcion 5",
+                2.4F,
+                null,
+                List.of(Category.Personal_Experience.name()),
+                null,
+                null
+        );
+
         Experience savedExperience = experienceRepository.save(experience);
 
-        ExperienceSimpleDTO savedDTO = new ExperienceSimpleDTO(savedExperience.getId(), savedExperience.getDate(), savedExperience.getRating(), savedExperience.getTitle(), savedExperience.getDescription(), savedExperience.getCategories(), "Berlin", "Germany", "user2");
+        ExperienceSimpleDTO savedDTO = new ExperienceSimpleDTO(
+                savedExperience.getId(),
+                savedExperience.getDate(),
+                savedExperience.getRating(),
+                savedExperience.getTitle(),
+                savedExperience.getDescription(),
+                savedExperience.getCategories(),
+                "Berlin",
+                "Germany",
+                "user2"
+        );
+
         expected.add(savedDTO);
 
-        result = experienceService.getAllExperiences();
+        result = experienceService.getAllExperiences(pageable);
 
-        assertEquals(expected.size(), result.size());
-        Long id = result.getFirst().id();
-        for(int i = 0; i<expected.size(); i++){
+        assertEquals(expected.size(), result.getTotalElements());
+        assertEquals(10, result.getNumberOfElements());
+
+        Long id = result.getContent().getFirst().id();
+
+        for(int i = 0; i < 10; i++){
             ExperienceSimpleDTO exp = expected.get(i);
-            ExperienceSimpleDTO res = result.get(i);
+            ExperienceSimpleDTO res = result.getContent().get(i);
+
             assertEquals(exp.id(), res.id());
             assertEquals(exp.description(), res.description());
             assertEquals(exp.title(), res.title());
@@ -123,15 +234,63 @@ public class ExperienceServiceTest extends TestDataBase {
             assertEquals(exp.authorName(), res.authorName());
             assertEquals(exp.cityName(), res.cityName());
             assertEquals(exp.country(), res.country());
+
             id++;
         }
     }
 
     @Test
+    void testGetAllPagination() {
+
+        Pageable pageable = PageRequest.of(0, 5);
+
+        Page<ExperienceSimpleDTO> result =
+                experienceService.getAllExperiences(pageable);
+
+        assertEquals(12, result.getTotalElements());
+        assertEquals(5, result.getNumberOfElements());
+        assertEquals(3, result.getTotalPages());
+        assertEquals(0, result.getNumber());
+
+        for (int i = 0; i < 5; i++) {
+            assertEquals(expected.get(i), result.getContent().get(i));
+        }
+
+        pageable = PageRequest.of(1, 5);
+
+        result = experienceService.getAllExperiences(pageable);
+
+        assertEquals(12, result.getTotalElements());
+        assertEquals(5, result.getNumberOfElements());
+        assertEquals(3, result.getTotalPages());
+        assertEquals(1, result.getNumber());
+
+        for (int i = 0; i < 5; i++) {
+            assertEquals(expected.get(i + 5), result.getContent().get(i));
+        }
+
+        pageable = PageRequest.of(2, 5);
+
+        result = experienceService.getAllExperiences(pageable);
+
+        assertEquals(12, result.getTotalElements());
+        assertEquals(2, result.getNumberOfElements());
+        assertEquals(3, result.getTotalPages());
+        assertEquals(2, result.getNumber());
+
+        assertEquals(expected.get(10), result.getContent().get(0));
+        assertEquals(expected.get(11), result.getContent().get(1));
+    }
+
+    @Test
     void testGetAllEmpty() {
+
         experienceRepository.deleteAll();
 
-        List<ExperienceSimpleDTO> result = experienceService.getAllExperiences();
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Page<ExperienceSimpleDTO> result =
+                experienceService.getAllExperiences(pageable);
 
         assertTrue(result.isEmpty());
     }
@@ -142,16 +301,18 @@ public class ExperienceServiceTest extends TestDataBase {
         Authentication authentication = new UsernamePasswordAuthenticationToken("test@email.com",null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        List<City> cities = cityRepository.findAll();
+
         ExperienceFormDTO formDTO = new ExperienceFormDTO(
                 5.0f,
                 "Erasmus party",
                 "Great Erasmus party",
                 LocalDate.of(2022, 1, 13),
                 List.of("Social_Events", "Gastronomy"),
-                1L
+                cities.getFirst().getId()
         );
 
-        City city = cityService.findById(1L);
+        City city = cities.getFirst();
         User user = userService.getLoggedUser();
 
         Experience savedExperience = new Experience(

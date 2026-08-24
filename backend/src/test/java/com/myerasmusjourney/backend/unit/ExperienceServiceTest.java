@@ -17,16 +17,18 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @Tag("unit")
@@ -49,65 +51,161 @@ public class ExperienceServiceTest {
     private ExperienceService experienceService;
 
     @Test
-    void testGetEmptyExperiences(){
-        List<Experience> experiences = List.of();
+    void testGetEmptyExperiences() {
+        Pageable pageable = PageRequest.of(0, 10);
 
-        when(experienceRepository.findAll()).thenReturn(experiences); //simulates what should happen when repository.findAll() is called in the real code.
-        when(experienceMapper.toDTOs(experiences)).thenReturn(List.of());
+        Page<Experience> emptyPage = new PageImpl<>(List.of(), pageable, 0);
 
+        when(experienceRepository.findAll(pageable)).thenReturn(emptyPage);
 
-        List<ExperienceSimpleDTO> result = experienceService.getAllExperiences();
+        Page<ExperienceSimpleDTO> result =
+                experienceService.getAllExperiences(pageable);
 
-        assertEquals(List.of(), result);
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        assertEquals(0, result.getTotalElements());
+        assertEquals(0, result.getTotalPages());
 
-        verify(experienceRepository).findAll(); //verifies repository.findAll() has been called
-        verify(experienceMapper).toDTOs(experiences);
-
+        verify(experienceRepository).findAll(pageable);
+        verifyNoInteractions(experienceMapper);
     }
 
     @Test
-    void testGetAllExperiences(){
+    void testGetAllExperiences() {
+        Pageable pageable = PageRequest.of(0, 10);
+
         List<Experience> experiences = List.of(
-                new Experience("Experiencia 1", "Descripcion 1", 9F, null, List.of("Personal_Experience", "Documentation"), null, null),
-                new Experience("Experiencia 2", "Descripcion 2", 8.67F, null, List.of("Social_Events", "Culture"), null, null),
-                new Experience("Experiencia 3", "Descripcion 3", 5.4F, null, List.of("Culture", "Gastronomy"), null, null),
-                new Experience("Experiencia 4", "Descripcion 4", 0.9F, null, List.of("Transportation"), null, null)
+                new Experience(
+                        "Experiencia 1",
+                        "Descripcion 1",
+                        9F,
+                        null,
+                        List.of("Personal_Experience", "Documentation"),
+                        null,
+                        null
+                ),
+                new Experience(
+                        "Experiencia 2",
+                        "Descripcion 2",
+                        8.67F,
+                        null,
+                        List.of("Social_Events", "Culture"),
+                        null,
+                        null
+                ),
+                new Experience(
+                        "Experiencia 3",
+                        "Descripcion 3",
+                        5.4F,
+                        null,
+                        List.of("Culture", "Gastronomy"),
+                        null,
+                        null
+                ),
+                new Experience(
+                        "Experiencia 4",
+                        "Descripcion 4",
+                        0.9F,
+                        null,
+                        List.of("Transportation"),
+                        null,
+                        null
+                )
         );
 
-        List<ExperienceSimpleDTO> mapped = List.of(
-                new ExperienceSimpleDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", List.of(Category.Personal_Experience, Category.Documentation), "London", "United Kingdom", "user"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", List.of(Category.Social_Events, Category.Culture), "Berlin", "Germany", "user2"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 5.4F, "Experiencia 3", "Descripcion 3", List.of(Category.Culture, Category.Gastronomy), "London", "United Kingdom", "user"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4", List.of(Category.Transportation), "Berlin", "Germany", "user2")
+        Page<Experience> experiencePage = new PageImpl<>(
+                experiences,
+                pageable,
+                experiences.size()
         );
 
         List<ExperienceSimpleDTO> expected = List.of(
-                new ExperienceSimpleDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", List.of(Category.Personal_Experience, Category.Documentation), "London", "United Kingdom", "user"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", List.of(Category.Social_Events, Category.Culture), "Berlin", "Germany", "user2"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 5.4F, "Experiencia 3", "Descripcion 3", List.of(Category.Culture, Category.Gastronomy), "London", "United Kingdom", "user"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4", List.of(Category.Transportation), "Berlin", "Germany", "user2")
+                new ExperienceSimpleDTO(
+                        null,
+                        LocalDate.now(),
+                        9F,
+                        "Experiencia 1",
+                        "Descripcion 1",
+                        List.of(Category.Personal_Experience, Category.Documentation),
+                        "London",
+                        "United Kingdom",
+                        "user"
+                ),
+                new ExperienceSimpleDTO(
+                        null,
+                        LocalDate.now(),
+                        8.67F,
+                        "Experiencia 2",
+                        "Descripcion 2",
+                        List.of(Category.Social_Events, Category.Culture),
+                        "Berlin",
+                        "Germany",
+                        "user2"
+                ),
+                new ExperienceSimpleDTO(
+                        null,
+                        LocalDate.now(),
+                        5.4F,
+                        "Experiencia 3",
+                        "Descripcion 3",
+                        List.of(Category.Culture, Category.Gastronomy),
+                        "London",
+                        "United Kingdom",
+                        "user"
+                ),
+                new ExperienceSimpleDTO(
+                        null,
+                        LocalDate.now(),
+                        0.9F,
+                        "Experiencia 4",
+                        "Descripcion 4",
+                        List.of(Category.Transportation),
+                        "Berlin",
+                        "Germany",
+                        "user2"
+                )
         );
 
-        when(experienceRepository.findAll()).thenReturn(experiences);
-        when(experienceMapper.toDTOs(experiences)).thenReturn(mapped);
+        when(experienceRepository.findAll(pageable))
+                .thenReturn(experiencePage);
 
-        List<ExperienceSimpleDTO> result = experienceService.getAllExperiences();
+        when(experienceMapper.toSimpleDTO(experiences.get(0)))
+                .thenReturn(expected.get(0));
+        when(experienceMapper.toSimpleDTO(experiences.get(1)))
+                .thenReturn(expected.get(1));
+        when(experienceMapper.toSimpleDTO(experiences.get(2)))
+                .thenReturn(expected.get(2));
+        when(experienceMapper.toSimpleDTO(experiences.get(3)))
+                .thenReturn(expected.get(3));
 
-        assertEquals(expected.size(), result.size());
+        Page<ExperienceSimpleDTO> result =
+                experienceService.getAllExperiences(pageable);
 
-        for(int i = 0; i<expected.size(); i++){
-            ExperienceSimpleDTO exp = expected.get(i);
-            ExperienceSimpleDTO res = result.get(i);
-            assertEquals(exp, res);
+        assertNotNull(result);
+
+        // Contenido
+        assertEquals(expected.size(), result.getNumberOfElements());
+
+        for (int i = 0; i < expected.size(); i++) {
+            assertEquals(expected.get(i), result.getContent().get(i));
         }
 
-        verify(experienceRepository).findAll();
-        verify(experienceMapper).toDTOs(experiences);
+        // Información de paginación
+        assertEquals(0, result.getNumber());
+        assertEquals(10, result.getSize());
+        assertEquals(4, result.getTotalElements());
+        assertEquals(1, result.getTotalPages());
 
+        verify(experienceRepository).findAll(pageable);
+
+        verify(experienceMapper).toSimpleDTO(experiences.get(0));
+        verify(experienceMapper).toSimpleDTO(experiences.get(1));
+        verify(experienceMapper).toSimpleDTO(experiences.get(2));
+        verify(experienceMapper).toSimpleDTO(experiences.get(3));
     }
 
     @Test
-    void testGetExperiences(){
+    void testGetCategories(){
         Category[] result = experienceService.getCategories();
 
         for (Category c: result){
