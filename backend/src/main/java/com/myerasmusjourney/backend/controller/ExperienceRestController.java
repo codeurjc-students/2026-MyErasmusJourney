@@ -6,6 +6,8 @@ import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
 import com.myerasmusjourney.backend.enumeration.Category;
 import com.myerasmusjourney.backend.service.ExperienceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -21,8 +23,8 @@ public class ExperienceRestController {
     private ExperienceService experienceService;
 
     @GetMapping("/")
-    public List<ExperienceSimpleDTO> getExperiences(){
-        return experienceService.getAllExperiences();
+    public Page<ExperienceSimpleDTO> getExperiences(Pageable pageable){
+        return experienceService.getAllExperiences(pageable);
     }
 
     @PostMapping("/")

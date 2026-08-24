@@ -12,10 +12,11 @@ import com.myerasmusjourney.backend.repository.ExperienceRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class ExperienceService {
@@ -44,9 +45,8 @@ public class ExperienceService {
         experienceRepository.saveAll(experiences);
     }
 
-    public List<ExperienceSimpleDTO> getAllExperiences() {
-        List<Experience> experiences = experienceRepository.findAll();
-        return experienceMapper.toDTOs(experiences);
+    public Page<ExperienceSimpleDTO> getAllExperiences(Pageable pageable) {
+        return experienceRepository.findAll(pageable).map(experienceMapper::toSimpleDTO);
     }
 
     public Category[] getCategories() {
