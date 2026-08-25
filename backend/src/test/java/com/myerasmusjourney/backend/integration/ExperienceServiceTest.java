@@ -10,9 +10,9 @@ import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import com.myerasmusjourney.backend.repository.CityRepository;
 import com.myerasmusjourney.backend.repository.ExperienceRepository;
 import com.myerasmusjourney.backend.repository.UserRepository;
-import com.myerasmusjourney.backend.service.CityService;
 import com.myerasmusjourney.backend.service.ExperienceService;
 import com.myerasmusjourney.backend.service.UserService;
+import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -55,11 +56,6 @@ public class ExperienceServiceTest extends TestDataBase {
 
     @Autowired
     private ExperienceMapper experienceMapper;
-
-    @Autowired
-    private CityService cityService;
-
-
 
     private List<ExperienceSimpleDTO> expected;
 
@@ -391,5 +387,22 @@ public class ExperienceServiceTest extends TestDataBase {
         } catch (NoSuchElementException exception){
             assertTrue(true);
         }
+    }
+
+    @Test
+    void testGetExperienceById() {
+
+        ExperienceDTO expected = experienceMapper.toDTO(experienceRepository.findAll().getFirst());
+
+        ExperienceDTO result = experienceService.getExperienceById(expected.id());
+
+        Assert.assertEquals(expected, result);
+    }
+
+    @Test
+    void testGetExperienceByIdNotFound() {
+        Long id = 0L;
+
+        assertThrows(NoSuchElementException.class, () -> experienceService.getExperienceById(id));
     }
 }

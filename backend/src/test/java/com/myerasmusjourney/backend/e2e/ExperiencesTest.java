@@ -134,4 +134,33 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .then()
                 .statusCode(404);
     }
+
+    @Test
+    void testGetExperienceById() {
+
+        when()
+                .get("/api/v1/experiences/1")
+                .then()
+                .statusCode(200)
+                .contentType("application/json")
+                .body("id", equalTo(1))
+                .body("date", notNullValue())
+                .body("rating", notNullValue())
+                .body("title", notNullValue())
+                .body("categories", notNullValue())
+                .body("categories", hasSize(greaterThan(0)))
+                .body("categories", hasSize(lessThanOrEqualTo(3)))
+                .body("description", notNullValue())
+                .body("author", equalTo(null))
+                .body("city", equalTo(null));
+    }
+
+    @Test
+    void testGetExperienceByIdNotFound() {
+
+        when()
+                .get("/api/v1/experiences/0")
+                .then()
+                .statusCode(404);
+    }
 }
