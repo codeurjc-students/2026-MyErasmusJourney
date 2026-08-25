@@ -1,10 +1,19 @@
 export interface ExperienceSimpleDTO{
-    id:number;
-    title:String;
-    date: String;
+    id: number;
+    title: string;
+    date: string;
     rating: number;
-    description: String;
-    cityName: String;
-    country: String;
-    authorName: String;
+    description: string;
+    categories: string[]
+    cityName: string;
+    country: string;
+    authorName: string;
+}
+
+export interface ExperiencePageDTO {
+    content: ExperienceSimpleDTO[];
+    totalElements?: number;
+    totalPages?: number;
+    number?: number;
+    size?: number;
 }
