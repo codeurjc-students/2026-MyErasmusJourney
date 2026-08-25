@@ -12,5 +12,8 @@ public record ExperienceSimpleDTO (
         Float rating,
         String title,
         String description,
-        Collection<Category> categories
+        Collection<Category> categories,
+        String cityName,
+        String country,
+        String authorName
 ){}

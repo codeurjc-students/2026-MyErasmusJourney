@@ -1,0 +1,63 @@
+/* Base font-size for the component */
+.experience-card {
+  font-size: 1rem;
+}
+
+/* Tertiary information (date, author, location, categories) */
+.experience-card .exp-meta,
+.experience-card .exp-category {
+  font-size: 0.8rem !important;
+  line-height: 1.1;
+}
+
+/* Slightly reduce spacing below author line */
+.experience-card .exp-meta {
+  margin-bottom: 0.125rem;
+}
+
+/* Small adjustment to make the card feel wider on larger screens */
+@media (min-width: 768px) {
+  .experience-card {
+    align-items: flex-start;
+  }
+}
+
+/* Description slightly larger than tertiary but smaller than base */
+.experience-card .exp-description {
+  font-size: 0.9rem !important;
+  line-height: 1.25;
+}
+
+/* Ensure long words or unbroken text do not expand the card width */
+.experience-card, .experience-card * {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Rating uses secondary size */
+.experience-card .exp-rating-text {
+  font-size: 0.9rem !important;
+  line-height: 1;
+}
+
+/* Ensure category chips stay on a single row and are fully visible */
+.experience-card {
+  overflow: visible;
+}
+
+.experience-card .categories-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.experience-card .exp-category {
+  white-space: normal;
+}
+
+/* Ensure the card sizes to its content and doesn't exceed container */
+.experience-card {
+  width: auto;
+  max-width: 100%;
+}

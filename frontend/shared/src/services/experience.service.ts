@@ -7,27 +7,37 @@
  *  data = expService.getAll();
 **/
 
-import type { ExperienceFormDTO } from "@shared/models/ExperienceFormDTO";
+import type { ExperienceFormDTO } from "../models/ExperienceFormDTO";
 import type { ApiClient } from "../apiClient";
+import type { ExperiencePageDTO } from "../models/ExperienceSimpleDTO";
 
 export type ExperienceService = ReturnType<typeof createExperienceService>;
 
 export function createExperienceService(api: ApiClient) {
   return {
-    getAll: () => getAllExperiences(api),
+    getAll: (page?: number, size?: number) => getAllExperiences(api, page, size),
     getCategories: () => getCategories(api),
     postExperience: (body: ExperienceFormDTO) => postExperience(api, body)
   };
 }
 
-async function getAllExperiences(api: ApiClient) {
-  const response = await api.get("/experiences/")
+async function getAllExperiences(api: ApiClient, page?: number, size?: number) {
+  let url = "/experiences/";
+
+  if (typeof page === "number" || typeof size === "number") {
+    const params = new URLSearchParams();
+    if (typeof page === "number") params.append("page", String(page));
+    if (typeof size === "number") params.append("size", String(size));
+    url = `${url}?${params.toString()}`;
+  }
+
+  const response = await api.get(url)
 
   if (!response.ok) {
     throw new Error("Error fetching experiences")
   }
 
-  return response.json();
+  return response.json() as Promise<ExperiencePageDTO>;
 }
 
 async function getCategories(api: ApiClient) {

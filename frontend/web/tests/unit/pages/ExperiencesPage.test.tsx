@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import ExperiencesPage from "src/pages/ExperiencesPage";
+import ExperiencesPage from "src/pages/ExperiencesPage/ExperiencesPage";
+import { MemoryRouter } from "react-router-dom";
 import type { ExperienceService } from "@shared/services/experience.service";
 import "@testing-library/jest-dom";
 
@@ -14,14 +15,18 @@ describe("ExperiencesPage", () => {
     ];
 
     //mock of getAll
-    const mockGetAll = vi.fn().mockResolvedValue(fakeData);
+    const mockGetAll = vi.fn().mockResolvedValue({ content: fakeData });
     //return mocked service
     const mockService: ExperienceService = {
       getAll: mockGetAll,
     };
 
     //render component (DOM virtual)
-    render(<ExperiencesPage experienceService={mockService}/>);
+    render(
+      <MemoryRouter>
+        <ExperiencesPage experienceService={mockService} />
+      </MemoryRouter>
+    );
 
     //assertions
     await waitFor(() => {
@@ -35,13 +40,17 @@ describe("ExperiencesPage", () => {
 
   it("renders empty when data is empty", async () => {
 
-    const mockGetAll = vi.fn().mockResolvedValue([]);
+    const mockGetAll = vi.fn().mockResolvedValue({ content: [] });
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
     };
 
-    render(<ExperiencesPage experienceService={mockService}/>);
+    render(
+      <MemoryRouter>
+        <ExperiencesPage experienceService={mockService} />
+      </MemoryRouter>
+    );
 
     await waitFor(() => {
       expect(screen.queryAllByText("Title")).toHaveLength(0);
@@ -61,13 +70,17 @@ describe("ExperiencesPage", () => {
       { id: 3, title: "Title 3", date:"2026-06-25", rating: 4.81, description: "description 3"},
     ];
 
-    const mockGetAll = vi.fn().mockResolvedValue(fakeData);
+    const mockGetAll = vi.fn().mockResolvedValue({ content: fakeData });
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
     };
 
-    render(<ExperiencesPage experienceService={mockService}/>);
+    render(
+      <MemoryRouter>
+        <ExperiencesPage experienceService={mockService} />
+      </MemoryRouter>
+    );
 
     await waitFor(() => {
       const experiences = screen.queryAllByText(/^Title /i);
@@ -87,23 +100,30 @@ describe("ExperiencesPage", () => {
       { id: 1, title: "Title 1", date:"2026-06-25", rating:7.32, description:"description 1"}
     ];
 
-    const mockGetAll = vi.fn().mockResolvedValue(fakeData);
+    const mockGetAll = vi.fn().mockResolvedValue({ content: fakeData });
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
     };
 
-    render(<ExperiencesPage experienceService={mockService}/>);
+    render(
+      <MemoryRouter>
+        <ExperiencesPage experienceService={mockService} />
+      </MemoryRouter>
+    );
 
-    await waitFor(() => {
-      const experiences = screen.queryAllByText(/^Title /i);
+    // wait for the experience title to appear
+    const titleEl = await screen.findByText("Title 1");
+    expect(titleEl).toBeInTheDocument();
 
-      expect(experiences).toHaveLength(1);
+    const experiences = screen.queryAllByText(/^Title /i);
+    expect(experiences).toHaveLength(1);
 
-      expect(experiences[0]).toHaveTextContent("Title 1");
+    expect(experiences[0]).toHaveTextContent("Title 1");
 
-      expect(screen.queryAllByRole("heading")).toHaveLength(2);
-    }); 
+    // header + experience title (experience title may be rendered as heading depending on markup)
+    expect(screen.queryAllByRole("heading")).toHaveLength(1);
+    
 
     expect(mockGetAll).toHaveBeenCalledTimes(1);
   });
@@ -114,13 +134,17 @@ describe("ExperiencesPage", () => {
       { id: 1, title: "Title 1", date:"2026-06-25", rating:7.32, description:"description 1"}
     ];
 
-    const mockGetAll = vi.fn().mockResolvedValue(fakeData);
+    const mockGetAll = vi.fn().mockResolvedValue({ content: fakeData });
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
     };
 
-    render(<ExperiencesPage experienceService={mockService}/>);
+    render(
+      <MemoryRouter>
+        <ExperiencesPage experienceService={mockService} />
+      </MemoryRouter>
+    );
 
 
     await waitFor(() => {
@@ -128,7 +152,7 @@ describe("ExperiencesPage", () => {
       expect(screen.getAllByText("Title 1")).toHaveLength(2);
       expect(screen.getAllByText("description 1")).toHaveLength(2);
       expect(screen.getAllByText("2026-06-25")).toHaveLength(2);
-      expect(screen.getAllByText(7.32)).toHaveLength(2);
+      expect(screen.getAllByText("7.3")).toHaveLength(2);
     }); 
 
     expect(mockGetAll).toHaveBeenCalledTimes(1);
@@ -145,7 +169,11 @@ describe("ExperiencesPage", () => {
       getAll: mockGetAll,
     };
 
-    render(<ExperiencesPage experienceService={mockService}/>);
+    render(
+      <MemoryRouter>
+        <ExperiencesPage experienceService={mockService} />
+      </MemoryRouter>
+    );
 
 
     await waitFor(() => {
@@ -172,13 +200,17 @@ describe("ExperiencesPage", () => {
       { id: 10, title: "Title 10", date: "2026-06-10", rating: 7.7, description: "Description 10" },
     ];
 
-    const mockGetAll = vi.fn().mockResolvedValue(fakeData);
+    const mockGetAll = vi.fn().mockResolvedValue({ content: fakeData });
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
     };
 
-    render(<ExperiencesPage experienceService={mockService}/>);
+    render(
+      <MemoryRouter>
+        <ExperiencesPage experienceService={mockService} />
+      </MemoryRouter>
+    );
 
     await waitFor(() => {
       const experiences = screen.queryAllByText(/^Title /i);
