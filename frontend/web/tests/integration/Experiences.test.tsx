@@ -4,7 +4,8 @@ import { createExperienceService } from "@shared/services/experience.service";
 import "@testing-library/jest-dom";
 import { createApiClient } from "@shared/apiClient";
 import { APIURL } from "src/config/env";
-import ExperiencesPage from "src/pages/ExperiencesPage";
+import ExperiencesPage from "src/pages/ExperiencesPage/ExperiencesPage";
+import { MemoryRouter } from "react-router-dom";
 
 const testAPI = createApiClient(APIURL)
 const testService = createExperienceService(testAPI);
@@ -12,7 +13,11 @@ const testService = createExperienceService(testAPI);
 describe("Experiences",()=>{
     it("renders data from API",async()=>{
 
-        render(<ExperiencesPage experienceService={testService}/>);
+                render(
+                    <MemoryRouter>
+                        <ExperiencesPage experienceService={testService} />
+                    </MemoryRouter>
+                );
 
         await waitFor(() => {
             expect(screen.queryAllByRole("heading").length).toBeGreaterThan(0);
