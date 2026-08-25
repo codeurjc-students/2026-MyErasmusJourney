@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class ExperienceService {
@@ -55,7 +56,7 @@ public class ExperienceService {
 
     @Transactional
     public ExperienceDTO createExperience(ExperienceFormDTO experienceFormDTO){
-        if(experienceFormDTO.categories().isEmpty() || experienceFormDTO.categories().size()>3){
+        if(experienceFormDTO.categories().isEmpty() || experienceFormDTO.categories().size()>3 || experienceFormDTO.rating()<0 || experienceFormDTO.rating()>10){
             return null;
         }
         City city = cityService.findById(experienceFormDTO.cityId());
@@ -65,5 +66,10 @@ public class ExperienceService {
         cityService.addExperience(savedExperience, city);
         userService.addExperience(savedExperience, user);
         return experienceMapper.toDTO(savedExperience);
+    }
+
+    public ExperienceDTO getExperienceById(Long id){
+        Experience experience = experienceRepository.findById(id).orElseThrow(()-> new NoSuchElementException("Experience not found"));
+        return experienceMapper.toDTO(experience);
     }
 }

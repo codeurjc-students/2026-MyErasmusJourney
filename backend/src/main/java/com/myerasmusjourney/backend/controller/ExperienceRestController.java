@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/experiences")
@@ -38,5 +37,10 @@ public class ExperienceRestController {
     @GetMapping("/categories")
     public Category[] getCategories(){
         return experienceService.getCategories();
+    }
+
+    @GetMapping("/{id}")
+    public ExperienceDTO getExperienceById(@PathVariable Long id){
+        return experienceService.getExperienceById(id);
     }
 }
