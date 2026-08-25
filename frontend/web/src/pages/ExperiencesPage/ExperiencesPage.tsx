@@ -2,13 +2,10 @@ import { useEffect, useState } from "react";
 import Experience from "../../components/Experience";
 import { API } from "../../api/client";
 import type { ExperienceSimpleDTO } from "@shared/models/ExperienceSimpleDTO";
-import { createExperienceService, type ExperienceService } from "@shared/services/experience.service";
+import { createExperienceService } from "@shared/services/experience.service";
+import type { experienceServiceProps } from "@shared/interfaces/experienceServiceProps";
 
-interface ExperiencesPageProps {
-    experienceService?: ExperienceService;
-}
-
-export default function ExperiencesPage({ experienceService = createExperienceService(API) }: ExperiencesPageProps) {
+export default function ExperiencesPage({ experienceService = createExperienceService(API) }: experienceServiceProps) {
 
     const [experiences, setExperiences] = useState<ExperienceSimpleDTO[]>([]);
     const [page, setPage] = useState(0);
