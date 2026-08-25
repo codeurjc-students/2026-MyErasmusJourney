@@ -17,7 +17,8 @@ export function createExperienceService(api: ApiClient) {
   return {
     getAll: (page?: number, size?: number) => getAllExperiences(api, page, size),
     getCategories: () => getCategories(api),
-    postExperience: (body: ExperienceFormDTO) => postExperience(api, body)
+    postExperience: (body: ExperienceFormDTO) => postExperience(api, body),
+    getExperienceById: (id: number)=> getExperienceById(api, id)
   };
 }
 
@@ -55,6 +56,16 @@ async function postExperience(api: ApiClient, body: ExperienceFormDTO) {
 
   if (!response.ok) {
     throw new Error("Error posting new experience")
+  }
+
+  return response.json();
+}
+
+async function getExperienceById(api: ApiClient, id:number) {
+  const response = await api.get(`/experiences/${id}`)
+
+  if (!response.ok) {
+    throw new Error("Error fetching experience")
   }
 
   return response.json();
