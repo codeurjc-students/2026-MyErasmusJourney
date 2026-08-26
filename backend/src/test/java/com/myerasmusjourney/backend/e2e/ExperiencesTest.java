@@ -151,8 +151,8 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .body("categories", hasSize(greaterThan(0)))
                 .body("categories", hasSize(lessThanOrEqualTo(3)))
                 .body("description", notNullValue())
-                .body("author", equalTo(null))
-                .body("city", equalTo(null));
+                .body("author", notNullValue())
+                .body("city", notNullValue());
     }
 
     @Test
