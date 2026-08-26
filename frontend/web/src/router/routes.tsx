@@ -9,7 +9,7 @@ import UserPage from "../pages/UserPage/UserPage";
 import AvailableSoonPage from "../pages/AvailableSoonPage/AvailableSoonPage";
 import CityFormPage from "../pages/CityFormPage/CityFormPage";
 import ExperienceFormPage from "../pages/ExperienceFormPage/ExperienceFormPage";
-import DetailedExperiencePage from "src/pages/DetailedExperiencePage/DetailedExperiencePage";
+import DetailedExperiencePage from "../pages/DetailedExperiencePage/DetailedExperiencePage";
 
 export const routes = [
   {

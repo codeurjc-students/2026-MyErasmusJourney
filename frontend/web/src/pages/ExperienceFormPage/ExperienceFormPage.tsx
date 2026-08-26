@@ -81,8 +81,8 @@ export default function ExperienceFormPage({ experienceService = createExperienc
         }
 
         try{
-            await experienceService.postExperience(experienceRequest);
-            navigate("/available-soon")
+            const newExperience = await experienceService.postExperience(experienceRequest);
+            navigate(`/experiences/${newExperience.id}`)
         }
         catch(error){
             alert("Error while publishing your experience.");
