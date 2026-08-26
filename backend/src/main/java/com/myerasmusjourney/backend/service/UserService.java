@@ -53,15 +53,15 @@ public class UserService {
     }
 
     @Transactional
-    public UserSimpleDTO createUser(UserFormDTO newUserDTO){
+    public UserDTO createUser(UserFormDTO newUserDTO){
         if(!newUserDTO.password().equals(newUserDTO.passwordConfirmation())) return null;
 
         User user = userRepository.findByEmail(newUserDTO.email());
         User newUser = new User(newUserDTO.fullName(), newUserDTO.displayName(), newUserDTO.email(), passwordEncoder.encode(newUserDTO.password()), newUserDTO.city(), newUserDTO.country());
-        if (user != null) return userMapper.toSimpleDTO(newUser);
+        if (user != null) return userMapper.toDTO(newUser);
 
         User savedUser = userRepository.save(newUser);
-        return userMapper.toSimpleDTO(savedUser);
+        return userMapper.toDTO(savedUser);
     }
 
     public UserSimpleDTO getUserInfo() {

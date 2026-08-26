@@ -51,18 +51,18 @@ public class UserServiceTest {
         savedUser.setId(1L);
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
-        UserSimpleDTO DTO = new UserSimpleDTO(1L, "Test", "password");
-        when(userMapper.toSimpleDTO(any(User.class))).thenReturn(DTO);
+        UserDTO DTO = new UserDTO(1L, "Test", "TestUser", "test@gmail.com", "Munich, Germany", List.of("USER"));
+        when(userMapper.toDTO(any(User.class))).thenReturn(DTO);
 
         when(passwordEncoder.encode(any(String.class))).thenReturn("encodedPassword");
 
-        UserSimpleDTO userDTO = userService.createUser(newUser);
+        UserDTO userDTO = userService.createUser(newUser);
         Long expectedId = 1L;
         assertEquals(expectedId, userDTO.id());
         assertEquals(DTO, userDTO);
 
         verify(userRepository).findByEmail(newUser.email());
-        verify(userMapper).toSimpleDTO(any(User.class));
+        verify(userMapper).toDTO(any(User.class));
         verify(userRepository).save(any(User.class));
     }
 
@@ -72,14 +72,14 @@ public class UserServiceTest {
         User user = new User("Test", "TestUser", "test@gmail.com", "password", "Munich", "Germany");
         when(userRepository.findByEmail(newUser.email())).thenReturn(user);
 
-        UserSimpleDTO DTO = new UserSimpleDTO(null, "Test", "password");
-        when(userMapper.toSimpleDTO(any(User.class))).thenReturn(DTO);
+        UserDTO DTO = new UserDTO(null, "Test", "TestUser","test@gmail.com","Munich, Germany", List.of("USER"));
+        when(userMapper.toDTO(any(User.class))).thenReturn(DTO);
 
-        UserSimpleDTO userDTO = userService.createUser(newUser);
+        UserDTO userDTO = userService.createUser(newUser);
         assertNull(userDTO.id());
 
         verify(userRepository).findByEmail(newUser.email());
-        verify(userMapper).toSimpleDTO(any(User.class));
+        verify(userMapper).toDTO(any(User.class));
 
     }
 
@@ -87,7 +87,7 @@ public class UserServiceTest {
     void testPasswordMismatch(){
         UserFormDTO newUser = new UserFormDTO("test@gmail.com", "Test", "TestUser","Germany", "Munich", "password", "pAssword" );
 
-        UserSimpleDTO userDTO = userService.createUser(newUser);
+        UserDTO userDTO = userService.createUser(newUser);
         assertNull(userDTO);
     }
 
