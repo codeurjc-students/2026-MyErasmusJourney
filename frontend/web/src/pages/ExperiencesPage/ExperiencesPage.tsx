@@ -1,25 +1,28 @@
 import { useEffect, useState } from "react";
-import Experience from "../../components/Experience";
+import Experience from "../../components/Experience/Experience";
 import { API } from "../../api/client";
 import type { ExperienceSimpleDTO } from "@shared/models/ExperienceSimpleDTO";
 import { createExperienceService } from "@shared/services/experience.service";
 import type { experienceServiceProps } from "@shared/interfaces/experienceServiceProps";
 
-export default function ExperiencesPage({ experienceService = createExperienceService(API) }: experienceServiceProps) {
+const defaultExperienceService = createExperienceService(API);
+
+export default function ExperiencesPage({ experienceService = defaultExperienceService }: experienceServiceProps) {
 
     const [experiences, setExperiences] = useState<ExperienceSimpleDTO[]>([]);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
 
-    const size = 9;
+    const size = 6;
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const data = await experienceService.getAll(page, size);
 
+                console.log(data.page.totalPages)
                 setExperiences(data.content || []);
-                setTotalPages(data.totalPages ?? 1);
+                setTotalPages(data.page.totalPages ?? 1);
             } catch (error) {
                 console.error(error);
             }
@@ -44,7 +47,7 @@ export default function ExperiencesPage({ experienceService = createExperienceSe
     }
 
     return (
-        <div id="experiences" className="mx-auto max-w-screen-2xl p-4 md:p-6">
+        <div id="experiences" className="mx-auto w-[97%] max-w-none p-4 md:p-6">
             <div className="grid grid-cols-1 lg:grid-cols-[minmax(17rem,1fr)_minmax(0,13fr)] gap-6 items-stretch">
 
                 <div className="w-full rounded-2xl bg-white shadow-xl p-6 flex items-center justify-center">
