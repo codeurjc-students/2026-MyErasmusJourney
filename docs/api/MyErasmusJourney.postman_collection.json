@@ -15,13 +15,23 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{APIURL}}/experiences/",
+              "raw": "{{APIURL}}/experiences/?page=0&size=9",
               "host": [
                 "{{APIURL}}"
               ],
               "path": [
                 "experiences",
                 ""
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "9"
+                }
               ]
             }
           },
@@ -94,6 +104,24 @@
               "path": [
                 "experiences",
                 ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Experience by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{APIURL}}/experiences/1",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "experiences",
+                "1"
               ]
             }
           },
