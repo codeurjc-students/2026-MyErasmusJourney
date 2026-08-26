@@ -12,17 +12,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.util.UriComponents;
 
-import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -53,24 +48,10 @@ public class CityServiceTest {
         when(cityRepository.save(any(City.class))).thenReturn(savedCity);
         when(cityMapper.toDTO(savedCity)).thenReturn(expectedDTO);
 
-        ServletUriComponentsBuilder builder = mock(ServletUriComponentsBuilder.class);
+        CityService.CityResult result = cityService.addCity(cityForm);
 
-        UriComponents uriComponents = mock(UriComponents.class);
-
-        when(builder.path("/{id}")).thenReturn(builder);
-        when(builder.buildAndExpand(savedCity.getId())).thenReturn(uriComponents);
-        when(uriComponents.toUri()).thenReturn(URI.create("/cities/1"));
-
-        try (MockedStatic<ServletUriComponentsBuilder> mocked = mockStatic(ServletUriComponentsBuilder.class)) {
-
-            mocked.when(ServletUriComponentsBuilder::fromCurrentRequest).thenReturn(builder);
-
-            ResponseEntity<CityDTO> response = cityService.addCity(cityForm);
-
-            assertEquals(HttpStatus.CREATED, response.getStatusCode());
-            assertEquals(expectedDTO, response.getBody());
-            assertEquals(URI.create("/cities/1"), response.getHeaders().getLocation());
-        }
+        assertTrue(result.created());
+        assertNotNull(result.city());
 
         verify(cityRepository).findByName("Munich");
         verify(cityRepository).save(any(City.class));
@@ -90,10 +71,10 @@ public class CityServiceTest {
 
         when(cityMapper.toDTO(existingCity)).thenReturn(expectedDTO);
 
-        ResponseEntity<CityDTO> response = cityService.addCity(cityForm);
+        CityService.CityResult result = cityService.addCity(cityForm);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(expectedDTO, response.getBody());
+        assertFalse(result.created());
+        assertNotNull(result.city());
 
         verify(cityRepository).findByName("Munich");
         verify(cityMapper).toDTO(existingCity);
@@ -120,24 +101,13 @@ public class CityServiceTest {
 
         when(cityMapper.toDTO(savedCity)).thenReturn(expectedDTO);
 
-        ServletUriComponentsBuilder builder = mock(ServletUriComponentsBuilder.class);
 
-        UriComponents uriComponents = mock(UriComponents.class);
 
-        when(builder.path("/{id}")).thenReturn(builder);
-        when(builder.buildAndExpand(savedCity.getId())).thenReturn(uriComponents);
-        when(uriComponents.toUri()).thenReturn(URI.create("/cities/2"));
+        CityService.CityResult result = cityService.addCity(cityForm);
 
-        try (MockedStatic<ServletUriComponentsBuilder> mocked = mockStatic(ServletUriComponentsBuilder.class)) {
-
-            mocked.when(ServletUriComponentsBuilder::fromCurrentRequest).thenReturn(builder);
-
-            ResponseEntity<CityDTO> response = cityService.addCity(cityForm);
-
-            assertEquals(HttpStatus.CREATED, response.getStatusCode());
-            assertEquals(expectedDTO, response.getBody());
-            assertEquals("/cities/2", response.getHeaders().getLocation().getPath());
-        }
+        assertTrue(result.created());
+        assertNotNull(result.city());
+        assertEquals(expectedDTO, result.city());
 
         verify(cityRepository).findByName("Munich");
         verify(cityRepository).save(any(City.class));

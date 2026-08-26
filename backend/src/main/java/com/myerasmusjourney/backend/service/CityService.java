@@ -7,14 +7,10 @@ import com.myerasmusjourney.backend.dto.CityFormDTO;
 import com.myerasmusjourney.backend.dto.CitySimpleDTO;
 import com.myerasmusjourney.backend.mapper.CityMapper;
 import com.myerasmusjourney.backend.repository.CityRepository;
-import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -23,6 +19,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class CityService {
+
+    public record CityResult(
+            CityDTO city,
+            boolean created
+    ) {}
 
     @Autowired
     private CityRepository cityRepository;
@@ -40,30 +41,19 @@ public class CityService {
                 .collect(Collectors.joining(" "));
     }
 
-    @PostConstruct
-    public void init(){
-        List<City> cities = List.of(
-                new City(formatName("valencia"), formatName("spain"),""),
-                new City(formatName("london"), formatName("united kingdom"),"")
-        );
-
-        cityRepository.saveAll(cities);
-    }
-
     @Transactional
-    public ResponseEntity<CityDTO> addCity(CityFormDTO cityFormDTO){
+    public CityResult addCity(CityFormDTO cityFormDTO){
         String cityName = formatName(cityFormDTO.name());
         List<City> cities = cityRepository.findByName(cityName);
         String countryName = formatName(cityFormDTO.country());
         for(City c: cities){
-            if(c.getCountry().equals(countryName)) return ResponseEntity.ok(cityMapper.toDTO(c));
+            if(c.getCountry().equals(countryName)) return new CityResult(cityMapper.toDTO(c), false);
         }
 
         City city = new City(cityName, countryName, cityFormDTO.description());
         City savedCity = cityRepository.save(city);
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedCity.getId()).toUri();
-        return ResponseEntity.created(location).body(cityMapper.toDTO(savedCity));
+        return new CityResult(cityMapper.toDTO(savedCity),true);
     }
 
     public Collection<CitySimpleDTO> getCities() {
