@@ -32,7 +32,9 @@ const normalizeCategory = (cat: unknown) => {
     return String(cat).replace(/\s+/g, "_").replace(/-/g, "_").toUpperCase();
 };
 
-export default function DetailedExperiencePage({ experienceService = createExperienceService(API) }: experienceServiceProps) {
+const defaultExperienceService = createExperienceService(API);
+
+export default function DetailedExperiencePage({ experienceService = defaultExperienceService }: experienceServiceProps) {
 
     const [experience, setExperience] = useState<ExperienceDTO | null>(null);
     const { id } = useParams();
