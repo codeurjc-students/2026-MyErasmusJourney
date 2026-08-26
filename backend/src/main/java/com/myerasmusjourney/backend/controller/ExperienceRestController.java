@@ -1,8 +1,6 @@
 package com.myerasmusjourney.backend.controller;
 
-import com.myerasmusjourney.backend.dto.ExperienceDTO;
-import com.myerasmusjourney.backend.dto.ExperienceFormDTO;
-import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
+import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.enumeration.Category;
 import com.myerasmusjourney.backend.service.ExperienceService;
 import org.springframework.beans.factory.annotation.Autowired;

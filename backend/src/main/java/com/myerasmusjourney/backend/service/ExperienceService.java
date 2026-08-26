@@ -34,18 +34,6 @@ public class ExperienceService {
     @Autowired
     private UserService userService;
 
-    @PostConstruct
-    @Transactional
-    public void init(){
-        List<Experience> experiences = List.of(
-            new Experience("Experiencia 1", "Descripcion 1", 9F, null, List.of("Accommodation", "Transportation"), null, null),
-            new Experience("Experiencia 2", "Descripcion 2", 8.67F, null, List.of("Gastronomy", "Social_Events"), null, null),
-            new Experience("Experiencia 3", "Descripcion 3", 5.4F, null, List.of("Culture", "Transportation"), null, null),
-            new Experience("Experiencia 4", "Descripcion 4", 0.9F, null, List.of("Studies", "Documentation"), null, null)
-        );
-        experienceRepository.saveAll(experiences);
-    }
-
     public Page<ExperienceSimpleDTO> getAllExperiences(Pageable pageable) {
         return experienceRepository.findAll(pageable).map(experienceMapper::toSimpleDTO);
     }
