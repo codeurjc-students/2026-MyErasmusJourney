@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, it, expect } from "vitest";
 import "@testing-library/jest-dom";
-import Experience from "../../../src/components/Experience";
+import Experience from "../../../src/components/Experience/Experience";
 
 
 describe("Experience Component", () => {

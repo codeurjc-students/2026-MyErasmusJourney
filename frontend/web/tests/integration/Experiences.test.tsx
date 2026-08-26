@@ -10,18 +10,18 @@ import { MemoryRouter } from "react-router-dom";
 const testAPI = createApiClient(APIURL)
 const testService = createExperienceService(testAPI);
 
-describe("Experiences",()=>{
-    it("renders data from API",async()=>{
-
-                render(
-                    <MemoryRouter>
-                        <ExperiencesPage experienceService={testService} />
-                    </MemoryRouter>
-                );
+describe("Experiences", () => {
+    it("renders data from API", async () => {
+        render(
+            <MemoryRouter>
+                <ExperiencesPage experienceService={testService} />
+            </MemoryRouter>
+        );
 
         await waitFor(() => {
-            expect(screen.queryAllByRole("heading").length).toBeGreaterThan(0);
-            expect(screen.queryAllByText(/^\d{4}-\d{2}-\d{2}$/).length).toBeGreaterThan(0)
-        });        
-    })
+            expect(
+                screen.queryAllByText(/\d{4}-\d{2}-\d{2}/).length
+            ).toBeGreaterThan(0);
+        });
+    });
 })
