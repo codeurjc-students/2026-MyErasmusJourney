@@ -5,10 +5,14 @@ import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
 import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.enumeration.Category;
-import com.myerasmusjourney.backend.mapper.ExperienceMapper;
+import com.myerasmusjourney.backend.mapper.*;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,9 +20,20 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("unit")
+@ExtendWith(MockitoExtension.class)
 public class ExperienceMapperTest {
 
-    private final ExperienceMapper mapper = Mappers.getMapper(ExperienceMapper.class);
+    @Spy
+    private CommentMapper commentMapper = Mappers.getMapper(CommentMapper.class);
+
+    @Spy
+    private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+
+    @Spy
+    private CityMapper cityMapper = Mappers.getMapper(CityMapper.class);
+
+    @InjectMocks
+    private ExperienceMapperImpl mapper;
 
     @Test
     void testToDTOs() {
@@ -77,7 +92,7 @@ public class ExperienceMapperTest {
 
         CitySimpleDTO citySimpleDTO = new CitySimpleDTO(null, "Madrid", "description", "Spain");
         UserSimpleDTO userSimpleDTO = new UserSimpleDTO(null, "test", "test@gmail.com");
-        CommentSimpleDTO commentSimpleDTO = new CommentSimpleDTO(1L, "test comment", "test");
+        CommentSimpleDTO commentSimpleDTO = new CommentSimpleDTO(1L,LocalDate.now(), "test comment", "test");
         ExperienceDTO dto = new ExperienceDTO(null, LocalDate.now(), 6.8F, "Title", "Description",  List.of(Category.Gastronomy, Category.Documentation), citySimpleDTO, userSimpleDTO, List.of(commentSimpleDTO));
 
         ExperienceDTO result = mapper.toDTO(exp);

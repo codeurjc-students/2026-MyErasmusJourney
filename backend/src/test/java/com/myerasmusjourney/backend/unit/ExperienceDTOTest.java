@@ -37,7 +37,7 @@ public class ExperienceDTOTest {
 
         UserSimpleDTO userSimpleDTO = new UserSimpleDTO(2L, "Test", "test@gamil.com");
 
-        exp = new ExperienceDTO(null, LocalDate.of(2026, 1, 15), 4.7F, "Tittle", "Description", List.of(Category.Accommodation, Category.Transportation), null, userSimpleDTO, List.of(new CommentSimpleDTO(1L, "test comment", "test")));
+        exp = new ExperienceDTO(null, LocalDate.of(2026, 1, 15), 4.7F, "Tittle", "Description", List.of(Category.Accommodation, Category.Transportation), null, userSimpleDTO, List.of(new CommentSimpleDTO(1L, LocalDate.now(), "description", "test")));
 
         assertNull(exp.id());
         assertEquals(LocalDate.of(2026, 1, 15), exp.date());
