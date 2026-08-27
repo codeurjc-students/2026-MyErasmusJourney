@@ -53,7 +53,9 @@ public class ExperienceRestController {
     }
 
     @PostMapping("/{id}/comments")
-    public CommentDTO postComment(@PathVariable Long id, @RequestBody CommentFormDTO commentFormDTO){
-        return commentService.postComment(id, commentFormDTO);
+    public ResponseEntity<CommentDTO> postComment(@PathVariable Long id, @RequestBody CommentFormDTO commentFormDTO){
+        CommentDTO commentDTO =  commentService.postComment(id, commentFormDTO);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
+        return ResponseEntity.created(location).body(commentDTO);
     }
 }
