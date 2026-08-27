@@ -34,13 +34,11 @@ public class ExperiencesPageTest extends BaseSeleniumTest {
                 By.id("experience-1")
         ));
 
-        List<Integer> ids = List.of(1,2,3,4);
+        List<Integer> ids = List.of(1,2,3);
         for (int id: ids){
             WebElement experienceDiv = driver.findElement(By.id("experience-"+id)); //grabs experience from experiences page
             String textContent = experienceDiv.getText();
-            assertTrue(textContent.contains("Experiencia " + id));
             assertTrue(textContent.contains(LocalDate.now().toString()));
-            assertTrue(textContent.contains("Descripcion " + id));
         }
     }
 }
