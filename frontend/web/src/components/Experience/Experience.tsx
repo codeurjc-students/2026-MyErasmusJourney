@@ -41,7 +41,7 @@ export default function Experience({ experience }: ExperienceProps) {
     const ratingColor = `rgb(${red}, ${green}, 0)`;
 
     const description = experience.description ?? "";
-    const shortDescription = description.length > 50 ? `${description.substring(0, 50)}...` : description;
+    const shortDescription = description.length > 80 ? `${description.substring(0, 80)}...` : description;
 
     return (
         <div id={`experience-${experience.id}`} className="experience-card w-full rounded-2xl bg-white shadow-md p-4 transition hover:shadow-lg flex flex-col gap-3">
@@ -93,7 +93,7 @@ export default function Experience({ experience }: ExperienceProps) {
             <div className="mt-1 w-full">
                 <p className="text-sm exp-description">
                     {shortDescription}{" "}
-                    {description.length > 50 && (
+                    {description.length > 80 && (
                         <Link to={`/experiences/${experience.id}`} className="link underline">Read More →</Link>
                     )}
                 </p>

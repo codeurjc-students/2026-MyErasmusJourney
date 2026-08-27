@@ -165,10 +165,10 @@ describe("ExperienceFormPage", () => {
     });
   });
 
-  it("submits valid data and navigates to the available-soon page", async () => {
+  it("submits valid data and navigates to the detailed Experience Page", async () => {
     const mockExperienceService = {
       getCategories: vi.fn().mockResolvedValue(["ART", "SPORT"]),
-      postExperience: vi.fn().mockResolvedValue({}),
+      postExperience: vi.fn().mockResolvedValue({id: 1, title: "Weekend in Lisbon", description:"A beautiful trip through the city.", date:"2026-08-15"}),
     };
 
     const mockCityService = {
@@ -208,7 +208,7 @@ describe("ExperienceFormPage", () => {
         cityId: 7,
         categories: ["ART"],
       });
-      expect(mockNavigate).toHaveBeenCalledWith("/available-soon");
+      expect(mockNavigate).toHaveBeenCalledWith("/experiences/1");
     });
   });
 

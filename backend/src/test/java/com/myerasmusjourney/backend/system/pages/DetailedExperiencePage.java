@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("system")
-public class ExperiencesPageTest extends BaseSeleniumTest {
+public class DetailedExperiencePage extends BaseSeleniumTest {
 
     @Test
     void testRendersData(){
@@ -34,11 +34,12 @@ public class ExperiencesPageTest extends BaseSeleniumTest {
                 By.id("experience-1")
         ));
 
-        List<Integer> ids = List.of(1,2,3);
-        for (int id: ids){
-            WebElement experienceDiv = driver.findElement(By.id("experience-"+id)); //grabs experience from experiences page
-            String textContent = experienceDiv.getText();
-            assertTrue(textContent.contains(LocalDate.now().toString()));
-        }
+        WebElement linkToFirstExperience = driver.findElement(By.xpath("/html/body/div/div/div/main/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/a"));
+
+        linkToFirstExperience.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div/div/div/main/div/div[2]/h3")
+        ));
     }
 }

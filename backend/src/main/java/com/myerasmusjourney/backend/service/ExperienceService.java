@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class ExperienceService {
@@ -33,18 +34,6 @@ public class ExperienceService {
     @Autowired
     private UserService userService;
 
-    @PostConstruct
-    @Transactional
-    public void init(){
-        List<Experience> experiences = List.of(
-            new Experience("Experiencia 1", "Descripcion 1", 9F, null, List.of("Accommodation", "Transportation"), null, null),
-            new Experience("Experiencia 2", "Descripcion 2", 8.67F, null, List.of("Gastronomy", "Social_Events"), null, null),
-            new Experience("Experiencia 3", "Descripcion 3", 5.4F, null, List.of("Culture", "Transportation"), null, null),
-            new Experience("Experiencia 4", "Descripcion 4", 0.9F, null, List.of("Studies", "Documentation"), null, null)
-        );
-        experienceRepository.saveAll(experiences);
-    }
-
     public Page<ExperienceSimpleDTO> getAllExperiences(Pageable pageable) {
         return experienceRepository.findAll(pageable).map(experienceMapper::toSimpleDTO);
     }
@@ -55,7 +44,7 @@ public class ExperienceService {
 
     @Transactional
     public ExperienceDTO createExperience(ExperienceFormDTO experienceFormDTO){
-        if(experienceFormDTO.categories().isEmpty() || experienceFormDTO.categories().size()>3){
+        if(experienceFormDTO.categories().isEmpty() || experienceFormDTO.categories().size()>3 || experienceFormDTO.rating()<0 || experienceFormDTO.rating()>10){
             return null;
         }
         City city = cityService.findById(experienceFormDTO.cityId());
@@ -65,5 +54,10 @@ public class ExperienceService {
         cityService.addExperience(savedExperience, city);
         userService.addExperience(savedExperience, user);
         return experienceMapper.toDTO(savedExperience);
+    }
+
+    public ExperienceDTO getExperienceById(Long id){
+        Experience experience = experienceRepository.findById(id).orElseThrow(()-> new NoSuchElementException("Experience not found"));
+        return experienceMapper.toDTO(experience);
     }
 }

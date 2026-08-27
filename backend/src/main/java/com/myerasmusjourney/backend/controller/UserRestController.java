@@ -21,7 +21,7 @@ public class UserRestController {
 
     @PostMapping("/")
     public ResponseEntity<Object> createUser(@RequestBody UserFormDTO newUser){
-        UserSimpleDTO userDTO = userService.createUser(newUser);
+        UserDTO userDTO = userService.createUser(newUser);
         if (userDTO == null){
             return ResponseEntity.badRequest().body("Passwords don't match");
         }   

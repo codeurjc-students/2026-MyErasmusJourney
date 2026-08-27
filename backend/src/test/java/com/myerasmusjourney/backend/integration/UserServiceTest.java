@@ -70,16 +70,16 @@ public class UserServiceTest extends TestDataBase{
         User expectedUser = new User("TestUser", "Test", "test@gmail.com", passwordEncoder.encode("password"), "Munich", "Germany");
         expectedUser.setId(expectedId);
 
-        UserSimpleDTO userDTO = userService.createUser(newUser);
+        UserDTO userDTO = userService.createUser(newUser);
 
         assertNotNull(userDTO);
         User notExpectedUser = new User("Test", "TestUser", "test@gmail.com", passwordEncoder.encode("password"), "Munich", "Germany");
         notExpectedUser.setId(-1L);
-        UserSimpleDTO notExpected = userMapper.toSimpleDTO(notExpectedUser);
+        UserDTO notExpected = userMapper.toDTO(notExpectedUser);
         assertNotEquals(notExpected, userDTO);
 
 
-        UserSimpleDTO expected = userMapper.toSimpleDTO(expectedUser);
+        UserDTO expected = userMapper.toDTO(expectedUser);
         assertEquals(expected, userDTO);
     }
 
@@ -91,16 +91,16 @@ public class UserServiceTest extends TestDataBase{
         User expectedUser = new User("TestUser", "Test", "test@gmail.com", passwordEncoder.encode("password"), "Munich", null);
         expectedUser.setId(expectedId);
 
-        UserSimpleDTO userDTO = userService.createUser(newUser);
+        UserDTO userDTO = userService.createUser(newUser);
 
         assertNotNull(userDTO);
         User notExpectedUser = new User("Test", "TestUser", "test@gmail.com", passwordEncoder.encode("password"), "Munich", null);
         notExpectedUser.setId(-1L);
-        UserSimpleDTO notExpected = userMapper.toSimpleDTO(notExpectedUser);
+        UserDTO notExpected = userMapper.toDTO(notExpectedUser);
         assertNotEquals(notExpected, userDTO);
 
 
-        UserSimpleDTO expected = userMapper.toSimpleDTO(expectedUser);
+        UserDTO expected = userMapper.toDTO(expectedUser);
         assertEquals(expected, userDTO);
     }
 
@@ -110,7 +110,7 @@ public class UserServiceTest extends TestDataBase{
 
         userService.createUser(newUser);
 
-        UserSimpleDTO userDTO = userService.createUser(newUser);
+        UserDTO userDTO = userService.createUser(newUser);
 
         assertNull(userDTO.id());
     }
@@ -118,7 +118,7 @@ public class UserServiceTest extends TestDataBase{
     @Test
     void testPasswordMismatch(){
         UserFormDTO newUser = new UserFormDTO("user1@gmail.com", "Test", "TestUser","Munich", "Germany", "Pasword", "password" );
-        UserSimpleDTO userDTO = userService.createUser(newUser);
+        UserDTO userDTO = userService.createUser(newUser);
 
         assertNull(userDTO);
     }

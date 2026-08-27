@@ -12,6 +12,7 @@ import { APIURL } from "src/config/env";
 import AvailableSoonPage from "src/pages/AvailableSoonPage/AvailableSoonPage";
 import ExperienceFormPage from "src/pages/ExperienceFormPage/ExperienceFormPage";
 import { authenticateUser, clearFetchAndUserStore } from "tests/testAuthentication";
+import DetailedExperiencePage from "src/pages/DetailedExperiencePage/DetailedExperiencePage";
 
 const testAPI = createApiClient(APIURL);
 const testCityService = createCityService(testAPI);
@@ -144,7 +145,7 @@ describe("ExperienceFormPage integration", () => {
     });
   });
 
-  it("publishes a valid experience and navigates to the available-soon page", async () => {
+  it("publishes a valid experience and navigates to experience detailed page", async () => {
     const cities = await testCityService.getAll();
     const title = `Real Experience ${Date.now()}`;
 
@@ -160,7 +161,7 @@ describe("ExperienceFormPage integration", () => {
               />
             }
           />
-          <Route path="/available-soon" element={<AvailableSoonPage />} />
+          <Route path="/experiences/:id" element={<DetailedExperiencePage />} />
         </Routes>
       </MemoryRouter>
     );
@@ -190,7 +191,7 @@ describe("ExperienceFormPage integration", () => {
     fireEvent.click(screen.getByRole("button", { name: /publish/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/not available yet/i)).toBeInTheDocument();
+      expect(screen.getByText(title)).toBeInTheDocument();
     });
   });
 });

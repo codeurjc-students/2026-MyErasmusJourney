@@ -3,7 +3,6 @@ package com.myerasmusjourney.backend.integration;
 import com.myerasmusjourney.backend.TestDataBase;
 import com.myerasmusjourney.backend.domain.City;
 import com.myerasmusjourney.backend.dto.*;
-import com.myerasmusjourney.backend.mapper.CityMapper;
 import com.myerasmusjourney.backend.repository.CityRepository;
 import com.myerasmusjourney.backend.service.CityService;
 import org.junit.jupiter.api.AfterEach;
@@ -11,8 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,13 +24,12 @@ public class CityServiceTest extends TestDataBase {
     private CityRepository cityRepository;
 
     @Autowired
-    private CityMapper cityMapper;
-
-    @Autowired
     private CityService cityService;
 
     @BeforeEach
     void setup() {
+        if(cityRepository.count() > 0) cityRepository.deleteAll();
+
         List<City> cities = List.of(
                 new City("Madrid", "Spain", ""),
                 new City("Rome", "Italy", ""),
@@ -52,27 +48,24 @@ public class CityServiceTest extends TestDataBase {
     void testAddCitySuccessfully() {
         CityFormDTO cityForm = new CityFormDTO("Munich", "A city in Germany", "Germany");
 
-        ResponseEntity<CityDTO> response = cityService.addCity(cityForm);
+        CityService.CityResult result = cityService.addCity(cityForm);
 
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertNotNull(response.getBody());
+        assertTrue(result.created());
+        assertNotNull(result.city());
 
-        CityDTO result = response.getBody();
+        CityDTO cityDTO = result.city();
 
-        assertNotNull(result.id());
-        assertEquals("Munich", result.name());
-        assertEquals("Germany", result.country());
-        assertEquals("A city in Germany", result.description());
+        assertNotNull(cityDTO.id());
+        assertEquals("Munich", cityDTO.name());
+        assertEquals("Germany", cityDTO.country());
+        assertEquals("A city in Germany", cityDTO.description());
 
-        City savedCity = cityRepository.findById(result.id()).orElse(null);
+        City savedCity = cityRepository.findById(cityDTO.id()).orElse(null);
 
         assertNotNull(savedCity);
         assertEquals("Munich", savedCity.getName());
         assertEquals("Germany", savedCity.getCountry());
         assertEquals("A city in Germany", savedCity.getDescription());
-
-        assertNotNull(response.getHeaders().getLocation());
-        assertEquals("/"+result.id(), response.getHeaders().getLocation().getPath());
     }
 
     @Test
@@ -81,17 +74,17 @@ public class CityServiceTest extends TestDataBase {
 
         CityFormDTO cityForm = new CityFormDTO("Munich", "New description", "Germany");
 
-        ResponseEntity<CityDTO> response = cityService.addCity(cityForm);
+        CityService.CityResult result = cityService.addCity(cityForm);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
+        assertFalse(result.created());
+        assertNotNull(result.city());
 
-        CityDTO result = response.getBody();
+        CityDTO cityDTO = result.city();
 
-        assertEquals(existingCity.getId(), result.id());
-        assertEquals("Munich", result.name());
-        assertEquals("Germany", result.country());
-        assertEquals("Existing description", result.description());
+        assertEquals(existingCity.getId(), cityDTO.id());
+        assertEquals("Munich", cityDTO.name());
+        assertEquals("Germany", cityDTO.country());
+        assertEquals("Existing description", cityDTO.description());
 
         List<City> cities = cityRepository.findByName("Munich");
 
@@ -105,19 +98,19 @@ public class CityServiceTest extends TestDataBase {
 
         CityFormDTO cityForm = new CityFormDTO("Munich", "Another Munich", "United States");
 
-        ResponseEntity<CityDTO> response = cityService.addCity(cityForm);
+        CityService.CityResult result = cityService.addCity(cityForm);
 
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertNotNull(response.getBody());
+        assertTrue(result.created());
+        assertNotNull(result.city());
 
-        CityDTO result = response.getBody();
+        CityDTO cityDTO = result.city();
 
-        assertNotNull(result.id());
-        assertNotEquals(existingCity.getId(), result.id());
+        assertNotNull(cityDTO.id());
+        assertNotEquals(existingCity.getId(), cityDTO.id());
 
-        assertEquals("Munich", result.name());
-        assertEquals("United States", result.country());
-        assertEquals("Another Munich", result.description());
+        assertEquals("Munich", cityDTO.name());
+        assertEquals("United States", cityDTO.country());
+        assertEquals("Another Munich", cityDTO.description());
 
         List<City> cities = cityRepository.findByName("Munich");
 

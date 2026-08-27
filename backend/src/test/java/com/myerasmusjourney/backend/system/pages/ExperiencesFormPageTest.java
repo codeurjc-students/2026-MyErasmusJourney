@@ -11,6 +11,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
+import static org.junit.Assert.assertEquals;
+
 @Tag("system")
 public class ExperiencesFormPageTest extends AuthenticatedSeleniumTest {
 
@@ -36,7 +38,6 @@ public class ExperiencesFormPageTest extends AuthenticatedSeleniumTest {
         WebElement date = driver.findElement(By.id("date"));
         WebElement location = driver.findElement(By.id("location"));
         Select select = new Select(location);
-        WebElement culture = driver.findElement(By.xpath("/html/body/div/div/form/div[1]/div[2]/div/label[2]"));
         WebElement documentation = driver.findElement(By.xpath("/html/body/div/div/form/div[1]/div[2]/div/label[3]"));
         WebElement submit = driver.findElement(By.xpath("/html/body/div/div/form/div[1]/div[5]/button"));
 
@@ -45,12 +46,14 @@ public class ExperiencesFormPageTest extends AuthenticatedSeleniumTest {
         date.sendKeys("01/13/2023");
         rating.sendKeys("5.3");
         select.selectByIndex(1);
-        culture.click();
         documentation.click();
         submit.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("/html/body/div/div/button")
+                By.xpath("/html/body/div/div/div/main/div/div[2]/h3")
         ));
+
+        WebElement experienceTitle = driver.findElement(By.xpath("/html/body/div/div/div/main/div/div[2]/h3"));
+        assertEquals("Selenium test", experienceTitle.getText());
     }
 }

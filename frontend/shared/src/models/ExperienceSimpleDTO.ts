@@ -1,3 +1,5 @@
+import type {Page} from "./Page";
+
 export interface ExperienceSimpleDTO{
     id: number;
     title: string;
@@ -12,8 +14,5 @@ export interface ExperienceSimpleDTO{
 
 export interface ExperiencePageDTO {
     content: ExperienceSimpleDTO[];
-    totalElements?: number;
-    totalPages?: number;
-    number?: number;
-    size?: number;
+    page: Page
 }

@@ -10,6 +10,7 @@ import com.myerasmusjourney.backend.repository.ExperienceRepository;
 import com.myerasmusjourney.backend.service.CityService;
 import com.myerasmusjourney.backend.service.ExperienceService;
 import com.myerasmusjourney.backend.service.UserService;
+import org.junit.Assert;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,8 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -336,5 +339,34 @@ public class ExperienceServiceTest {
 
         ExperienceDTO result = experienceService.createExperience(formDTO);
         assertNull(result);
+    }
+
+    @Test
+    void testGetExperienceById() {
+        Experience experience =  new Experience("Experiencia 1", "Descripcion 1", 9F, null, List.of("Personal_Experience", "Documentation"), null, null);
+
+        ExperienceDTO experienceDTO = new ExperienceDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", List.of(Category.Personal_Experience, Category.Documentation), null, null);
+        Long id = 1L;
+
+        when(experienceRepository.findById(id)).thenReturn(Optional.of(experience));
+
+        when(experienceMapper.toDTO(experience))
+                .thenReturn(experienceDTO);
+
+        ExperienceDTO result = experienceService.getExperienceById(1L);
+
+        Assert.assertEquals(experienceDTO, result);
+
+        verify(experienceRepository).findById(1L);
+        verify(experienceMapper).toDTO(experience);
+    }
+
+    @Test
+    void testGetExperienceByIdNotFound() {
+        Long id = 0L;
+
+        when(experienceRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> experienceService.getExperienceById(id));
     }
 }

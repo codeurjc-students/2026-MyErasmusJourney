@@ -1,8 +1,6 @@
 package com.myerasmusjourney.backend.controller;
 
-import com.myerasmusjourney.backend.dto.ExperienceDTO;
-import com.myerasmusjourney.backend.dto.ExperienceFormDTO;
-import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
+import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.enumeration.Category;
 import com.myerasmusjourney.backend.service.ExperienceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/experiences")
@@ -38,5 +35,10 @@ public class ExperienceRestController {
     @GetMapping("/categories")
     public Category[] getCategories(){
         return experienceService.getCategories();
+    }
+
+    @GetMapping("/{id}")
+    public ExperienceDTO getExperienceById(@PathVariable Long id){
+        return experienceService.getExperienceById(id);
     }
 }
