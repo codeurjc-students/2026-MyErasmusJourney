@@ -35,7 +35,7 @@ public class Experience {
     private User author;
 
     @OneToMany(mappedBy = "experience", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Comment> comments = new LinkedList<>();
+    private List<Comment> comments = new LinkedList<>();
 
     public Experience(){}
 
@@ -120,6 +120,10 @@ public class Experience {
         for(String c: categories){
             this.categories.add(Category.valueOf(c));
         }
+    }
+
+    public void setComments(List<Comment>comments){
+        this.comments = comments;
     }
 
     public List<Comment> getComments() {

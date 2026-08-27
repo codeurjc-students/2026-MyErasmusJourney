@@ -72,6 +72,7 @@ public class ExperienceService {
         experienceRepository.save(experience);
     }
 
+    @Transactional
     public Collection<CommentSimpleDTO> getComments(Long id){
         Experience experience = getExperience(id);
         return commentMapper.toSimpleDTOs(experience.getComments());
