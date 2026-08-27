@@ -2,6 +2,7 @@ package com.myerasmusjourney.backend.controller;
 
 import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.enumeration.Category;
+import com.myerasmusjourney.backend.service.CommentService;
 import com.myerasmusjourney.backend.service.ExperienceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/api/v1/experiences")
@@ -18,6 +20,9 @@ public class ExperienceRestController {
 
     @Autowired
     private ExperienceService experienceService;
+
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping("/")
     public Page<ExperienceSimpleDTO> getExperiences(Pageable pageable){
@@ -40,5 +45,15 @@ public class ExperienceRestController {
     @GetMapping("/{id}")
     public ExperienceDTO getExperienceById(@PathVariable Long id){
         return experienceService.getExperienceById(id);
+    }
+
+    @GetMapping("/{id}/comments")
+    public Collection<CommentSimpleDTO> getComments(@PathVariable Long id){
+        return experienceService.getComments(id);
+    }
+
+    @PostMapping("/{id}/comments")
+    public CommentDTO postComment(@PathVariable Long id, @RequestBody CommentFormDTO commentFormDTO){
+        return commentService.postComment(id, commentFormDTO);
     }
 }
