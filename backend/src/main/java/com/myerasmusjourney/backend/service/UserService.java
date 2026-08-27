@@ -1,5 +1,6 @@
 package com.myerasmusjourney.backend.service;
 
+import com.myerasmusjourney.backend.domain.Comment;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
 import com.myerasmusjourney.backend.dto.UserDTO;
@@ -88,5 +89,10 @@ public class UserService {
         User userToDelete = userRepository.findById(id).orElseThrow(()-> new NoSuchElementException("User not found"));
         userRepository.delete(userToDelete);
         return userMapper.toDTO(userToDelete);
+    }
+
+    public void addComment(Comment comment, User user) {
+        user.addComment(comment);
+        userRepository.save(user);
     }
 }

@@ -2,10 +2,10 @@ package com.myerasmusjourney.backend.domain;
 
 import com.myerasmusjourney.backend.enumeration.Category;
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +33,9 @@ public class Experience {
     @ManyToOne
     @JoinColumn(name = "author_id")
     private User author;
+
+    @OneToMany(mappedBy = "experience", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Comment> comments = new LinkedList<>();
 
     public Experience(){}
 
@@ -117,5 +120,13 @@ public class Experience {
         for(String c: categories){
             this.categories.add(Category.valueOf(c));
         }
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void addComment (Comment comment){
+        this.comments.add(comment);
     }
 }

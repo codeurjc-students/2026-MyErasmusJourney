@@ -30,6 +30,9 @@ public class User {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Experience> experiences = new LinkedList<>();
 
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Comment> comments = new LinkedList<>();
+
     public User(){
         this.roles.add("USER");
     }
@@ -114,5 +117,13 @@ public class User {
 
     public void addExperience(Experience experience){
         this.experiences.add(experience);
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void addComment (Comment comment){
+        this.comments.add(comment);
     }
 }
