@@ -346,7 +346,8 @@ public class ExperienceServiceTest extends TestDataBase {
                 savedExperience.getDescription(),
                 savedExperience.getCategories(),
                 cityDTO,
-                userDTO
+                userDTO,
+                List.of()
         );
 
         assertNotNull(result);

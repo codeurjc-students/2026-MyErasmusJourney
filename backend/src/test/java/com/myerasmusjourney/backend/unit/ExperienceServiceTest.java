@@ -276,7 +276,8 @@ public class ExperienceServiceTest {
                 savedExperience.getDescription(),
                 savedExperience.getCategories(),
                 cityDTO,
-                userDTO
+                userDTO,
+                List.of()
         );
 
         when(cityService.findById(formDTO.cityId())).thenReturn(city);
@@ -345,7 +346,7 @@ public class ExperienceServiceTest {
     void testGetExperienceById() {
         Experience experience =  new Experience("Experiencia 1", "Descripcion 1", 9F, null, List.of("Personal_Experience", "Documentation"), null, null);
 
-        ExperienceDTO experienceDTO = new ExperienceDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", List.of(Category.Personal_Experience, Category.Documentation), null, null);
+        ExperienceDTO experienceDTO = new ExperienceDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", List.of(Category.Personal_Experience, Category.Documentation), null, null, List.of());
         Long id = 1L;
 
         when(experienceRepository.findById(id)).thenReturn(Optional.of(experience));
