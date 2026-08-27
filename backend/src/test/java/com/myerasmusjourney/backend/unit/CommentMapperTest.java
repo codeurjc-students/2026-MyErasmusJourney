@@ -10,16 +10,9 @@ import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
 import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import com.myerasmusjourney.backend.enumeration.Category;
 import com.myerasmusjourney.backend.mapper.CommentMapper;
-import com.myerasmusjourney.backend.mapper.CommentMapperImpl;
-import com.myerasmusjourney.backend.mapper.ExperienceMapper;
-import com.myerasmusjourney.backend.mapper.UserMapper;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
-import org.mockito.InjectMocks;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,17 +20,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Tag("unit")
-@ExtendWith(MockitoExtension.class)
 class CommentMapperTest {
 
-    @Spy
-    private ExperienceMapper experienceMapper = Mappers.getMapper(ExperienceMapper.class);
-
-    @Spy
-    private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-
-    @InjectMocks
-    private CommentMapperImpl mapper;
+    private final CommentMapper mapper = Mappers.getMapper(CommentMapper.class);
 
     @Test
     void toDTO() {

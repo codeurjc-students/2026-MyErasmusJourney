@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {CommentMapper.class, UserMapper.class, CityMapper.class})
+@Mapper(componentModel = "spring", uses = {CommentMapper.class, CityMapper.class})
 public interface ExperienceMapper {
     @Mapping(source = "city.name", target = "cityName")
     @Mapping(source = "city.country", target = "country")
