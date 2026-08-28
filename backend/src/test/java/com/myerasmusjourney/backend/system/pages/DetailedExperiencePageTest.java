@@ -13,7 +13,7 @@ import java.time.Duration;
 import static org.junit.Assert.assertTrue;
 
 @Tag("system")
-public class DetailedExperiencePage extends AuthenticatedSeleniumTest {
+public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
 
     private final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
