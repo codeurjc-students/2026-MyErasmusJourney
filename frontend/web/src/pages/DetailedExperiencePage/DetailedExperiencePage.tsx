@@ -4,6 +4,7 @@ import { createExperienceService } from "@shared/services/experience.service";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { API } from "../../api/client";
+import Comments from "../../components/Comments/Comments";
 
 const categoryStyles: Record<string, string> = {
     STUDIES: "#4A90D9",
@@ -135,51 +136,7 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
 
                 <aside className="w-full rounded-2xl bg-white shadow-xl p-4 md:p-6 flex flex-col min-h-full">
 
-                    <div className="flex flex-col gap-4 flex-1">
-
-                        <div className="space-y-4">
-                            <div className="rounded-2xl bg-white shadow-md p-4">
-                                <div className="flex items-center justify-between gap-3">
-                                    <div className="flex items-center gap-3">
-                                        <img src="/images/available_soon.png" alt="Comment author profile" className="w-10 h-10 rounded-full object-cover" />
-                                        <p className="font-bold">Carlos</p>
-                                    </div>
-                                    <p className="text-sm opacity-70">02/31/2027</p>
-                                </div>
-                                <p className="mt-3">I began my studies in the Technical Munich University some weeks ago and I found it quite interesting...</p>
-                            </div>
-
-                            <div className="rounded-2xl bg-white shadow-md p-4">
-                                <div className="flex items-center justify-between gap-3">
-                                    <div className="flex items-center gap-3">
-                                        <img src="/images/available_soon.png" alt="Comment author profile" className="w-10 h-10 rounded-full object-cover" />
-                                        <p className="font-bold">Carlos</p>
-                                    </div>
-                                    <p className="text-sm opacity-70">02/31/2027</p>
-                                </div>
-                                <p className="mt-3">I began my studies in the Technical Munich University some weeks ago and I found it quite interesting...</p>
-                            </div>
-
-                            <div className="rounded-2xl bg-white shadow-md p-4">
-                                <div className="flex items-center justify-between gap-3">
-                                    <div className="flex items-center gap-3">
-                                        <img src="/images/available_soon.png" alt="Comment author profile" className="w-10 h-10 rounded-full object-cover" />
-                                        <p className="font-bold">Carlos</p>
-                                    </div>
-                                    <p className="text-sm opacity-70">02/31/2027</p>
-                                </div>
-                                <p className="mt-3">I began my studies in the Technical Munich University some weeks ago and I found it quite interesting...</p>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div className="flex items-center gap-3 mt-6">
-                        <input type="text" placeholder="Share your opinion..." className="flex-1 min-w-0" />
-                        <button type="button" aria-label="Send comment" className="shrink-0 w-11 h-11 flex items-center justify-center rounded-full p-2">
-                            ➤
-                        </button>
-                    </div>
+                    <Comments experienceService={experienceService} experienceId={experience.id} />
 
                 </aside>
 
