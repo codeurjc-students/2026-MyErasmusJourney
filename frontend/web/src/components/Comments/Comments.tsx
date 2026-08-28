@@ -26,7 +26,7 @@ export default function Comments({ experienceService = createExperienceService(A
     }
 
     async function getComments(){
-        const data = await experienceService.getComments(experienceId);
+        const data = await experienceService.getCommentsByExperienceId(experienceId);
         setComments(data);
     }
 

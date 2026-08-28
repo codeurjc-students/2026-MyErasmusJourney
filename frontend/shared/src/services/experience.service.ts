@@ -22,7 +22,7 @@ export function createExperienceService(api: ApiClient) {
     postExperience: (body: ExperienceFormDTO) => postExperience(api, body),
     getExperienceById: (id: number)=> getExperienceById(api, id),
     postComment:(id:number, body: CommentFormDTO) => postComment(api, id, body),
-    getComments:(id:number) => getComments(api, id)
+    getCommentsByExperienceId:(id:number) => getCommentsByExperienceId(api, id)
   };
 }
 
@@ -87,7 +87,7 @@ async function postComment(api: ApiClient, id:number, body:CommentFormDTO){
   return response.json();
 }
 
-async function getComments(api: ApiClient, id:number){
+async function getCommentsByExperienceId(api: ApiClient, id:number){
    const response = await api.get(`/experiences/${id}/comments`)
 
   if (!response.ok) {
