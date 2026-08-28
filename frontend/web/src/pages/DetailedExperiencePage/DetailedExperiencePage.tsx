@@ -71,7 +71,7 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
 
     return (
         <div className="container mx-auto max-w-7xl p-4 md:p-6">
-            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,7fr)_minmax(18rem,3fr)] gap-6 items-stretch">
+            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,7fr)_minmax(18rem,3fr)] gap-6 items-start">
 
                 <main className="w-full rounded-2xl bg-white shadow-xl p-6 md:p-8">
                     <div className="flex flex-col gap-6">
@@ -134,7 +134,7 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
                     </div>
                 </main>
 
-                <aside className="w-full rounded-2xl bg-white shadow-xl p-4 md:p-6 flex flex-col min-h-full">
+                <aside className="w-full rounded-2xl bg-white shadow-xl p-4 md:p-6 flex flex-col">
 
                     <Comments experienceService={experienceService} experienceId={experience.id} />
 

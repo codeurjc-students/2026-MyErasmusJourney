@@ -46,9 +46,9 @@ export default function Comments({ experienceService = createExperienceService(A
 
 
     return(<>
-        <div className="flex flex-col gap-4 flex-1">
+        <div className="flex flex-col flex-1 min-h-0">
 
-            <div className="space-y-4">
+            <div className="space-y-4 max-h-[32rem] overflow-y-auto pr-2 pb-2">
                 {comments.map((comment)=>(
                     <div className="rounded-2xl bg-white shadow-md p-4">
                         <div className="flex items-center justify-between gap-3">
@@ -64,19 +64,19 @@ export default function Comments({ experienceService = createExperienceService(A
             </div>
 
         </div>
-            {user !== null
-                ?(
-                    <div className="flex items-center gap-3 mt-6">
-                        <input type="text" placeholder="Share your opinion..." className="flex-1 min-w-0" name="description" value={description} onChange={onChange}/>
-                        <button type="button" aria-label="Send comment" className="shrink-0 w-11 h-11 flex items-center justify-center rounded-full p-2" onClick={postComment}>
-                            ➤
-                        </button>
-                    </div>
-                ):(
-                    <div className="flex items-center gap-3 mt-6">
-                        <p>Enjoyed this experience? <Link to={"/log-in"} className="link"> Sign in </Link>and share your thoughts! </p>
-                    </div>
-                )
-            }
+        {user !== null
+            ?(
+                <div className="flex items-center gap-3 mt-6">
+                    <input type="text" placeholder="Share your opinion..." className="flex-1 min-w-0" name="description" value={description} onChange={onChange}/>
+                    <button type="button" aria-label="Send comment" className="shrink-0 w-11 h-11 flex items-center justify-center rounded-full p-2" onClick={postComment}>
+                        ➤
+                    </button>
+                </div>
+            ):(
+                <div className="flex items-center gap-3 mt-6">
+                    <p>Enjoyed this experience? <Link to={"/log-in"} className="link"> Sign in </Link>and share your thoughts! </p>
+                </div>
+            )
+        }
     </>)
 }
