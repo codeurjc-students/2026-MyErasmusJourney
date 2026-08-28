@@ -228,4 +228,133 @@ describe("ExperienceService", () => {
     expect(mockApi.get).toHaveBeenCalledTimes(1);
     expect(mockApi.get).toHaveBeenCalledWith("/experiences/1");
   });
+
+  it("should post a new comment successfully", async () => {
+
+    const fakeComment: CommentSimpleDTO = {
+      id: 1,
+      description: "Great experience!",
+      date: "2026-08-28",
+      authorName: "John"
+    };
+
+    const mockPost = vi.fn().mockResolvedValue({
+      status: 201,
+      json: vi.fn().mockResolvedValue(fakeComment)
+    });
+
+    const mockApi: ApiClient = {
+      post: mockPost,
+      get: vi.fn(),
+    };
+
+    const experienceService = createExperienceService(mockApi);
+
+    const comment: CommentFormDTO = {
+      description: "Great experience!"
+    };
+
+    const result = await experienceService.postComment(1, comment);
+
+    expect(mockPost).toHaveBeenCalledTimes(1);
+    expect(mockPost).toHaveBeenCalledWith(
+      "/experiences/1/comments",
+      comment
+    );
+
+    expect(result).toEqual(fakeComment);
+  });
+
+
+  it("should throw an error when posting a comment fails", async () => {
+
+    const mockPost = vi.fn().mockResolvedValue({
+      status: 400,
+      json: vi.fn()
+    });
+
+    const mockApi: ApiClient = {
+      post: mockPost,
+      get: vi.fn(),
+    };
+
+    const experienceService = createExperienceService(mockApi);
+
+    const comment: CommentFormDTO = {
+      description: "Great experience!"
+    };
+
+    await expect(
+      experienceService.postComment(1, comment)
+    ).rejects.toThrow("Error posting new comment");
+
+    expect(mockPost).toHaveBeenCalledWith(
+      "/experiences/1/comments",
+      comment
+    );
+  });
+
+
+  it("should get comments successfully", async () => {
+
+    const fakeComments: CommentSimpleDTO[] = [
+      {
+        id: 1,
+        description: "Great experience!",
+        date: "2026-08-28",
+        authorName: "John"
+      },
+      {
+        id: 2,
+        description: "I really enjoyed it.",
+        date: "2026-08-27",
+        authorName: "Jane"
+      }
+    ];
+
+    const mockGet = vi.fn().mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue(fakeComments)
+    });
+
+    const mockApi: ApiClient = {
+      post: vi.fn(),
+      get: mockGet,
+    };
+
+    const experienceService = createExperienceService(mockApi);
+
+    const result = await experienceService.getCommentsByExperienceId(1);
+
+    expect(mockGet).toHaveBeenCalledTimes(1);
+    expect(mockGet).toHaveBeenCalledWith(
+      "/experiences/1/comments"
+    );
+
+    expect(result).toEqual(fakeComments);
+  });
+
+
+  it("should throw an error when getting comments fails", async () => {
+
+    const mockGet = vi.fn().mockResolvedValue({
+      ok: false,
+      json: vi.fn()
+    });
+
+    const mockApi: ApiClient = {
+      post: vi.fn(),
+      get: mockGet,
+    };
+
+    const experienceService = createExperienceService(mockApi);
+
+    await expect(
+      experienceService.getCommentsByExperienceId(1)
+    ).rejects.toThrow("Error posting new comment");
+
+    expect(mockGet).toHaveBeenCalledWith(
+      "/experiences/1/comments"
+    );
+  });
 });
