@@ -15,9 +15,9 @@ import static org.junit.Assert.assertTrue;
 @Tag("system")
 public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
 
-    private final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-
     private void goToExperience(){
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.linkText("Experiences")
@@ -39,6 +39,8 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
     @Test
     void testRendersData(){
 
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
         goToExperience();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -48,6 +50,10 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
 
     @Test
     void testPostAndRenderComments(){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        goToExperience();
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div/div/div/main/div/div[2]/h3")
         ));
@@ -58,12 +64,17 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
         commentInput.sendKeys("New comment");
         postButton.click();
 
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div/div/div/aside/div[1]/div/div[1]")
+        ));
+
         WebElement newComment = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[1]/div/div[1]"));
         assertTrue(newComment.getText().contains("New comment"));
     }
 
     @Test
     void testLogInLink(){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
         logOutUser();
 
