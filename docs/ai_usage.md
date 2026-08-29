@@ -17,7 +17,7 @@ All AI-generated outputs have been reviewed, understood and adapted before being
 | Reasoning level | Standard |
 | Agent mode | Enabled (IDE-integrated subagents) |
 | IDE integration | VS Code GitHub Copilot |
-| Plugins / Skills | create-agent, agent-customization |
+| Plugins / Skills | create-agent, agent-customization |89-detailed-experience-page
 | Subagents | Explore (codebase search & analysis) |
 | MCP Servers | None |
 | Context files | Repository structure, source code, build logs |
@@ -25,6 +25,499 @@ All AI-generated outputs have been reviewed, understood and adapted before being
 ---
 
 # Usage Log
+
+## 2026-08-28
+
+### Phase
+
+Phase 3 — Basic Functionality
+
+### Objective
+
+Continue the development and testing of the application, focusing on the implementation and validation of the current functionality.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+* Model: GPT-5.5
+* Interaction mode: Conversational chat
+* Reasoning: Standard
+* Agentic mode: Disabled
+* IDE integration: None
+* Plugins/Skills: None
+
+### How it was used
+
+* Assisted with the implementation and debugging of the current functionality.
+* Reviewed existing code and test behaviour to identify potential problems.
+* Helped analyse errors encountered during development and proposed possible solutions.
+* Reviewed the implementation to ensure that the changes were consistent with the existing project architecture and testing strategy.
+
+### Complements
+
+None.
+
+### Context Files
+
+* Existing project source code.
+* Existing backend and frontend test suite.
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+* Current backend and frontend implementation and test files.
+
+### Human Review
+
+All suggestions and proposed changes were reviewed by the user and manually validated before being incorporated into the project.
+
+
+## 2026-08-26
+
+### Phase
+
+Phase 3 — Basic Functionality
+
+### Objective
+
+Continue the implementation and testing of the application's user and experience functionality.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+* Model: GPT-5.5
+* Interaction mode: Conversational chat
+* Reasoning: Standard
+* Agentic mode: Disabled
+* IDE integration: None
+* Plugins/Skills: None
+
+### How it was used
+
+* Helped diagnose and fix issues related to date handling in the Experience tests.
+* Reviewed frontend and backend test behaviour after changes to the experience pagination and API responses.
+* Assisted in identifying the cause of failing assertions when retrieving experiences from the API.
+* Helped adapt the tests to the current implementation and expected API behaviour.
+
+### Complements
+
+None.
+
+### Context Files
+
+* Existing Experience service and API implementation.
+* Existing Experience frontend components.
+* Existing Vitest and backend integration tests.
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+* Experience-related frontend tests.
+* Experience-related backend/integration tests.
+
+### Human Review
+
+The proposed solutions and test modifications were reviewed by the user and validated against the current project implementation before being incorporated.
+
+
+## 2026-08-25
+
+### Phase
+
+Phase 3 — Final Polishing
+
+### Objective
+
+Make small visual and test reliability improvements: ensure experience descriptions span the full card width under the header, improve category chip wrapping and typography, rebalance the Experiences page grid slightly, and make unit/integration tests router-aware.
+
+### Tool
+
+ChatGPT (IDE-assisted)
+
+### Version
+
+GPT-5 mini
+
+### Configuration
+
+* Model: GPT-5 mini
+* Interaction mode: Conversational chat integrated with IDE
+* Reasoning: Standard
+* Agentic mode: Enabled (IDE-integrated edits)
+* IDE integration: VS Code (apply_patch edits)
+
+### How it was used
+
+* Adjusted `Experience` component markup and `Experience.css` to place descriptions in a full-width block and tune typography and wrapping.
+* Rebalanced the `ExperiencesPage` grid to shift minimal width from the filter to the experiences area.
+* Updated unit and integration tests to render inside `MemoryRouter` and corrected rating assertions to match displayed format.
+
+### Files Affected
+
+* frontend/web/src/components/Experience.tsx
+* frontend/web/src/components/Experience.css
+* frontend/web/src/pages/ExperiencesPage/ExperiencesPage.tsx
+* frontend/web/tests/unit/componentes/Experience.test.tsx
+* frontend/web/tests/unit/pages/ExperiencesPage.test.tsx
+* frontend/web/tests/integration/Experiences.test.tsx
+
+### Human Review
+
+Developer reviewed and validated the edits locally where possible; test changes were limited to test files only.
+
+## 2026-08-24
+
+### Phase
+
+Phase 3 — Basic Functionality
+
+### Objective
+
+Improve the frontend presentation of the Experience Form while maintaining its existing functionality.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+* Model: GPT-5.5
+* Interaction mode: Conversational chat
+* Reasoning: Standard
+* Agentic mode: Disabled
+* IDE integration: None
+* Plugins/Skills: None
+
+### How it was used
+
+* Helped improve the visual styling of the Experience Form in React.
+* Reviewed the existing component structure and suggested improvements to its layout and presentation.
+* Adjusted the form's visual hierarchy, spacing and alignment.
+* Focused the changes on the React component itself without modifying the associated CSS file.
+* Preserved the existing functionality while improving the user interface.
+
+### Complements
+
+None.
+
+### Context Files
+
+* Existing React Experience Form component.
+* Existing frontend project structure.
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+* React Experience Form component.
+
+### Human Review
+
+All proposed changes were reviewed by the user and manually validated in the application before being incorporated into the project.
+
+## 2026-08-24
+
+### Phase
+
+Phase 3 — Basic Functionality
+
+### Objective
+
+Add pagination support to the Experiences API consumption in the frontend: update the DTOs to accept a Page-like response, adapt the `experience` service to accept pagination parameters and construct query strings, update the `ExperiencesPage` component to read the `content` field, and update unit tests accordingly.
+
+### Tool
+
+ChatGPT / GitHub Copilot
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+* Model: GPT-5.5
+* Interaction mode: Conversational chat integrated with IDE
+* Reasoning: Standard
+* Agentic mode: Enabled (IDE-integrated edits)
+* IDE integration: VS Code GitHub Copilot
+* Plugins / Skills: agent-customization, create-agent
+
+### How it was used
+
+* Implemented a new `ExperiencePageDTO` to represent paged API responses.
+* Changed `createExperienceService#getAll` to accept optional `page` and `size` parameters and to build a query string when provided.
+* Updated `ExperiencesPage` to extract the `content` array from the page response.
+* Modified unit tests for the shared service and the page to mock and assert a page-like response (`{ content: [...] }`) and to verify the paginated request URL when pagination args are provided.
+
+### Files Affected
+
+* frontend/shared/src/models/ExperienceSimpleDTO.ts
+* frontend/shared/src/services/experience.service.ts
+* frontend/shared/tests/unit/services/experience.service.test.tsx
+* frontend/web/src/pages/ExperiencesPage/ExperiencesPage.tsx
+* frontend/web/tests/unit/pages/ExperiencesPage.test.tsx
+
+### Human Review
+
+All changes were reviewed and validated by the developer. The modifications were intentionally limited to the frontend files listed above to avoid collateral changes.
+
+## 2026-08-20
+
+### Phase
+
+Phase 3 — Basic Functionality
+
+### Objective
+
+Improve the visual design and usability of the Experience Form in the React frontend.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+* Model: GPT-5.5
+* Interaction mode: Conversational chat
+* Reasoning: Standard
+* Agentic mode: Disabled
+* IDE integration: None
+* Plugins/Skills: None
+
+### How it was used
+
+* Helped improve the layout and visual structure of the Experience Form.
+* Suggested and applied Tailwind CSS utility classes to improve spacing, alignment and responsive behaviour.
+* Reviewed the organization of the form fields and their visual hierarchy.
+* Adjusted the form layout to provide a clearer and more consistent user experience.
+* Preserved the existing functionality while focusing on the presentation layer.
+
+### Complements
+
+None.
+
+### Context Files
+
+* Existing React Experience Form component.
+* Existing Tailwind CSS configuration and frontend structure.
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+* React Experience Form component.
+
+### Human Review
+
+All styling suggestions were reviewed by the user and manually validated in the application before being incorporated into the project.
+
+## 2026-08-18
+
+### Phase
+
+Phase 3 — Basic Functionality
+
+### Objective
+
+Implement and validate the backend functionality for creating new experiences, including the corresponding automated tests.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+* Model: GPT-5.5
+* Interaction mode: Conversational chat
+* Reasoning: Standard
+* Agentic mode: Disabled
+* IDE integration: None
+* Plugins/Skills: None
+
+### How it was used
+
+* Helped design and implement the server-side tests for creating new experiences.
+* Reviewed the existing experience creation flow between the controller, service, mapper and repository layers.
+* Assisted in identifying the required test cases and assertions for the new experience functionality.
+* Helped diagnose and correct problems encountered while running the tests.
+* Reviewed the integration between the experience creation endpoint and the persistence layer.
+
+### Complements
+
+None.
+
+### Context Files
+
+* Existing backend Experience-related classes.
+* Existing backend test suite.
+* Experience DTOs, mapper, service, controller and repository.
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+* Backend Experience-related test files.
+* Existing Experience service and API test infrastructure where required.
+
+### Human Review
+
+All testing guidance and proposed changes were reviewed by the user and validated against the existing implementation before being incorporated into the project.
+
+## 2026-08-17
+
+### Phase
+
+Phase 3 — Basic Functionality
+
+### Objective
+
+Continue the development of the frontend by implementing the HTML/JSX structure of a React component and ensuring its behaviour is correctly covered by automated tests.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Helped implement and refine the HTML/JSX structure of the React component.
+- Reviewed the component structure and its interaction with the existing frontend logic.
+- Helped implement unit tests using Vitest.
+- Helped implement integration tests using Vitest and Testing Library.
+- Reviewed test setup, assertions and service interactions to ensure that the implemented functionality was correctly covered.
+
+### Complements
+
+None.
+
+### Context Files
+
+- React component source files.
+- Existing Vitest unit and integration test files.
+- Frontend service implementations used by the component.
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- React component files involved in the implemented functionality.
+- Corresponding Vitest unit test files.
+- Corresponding Vitest integration test files.
+
+### Human Review
+
+The proposed component implementation and test changes were reviewed by the user and adapted to the existing project architecture before being incorporated into the project.
+
+## 2026-08-16
+
+### Phase
+
+Phase 3 — Basic Functionality
+
+### Objective
+
+Continue the development of the frontend functionality by implementing the HTML structure of the React component and ensuring its behaviour is correctly covered by automated tests.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Helped implement and refine the HTML/JSX structure of the React component.
+- Reviewed the component structure and its interaction with the existing frontend logic.
+- Helped create and adjust Vitest unit tests for the component.
+- Helped create and adjust Vitest integration tests to verify the component's behaviour with the application services.
+- Reviewed test assertions and test setup to ensure that the implemented functionality was correctly covered.
+
+### Complements
+
+None.
+
+### Context Files
+
+- React component source files.
+- Existing Vitest unit and integration test files.
+- Frontend service implementations used by the component.
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- React component files involved in the implemented functionality.
+- Corresponding Vitest unit test files.
+- Corresponding Vitest integration test files.
+
+### Human Review
+
+The proposed component implementation and test changes were reviewed by the user and adapted to the existing project architecture before being incorporated into the project.
 
 ## 2026-08-15
 

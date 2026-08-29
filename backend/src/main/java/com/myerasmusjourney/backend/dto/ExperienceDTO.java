@@ -13,5 +13,6 @@ public record ExperienceDTO (
         String description,
         Collection<Category> categories,
         CitySimpleDTO city,
-        UserSimpleDTO author
+        UserSimpleDTO author,
+        Collection<CommentSimpleDTO> comments
 ){}

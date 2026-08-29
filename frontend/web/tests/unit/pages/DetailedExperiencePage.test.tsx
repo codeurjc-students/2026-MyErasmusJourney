@@ -85,6 +85,7 @@ describe("DetailedExperiencePage", () => {
     const mockService: ExperienceService = {
       getAll: vi.fn(),
       getExperienceById: mockGetExperienceById,
+      getCommentsByExperienceId: vi.fn().mockResolvedValue([]),
     };
 
     render(

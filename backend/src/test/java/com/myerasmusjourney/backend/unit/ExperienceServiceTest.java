@@ -1,10 +1,12 @@
 package com.myerasmusjourney.backend.unit;
 
 import com.myerasmusjourney.backend.domain.City;
+import com.myerasmusjourney.backend.domain.Comment;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
 import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.enumeration.Category;
+import com.myerasmusjourney.backend.mapper.CommentMapper;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import com.myerasmusjourney.backend.repository.ExperienceRepository;
 import com.myerasmusjourney.backend.service.CityService;
@@ -24,6 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -42,6 +45,9 @@ public class ExperienceServiceTest {
 
     @Mock
     private ExperienceMapper experienceMapper;
+
+    @Mock
+    private CommentMapper commentMapper;
 
     @Mock
     private CityService cityService;
@@ -276,7 +282,8 @@ public class ExperienceServiceTest {
                 savedExperience.getDescription(),
                 savedExperience.getCategories(),
                 cityDTO,
-                userDTO
+                userDTO,
+                List.of()
         );
 
         when(cityService.findById(formDTO.cityId())).thenReturn(city);
@@ -345,7 +352,7 @@ public class ExperienceServiceTest {
     void testGetExperienceById() {
         Experience experience =  new Experience("Experiencia 1", "Descripcion 1", 9F, null, List.of("Personal_Experience", "Documentation"), null, null);
 
-        ExperienceDTO experienceDTO = new ExperienceDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", List.of(Category.Personal_Experience, Category.Documentation), null, null);
+        ExperienceDTO experienceDTO = new ExperienceDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", List.of(Category.Personal_Experience, Category.Documentation), null, null, List.of());
         Long id = 1L;
 
         when(experienceRepository.findById(id)).thenReturn(Optional.of(experience));
@@ -368,5 +375,21 @@ public class ExperienceServiceTest {
         when(experienceRepository.findById(id)).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class, () -> experienceService.getExperienceById(id));
+    }
+
+    @Test
+    void testGetComments(){
+        Experience experience = new Experience();
+        experience.addComment(new Comment());
+        experience.addComment(new Comment());
+
+        when(experienceRepository.findById(1L)).thenReturn(Optional.of(experience));
+        when(commentMapper.toSimpleDTOs(argThat(comments -> comments.size() == 2))).thenReturn(List.of(new CommentSimpleDTO(null, null, null, null), new CommentSimpleDTO(null, null, null, null)));
+        Collection<CommentSimpleDTO> result = experienceService.getComments(1L);
+
+        assertEquals(2, result.size());
+
+        verify(experienceRepository).findById(1L);
+        verify(commentMapper).toSimpleDTOs(argThat(comments -> comments.size() == 2));
     }
 }

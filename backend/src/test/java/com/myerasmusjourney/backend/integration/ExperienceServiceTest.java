@@ -10,8 +10,10 @@ import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import com.myerasmusjourney.backend.repository.CityRepository;
 import com.myerasmusjourney.backend.repository.ExperienceRepository;
 import com.myerasmusjourney.backend.repository.UserRepository;
+import com.myerasmusjourney.backend.service.CommentService;
 import com.myerasmusjourney.backend.service.ExperienceService;
 import com.myerasmusjourney.backend.service.UserService;
+import jakarta.transaction.Transactional;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +29,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -44,6 +47,9 @@ public class ExperienceServiceTest extends TestDataBase {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CommentService commentService;
 
     @Autowired
     private ExperienceRepository experienceRepository;
@@ -346,7 +352,8 @@ public class ExperienceServiceTest extends TestDataBase {
                 savedExperience.getDescription(),
                 savedExperience.getCategories(),
                 cityDTO,
-                userDTO
+                userDTO,
+                List.of()
         );
 
         assertNotNull(result);
@@ -390,6 +397,7 @@ public class ExperienceServiceTest extends TestDataBase {
     }
 
     @Test
+    @Transactional
     void testGetExperienceById() {
 
         ExperienceDTO expected = experienceMapper.toDTO(experienceRepository.findAll().getFirst());
@@ -404,5 +412,26 @@ public class ExperienceServiceTest extends TestDataBase {
         Long id = 0L;
 
         assertThrows(NoSuchElementException.class, () -> experienceService.getExperienceById(id));
+    }
+
+    @Test
+    void testGetComments(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken("test@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        Experience experience = experienceRepository.findAll().getFirst();
+
+        Collection<CommentSimpleDTO> result = experienceService.getComments(experience.getId());
+
+        assertTrue(result.isEmpty());
+
+        CommentDTO commentDTO = commentService.postComment(experience.getId(), new CommentFormDTO("New comment"));
+
+        CommentSimpleDTO expected = new CommentSimpleDTO(commentDTO.id(), commentDTO.date(), commentDTO.description(), commentDTO.author().displayName());
+
+        result = experienceService.getComments(experience.getId());
+
+        assertEquals(1, result.size());
+        assertTrue(result.contains(expected));
     }
 }

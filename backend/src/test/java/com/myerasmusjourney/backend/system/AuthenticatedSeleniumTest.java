@@ -47,7 +47,7 @@ public class AuthenticatedSeleniumTest extends BaseSeleniumTest{
         ));
     }
 
-    private void logOutUser(){
+    public void logOutUser(){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(

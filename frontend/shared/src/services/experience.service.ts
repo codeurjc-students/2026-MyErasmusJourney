@@ -10,6 +10,8 @@
 import type { ExperienceFormDTO } from "../models/ExperienceFormDTO";
 import type { ApiClient } from "../apiClient";
 import type { ExperiencePageDTO } from "../models/ExperienceSimpleDTO";
+import type { CommentFormDTO } from "../models/CommentFormDTO";
+
 
 export type ExperienceService = ReturnType<typeof createExperienceService>;
 
@@ -18,7 +20,9 @@ export function createExperienceService(api: ApiClient) {
     getAll: (page?: number, size?: number) => getAllExperiences(api, page, size),
     getCategories: () => getCategories(api),
     postExperience: (body: ExperienceFormDTO) => postExperience(api, body),
-    getExperienceById: (id: number)=> getExperienceById(api, id)
+    getExperienceById: (id: number)=> getExperienceById(api, id),
+    postComment:(id:number, body: CommentFormDTO) => postComment(api, id, body),
+    getCommentsByExperienceId:(id:number) => getCommentsByExperienceId(api, id)
   };
 }
 
@@ -68,6 +72,26 @@ async function getExperienceById(api: ApiClient, id:number) {
 
   if (!response.ok) {
     throw new Error("Error fetching experience")
+  }
+
+  return response.json();
+}
+
+async function postComment(api: ApiClient, id:number, body:CommentFormDTO){
+   const response = await api.post(`/experiences/${id}/comments`, body)
+
+  if (response.status !== 201) {
+    throw new Error("Error posting new comment")
+  }
+
+  return response.json();
+}
+
+async function getCommentsByExperienceId(api: ApiClient, id:number){
+   const response = await api.get(`/experiences/${id}/comments`)
+
+  if (!response.ok) {
+    throw new Error("Error posting new comment")
   }
 
   return response.json();
