@@ -13,6 +13,7 @@ import com.myerasmusjourney.backend.repository.UserRepository;
 import com.myerasmusjourney.backend.service.CommentService;
 import com.myerasmusjourney.backend.service.ExperienceService;
 import com.myerasmusjourney.backend.service.UserService;
+import jakarta.transaction.Transactional;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -396,6 +397,7 @@ public class ExperienceServiceTest extends TestDataBase {
     }
 
     @Test
+    @Transactional
     void testGetExperienceById() {
 
         ExperienceDTO expected = experienceMapper.toDTO(experienceRepository.findAll().getFirst());
