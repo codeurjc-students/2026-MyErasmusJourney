@@ -141,7 +141,7 @@ describe("UserExperiences", () => {
     const fakeExperiences = [
       {
         id: 1,
-        title: "My experience in Munich",
+        title: "User 2 experience",
         date: "2026-06-25",
         cityName: "Munich",
         country: "Germany",
@@ -189,7 +189,7 @@ describe("UserExperiences", () => {
     const fakeExperiences = [
       {
         id: 1,
-        title: "My experience in Munich",
+        title: "My experience",
         date: "2026-06-25",
         cityName: "Munich",
         country: "Germany",
