@@ -36,10 +36,14 @@ export default function UserExperiences({ userService = createUserService(API), 
         
         if (userExperiences === undefined || userExperiences.length < 1){
             fetchExperiences();
+            console.log(experiences.reverse())
         }
         else{
             setExperiences(userExperiences)
+            console.log(experiences.reverse())
         }
+
+        
     },[])
 
     return(<>

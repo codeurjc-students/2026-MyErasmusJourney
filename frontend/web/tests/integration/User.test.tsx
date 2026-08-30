@@ -20,8 +20,8 @@ const testUserService = createUserService(testAPI);
 describe("UserPage", () => {
   let authenticatedUser: UserSimpleDTO;
 
-  beforeAll(async() => {
-    authenticatedUser = await authenticateUser(false);
+  beforeAll(async () => {
+    authenticatedUser = await authenticateUser("test@email.com");
   });
 
   beforeEach(() => {
@@ -37,7 +37,7 @@ describe("UserPage", () => {
     render(
       <MemoryRouter initialEntries={["/profile"]}>
         <Routes>
-          <Route path="/profile" element={<UserPage userService={testUserService} authService={testAuthService}/>} />
+          <Route path="/profile" element={<UserPage userService={testUserService} authService={testAuthService} />} />
           <Route path="/log-in" element={<div>Log in page</div>} />
         </Routes>
       </MemoryRouter>
@@ -61,7 +61,7 @@ describe("UserPage", () => {
       <MemoryRouter initialEntries={["/profile"]}>
         <Routes>
           <Route path="/" element={<div>Home page</div>} />
-          <Route path="/profile" element={<UserPage userService={testUserService} authService={testAuthService}/>} />
+          <Route path="/profile" element={<UserPage userService={testUserService} authService={testAuthService} />} />
           <Route path="/log-in" element={<div>Log in page</div>} />
         </Routes>
       </MemoryRouter>
@@ -73,12 +73,12 @@ describe("UserPage", () => {
   });
 
   it("redirects to city form", async () => {
-    authenticatedUser = await authenticateUser(true);
+    authenticatedUser = await authenticateUser("testadmin@email.com");
     render(
       <MemoryRouter initialEntries={["/profile"]}>
         <Routes>
           <Route path="/cities/new" element={<div>City Form</div>} />
-          <Route path="/profile" element={<UserPage userService={testUserService} authService={testAuthService}/>} />
+          <Route path="/profile" element={<UserPage userService={testUserService} authService={testAuthService} />} />
           <Route path="/log-in" element={<div>Log in page</div>} />
         </Routes>
       </MemoryRouter>
@@ -174,5 +174,84 @@ describe("UserPage", () => {
     expect(screen.getByText("Profile")).toBeInTheDocument();
 
     confirmSpy.mockRestore();
+  });
+
+  it("renders the authenticated user's experiences with real API data", async () => {
+    authenticatedUser = await authenticateUser("exampleuser1@email.com")
+
+
+    const experiences = await testUserService.getExperiences(
+      authenticatedUser.id
+    );
+
+    render(
+      <MemoryRouter initialEntries={["/profile"]}>
+        <Routes>
+          <Route
+            path="/profile"
+            element={
+              <UserPage
+                userService={testUserService}
+                authService={testAuthService}
+              />
+            }
+          />
+
+          <Route
+            path="/log-in"
+            element={<div>Log in page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(
+      await screen.findByText("Experiences")
+    ).toBeInTheDocument();
+
+    for (const experience of experiences) {
+      expect(
+        await screen.findByText(experience.title)
+      ).toBeInTheDocument();
+    }
+  });
+
+  it("loads the authenticated user's experiences when no userId is provided", async () => {
+      authenticatedUser = await authenticateUser("exampleuser1@email.com")
+
+    const experiences = await testUserService.getExperiences(
+      authenticatedUser.id
+    );
+
+    render(
+      <MemoryRouter initialEntries={["/profile"]}>
+        <Routes>
+          <Route
+            path="/profile"
+            element={
+              <UserPage
+                userService={testUserService}
+                authService={testAuthService}
+              />
+            }
+          />
+
+          <Route
+            path="/log-in"
+            element={<div>Log in page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(
+      await screen.findByText("Experiences")
+    ).toBeInTheDocument();
+
+    for (const experience of experiences) {
+      expect(
+        await screen.findByText(experience.title)
+      ).toBeInTheDocument();
+    }
   });
 });
