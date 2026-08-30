@@ -1,6 +1,6 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import "@testing-library/jest-dom";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 import { createApiClient } from "@shared/apiClient";
@@ -20,16 +20,14 @@ const testUserService = createUserService(testAPI);
 describe("UserPage", () => {
   let authenticatedUser: UserSimpleDTO;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     authenticatedUser = await authenticateUser("test@email.com");
-  });
-
-  beforeEach(() => {
     useUserStore.getState().setUser(authenticatedUser);
   });
 
   afterAll(() => {
     clearFetchAndUserStore();
+    cleanup();
   });
 
   it("renders the authenticated user's profile with real API data", async () => {
@@ -93,6 +91,10 @@ describe("UserPage", () => {
     authenticatedUser = await authenticateUserToDelete();
     useUserStore.getState().setUser(authenticatedUser);
 
+    const experiences = await testUserService.getExperiences(authenticatedUser.id);
+
+    console.log("Experiences:", experiences);
+
     const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(true);
 
     render(
@@ -117,6 +119,7 @@ describe("UserPage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Profile")).toBeInTheDocument();
+      expect(screen.queryByText("Loading experiences...")).not.toBeInTheDocument();
     });
 
     fireEvent.click(
@@ -132,9 +135,15 @@ describe("UserPage", () => {
     });
 
     confirmSpy.mockRestore();
+
+    authenticateUser("test@email.com")
   });
 
   it("cancels deleting the authenticated user", async () => {
+
+    console.log("1 - antes de authenticateUser");
+    console.log(useUserStore.getState());
+
     const confirmSpy = vi
       .spyOn(window, "confirm")
       .mockReturnValue(false);
@@ -177,12 +186,19 @@ describe("UserPage", () => {
   });
 
   it("renders the authenticated user's experiences with real API data", async () => {
-    authenticatedUser = await authenticateUser("exampleuser1@email.com")
 
+    console.log("1 - antes de authenticateUser");
+    console.log(useUserStore.getState());
 
-    const experiences = await testUserService.getExperiences(
-      authenticatedUser.id
-    );
+    authenticatedUser = await authenticateUser("exampleuser1@email.com");
+
+    console.log("2 - después de authenticateUser");
+    console.log(useUserStore.getState());
+
+    const experiences = await testUserService.getExperiences(authenticatedUser.id);
+
+    console.log("3 - después de getExperiences");
+    console.log(experiences);
 
     render(
       <MemoryRouter initialEntries={["/profile"]}>
@@ -205,9 +221,10 @@ describe("UserPage", () => {
       </MemoryRouter>
     );
 
-    expect(
-      await screen.findByText("Experiences")
-    ).toBeInTheDocument();
+    expect(await screen.findByText("Experiences")).toBeInTheDocument();
+
+    expect(screen.queryByText("Loading experiences...")).not.toBeInTheDocument(); 
+
 
     for (const experience of experiences) {
       expect(
@@ -244,9 +261,8 @@ describe("UserPage", () => {
       </MemoryRouter>
     );
 
-    expect(
-      await screen.findByText("Experiences")
-    ).toBeInTheDocument();
+    expect(await screen.findByText("Experiences")).toBeInTheDocument();
+    expect(screen.queryByText("Loading experiences...")).not.toBeInTheDocument(); 
 
     for (const experience of experiences) {
       expect(

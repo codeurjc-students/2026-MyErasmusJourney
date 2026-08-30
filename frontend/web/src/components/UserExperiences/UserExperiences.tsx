@@ -5,6 +5,7 @@ import { useUserStore } from "@shared/stores/userStore";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { API } from "../../api/client";
+import { useFormState } from "react-dom";
 
 interface experiencesProps{
     userExperiences: ExperienceSimpleDTO[]|undefined;
@@ -16,6 +17,8 @@ interface userIdProps{
 export default function UserExperiences({ userService = createUserService(API), userExperiences, userId}: userServiceProps & experiencesProps & userIdProps){
 
     const {user} = useUserStore();
+
+    const [loading, setLoading] = useState<boolean>(true);
 
     const [experiences, setExperiences] = useState<ExperienceSimpleDTO[]>([]);
 
@@ -42,13 +45,16 @@ export default function UserExperiences({ userService = createUserService(API), 
             setExperiences(userExperiences)
             console.log(experiences.reverse())
         }
-
-        
+        setLoading(false);
     },[])
 
     return(<>
         <div className="md:pr-8 md:border-r">
             <h4 className="mb-6">Experiences</h4>
+            {loading
+            ?(
+                <p>Loading experiences...</p>
+            ):(
                 <div className="flex flex-col gap-4">
                     {experiences.map((experience)=>(
                         <div id={`experience-${experience.id}`} className="w-full rounded-2xl bg-white shadow-md p-4 flex items-center justify-between gap-4 transition hover:shadow-lg">
@@ -68,6 +74,8 @@ export default function UserExperiences({ userService = createUserService(API), 
                         </div>
                     ))}
                 </div>
+            )}
+                    
         </div>
     </>)
 }
