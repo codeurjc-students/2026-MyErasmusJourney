@@ -281,5 +281,144 @@ describe("UserService", () => {
     expect(mockApi.get).toHaveBeenCalledWith("/users/5");
   });
 
-  
+  it("should successfully delete a user", async () => {
+    const responseData = {
+      id: 1,
+      displayName: "testuser",
+      email: "test@example.com"
+    };
+
+    const mockApi = {
+      delete: vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue(responseData),
+        text: vi.fn(),
+      }),
+    };
+
+    const service = createUserService(mockApi);
+
+    const result = await service.deleteUserById(1);
+
+    expect(mockApi.delete).toHaveBeenCalledTimes(1);
+    expect(mockApi.delete).toHaveBeenCalledWith("/users/1");
+    expect(result).toEqual(responseData);
+  });
+
+  it("should throw an error when deleteUserById request fails", async () => {
+    const errorMessage = "Unauthorized";
+
+    const mockApi = {
+      delete: vi.fn().mockResolvedValue({
+        ok: false,
+        text: vi.fn().mockResolvedValue(errorMessage),
+        json: vi.fn(),
+      }),
+    };
+
+    const service = createUserService(mockApi);
+
+    await expect(
+      service.deleteUserById(1)
+    ).rejects.toThrow(errorMessage);
+
+    expect(mockApi.delete).toHaveBeenCalledWith("/users/1");
+  });
+
+  it("should call the correct endpoint when deleting a user", async () => {
+    const mockApi = {
+      delete: vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue({}),
+        text: vi.fn(),
+      }),
+    };
+
+    const service = createUserService(mockApi);
+
+    await service.deleteUserById(5);
+
+    expect(mockApi.delete).toHaveBeenCalledWith("/users/5");
+  });
+
+  it("should successfully return the experiences of a user", async () => {
+    const responseData = [
+      {
+        id: 1,
+        date: "2026-08-30",
+        rating: 8.5,
+        title: "My Erasmus Experience",
+        description: "Amazing experience in Munich",
+        categories: ["Studies", "Culture"],
+        cityName: "Munich",
+        country: "Germany",
+        authorName: "testuser"
+      },
+      {
+        id: 2,
+        date: "2026-08-29",
+        rating: 9.0,
+        title: "A weekend in Berlin",
+        description: "Great weekend trip",
+        categories: ["Culture"],
+        cityName: "Berlin",
+        country: "Germany",
+        authorName: "testuser"
+      }
+    ];
+
+    const mockApi = {
+      get: vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue(responseData),
+        text: vi.fn(),
+      }),
+    };
+
+    const service = createUserService(mockApi);
+
+    const result = await service.getExperiences(1);
+
+    expect(mockApi.get).toHaveBeenCalledTimes(1);
+    expect(mockApi.get).toHaveBeenCalledWith("/users/1/experiences");
+    expect(result).toEqual(responseData);
+  });
+
+  it("should throw an error when getExperiences request fails", async () => {
+    const errorMessage = "Unauthorized";
+
+    const mockApi = {
+      get: vi.fn().mockResolvedValue({
+        ok: false,
+        text: vi.fn().mockResolvedValue(errorMessage),
+        json: vi.fn(),
+      }),
+    };
+
+    const service = createUserService(mockApi);
+
+    await expect(
+      service.getExperiences(1)
+    ).rejects.toThrow(errorMessage);
+
+    expect(mockApi.get).toHaveBeenCalledWith("/users/1/experiences");
+  });
+
+  it("should call the correct endpoint when requesting user experiences", async () => {
+    const mockApi = {
+      get: vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue([]),
+        text: vi.fn(),
+      }),
+    };
+
+    const service = createUserService(mockApi);
+
+    await service.getExperiences(5);
+
+    expect(mockApi.get).toHaveBeenCalledWith("/users/5/experiences");
+  });
+
+
 });
