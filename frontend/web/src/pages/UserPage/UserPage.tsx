@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import "./UserPage.css";
 import { createAuthService } from "@shared/services/auth.service";
 import type { authServiceProps } from "@shared/interfaces/authServiceProps";
+import UserExperiences from "../../components/UserExperiences/UserExperiences";
 
 export default function UserPage({ authService = createAuthService(API), userService = createUserService(API) }: authServiceProps & userServiceProps){
 
@@ -118,9 +119,7 @@ export default function UserPage({ authService = createAuthService(API), userSer
 
             </div>
             <div className="mt-16 grid md:grid-cols-2 gap-10">
-                <div className="md:pr-8 md:border-r">
-                    <h4 className="mb-6">Experiences</h4>
-                </div>
+                <UserExperiences userService={userService} userExperiences={userDTO?.experiences} userId={userDTO?.id}/>
                 <div className="md:pl-8">
                     <h4 className="mb-6">Comments</h4>
                 </div>
