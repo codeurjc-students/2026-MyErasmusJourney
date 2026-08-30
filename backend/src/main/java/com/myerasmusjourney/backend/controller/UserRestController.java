@@ -1,5 +1,6 @@
 package com.myerasmusjourney.backend.controller;
 
+import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
 import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserFormDTO;
 import com.myerasmusjourney.backend.dto.UserSimpleDTO;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -49,5 +51,12 @@ public class UserRestController {
         UserDTO userDTO = userService.deleteUser(id);
         if (userDTO == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         return ResponseEntity.ok(userDTO);
+    }
+
+    @GetMapping("/{id}/experiences")
+    public ResponseEntity<Collection<ExperienceSimpleDTO>> getExperiencesByUser(@PathVariable Long id){
+        Collection<ExperienceSimpleDTO> experienceSimpleDTOs =  userService.getExperiences(id);
+        if (experienceSimpleDTOs == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        return ResponseEntity.ok(experienceSimpleDTOs);
     }
 }

@@ -8,7 +8,6 @@ import { APIURL } from "src/config/env";
 import makeFetchCookie from "fetch-cookie";
 import type { UserFormDTO } from "@shared/models/UserFormDTO";
 
-
 const originalFetch = globalThis.fetch;
 
 const testAPI = createApiClient(APIURL);
@@ -17,26 +16,29 @@ const testUserService = createUserService(testAPI);
 
 const setUser = useUserStore.getState().setUser;
 
-export async function authenticateUserToDelete(): Promise<UserSimpleDTO>{
-    
+export async function authenticateUserToDelete(): Promise<UserSimpleDTO> {
     setupFetchWithCookies();
 
     const signUpForm: UserFormDTO = {
         fullName: "John Doe",
         displayName: "johndoe",
-        email: "john@example.com",
-        city:null,
-        country:null,
+        email: "usertodelete@example.com",
+        city: null,
+        country: null,
         password: "password123",
         passwordConfirmation: "password123",
-    }
+    };
 
-    try{
+    try {
         await testUserService.signUp(signUpForm);
-    } catch(error){
+    } catch (error) {
         console.error(error);
     }
-    const loginRequest: LoginRequest = {username: "john@example.com", password: "password123"}
+
+    const loginRequest: LoginRequest = {
+        username: "usertodelete@example.com",
+        password: "password123"
+    };
 
     const user = await obtainAuthenticatedUser(loginRequest);
 
@@ -45,19 +47,16 @@ export async function authenticateUserToDelete(): Promise<UserSimpleDTO>{
     return user;
 }
 
-export async function authenticateUser(admin: boolean): Promise<UserSimpleDTO> {
+export async function authenticateUser(
+    email: string
+): Promise<UserSimpleDTO> {
 
     setupFetchWithCookies();
 
-    const loginRequest: LoginRequest = admin
-        ? {
-            username: "testadmin@email.com",
-            password: "password"
-        }
-        : {
-            username: "test@email.com",
-            password: "password"
-        };
+    const loginRequest: LoginRequest = {
+        username: email,
+        password: "password"
+    };
 
     const user = await obtainAuthenticatedUser(loginRequest);
 
@@ -67,7 +66,10 @@ export async function authenticateUser(admin: boolean): Promise<UserSimpleDTO> {
 }
 
 function setupFetchWithCookies() {
-    const cookieAwareFetch = makeFetchCookie(globalThis.fetch);
+    // IMPORTANTE:
+    // Siempre partimos del fetch original, nunca de globalThis.fetch.
+    const cookieAwareFetch = makeFetchCookie(originalFetch);
+
     globalThis.fetch = cookieAwareFetch as typeof fetch;
 }
 
@@ -77,16 +79,28 @@ async function obtainAuthenticatedUser(
 
     await testAuthService.logIn(loginRequest);
 
-    const user = await testUserService.getUserInfo();
+    try {
+        const user = await testUserService.getUserInfo();
 
-    return {
-        id: user.id,
-        displayName: user.displayName,
-        email: user.email
-    };
+        return {
+            id: user.id,
+            displayName: user.displayName,
+            email: user.email
+        };
+
+    } catch (error) {
+        console.log("Error authenticating:", loginRequest);
+        console.error(error);
+
+        return {
+            id: 0,
+            displayName: "",
+            email: ""
+        };
+    }
 }
 
 export function clearFetchAndUserStore() {
     globalThis.fetch = originalFetch;
-    useUserStore.getState().setUser(null);
+    setUser(null);
 }

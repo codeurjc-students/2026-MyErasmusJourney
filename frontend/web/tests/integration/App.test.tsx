@@ -18,8 +18,8 @@ const testUserService = createUserService(testAPI);
 describe("App component", () => {
   let authenticatedUser: UserSimpleDTO;
   
-  beforeAll(() => {
-      authenticatedUser = authenticateUser(false);
+  beforeAll(async () => {
+      authenticatedUser = await authenticateUser("test@email.com");
     });
   
     beforeEach(() => {

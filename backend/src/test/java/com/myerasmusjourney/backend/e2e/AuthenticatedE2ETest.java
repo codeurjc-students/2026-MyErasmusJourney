@@ -30,12 +30,11 @@ public class AuthenticatedE2ETest extends TestDataBase {
 
     protected String token = null;
 
-    protected void obtainToken(boolean admin) throws JSONException {
+    protected void obtainToken(String email) throws JSONException {
         if(token != null) return;
 
         JSONObject body = new JSONObject();
-        if (!admin) body.put("username","test@email.com");
-        else body.put("username","testadmin@email.com");
+        body.put("username", email);
         body.put("password", "password");
 
         Response response =

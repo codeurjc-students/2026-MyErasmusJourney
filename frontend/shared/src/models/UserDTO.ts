@@ -1,3 +1,5 @@
+import type { ExperienceSimpleDTO } from "./ExperienceSimpleDTO";
+
 export interface UserDTO{
     id: number;
     displayName: String;
@@ -5,4 +7,5 @@ export interface UserDTO{
     email: String;
     studyLocation: String;
     roles: Array<String>;
+    experiences: ExperienceSimpleDTO[];
 }

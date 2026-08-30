@@ -8,7 +8,8 @@ export function createUserService(api:ApiClient) {
     signUp: (body: UserFormDTO) => signUp(api, body),
     getUserInfo: () => getUserInfo(api),
     getUserById: (id: number) => getUserById(api, id),
-    deleteUserById: (id:number) => deleteUserById(api, id)
+    deleteUserById: (id:number) => deleteUserById(api, id),
+    getExperiences: (id:number) => getExperiences(api, id)
   };
 }
 
@@ -49,6 +50,17 @@ async function getUserById(api:ApiClient, id:number){
 async function deleteUserById(api: ApiClient, id:number){
 
   const response = await api.delete(`/users/${id}`);
+
+  if (!response.ok){
+      const error = await response.text();
+      throw new Error(error);
+    }
+
+  return response.json();
+}
+
+async function getExperiences(api: ApiClient, id:number){
+  const response = await api.get(`/users/${id}/experiences`);
 
   if (!response.ok){
       const error = await response.text();

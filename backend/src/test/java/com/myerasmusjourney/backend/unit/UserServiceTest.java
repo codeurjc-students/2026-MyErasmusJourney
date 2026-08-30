@@ -1,9 +1,12 @@
 package com.myerasmusjourney.backend.unit;
 
+import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
 import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserFormDTO;
 import com.myerasmusjourney.backend.dto.UserSimpleDTO;
+import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import com.myerasmusjourney.backend.mapper.UserMapper;
 import com.myerasmusjourney.backend.repository.UserRepository;
 import com.myerasmusjourney.backend.service.UserService;
@@ -35,6 +38,9 @@ public class UserServiceTest {
 
     @Mock
     private UserMapper userMapper;
+
+    @Mock
+    private ExperienceMapper experienceMapper;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -458,4 +464,140 @@ public class UserServiceTest {
         verify(userMapper).toDTO(targetUser);
     }
 
+    @Test
+    void testGetUserExperiencesByUser(){
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+
+        Experience experience1 = new Experience();
+        experience1.setTitle("Experience 1");
+        experience1.setId(1L);
+
+        Experience experience2 = new Experience();
+        experience2.setTitle("Experience 2");
+        experience2.setId(2L);
+
+        user.addExperience(experience1);
+        user.addExperience(experience2);
+
+        List<ExperienceSimpleDTO> expected = List.of(
+                new ExperienceSimpleDTO(1L, null, null, "Experience 1", null, null, null, null, null),
+                new ExperienceSimpleDTO(2L, null, null, "Experience 2", null, null, null, null, null)
+
+        );
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("user@email.com");
+        when(userRepository.findByEmail("user@email.com")).thenReturn(user);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(experienceMapper.toDTOs(argThat(experiences -> experiences.size() == 2))).thenReturn(expected);
+
+        List<ExperienceSimpleDTO> result = userService.getExperiences(1L);
+
+        for(int i = 0; i<expected.size(); i++){
+            ExperienceSimpleDTO res = result.get(i);
+            ExperienceSimpleDTO exp = expected.get(i);
+            assertEquals(exp, res);
+        }
+
+        verify(userRepository).findByEmail("user@email.com");
+        verify(userRepository).findById(1L);
+        verify(experienceMapper).toDTOs(argThat(experiences -> experiences.size() == 2));
+    }
+
+    @Test
+    void testGetUserExperiencesByAdmin(){
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+
+        Experience experience1 = new Experience();
+        experience1.setTitle("Experience 1");
+        experience1.setId(1L);
+
+        Experience experience2 = new Experience();
+        experience2.setTitle("Experience 2");
+        experience2.setId(2L);
+
+        user.addExperience(experience1);
+        user.addExperience(experience2);
+
+        User admin = new User();
+        admin.setEmail("admin@email.com");
+        admin.setId(2L);
+        admin.setRoles(List.of("USER", "ADMIN"));
+
+        List<ExperienceSimpleDTO> expected = List.of(
+                new ExperienceSimpleDTO(1L, null, null, "Experience 1", null, null, null, null, null),
+                new ExperienceSimpleDTO(2L, null, null, "Experience 2", null, null, null, null, null)
+
+        );
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("admin@email.com");
+        when(userRepository.findByEmail("admin@email.com")).thenReturn(admin);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(experienceMapper.toDTOs(argThat(experiences -> experiences.size() == 2))).thenReturn(expected);
+
+        List<ExperienceSimpleDTO> result = userService.getExperiences(1L);
+
+        for(int i = 0; i<expected.size(); i++){
+            ExperienceSimpleDTO res = result.get(i);
+            ExperienceSimpleDTO exp = expected.get(i);
+            assertEquals(exp, res);
+        }
+
+        verify(userRepository).findByEmail("admin@email.com");
+        verify(userRepository).findById(1L);
+        verify(experienceMapper).toDTOs(argThat(experiences -> experiences.size() == 2));
+    }
+
+    @Test
+    void testGetUserExperiencesFail(){
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+
+        Experience experience1 = new Experience();
+        experience1.setTitle("Experience 1");
+        experience1.setId(1L);
+
+        Experience experience2 = new Experience();
+        experience2.setTitle("Experience 2");
+        experience2.setId(2L);
+
+        user.addExperience(experience1);
+        user.addExperience(experience2);
+
+        User user2 = new User();
+        user2.setEmail("user2@email.com");
+        user2.setId(2L);
+        user2.setRoles(List.of("USER"));
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("user2@email.com");
+        when(userRepository.findByEmail("user2@email.com")).thenReturn(user2);
+
+        List<ExperienceSimpleDTO> result = userService.getExperiences(1L);
+
+        assertNull(result);
+
+        verify(userRepository).findByEmail("user2@email.com");
+    }
 }

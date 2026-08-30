@@ -46,7 +46,8 @@ describe("UserPage", () => {
     const mockService: UserService = {
       signUp: vi.fn(),
       getUserInfo: vi.fn(),
-      getUserById: mockGetUser
+      getUserById: mockGetUser,
+      getExperiences: vi.fn().mockResolvedValue([]),
     };
 
     const mockAuth: AuthService = {
@@ -88,7 +89,8 @@ describe("UserPage", () => {
     const mockService: UserService = {
       signUp: vi.fn(),
       getUserInfo: vi.fn(),
-      getUserById: mockGetUser
+      getUserById: mockGetUser,
+      getExperiences: vi.fn().mockResolvedValue([])
     };
 
     (useUserStore as any).mockReturnValue({
@@ -112,7 +114,8 @@ describe("UserPage", () => {
     const mockService: UserService = {
       signUp: vi.fn(),
       getUserInfo: vi.fn(),
-      getUserById: vi.fn()
+      getUserById: vi.fn(),
+      getExperiences: vi.fn().mockResolvedValue([])
     };
 
     (useUserStore as any).mockReturnValue({
@@ -136,7 +139,8 @@ describe("UserPage", () => {
     const mockService: UserService = {
       signUp: vi.fn(),
       getUserInfo: vi.fn(),
-      getUserById: mockGetUser
+      getUserById: mockGetUser,
+      getExperiences: vi.fn().mockResolvedValue([])
     };
 
     (useUserStore as any).mockReturnValue({
@@ -172,7 +176,8 @@ describe("UserPage", () => {
     const mockService: UserService = {
       signUp: vi.fn(),
       getUserInfo: vi.fn(),
-      getUserById: mockGetUser
+      getUserById: mockGetUser,
+      getExperiences: vi.fn().mockResolvedValue([])
     };
 
     const mockAuth: AuthService = {
@@ -212,7 +217,8 @@ describe("UserPage", () => {
     const mockService: UserService = {
       signUp: vi.fn(),
       getUserInfo: vi.fn(),
-      getUserById: vi.fn().mockResolvedValue(fakeUser)
+      getUserById: vi.fn().mockResolvedValue(fakeUser),
+      getExperiences: vi.fn().mockResolvedValue([]),
     };
 
     (useUserStore as any).mockReturnValue({
@@ -244,7 +250,8 @@ describe("UserPage", () => {
     const mockService: UserService = {
       signUp: vi.fn(),
       getUserInfo: vi.fn(),
-      getUserById: vi.fn().mockResolvedValue(fakeUser)
+      getUserById: vi.fn().mockResolvedValue(fakeUser),
+      getExperiences: vi.fn().mockResolvedValue([]),
     };
 
     (useUserStore as any).mockReturnValue({
@@ -283,7 +290,9 @@ describe("UserPage", () => {
     const mockService: UserService = {
       signUp: vi.fn(),
       getUserInfo: vi.fn(),
-      getUserById: mockGetUser
+      getUserById: mockGetUser,
+      getExperiences: vi.fn().mockResolvedValue([]),
+
     };
 
     const mockAuth: AuthService = {
@@ -326,7 +335,9 @@ describe("UserPage", () => {
         fullName: "userTest",
         email: "test@email.com",
         studyLocation: "To be filled",
-        roles: ["USER"]
+        roles: ["USER"],
+        experiences:[]
+
     }
 
     const mockGetUser = vi.fn().mockResolvedValue(fakeUser);
@@ -342,7 +353,8 @@ describe("UserPage", () => {
       signUp: vi.fn(),
       getUserInfo: vi.fn(),
       getUserById: mockGetUser,
-      deleteUserById: mockDeleteUserById
+      deleteUserById: mockDeleteUserById,
+      getExperiences: vi.fn().mockResolvedValue([]),
     };
 
     const mockAuth: AuthService = {
@@ -386,7 +398,8 @@ describe("UserPage", () => {
         fullName: "userTest",
         email: "test@email.com",
         studyLocation: "To be filled",
-        roles: ["USER"]
+        roles: ["USER"],
+        experiences:[]
     }
 
     const mockGetUser = vi.fn().mockResolvedValue(fakeUser);
@@ -402,7 +415,8 @@ describe("UserPage", () => {
       signUp: vi.fn(),
       getUserInfo: vi.fn(),
       getUserById: mockGetUser,
-      deleteUserById: mockDeleteUserById
+      deleteUserById: mockDeleteUserById,
+      getExperiences: vi.fn().mockResolvedValue([]),
     };
 
     const mockAuth: AuthService = {

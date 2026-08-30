@@ -1,13 +1,18 @@
 package com.myerasmusjourney.backend.integration;
 
 import com.myerasmusjourney.backend.TestDataBase;
+import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
 import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserFormDTO;
 import com.myerasmusjourney.backend.dto.UserSimpleDTO;
+import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import com.myerasmusjourney.backend.mapper.UserMapper;
+import com.myerasmusjourney.backend.repository.ExperienceRepository;
 import com.myerasmusjourney.backend.repository.UserRepository;
 import com.myerasmusjourney.backend.service.UserService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,6 +36,12 @@ public class UserServiceTest extends TestDataBase{
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ExperienceRepository experienceRepository;
+
+    @Autowired
+    private ExperienceMapper experienceMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -287,5 +298,122 @@ public class UserServiceTest extends TestDataBase{
         assertNotNull(result);
         assertEquals(expected, result);
         assertNull(userRepository.findByEmail(user.getEmail()));
+    }
+
+    @Test
+    @Transactional
+    void testGetUserExperiencesByIdSuccess() {
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken("user1@gmail.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User user = userRepository.findByEmail("user1@gmail.com");
+
+        Experience experience1 = new Experience();
+        experience1.setTitle("Experience 1");
+
+        Experience experience2 = new Experience();
+        experience2.setTitle("Experience 2");
+
+        experience1 = experienceRepository.save(experience1);
+        experience2 = experienceRepository.save(experience2);
+
+        user.addExperience(experience1);
+        user.addExperience(experience2);
+
+        user = userRepository.save(user);
+
+        assertNotNull(user);
+        assertTrue(user.getId()>0L);
+
+        List<ExperienceSimpleDTO> result = userService.getExperiences(user.getId());
+
+        List<ExperienceSimpleDTO> expected = experienceMapper.toDTOs(List.of(experience1, experience2));
+
+        assertNotNull(result);
+
+        for(int i = 0; i<expected.size(); i++){
+            ExperienceSimpleDTO res = result.get(i);
+            ExperienceSimpleDTO exp = expected.get(i);
+            assertEquals(exp, res);
+        }
+    }
+
+    @Test
+    @Transactional
+    void testGetUserExperiencesByIdAdmin() {
+
+        User newAdmin = new User("admin", "TestAdmin", "integrationAdmin@email.com", passwordEncoder.encode("password"), "", "", List.of("USER", "ADMIN"));
+        userRepository.save(newAdmin);
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken("integrationAdmin@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User authenticatedUser = userRepository.findByEmail("integrationAdmin@email.com");
+
+        assertNotNull(authenticatedUser);
+        assertEquals(newAdmin.getId(), authenticatedUser.getId());
+        assertTrue(authenticatedUser.getRoles().contains("ADMIN"));
+
+        User user = userRepository.findByEmail("user1@gmail.com");
+
+        Experience experience1 = new Experience();
+        experience1.setTitle("Experience 1");
+
+        Experience experience2 = new Experience();
+        experience2.setTitle("Experience 2");
+
+        experience1 = experienceRepository.save(experience1);
+        experience2 = experienceRepository.save(experience2);
+
+        user.addExperience(experience1);
+        user.addExperience(experience2);
+
+        user = userRepository.save(user);
+
+        assertNotNull(user);
+        assertTrue(user.getId()>0L);
+
+        List<ExperienceSimpleDTO> result = userService.getExperiences(user.getId());
+
+        List<ExperienceSimpleDTO> expected = experienceMapper.toDTOs(List.of(experience1, experience2));
+
+        assertNotNull(result);
+
+        for(int i = 0; i<expected.size(); i++){
+            ExperienceSimpleDTO res = result.get(i);
+            ExperienceSimpleDTO exp = expected.get(i);
+            assertEquals(exp, res);
+        }
+    }
+
+    @Test
+    @Transactional
+    void testGetUserExperiencesFail(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken("user2@gmail.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User user = userRepository.findByEmail("user1@gmail.com");
+
+        Experience experience1 = new Experience();
+        experience1.setTitle("Experience 1");
+
+        Experience experience2 = new Experience();
+        experience2.setTitle("Experience 2");
+
+        experience1 = experienceRepository.save(experience1);
+        experience2 = experienceRepository.save(experience2);
+
+        user.addExperience(experience1);
+        user.addExperience(experience2);
+
+        user = userRepository.save(user);
+
+        assertNotNull(user);
+        assertTrue(user.getId()>0L);
+
+        List<ExperienceSimpleDTO> result = userService.getExperiences(user.getId());
+
+        assertNull(result);
     }
 }

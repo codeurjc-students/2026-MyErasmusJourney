@@ -131,7 +131,7 @@ public class UsersTest extends AuthenticatedE2ETest {
     @Test
     void testGetUserInfo(){
         try {
-            obtainToken(false);
+            obtainToken("test@email.com");
         } catch (Exception e) {
             log.error("e: ", e);
             throw new RuntimeException(e);
@@ -153,7 +153,7 @@ public class UsersTest extends AuthenticatedE2ETest {
     @Test
     void testGetUserByIdSuccess(){
         try {
-            obtainToken(false);
+            obtainToken("test@email.com");
         } catch (Exception e) {
             log.error("e: ", e);
             throw new RuntimeException(e);
@@ -177,7 +177,7 @@ public class UsersTest extends AuthenticatedE2ETest {
     @Test
     void testGetUserByAdmin(){
         try {
-            obtainToken(true);
+            obtainToken("testadmin@email.com");
         } catch (Exception e) {
             log.error("e: ", e);
             throw new RuntimeException(e);
@@ -202,7 +202,7 @@ public class UsersTest extends AuthenticatedE2ETest {
     @Test
     void testGetUserByIdSuccessNoStudyLocation(){
         try {
-            obtainToken(false);
+            obtainToken("test@email.com");
         } catch (Exception e) {
             log.error("e: ", e);
             throw new RuntimeException(e);
@@ -227,7 +227,7 @@ public class UsersTest extends AuthenticatedE2ETest {
     @Test
     void testGetUserByIdNotFound(){
         try {
-            obtainToken(true);
+            obtainToken("testadmin@email.com");
         } catch (Exception e) {
             log.error("e: ", e);
             throw new RuntimeException(e);
@@ -244,7 +244,7 @@ public class UsersTest extends AuthenticatedE2ETest {
     @Test
     void testGetUserByIdFail(){
         try {
-            obtainToken(false);
+            obtainToken("test@email.com");
         } catch (Exception e) {
             log.error("e: ", e);
             throw new RuntimeException(e);
@@ -284,7 +284,7 @@ public class UsersTest extends AuthenticatedE2ETest {
     @Test
     void testDeleteUserByIdNotFound(){
         try{
-            obtainToken(true);
+            obtainToken("testadmin@email.com");
             given()
                     .cookie("AuthToken", this.token)
                     .when()
@@ -300,7 +300,7 @@ public class UsersTest extends AuthenticatedE2ETest {
     void testDeleteUserByIdFail(){
         try{
             createUserToDelete();
-            obtainToken(false);
+            obtainToken("test@email.com");
             given()
                     .cookie("AuthToken", this.token)
                     .when()
@@ -316,7 +316,7 @@ public class UsersTest extends AuthenticatedE2ETest {
     void testDeleteUserByAdmin(){
         try{
             createUserToDelete();
-            obtainToken(true);
+            obtainToken("testadmin@email.com");
             given()
                     .cookie("AuthToken", this.token)
                     .when()
@@ -347,5 +347,101 @@ public class UsersTest extends AuthenticatedE2ETest {
         } catch (JSONException e){
             fail();
         }
+    }
+
+    @Test
+    void testGetUserExperiencesByIdSuccess(){
+        try {
+            obtainToken("exampleuser1@email.com");
+        } catch (Exception e) {
+            log.error("e: ", e);
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .when()
+                .get("/api/v1/users/3/experiences")
+                .then()
+                .statusCode(200)
+                .contentType("application/json")
+                .body("", hasSize(greaterThan(0)))
+                .body("[0].id", notNullValue())
+                .body("[0].title", notNullValue())
+                .body("[0].description", notNullValue())
+                .body("[0].date", notNullValue())
+                .body("[0].categories", hasSize(greaterThan(0)))
+                .body("[0].categories", hasSize(lessThan(4)));
+    }
+
+    @Test
+    void testGetUserEmptyExperiencesByIdSuccess(){
+        try {
+            obtainToken("test@email.com");
+        } catch (Exception e) {
+            log.error("e: ", e);
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .when()
+                .get("/api/v1/users/2/experiences")
+                .then()
+                .statusCode(200)
+                .contentType("application/json")
+                .body("", hasSize(0));
+    }
+
+    @Test
+    void testGetUserExperiencesByAdmin(){
+        try {
+            obtainToken("testadmin@email.com");
+        } catch (Exception e) {
+            log.error("e: ", e);
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .when()
+                .get("/api/v1/users/3/experiences")
+                .then()
+                .statusCode(200)
+                .contentType("application/json")
+                .body("", hasSize(greaterThan(0)))
+                .body("[0].id", notNullValue())
+                .body("[0].title", notNullValue())
+                .body("[0].description", notNullValue())
+                .body("[0].date", notNullValue())
+                .body("[0].categories", hasSize(greaterThan(0)))
+                .body("[0].categories", hasSize(lessThan(4)));
+    }
+
+    @Test
+    void testGetUserExperiencesByIdFails(){
+        try {
+            obtainToken("test@email.com");
+        } catch (Exception e) {
+            log.error("e: ", e);
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .when()
+                .get("/api/v1/users/3/experiences")
+                .then()
+                .statusCode(403);
+    }
+
+    @Test
+    void testGetUserExperiencesWithoutAuthentication(){
+
+        given()
+                .when()
+                .get("/api/v1/users/3/experiences")
+                .then()
+                .statusCode(401);
     }
 }

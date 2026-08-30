@@ -9,7 +9,6 @@ import { createExperienceService } from "@shared/services/experience.service";
 import { useUserStore } from "@shared/stores/userStore";
 
 import { APIURL } from "src/config/env";
-import AvailableSoonPage from "src/pages/AvailableSoonPage/AvailableSoonPage";
 import ExperienceFormPage from "src/pages/ExperienceFormPage/ExperienceFormPage";
 import { authenticateUser, clearFetchAndUserStore } from "tests/testAuthentication";
 import DetailedExperiencePage from "src/pages/DetailedExperiencePage/DetailedExperiencePage";
@@ -21,7 +20,7 @@ const testExperienceService = createExperienceService(testAPI);
 describe("ExperienceFormPage integration", () => {
 
   beforeEach(async () => {
-    await authenticateUser(true);
+    await authenticateUser("test@email.com");
     const user = useUserStore.getState().user;
     useUserStore.getState().setUser(user);
   });
@@ -52,17 +51,15 @@ describe("ExperienceFormPage integration", () => {
     expect(screen.getByLabelText(/experience description/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /publish/i })).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(screen.getByRole("checkbox", { name: /accommodation/i })).toBeInTheDocument();
-    });
-
     const cities = await testCityService.getAll();
 
-    expect(
-      screen.getByRole("option", {
-        name: new RegExp(`${cities[0].name}, ${cities[0].country}`, "i"),
-      })
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole("checkbox", { name: /accommodation/i })).toBeInTheDocument();
+      expect(screen.getByRole("option", {name: new RegExp(`${cities[0].name}, ${cities[0].country}`, "i"),})).toBeInTheDocument();
+    });
+
+
+    
   });
 
   it("redirects to the login page when there is no authenticated user", async () => {
@@ -105,8 +102,6 @@ describe("ExperienceFormPage integration", () => {
       </MemoryRouter>
     );
 
-    console.log("Checkpoint");
-
     await waitFor(() => {
       expect(screen.getByRole("checkbox", { name: /accommodation/i })).toBeInTheDocument();
     });
@@ -127,9 +122,6 @@ describe("ExperienceFormPage integration", () => {
       target: { value: "A short trip with many activity categories." },
     });
 
-        console.log("Checkpoint 2");
-
-
     const checkboxList = screen.getAllByRole("checkbox");
     fireEvent.click(checkboxList[0]);
     fireEvent.click(checkboxList[1]);
@@ -147,7 +139,7 @@ describe("ExperienceFormPage integration", () => {
 
   it("publishes a valid experience and navigates to experience detailed page", async () => {
     const cities = await testCityService.getAll();
-    const title = `Real Experience ${Date.now()}`;
+    const title = `Real Experience`;
 
     render(
       <MemoryRouter initialEntries={["/experiences/new"]}>

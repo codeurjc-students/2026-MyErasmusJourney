@@ -22,7 +22,7 @@ const testCityService = createCityService(testAPI);
 describe("CityFormPage", () => {
 
   beforeAll(async () => {
-    await authenticateUser(true);
+    await authenticateUser("testadmin@email.com");
   });
 
   beforeEach(() => {
