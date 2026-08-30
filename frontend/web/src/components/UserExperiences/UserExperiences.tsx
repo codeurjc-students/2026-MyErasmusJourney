@@ -40,7 +40,7 @@ export default function UserExperiences({ userService = createUserService(API), 
         else{
             setExperiences(userExperiences)
         }
-    })
+    },[])
 
     return(<>
         <div className="md:pr-8 md:border-r">
