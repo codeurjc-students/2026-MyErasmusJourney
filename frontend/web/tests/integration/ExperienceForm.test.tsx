@@ -21,7 +21,7 @@ const testExperienceService = createExperienceService(testAPI);
 describe("ExperienceFormPage integration", () => {
 
   beforeEach(async () => {
-    await authenticateUser(true);
+    await authenticateUser("test@email.com");
     const user = useUserStore.getState().user;
     useUserStore.getState().setUser(user);
   });

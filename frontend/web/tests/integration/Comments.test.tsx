@@ -28,7 +28,7 @@ describe("Comments integration tests", () => {
   let authenticatedUser: UserSimpleDTO;
 
   beforeAll(async () => {
-    authenticatedUser = await authenticateUser(false);
+    authenticatedUser = await authenticateUser("test@email.com");
   });
 
   beforeEach(() => {

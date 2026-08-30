@@ -45,20 +45,14 @@ export async function authenticateUserToDelete(): Promise<UserSimpleDTO>{
     return user;
 }
 
-export async function authenticateUser(admin: boolean): Promise<UserSimpleDTO> {
+export async function authenticateUser(email: string): Promise<UserSimpleDTO> {
 
     setupFetchWithCookies();
 
-    const loginRequest: LoginRequest = admin
-        ? {
-            username: "testadmin@email.com",
+    const loginRequest: LoginRequest = {
+            username: email,
             password: "password"
         }
-        : {
-            username: "test@email.com",
-            password: "password"
-        };
-
     const user = await obtainAuthenticatedUser(loginRequest);
 
     setUser(user);
