@@ -19,7 +19,7 @@ public class CommentsTest extends AuthenticatedE2ETest{
         JSONObject body = new JSONObject();
         body.put("description", "test description");
 
-        obtainToken(false);
+        obtainToken("test@email.com");
 
         given()
                 .cookie("AuthToken", this.token)
@@ -40,7 +40,7 @@ public class CommentsTest extends AuthenticatedE2ETest{
         JSONObject body = new JSONObject();
         body.put("description", "test description");
 
-        obtainToken(false);
+        obtainToken("test@email.com");
 
         given()
                 .cookie("AuthToken", this.token)

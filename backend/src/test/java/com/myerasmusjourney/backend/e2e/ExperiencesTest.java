@@ -65,7 +65,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
         body.put("categories", categories);
         body.put("date", LocalDate.of(2022, 1, 13));
 
-        obtainToken(false);
+        obtainToken("test@email.com");
 
         given()
                 .cookie("AuthToken", this.token)
@@ -123,7 +123,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
         body.put("categories", categories);
         body.put("date", JSONObject.NULL);
 
-        obtainToken(false);
+        obtainToken("test@email.com");
 
         given()
                 .cookie("AuthToken", this.token)

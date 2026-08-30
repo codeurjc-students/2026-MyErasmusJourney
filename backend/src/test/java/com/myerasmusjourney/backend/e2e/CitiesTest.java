@@ -20,7 +20,7 @@ public class CitiesTest extends AuthenticatedE2ETest {
         body.put("country", "Spain");
         body.put("description", "Capital of Spain");
 
-        obtainToken(true);
+        obtainToken("testadmin@email.com");
 
         given()
                 .cookie("AuthToken", this.token)
@@ -42,7 +42,7 @@ public class CitiesTest extends AuthenticatedE2ETest {
         germanCity.put("country", "Germany");
         germanCity.put("description", "City of Germany");
 
-        obtainToken(true);
+        obtainToken("testadmin@email.com");
 
         given()
                 .cookie("AuthToken", this.token)
@@ -81,7 +81,7 @@ public class CitiesTest extends AuthenticatedE2ETest {
         germanCity.put("country", "Germany");
         germanCity.put("description", "Capital of Germany");
 
-        obtainToken(true);
+        obtainToken("testadmin@email.com");
 
         given()
                 .cookie("AuthToken", this.token)
@@ -115,7 +115,7 @@ public class CitiesTest extends AuthenticatedE2ETest {
         body.put("country", "Spain");
         body.put("description", "Capital of Spain");
 
-        obtainToken(false);
+        obtainToken("test@email.com");
 
         given()
                 .cookie("AuthToken", this.token)
