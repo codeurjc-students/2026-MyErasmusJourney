@@ -128,7 +128,7 @@
           "response": []
         },
         {
-          "name": "Post comment",
+          "name": "Post Comment",
           "request": {
             "auth": {
               "type": "bearer",
@@ -166,7 +166,7 @@
           "response": []
         },
         {
-          "name": "Get comments",
+          "name": "Get Comments",
           "request": {
             "method": "GET",
             "header": [],
@@ -303,6 +303,25 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Get User Experiences",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{APIURL}}/users/3/experiences",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "users",
+                "3",
+                "experiences"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -374,7 +393,7 @@
       "name": "City",
       "item": [
         {
-          "name": "Add city",
+          "name": "Add City",
           "request": {
             "auth": {
               "type": "bearer",
@@ -411,7 +430,7 @@
           "response": []
         },
         {
-          "name": "Get cities",
+          "name": "Get Cities",
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
