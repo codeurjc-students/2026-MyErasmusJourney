@@ -30,7 +30,7 @@ export default function UserExperiences({ userService = createUserService(API), 
                 id = user.id;
             }
             const data = await userService.getExperiences(id);
-            setExperiences(data);
+            setExperiences(data.reverse());
         };
 
         
