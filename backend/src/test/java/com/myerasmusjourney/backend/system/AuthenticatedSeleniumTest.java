@@ -15,10 +15,10 @@ public class AuthenticatedSeleniumTest extends BaseSeleniumTest{
     void setUpWebDriver(){
         startWebDriver();
         driver.get("http://localhost:" + FRONTEND_PORT);
-        authenticateTest();
+        authenticateUser("test@email.com");
     }
 
-    private void authenticateTest(){
+    private void authenticateUser(String username){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -36,7 +36,7 @@ public class AuthenticatedSeleniumTest extends BaseSeleniumTest{
         WebElement email = driver.findElement(By.id("email"));
         WebElement password = driver.findElement(By.id("password"));
 
-        email.sendKeys("test@email.com");
+        email.sendKeys(username);
         password.sendKeys("password");
 
         WebElement button = driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/form/button"));
@@ -66,32 +66,7 @@ public class AuthenticatedSeleniumTest extends BaseSeleniumTest{
     protected void authenticateAdminTest(){
         logOutUser();
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.linkText("Log in")
-        ));
-
-        WebElement linkToLogIn = driver.findElement(By.linkText("Log in"));
-
-        linkToLogIn.click();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("email")
-        ));
-
-        WebElement email = driver.findElement(By.id("email"));
-        WebElement password = driver.findElement(By.id("password"));
-
-        email.sendKeys("testadmin@email.com");
-        password.sendKeys("password");
-
-        WebElement button = driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/form/button"));
-        button.click();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("profileTitle")
-        ));
+        authenticateUser("testadmin@email.com");
     }
 
     private void createUserToDelete(){
@@ -133,31 +108,12 @@ public class AuthenticatedSeleniumTest extends BaseSeleniumTest{
 
         createUserToDelete();
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        authenticateUser("delete@email.com");
+    }
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.linkText("Log in")
-        ));
+    protected void authenticateWithSpecificUser(String email){
+        logOutUser();
 
-        WebElement linkToLogIn = driver.findElement(By.linkText("Log in"));
-
-        linkToLogIn.click();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("email")
-        ));
-
-        WebElement email = driver.findElement(By.id("email"));
-        WebElement password = driver.findElement(By.id("password"));
-
-        email.sendKeys("delete@email.com");
-        password.sendKeys("password");
-
-        WebElement button = driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/form/button"));
-        button.click();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("profileTitle")
-        ));
+        authenticateUser(email);
     }
 }
