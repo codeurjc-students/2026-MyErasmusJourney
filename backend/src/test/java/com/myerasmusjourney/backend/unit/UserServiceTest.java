@@ -57,7 +57,7 @@ public class UserServiceTest {
         savedUser.setId(1L);
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
-        UserDTO DTO = new UserDTO(1L, "Test", "TestUser", "test@gmail.com", "Munich, Germany", List.of("USER"));
+        UserDTO DTO = new UserDTO(1L, "Test", "TestUser", "test@gmail.com", "Munich, Germany", List.of("USER"), List.of(), List.of());
         when(userMapper.toDTO(any(User.class))).thenReturn(DTO);
 
         when(passwordEncoder.encode(any(String.class))).thenReturn("encodedPassword");
@@ -78,7 +78,7 @@ public class UserServiceTest {
         User user = new User("Test", "TestUser", "test@gmail.com", "password", "Munich", "Germany");
         when(userRepository.findByEmail(newUser.email())).thenReturn(user);
 
-        UserDTO DTO = new UserDTO(null, "Test", "TestUser","test@gmail.com","Munich, Germany", List.of("USER"));
+        UserDTO DTO = new UserDTO(null, "Test", "TestUser","test@gmail.com","Munich, Germany", List.of("USER"), List.of(), List.of());
         when(userMapper.toDTO(any(User.class))).thenReturn(DTO);
 
         UserDTO userDTO = userService.createUser(newUser);
@@ -217,7 +217,9 @@ public class UserServiceTest {
                 "john",
                 "john@email.com",
                 "Munich, Germany",
-                List.of("USER")
+                List.of("USER"),
+                List.of(),
+                List.of()
         );
 
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -260,7 +262,9 @@ public class UserServiceTest {
                 "john",
                 "john@email.com",
                 null,
-                List.of("USER")
+                List.of("USER"),
+                List.of(),
+                List.of()
         );
 
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -332,7 +336,9 @@ public class UserServiceTest {
                 "john",
                 "john@email.com",
                 "Munich, Germany",
-                List.of("USER")
+                List.of("USER"),
+                List.of(),
+                List.of()
         );
 
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -374,7 +380,9 @@ public class UserServiceTest {
                 "john",
                 "john@email.com",
                 null,
-                List.of("USER")
+                List.of("USER"),
+                List.of(),
+                List.of()
         );
 
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -438,7 +446,9 @@ public class UserServiceTest {
                 "john",
                 "john@email.com",
                 "Munich, Germany",
-                List.of("USER")
+                List.of("USER"),
+                List.of(),
+                List.of()
         );
 
         SecurityContext securityContext = mock(SecurityContext.class);
