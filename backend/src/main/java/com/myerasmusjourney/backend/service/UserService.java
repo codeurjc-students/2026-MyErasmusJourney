@@ -76,6 +76,7 @@ public class UserService {
         return userMapper.toSimpleDTO(this.getLoggedUser());
     }
 
+    @Transactional
     public UserDTO getUserById(Long id) {
         User user = getLoggedUser();
         if (user == null) return null;

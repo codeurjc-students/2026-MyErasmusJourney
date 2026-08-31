@@ -1,14 +1,14 @@
 package com.myerasmusjourney.backend.integration;
 
 import com.myerasmusjourney.backend.TestDataBase;
+import com.myerasmusjourney.backend.domain.Comment;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
-import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
-import com.myerasmusjourney.backend.dto.UserDTO;
-import com.myerasmusjourney.backend.dto.UserFormDTO;
-import com.myerasmusjourney.backend.dto.UserSimpleDTO;
+import com.myerasmusjourney.backend.dto.*;
+import com.myerasmusjourney.backend.mapper.CommentMapper;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import com.myerasmusjourney.backend.mapper.UserMapper;
+import com.myerasmusjourney.backend.repository.CommentRepository;
 import com.myerasmusjourney.backend.repository.ExperienceRepository;
 import com.myerasmusjourney.backend.repository.UserRepository;
 import com.myerasmusjourney.backend.service.UserService;
@@ -22,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -41,7 +42,13 @@ public class UserServiceTest extends TestDataBase{
     private ExperienceRepository experienceRepository;
 
     @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
     private ExperienceMapper experienceMapper;
+
+    @Autowired
+    private CommentMapper commentMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -192,6 +199,7 @@ public class UserServiceTest extends TestDataBase{
     }
 
     @Test
+    @Transactional
     void testGetUserByIdSuccess() {
         Authentication authentication = new UsernamePasswordAuthenticationToken("user1@gmail.com",null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -219,6 +227,7 @@ public class UserServiceTest extends TestDataBase{
     }
 
     @Test
+    @Transactional
     void testGetUserByIdAdmin() {
 
         User newAdmin = new User("admin", "TestAdmin", "integrationAdmin@email.com", passwordEncoder.encode("password"), "", "", List.of("USER", "ADMIN"));
@@ -246,6 +255,7 @@ public class UserServiceTest extends TestDataBase{
     }
 
     @Test
+    @Transactional
     void testDeleteUserByIdSuccess() {
         Authentication authentication = new UsernamePasswordAuthenticationToken("user1@gmail.com",null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -273,6 +283,7 @@ public class UserServiceTest extends TestDataBase{
     }
 
     @Test
+    @Transactional
     void testDeleteUserByIdAdmin() {
 
         User newAdmin = new User("admin", "TestAdmin", "integrationAdmin@email.com", passwordEncoder.encode("password"), "", "", List.of("USER", "ADMIN"));
@@ -413,6 +424,119 @@ public class UserServiceTest extends TestDataBase{
         assertTrue(user.getId()>0L);
 
         List<ExperienceSimpleDTO> result = userService.getExperiences(user.getId());
+
+        assertNull(result);
+    }
+
+    @Test
+    @Transactional
+    void testGetUserCommentsByIdSuccess() {
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken("user1@gmail.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User user = userRepository.findByEmail("user1@gmail.com");
+
+        Comment comment1 = new Comment();
+        comment1.setDescription("comment 1");
+
+        Comment comment2 = new Comment();
+        comment2.setDescription("comment 2");
+
+        comment1 = commentRepository.save(comment1);
+        comment2 = commentRepository.save(comment2);
+
+        user.addComment(comment1);
+        user.addComment(comment2);
+
+        user = userRepository.save(user);
+
+        assertNotNull(user);
+        assertTrue(user.getId()>0L);
+
+        Collection<CommentSimpleDTO> result = userService.getComments(user.getId());
+
+        Collection<CommentSimpleDTO> expected = commentMapper.toSimpleDTOs(List.of(comment1, comment2));
+
+        assertNotNull(result);
+
+
+        assertEquals(expected.size(), result.size());
+        assertTrue(expected.containsAll(result));
+
+    }
+
+    @Test
+    @Transactional
+    void testGetUserCommentsByIdAdmin() {
+
+        User newAdmin = new User("admin", "TestAdmin", "integrationAdmin@email.com", passwordEncoder.encode("password"), "", "", List.of("USER", "ADMIN"));
+        userRepository.save(newAdmin);
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken("integrationAdmin@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User authenticatedUser = userRepository.findByEmail("integrationAdmin@email.com");
+
+        assertNotNull(authenticatedUser);
+        assertEquals(newAdmin.getId(), authenticatedUser.getId());
+        assertTrue(authenticatedUser.getRoles().contains("ADMIN"));
+
+        User user = userRepository.findByEmail("user1@gmail.com");
+
+        Comment comment1 = new Comment();
+        comment1.setDescription("comment 1");
+
+        Comment comment2 = new Comment();
+        comment2.setDescription("comment 2");
+
+        comment1 = commentRepository.save(comment1);
+        comment2 = commentRepository.save(comment2);
+
+        user.addComment(comment1);
+        user.addComment(comment2);
+
+        user = userRepository.save(user);
+
+        assertNotNull(user);
+        assertTrue(user.getId()>0L);
+
+        Collection<CommentSimpleDTO> result = userService.getComments(user.getId());
+
+        Collection<CommentSimpleDTO> expected = commentMapper.toSimpleDTOs(List.of(comment1, comment2));
+
+        assertNotNull(result);
+
+        assertEquals(expected.size(), result.size());
+        assertTrue(expected.containsAll(result));
+    }
+
+    @Test
+    @Transactional
+    void testGetUserCommentsFail(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken("user2@gmail.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User user = userRepository.findByEmail("user1@gmail.com");
+
+        Comment comment1 = new Comment();
+        comment1.setDescription("comment 1");
+
+        Comment comment2 = new Comment();
+        comment2.setDescription("comment 2");
+
+        comment1 = commentRepository.save(comment1);
+        comment2 = commentRepository.save(comment2);
+
+        user.addComment(comment1);
+        user.addComment(comment2);
+
+        user = userRepository.save(user);
+
+        assertNotNull(user);
+        assertTrue(user.getId()>0L);
+
+        Collection<CommentSimpleDTO> result = userService.getComments(user.getId());
 
         assertNull(result);
     }
