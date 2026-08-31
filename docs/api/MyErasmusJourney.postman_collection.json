@@ -305,6 +305,25 @@
           "response": []
         },
         {
+          "name": "Get User Comments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{APIURL}}/users/3/comments",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "users",
+                "3",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Get User Experiences",
           "request": {
             "method": "GET",

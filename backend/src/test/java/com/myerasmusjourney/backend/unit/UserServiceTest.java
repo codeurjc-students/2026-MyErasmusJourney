@@ -1,11 +1,10 @@
 package com.myerasmusjourney.backend.unit;
 
+import com.myerasmusjourney.backend.domain.Comment;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
-import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
-import com.myerasmusjourney.backend.dto.UserDTO;
-import com.myerasmusjourney.backend.dto.UserFormDTO;
-import com.myerasmusjourney.backend.dto.UserSimpleDTO;
+import com.myerasmusjourney.backend.dto.*;
+import com.myerasmusjourney.backend.mapper.CommentMapper;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import com.myerasmusjourney.backend.mapper.UserMapper;
 import com.myerasmusjourney.backend.repository.UserRepository;
@@ -21,6 +20,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -41,6 +41,9 @@ public class UserServiceTest {
 
     @Mock
     private ExperienceMapper experienceMapper;
+
+    @Mock
+    private CommentMapper commentMapper;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -589,6 +592,151 @@ public class UserServiceTest {
 
         user.addExperience(experience1);
         user.addExperience(experience2);
+
+        User user2 = new User();
+        user2.setEmail("user2@email.com");
+        user2.setId(2L);
+        user2.setRoles(List.of("USER"));
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("user2@email.com");
+        when(userRepository.findByEmail("user2@email.com")).thenReturn(user2);
+
+        List<ExperienceSimpleDTO> result = userService.getExperiences(1L);
+
+        assertNull(result);
+
+        verify(userRepository).findByEmail("user2@email.com");
+    }
+
+    @Test
+    void testGetUserCommentsByUser(){
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+
+        Comment comment1 = new Comment();
+        comment1.setDescription("Comment 1");
+        comment1.setId(1L);
+
+        Comment comment2 = new Comment();
+        comment2.setDescription("Comment 2");
+        comment2.setId(2L);
+
+        user.addComment(comment1);
+        user.addComment(comment2);
+
+        List<CommentSimpleDTO> expected = List.of(
+                new CommentSimpleDTO(1L, null, "Comment 1", null),
+                new CommentSimpleDTO(2L, null, "Comment 2", null)
+
+        );
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("user@email.com");
+        when(userRepository.findByEmail("user@email.com")).thenReturn(user);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(commentMapper.toSimpleDTOs(argThat(comments -> comments.size() == 2))).thenReturn(expected);
+
+        Collection<CommentSimpleDTO> result = userService.getComments(1L);
+
+        assertEquals(expected.size(), result.size());
+
+        int i = 0;
+        for(CommentSimpleDTO res: result){
+            CommentSimpleDTO exp = expected.get(i);
+            assertEquals(exp, res);
+            i++;
+        }
+
+        verify(userRepository).findByEmail("user@email.com");
+        verify(userRepository).findById(1L);
+        verify(commentMapper).toSimpleDTOs(argThat(comments -> comments.size() == 2));
+    }
+
+    @Test
+    void testGetUserCommentsByAdmin(){
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+
+        Comment comment1 = new Comment();
+        comment1.setDescription("Comment 1");
+        comment1.setId(1L);
+
+        Comment comment2 = new Comment();
+        comment2.setDescription("Comment 2");
+        comment2.setId(2L);
+
+        user.addComment(comment1);
+        user.addComment(comment2);
+
+
+
+        User admin = new User();
+        admin.setEmail("admin@email.com");
+        admin.setId(2L);
+        admin.setRoles(List.of("USER", "ADMIN"));
+
+        List<CommentSimpleDTO> expected = List.of(
+                new CommentSimpleDTO(1L, null, "Comment 1", null),
+                new CommentSimpleDTO(2L, null, "Comment 2", null)
+
+        );
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("admin@email.com");
+        when(userRepository.findByEmail("admin@email.com")).thenReturn(admin);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(commentMapper.toSimpleDTOs(argThat(comments -> comments.size() == 2))).thenReturn(expected);
+
+        Collection<CommentSimpleDTO> result = userService.getComments(1L);
+
+        assertEquals(expected.size(), result.size());
+
+        int i = 0;
+        for(CommentSimpleDTO res: result){
+            CommentSimpleDTO exp = expected.get(i);
+            assertEquals(exp, res);
+            i++;
+        }
+
+        verify(userRepository).findByEmail("admin@email.com");
+        verify(userRepository).findById(1L);
+        verify(commentMapper).toSimpleDTOs(argThat(comments -> comments.size() == 2));
+    }
+
+    @Test
+    void testGetUserCommentsFail(){
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+
+        Comment comment1 = new Comment();
+        comment1.setDescription("Comment 1");
+        comment1.setId(1L);
+
+        Comment comment2 = new Comment();
+        comment2.setDescription("Comment 2");
+        comment2.setId(2L);
+
+        user.addComment(comment1);
+        user.addComment(comment2);
 
         User user2 = new User();
         user2.setEmail("user2@email.com");
