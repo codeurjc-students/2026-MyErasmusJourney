@@ -2,6 +2,7 @@ package com.myerasmusjourney.backend.initializer;
 
 import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.service.CityService;
+import com.myerasmusjourney.backend.service.CommentService;
 import com.myerasmusjourney.backend.service.ExperienceService;
 import com.myerasmusjourney.backend.service.UserService;
 import jakarta.annotation.PostConstruct;
@@ -27,6 +28,9 @@ public class DataInitializer {
     @Autowired
     private ExperienceService experienceService;
 
+    @Autowired
+    private CommentService commentService;
+
     @PostConstruct
     @Transactional
     public void init(){
@@ -50,6 +54,8 @@ public class DataInitializer {
         ExperienceFormDTO experienceFormDTO2 = new ExperienceFormDTO(9F, "Example experience 2", "Long description about an amazing adventure or small story", LocalDate.now(), List.of("Studies", "Documentation"), 2L);
         ExperienceFormDTO experienceFormDTO3 = new ExperienceFormDTO(3.1F, "Example experience 3", "Long description about an amazing adventure or small story", LocalDate.now(), List.of("Studies", "Documentation"), 3L);
 
+        CommentFormDTO commentFormDTO = new CommentFormDTO("My opinion or point of view regarding the experience");
+
         Authentication authentication = new UsernamePasswordAuthenticationToken("exampleuser1@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         experienceService.createExperience(experienceFormDTO1);
@@ -58,8 +64,22 @@ public class DataInitializer {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         experienceService.createExperience(experienceFormDTO2);
 
+
         authentication = new UsernamePasswordAuthenticationToken("exampleuser3@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         experienceService.createExperience(experienceFormDTO3);
+
+        authentication = new UsernamePasswordAuthenticationToken("exampleuser3@email.com", null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        commentService.postComment(1L, commentFormDTO);
+
+        authentication = new UsernamePasswordAuthenticationToken("exampleuser2@email.com", null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        commentService.postComment(3L, commentFormDTO);
+
+        authentication = new UsernamePasswordAuthenticationToken("exampleuser1@email.com", null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        commentService.postComment(2L, commentFormDTO);
+
     }
 }
