@@ -55,6 +55,7 @@ public class CommentsTest extends AuthenticatedE2ETest{
                 .get("/api/v1/experiences/2/comments")
                 .then()
                 .statusCode(200)
-                .body("", hasSize(greaterThan(0)));
+                .body("", hasSize(greaterThan(0)))
+                .body("[0].experienceId", equalTo(2));
     }
 }

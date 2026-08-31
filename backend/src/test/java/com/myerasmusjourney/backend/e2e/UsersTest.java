@@ -444,4 +444,79 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .then()
                 .statusCode(401);
     }
+
+    @Test
+    void testGetUserCommentsByIdSuccess(){
+        try {
+            obtainToken("exampleuser1@email.com");
+        } catch (Exception e) {
+            log.error("e: ", e);
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .when()
+                .get("/api/v1/users/3/comments")
+                .then()
+                .statusCode(200)
+                .contentType("application/json")
+                .body("", hasSize(greaterThan(0)))
+                .body("[0].id", notNullValue())
+                .body("[0].description", notNullValue())
+                .body("[0].date", notNullValue())
+                .body("[0].experienceId", greaterThan(0))
+                .body("[0].authorName", notNullValue());
+    }
+
+    @Test
+    void testGetUserCommentsByAdmin(){
+        try {
+            obtainToken("testadmin@email.com");
+        } catch (Exception e) {
+            log.error("e: ", e);
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .when()
+                .get("/api/v1/users/3/comments")
+                .then()
+                .statusCode(200)
+                .contentType("application/json")
+                .body("", hasSize(greaterThan(0)))
+                .body("[0].id", notNullValue())
+                .body("[0].description", notNullValue())
+                .body("[0].date", notNullValue())
+                .body("[0].experienceId", greaterThan(0))
+                .body("[0].authorName", notNullValue());
+    }
+
+    @Test
+    void testGetUserCommentsByIdFails(){
+        try {
+            obtainToken("test@email.com");
+        } catch (Exception e) {
+            log.error("e: ", e);
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .when()
+                .get("/api/v1/users/3/comments")
+                .then()
+                .statusCode(403);
+    }
+
+    @Test
+    void testGetUserCommentsWithoutAuthentication(){
+
+        given()
+                .when()
+                .get("/api/v1/users/3/comments")
+                .then()
+                .statusCode(401);
+    }
 }
