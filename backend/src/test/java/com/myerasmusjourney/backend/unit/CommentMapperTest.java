@@ -85,18 +85,23 @@ class CommentMapperTest {
         User user = new User();
         user.setDisplayName("testAuthor");
 
+        Experience experience = new Experience();
+        experience.setId(5L);
+
         Comment comment = new Comment();
         comment.setId(2L);
         comment.setDate(LocalDate.now());
         comment.setDescription("testing");
         comment.setAuthor(user);
+        comment.setExperience(experience);
 
         CommentSimpleDTO expected =
                 new CommentSimpleDTO(
                         2L,
                         LocalDate.now(),
                         "testing",
-                        "testAuthor"
+                        "testAuthor",
+                        5L
                 );
 
         CommentSimpleDTO result = mapper.toSimpleDTO(comment);

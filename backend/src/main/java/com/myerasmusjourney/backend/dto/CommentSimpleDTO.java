@@ -6,5 +6,6 @@ public record CommentSimpleDTO(
         Long id,
         LocalDate date,
         String description,
-        String authorName
+        String authorName,
+        Long experienceId
 ) {}

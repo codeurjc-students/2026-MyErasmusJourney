@@ -632,8 +632,8 @@ public class UserServiceTest {
         user.addComment(comment2);
 
         List<CommentSimpleDTO> expected = List.of(
-                new CommentSimpleDTO(1L, null, "Comment 1", null),
-                new CommentSimpleDTO(2L, null, "Comment 2", null)
+                new CommentSimpleDTO(1L, null, "Comment 1", null, 4L),
+                new CommentSimpleDTO(2L, null, "Comment 2", null, 5L)
 
         );
 
@@ -689,8 +689,8 @@ public class UserServiceTest {
         admin.setRoles(List.of("USER", "ADMIN"));
 
         List<CommentSimpleDTO> expected = List.of(
-                new CommentSimpleDTO(1L, null, "Comment 1", null),
-                new CommentSimpleDTO(2L, null, "Comment 2", null)
+                new CommentSimpleDTO(1L, null, "Comment 1", null, 22L),
+                new CommentSimpleDTO(2L, null, "Comment 2", null, 3L)
 
         );
 

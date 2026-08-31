@@ -1,6 +1,7 @@
 package com.myerasmusjourney.backend.unit;
 
 import com.myerasmusjourney.backend.domain.City;
+import com.myerasmusjourney.backend.domain.Comment;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
 import com.myerasmusjourney.backend.dto.*;
@@ -89,10 +90,12 @@ public class ExperienceMapperTest {
         City city = new City("Madrid", "Spain", "description");
         User user = new User("test", "test", "test@gmail.com", "password", "valencia", "spain");
         Experience exp = new Experience("Title", "Description", 6.8F, null, List.of("Gastronomy", "Documentation"), city, user);
+        Comment comment = new Comment("test comment", user, exp);
+        exp.addComment(comment);
 
         CitySimpleDTO citySimpleDTO = new CitySimpleDTO(null, "Madrid", "description", "Spain");
         UserSimpleDTO userSimpleDTO = new UserSimpleDTO(null, "test", "test@gmail.com");
-        CommentSimpleDTO commentSimpleDTO = new CommentSimpleDTO(1L,LocalDate.now(), "test comment", "test");
+        CommentSimpleDTO commentSimpleDTO = new CommentSimpleDTO(null,LocalDate.now(), "test comment", "test", null);
         ExperienceDTO dto = new ExperienceDTO(null, LocalDate.now(), 6.8F, "Title", "Description",  List.of(Category.Gastronomy, Category.Documentation), citySimpleDTO, userSimpleDTO, List.of(commentSimpleDTO));
 
         ExperienceDTO result = mapper.toDTO(exp);
@@ -103,7 +106,7 @@ public class ExperienceMapperTest {
         assertEquals(dto.date(), result.date());
         assertEquals(dto.rating(), result.rating());
         assertEquals(dto.categories().size(), result.categories().size());
-        assertTrue(dto.comments().contains(commentSimpleDTO));
+        assertTrue(result.comments().contains(commentSimpleDTO));
 
         exp = null;
 

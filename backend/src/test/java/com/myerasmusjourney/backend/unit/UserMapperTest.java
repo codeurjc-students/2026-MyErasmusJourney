@@ -47,7 +47,7 @@ public class UserMapperTest {
 
         u.addComment(new Comment());
 
-        UserDTO expected = new UserDTO(null, "John Doe", "jdoe", "john@example.com", "Munich, Germany", List.of("USER"), List.of(new ExperienceSimpleDTO(null, null, null, null, null, List.of(), null, null, null)), List.of(new CommentSimpleDTO(null, null, null, null)));
+        UserDTO expected = new UserDTO(null, "John Doe", "jdoe", "john@example.com", "Munich, Germany", List.of("USER"), List.of(new ExperienceSimpleDTO(null, null, null, null, null, List.of(), null, null, null)), List.of(new CommentSimpleDTO(null, null, null, null, null)));
 
         UserDTO result = mapper.toDTO(u);
 
