@@ -1,9 +1,6 @@
 package com.myerasmusjourney.backend.controller;
 
-import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
-import com.myerasmusjourney.backend.dto.UserDTO;
-import com.myerasmusjourney.backend.dto.UserFormDTO;
-import com.myerasmusjourney.backend.dto.UserSimpleDTO;
+import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,5 +55,12 @@ public class UserRestController {
         Collection<ExperienceSimpleDTO> experienceSimpleDTOs =  userService.getExperiences(id);
         if (experienceSimpleDTOs == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         return ResponseEntity.ok(experienceSimpleDTOs);
+    }
+
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<Collection<CommentSimpleDTO>> getCommentsByUser(@PathVariable Long id){
+        Collection<CommentSimpleDTO> commentSimpleDTOS =  userService.getComments(id);
+        if (commentSimpleDTOS == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        return ResponseEntity.ok(commentSimpleDTOS);
     }
 }
