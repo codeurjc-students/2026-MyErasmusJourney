@@ -9,6 +9,7 @@ import "./UserPage.css";
 import { createAuthService } from "@shared/services/auth.service";
 import type { authServiceProps } from "@shared/interfaces/authServiceProps";
 import UserExperiences from "../../components/UserExperiences/UserExperiences";
+import UserComments from "../../components/UserComments/UserComments";
 
 export default function UserPage({ authService = createAuthService(API), userService = createUserService(API) }: authServiceProps & userServiceProps){
 
@@ -35,7 +36,6 @@ export default function UserPage({ authService = createAuthService(API), userSer
         const fetchUser = async () => {
             if(user != null){
                 try{
-                    
                     {
                         const data = await userService.getUserById(user.id);
                         setUserDTO(data);
@@ -120,9 +120,7 @@ export default function UserPage({ authService = createAuthService(API), userSer
             </div>
             <div className="mt-16 grid md:grid-cols-2 gap-10">
                 <UserExperiences userService={userService} userExperiences={userDTO?.experiences} userId={userDTO?.id}/>
-                <div className="md:pl-8">
-                    <h4 className="mb-6">Comments</h4>
-                </div>
+                <UserComments userService={userService} userComments={userDTO?.comments} userId={userDTO?.id}/>
             </div>
 
         </div>
