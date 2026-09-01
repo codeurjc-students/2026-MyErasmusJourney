@@ -55,7 +55,6 @@ public class ExperienceServiceTest {
     @Mock
     private UserService userService;
 
-
     @InjectMocks
     private ExperienceService experienceService;
 
@@ -391,5 +390,89 @@ public class ExperienceServiceTest {
 
         verify(experienceRepository).findById(1L);
         verify(commentMapper).toSimpleDTOs(argThat(comments -> comments.size() == 2));
+    }
+
+    @Test
+    void testDeleteExperienceByIdSuccess(){
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+
+        Experience experience = new Experience();
+        experience.setId(2L);
+        experience.setTitle("Deleted experience");
+        experience.setAuthor(user);
+        user.addExperience(experience);
+
+        ExperienceDTO experienceDTO = new ExperienceDTO(2L, null, null, "Deleted experience", null, null, null, null, null);
+
+        when(userService.getLoggedUser()).thenReturn(user);
+        when(experienceRepository.findById(2L)).thenReturn(Optional.of(experience));
+        when(experienceMapper.toDTO(experience)).thenReturn(experienceDTO);
+
+        ExperienceDTO result = experienceService.deleteExperienceById(2L);
+
+        assertEquals(experienceDTO, result);
+
+        verify(userService).getLoggedUser();
+        verify(experienceRepository).findById(2L);
+        verify(experienceMapper).toDTO(experience);
+    }
+
+    @Test
+    void testDeleteExperienceByIdFails(){
+        User user2 = new User();
+        user2.setId(2L);
+
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+
+        Experience experience = new Experience();
+        experience.setId(2L);
+        experience.setTitle("Deleted experience");
+        experience.setAuthor(user);
+        user.addExperience(experience);
+
+        when(userService.getLoggedUser()).thenReturn(user2);
+        when(experienceRepository.findById(2L)).thenReturn(Optional.of(experience));
+
+        ExperienceDTO result = experienceService.deleteExperienceById(2L);
+
+        assertNull(result);
+
+        verify(userService).getLoggedUser();
+        verify(experienceRepository).findById(2L);
+
+    }
+
+    @Test
+    void testDeleteExperienceByAdmin(){
+        User user2 = new User();
+        user2.setId(2L);
+        user2.setRoles(List.of("USER", "ADMIN"));
+
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+
+        Experience experience = new Experience();
+        experience.setId(2L);
+        experience.setTitle("Deleted experience");
+        user.addExperience(experience);
+
+        ExperienceDTO experienceDTO = new ExperienceDTO(2L, null, null, "Deleted experience", null, null, null, null, null);
+
+        when(userService.getLoggedUser()).thenReturn(user2);
+        when(experienceRepository.findById(2L)).thenReturn(Optional.of(experience));
+        when(experienceMapper.toDTO(experience)).thenReturn(experienceDTO);
+
+        ExperienceDTO result = experienceService.deleteExperienceById(2L);
+
+        assertEquals(experienceDTO, result);
+
+        verify(userService).getLoggedUser();
+        verify(experienceRepository).findById(2L);
+        verify(experienceMapper).toDTO(experience);
     }
 }

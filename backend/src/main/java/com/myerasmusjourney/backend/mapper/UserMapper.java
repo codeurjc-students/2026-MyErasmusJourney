@@ -5,7 +5,7 @@ import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {CommentMapper.class})
 public interface UserMapper {
     UserSimpleDTO toSimpleDTO(User user);
     UserDTO toDTO(User user);

@@ -36,6 +36,10 @@ public class ExperienceService {
     @Autowired
     private UserService userService;
 
+    private boolean isActionNotAllowed(User user, Experience experience){
+        return !(user.getRoles().contains("ADMIN")||experience.getAuthor().getId().equals(user.getId()));
+    }
+
     public Page<ExperienceSimpleDTO> getAllExperiences(Pageable pageable) {
         return experienceRepository.findAll(pageable).map(experienceMapper::toSimpleDTO);
     }
@@ -76,5 +80,15 @@ public class ExperienceService {
     public Collection<CommentSimpleDTO> getComments(Long id){
         Experience experience = getExperience(id);
         return commentMapper.toSimpleDTOs(experience.getComments());
+    }
+
+    @Transactional
+    public ExperienceDTO deleteExperienceById(Long id) {
+        User user = userService.getLoggedUser();
+        Experience experience = experienceRepository.findById(id).orElseThrow(()-> new NoSuchElementException("Experience not found"));
+        if(user == null || isActionNotAllowed(user, experience)) return null;
+        ExperienceDTO deletedExperience = experienceMapper.toDTO(experience);
+        experienceRepository.delete(experience);
+        return deletedExperience;
     }
 }

@@ -304,7 +304,6 @@ describe("UserPage", () => {
     }
   });
 
-
   it("loads the authenticated user's comments when no userId is provided", async () => {
 
     authenticatedUser = await authenticateUser(
@@ -351,5 +350,101 @@ describe("UserPage", () => {
         screen.getByText(comment.authorName)
       ).toBeInTheDocument();
     }
+  });
+
+  it("deletes an experience of the authenticated user successfully", async () => {
+    authenticatedUser = await authenticateUser("exampleuser2@email.com");
+
+    const experiencesBefore = await testUserService.getExperiences(
+      authenticatedUser.id
+    );
+
+    expect(experiencesBefore.length).toBeGreaterThan(0);
+
+    const experienceToDelete = experiencesBefore[0];
+
+    render(
+      <MemoryRouter initialEntries={["/profile"]}>
+        <Routes>
+          <Route
+            path="/profile"
+            element={
+              <UserPage
+                userService={testUserService}
+                authService={testAuthService}
+              />
+            }
+          />
+
+          <Route
+            path="/log-in"
+            element={<div>Log in page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByText("Experiences")).toBeInTheDocument();
+
+    expect(await screen.findByText(experienceToDelete.title)).toBeInTheDocument();
+
+    const deleteButton = screen.getByRole("button", {
+      name: `Delete ${experienceToDelete.title}`,
+    });
+
+    fireEvent.click(deleteButton);
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText(experienceToDelete.title)
+      ).not.toBeInTheDocument();
+    });
+
+    const experiencesAfter = await testUserService.getExperiences(
+      authenticatedUser.id
+    );
+
+    expect(experiencesAfter.some(experience => experience.id === experienceToDelete.id)).toBe(false);
+  });
+
+  it("shows an alert when deleting an experience fails", async () => {
+    authenticatedUser = await authenticateUser("exampleuser3@email.com");
+
+    const experiences = await testUserService.getExperiences(
+      authenticatedUser.id
+    );
+
+    expect(experiences.length).toBeGreaterThan(0);
+
+    const experience = experiences[0];
+
+    const alertSpy = vi
+      .spyOn(window, "alert")
+      .mockImplementation(() => { });
+
+    render(
+      <MemoryRouter initialEntries={["/profile"]}>
+        <Routes>
+          <Route
+            path="/profile"
+            element={
+              <UserPage
+                userService={testUserService}
+                authService={testAuthService}
+              />
+            }
+          />
+
+          <Route
+            path="/log-in"
+            element={<div>Log in page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(
+      await screen.findByText(experience.title)
+    ).toBeInTheDocument();
   });
 });

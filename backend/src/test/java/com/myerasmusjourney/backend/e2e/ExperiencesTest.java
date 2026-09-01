@@ -1,7 +1,9 @@
 package com.myerasmusjourney.backend.e2e;
 
 
+import com.myerasmusjourney.backend.dto.ExperienceDTO;
 import com.myerasmusjourney.backend.enumeration.Category;
+import io.restassured.response.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +18,29 @@ import static org.hamcrest.Matchers.*;
 
 @Tag("e2e")
 class ExperiencesTest extends AuthenticatedE2ETest {
+
+    private ExperienceDTO postExperience() throws JSONException {
+        JSONArray categories = new JSONArray();
+        categories.put("Transportation");
+        categories.put("Studies");
+
+        JSONObject body = new JSONObject();
+        body.put("title", "Experience");
+        body.put("cityId", 1L);
+        body.put("description", "Whatever user wants");
+        body.put("rating", 5.2F);
+        body.put("categories", categories);
+        body.put("date", LocalDate.of(2022, 1, 13));
+
+        Response response = given()
+                .cookie("AuthToken", this.token)
+                .contentType("application/json")
+                .body(body.toString()).
+                when()
+                .post("/api/v1/experiences/");
+
+        return response.getBody().as(ExperienceDTO.class);
+    }
 
     @Test
     void testGetExperiences() {
@@ -162,5 +187,82 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .get("/api/v1/experiences/0")
                 .then()
                 .statusCode(404);
+    }
+
+    @Test
+    void testDeleteExperienceByIdSuccess(){
+        ExperienceDTO experienceDTO;
+
+        try {
+            obtainToken("exampleuser1@email.com");
+            experienceDTO = postExperience();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+        given()
+                .cookie("AuthToken", this.token)
+                .when()
+                .delete("/api/v1/experiences/"+experienceDTO.id())
+                .then()
+                .statusCode(200)
+                .contentType("application/json")
+                .body("id", equalTo(experienceDTO.id().intValue()))
+                .body("description", equalTo(experienceDTO.description()))
+                .body("date", equalTo(experienceDTO.date().toString()))
+                .body("rating", equalTo(experienceDTO.rating()));
+    }
+
+    @Test
+    void testDeleteExperienceByAdmin(){
+        ExperienceDTO experienceDTO;
+
+        try {
+            obtainToken("exampleuser1@email.com");
+            experienceDTO = postExperience();
+            obtainToken("testadmin@email.com");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+        given()
+                .cookie("AuthToken", this.token)
+                .when()
+                .delete("/api/v1/experiences/"+experienceDTO.id())
+                .then()
+                .statusCode(200)
+                .contentType("application/json")
+                .body("id", equalTo(experienceDTO.id().intValue()))
+                .body("description", equalTo(experienceDTO.description()))
+                .body("date", equalTo(experienceDTO.date().toString()))
+                .body("rating", equalTo(experienceDTO.rating()));
+    }
+
+    @Test
+    void testDeleteExperienceByIdFails(){
+        try {
+            obtainToken("test@email.com");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .when()
+                .delete("/api/v1/experiences/1")
+                .then()
+                .statusCode(403);
+    }
+
+    @Test
+    void testDeleteExperienceWithoutAuthentication(){
+
+        given()
+                .when()
+                .delete("/api/v1/experiences/1")
+                .then()
+                .statusCode(401);
     }
 }

@@ -5,6 +5,8 @@ import { useUserStore } from "@shared/stores/userStore";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { API } from "../../api/client";
+import { createExperienceService } from "@shared/services/experience.service";
+import type { experienceServiceProps } from "@shared/interfaces/experienceServiceProps";
 
 interface experiencesProps{
     userExperiences: ExperienceSimpleDTO[]|undefined;
@@ -13,7 +15,7 @@ interface userIdProps{
     userId: number |undefined;
 }
 
-export default function UserExperiences({ userService = createUserService(API), userExperiences, userId}: userServiceProps & experiencesProps & userIdProps){
+export default function UserExperiences({ userService = createUserService(API), experienceService = createExperienceService(API), userExperiences, userId}: userServiceProps & experienceServiceProps & experiencesProps & userIdProps){
 
     const {user} = useUserStore();
 
@@ -23,8 +25,7 @@ export default function UserExperiences({ userService = createUserService(API), 
 
     let id = 0;
 
-    useEffect(()=>{
-        const fetchExperiences = async () =>{ 
+    const fetchExperiences = async () =>{ 
             if(userId !== undefined){
                 id = userId;
             } 
@@ -35,17 +36,27 @@ export default function UserExperiences({ userService = createUserService(API), 
             setExperiences(data.reverse());
         };
 
+    useEffect(()=>{
         
         if (userExperiences === undefined || userExperiences.length < 1){
             fetchExperiences();
-            console.log(experiences.reverse())
         }
         else{
             setExperiences(userExperiences)
-            console.log(experiences.reverse())
         }
         setLoading(false);
     },[])
+
+    async function handleDeleteExperience(experienceId: number) {
+
+        try{
+            await experienceService.deleteExperience(experienceId)
+            await fetchExperiences();
+        }
+        catch(error){
+            alert("Error deleting experience:" +  error)
+        }
+    }
 
     return(<>
         <div className="md:pr-8 md:border-r">
@@ -66,7 +77,7 @@ export default function UserExperiences({ userService = createUserService(API), 
                                     👁
                                 </Link>
 
-                                <button type="button" aria-label={`Delete ${experience.title}`} className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#4A90D9] text-white hover:opacity-80 transition">
+                                <button type="button" aria-label={`Delete ${experience.title}`} onClick={() =>(handleDeleteExperience(experience.id))} className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#4A90D9] text-white hover:opacity-80 transition">
                                     🗑
                                 </button>
                             </div>
