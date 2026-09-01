@@ -22,7 +22,8 @@ export function createExperienceService(api: ApiClient) {
     postExperience: (body: ExperienceFormDTO) => postExperience(api, body),
     getExperienceById: (id: number)=> getExperienceById(api, id),
     postComment:(id:number, body: CommentFormDTO) => postComment(api, id, body),
-    getCommentsByExperienceId:(id:number) => getCommentsByExperienceId(api, id)
+    getCommentsByExperienceId:(id:number) => getCommentsByExperienceId(api, id),
+    deleteExperience:(id:number) => deleteExperience(api, id)
   };
 }
 
@@ -94,5 +95,16 @@ async function getCommentsByExperienceId(api: ApiClient, id:number){
     throw new Error("Error posting new comment")
   }
 
+  return response.json();
+}
+
+async function deleteExperience(api: ApiClient, id:number){
+  const response = await api.delete(`/experiences/${id}`)
+  
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(error)
+  }
+  
   return response.json();
 }
