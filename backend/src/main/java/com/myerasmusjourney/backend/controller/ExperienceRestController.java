@@ -7,6 +7,7 @@ import com.myerasmusjourney.backend.service.ExperienceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -45,6 +46,13 @@ public class ExperienceRestController {
     @GetMapping("/{id}")
     public ExperienceDTO getExperienceById(@PathVariable Long id){
         return experienceService.getExperienceById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ExperienceDTO> deleteExperienceById(@PathVariable Long id){
+        ExperienceDTO experienceDTO = experienceService.deleteExperienceById(id);
+        if(experienceDTO == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        return ResponseEntity.ok(experienceDTO);
     }
 
     @GetMapping("/{id}/comments")
