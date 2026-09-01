@@ -427,7 +427,7 @@ public class ExperienceServiceTest extends TestDataBase {
 
         CommentDTO commentDTO = commentService.postComment(experience.getId(), new CommentFormDTO("New comment"));
 
-        CommentSimpleDTO expected = new CommentSimpleDTO(commentDTO.id(), commentDTO.date(), commentDTO.description(), commentDTO.author().displayName());
+        CommentSimpleDTO expected = new CommentSimpleDTO(commentDTO.id(), commentDTO.date(), commentDTO.description(), commentDTO.author().displayName(), experience.getId());
 
         result = experienceService.getComments(experience.getId());
 

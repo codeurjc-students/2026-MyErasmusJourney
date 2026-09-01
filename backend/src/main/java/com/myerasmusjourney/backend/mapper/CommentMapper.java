@@ -11,6 +11,7 @@ import java.util.Collection;
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
     @Mapping(source = "author.displayName", target = "authorName")
+    @Mapping(source = "experience.id", target = "experienceId")
     CommentSimpleDTO toSimpleDTO(Comment comment);
     Collection<CommentSimpleDTO> toSimpleDTOs(Collection<Comment> comments);
 

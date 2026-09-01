@@ -1,3 +1,4 @@
+import type { CommentSimpleDTO } from "./CommentSimpleDTO";
 import type { ExperienceSimpleDTO } from "./ExperienceSimpleDTO";
 
 export interface UserDTO{
@@ -8,4 +9,5 @@ export interface UserDTO{
     studyLocation: String;
     roles: Array<String>;
     experiences: ExperienceSimpleDTO[];
+    comments: CommentSimpleDTO[];
 }

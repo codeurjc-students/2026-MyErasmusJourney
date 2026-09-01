@@ -3,10 +3,8 @@ package com.myerasmusjourney.backend.service;
 import com.myerasmusjourney.backend.domain.Comment;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
-import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
-import com.myerasmusjourney.backend.dto.UserDTO;
-import com.myerasmusjourney.backend.dto.UserFormDTO;
-import com.myerasmusjourney.backend.dto.UserSimpleDTO;
+import com.myerasmusjourney.backend.dto.*;
+import com.myerasmusjourney.backend.mapper.CommentMapper;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import com.myerasmusjourney.backend.mapper.UserMapper;
 import com.myerasmusjourney.backend.repository.UserRepository;
@@ -19,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -33,6 +32,9 @@ public class UserService {
 
     @Autowired
     private ExperienceMapper experienceMapper;
+
+    @Autowired
+    private CommentMapper commentMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -74,6 +76,7 @@ public class UserService {
         return userMapper.toSimpleDTO(this.getLoggedUser());
     }
 
+    @Transactional
     public UserDTO getUserById(Long id) {
         User user = getLoggedUser();
         if (user == null) return null;
@@ -108,5 +111,14 @@ public class UserService {
         User savedUser = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
         List<Experience> experiences = savedUser.getExperiences();
         return experienceMapper.toDTOs(experiences);
+    }
+
+    @Transactional
+    public Collection<CommentSimpleDTO> getComments(Long id) {
+        User user = getLoggedUser();
+        if (user == null || isActionNotAllowed(user, id)) return null;
+        User savedUser = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
+        List<Comment> comments = savedUser.getComments();
+        return commentMapper.toSimpleDTOs(comments);
     }
 }

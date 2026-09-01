@@ -9,7 +9,8 @@ export function createUserService(api:ApiClient) {
     getUserInfo: () => getUserInfo(api),
     getUserById: (id: number) => getUserById(api, id),
     deleteUserById: (id:number) => deleteUserById(api, id),
-    getExperiences: (id:number) => getExperiences(api, id)
+    getExperiences: (id:number) => getExperiences(api, id),
+    getComments: (id:number) => getComments(api, id)
   };
 }
 
@@ -61,6 +62,17 @@ async function deleteUserById(api: ApiClient, id:number){
 
 async function getExperiences(api: ApiClient, id:number){
   const response = await api.get(`/users/${id}/experiences`);
+
+  if (!response.ok){
+      const error = await response.text();
+      throw new Error(error);
+    }
+
+  return response.json();
+}
+
+async function getComments(api: ApiClient, id:number){
+  const response = await api.get(`/users/${id}/comments`);
 
   if (!response.ok){
       const error = await response.text();

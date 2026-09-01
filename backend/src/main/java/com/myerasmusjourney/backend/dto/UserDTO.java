@@ -8,5 +8,7 @@ public record UserDTO(
         String displayName,
         String email,
         String studyLocation,
-        List<String> roles
+        List<String> roles,
+        List<ExperienceSimpleDTO> experiences,
+        List<CommentSimpleDTO> comments
 ) {}

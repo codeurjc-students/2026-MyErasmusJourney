@@ -28,10 +28,10 @@ public class User {
     private List<String> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Experience> experiences = new LinkedList<>();
+    private List<Experience> experiences = new LinkedList<>();
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Comment> comments = new LinkedList<>();
+    private List<Comment> comments = new LinkedList<>();
 
     public User(){
         this.roles.add("USER");
@@ -81,6 +81,14 @@ public class User {
 
     public void setRoles(List<String> roles) {
         this.roles = roles;
+    }
+
+    public void setExperiences(List<Experience> experiences){
+        this.experiences = experiences;
+    }
+
+    public void setComments(List<Comment> comments){
+        this.comments = comments;
     }
 
     public Long getId() {

@@ -1,4 +1,4 @@
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 import "@testing-library/jest-dom";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
@@ -120,6 +120,7 @@ describe("UserPage", () => {
     await waitFor(() => {
       expect(screen.getByText("Profile")).toBeInTheDocument();
       expect(screen.queryByText("Loading experiences...")).not.toBeInTheDocument();
+      expect(screen.queryByText("Loading comments...")).not.toBeInTheDocument();
     });
 
     fireEvent.click(
@@ -140,9 +141,6 @@ describe("UserPage", () => {
   });
 
   it("cancels deleting the authenticated user", async () => {
-
-    console.log("1 - antes de authenticateUser");
-    console.log(useUserStore.getState());
 
     const confirmSpy = vi
       .spyOn(window, "confirm")
@@ -187,18 +185,9 @@ describe("UserPage", () => {
 
   it("renders the authenticated user's experiences with real API data", async () => {
 
-    console.log("1 - antes de authenticateUser");
-    console.log(useUserStore.getState());
-
     authenticatedUser = await authenticateUser("exampleuser1@email.com");
 
-    console.log("2 - después de authenticateUser");
-    console.log(useUserStore.getState());
-
     const experiences = await testUserService.getExperiences(authenticatedUser.id);
-
-    console.log("3 - después de getExperiences");
-    console.log(experiences);
 
     render(
       <MemoryRouter initialEntries={["/profile"]}>
@@ -223,7 +212,7 @@ describe("UserPage", () => {
 
     expect(await screen.findByText("Experiences")).toBeInTheDocument();
 
-    expect(screen.queryByText("Loading experiences...")).not.toBeInTheDocument(); 
+    expect(screen.queryByText("Loading experiences...")).not.toBeInTheDocument();
 
 
     for (const experience of experiences) {
@@ -234,7 +223,7 @@ describe("UserPage", () => {
   });
 
   it("loads the authenticated user's experiences when no userId is provided", async () => {
-      authenticatedUser = await authenticateUser("exampleuser1@email.com")
+    authenticatedUser = await authenticateUser("exampleuser1@email.com")
 
     const experiences = await testUserService.getExperiences(
       authenticatedUser.id
@@ -262,11 +251,104 @@ describe("UserPage", () => {
     );
 
     expect(await screen.findByText("Experiences")).toBeInTheDocument();
-    expect(screen.queryByText("Loading experiences...")).not.toBeInTheDocument(); 
+    expect(screen.queryByText("Loading experiences...")).not.toBeInTheDocument();
 
     for (const experience of experiences) {
       expect(
         await screen.findByText(experience.title)
+      ).toBeInTheDocument();
+    }
+  });
+
+  it("renders the authenticated user's comments with real API data", async () => {
+
+    authenticatedUser = await authenticateUser(
+      "exampleuser1@email.com"
+    );
+
+    const comments = await testUserService.getComments(
+      authenticatedUser.id
+    );
+
+    render(
+      <MemoryRouter initialEntries={["/profile"]}>
+        <Routes>
+
+          <Route
+            path="/profile"
+            element={
+              <UserPage
+                userService={testUserService}
+                authService={testAuthService}
+              />
+            }
+          />
+
+          <Route
+            path="/log-in"
+            element={<div>Log in page</div>}
+          />
+
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByText("Comments")).toBeInTheDocument();
+    expect(screen.queryByText("Loading comments...")).not.toBeInTheDocument();
+
+    for (const comment of comments) {
+
+      expect(
+        await screen.findByText(comment.description)
+      ).toBeInTheDocument();
+    }
+  });
+
+
+  it("loads the authenticated user's comments when no userId is provided", async () => {
+
+    authenticatedUser = await authenticateUser(
+      "exampleuser1@email.com"
+    );
+
+    const comments = await testUserService.getComments(
+      authenticatedUser.id
+    );
+
+    render(
+      <MemoryRouter initialEntries={["/profile"]}>
+        <Routes>
+
+          <Route
+            path="/profile"
+            element={
+              <UserPage
+                userService={testUserService}
+                authService={testAuthService}
+              />
+            }
+          />
+
+          <Route
+            path="/log-in"
+            element={<div>Log in page</div>}
+          />
+
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByText("Comments")).toBeInTheDocument();
+    expect(screen.queryByText("Loading comments...")).not.toBeInTheDocument();
+
+    for (const comment of comments) {
+
+      expect(
+        await screen.findByText(comment.description)
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByText(comment.authorName)
       ).toBeInTheDocument();
     }
   });
