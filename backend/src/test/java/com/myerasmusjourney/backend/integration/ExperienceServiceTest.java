@@ -33,8 +33,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -433,5 +432,49 @@ public class ExperienceServiceTest extends TestDataBase {
 
         assertEquals(1, result.size());
         assertTrue(result.contains(expected));
+    }
+
+    @Test
+    @Transactional
+    void testDeleteExperienceByIdSuccess(){
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken("exampleuser1@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User user = userService.getLoggedUser();
+
+        ExperienceDTO expected = experienceMapper.toDTO(user.getExperiences().getFirst());
+
+        ExperienceDTO result = experienceService.deleteExperienceById(expected.id());
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    @Transactional
+    void testDeleteExperienceByIdFail(){
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken("test@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        Experience expected = experienceRepository.findAll().getFirst();
+
+        ExperienceDTO result = experienceService.deleteExperienceById(expected.getId());
+
+        assertNull(result);
+    }
+
+    @Test
+    @Transactional
+    void testDeleteExperienceByAdmin(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken("testadmin@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        Experience experience = experienceRepository.findAll().getFirst();
+        ExperienceDTO expected = experienceMapper.toDTO(experience);
+
+        ExperienceDTO result = experienceService.deleteExperienceById(experience.getId());
+
+        assertEquals(expected, result);
     }
 }
