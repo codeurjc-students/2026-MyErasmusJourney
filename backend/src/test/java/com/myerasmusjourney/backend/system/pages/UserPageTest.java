@@ -231,4 +231,26 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
 
         assertEquals("New comment", firstCommentDescription.getText());
     }
+
+    @Test
+    void testDeleteExperience(){
+        authenticateWithSpecificUser("exampleuser2@email.com");
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div/div/div[2]/div[1]/div/div/div[1]/p")
+        ));
+
+        String deletedExperience = driver.findElement(By.xpath("/html/body/div/div/div[2]/div[1]/div/div/div[1]/p")).getText();
+        WebElement deleteExperienceButton = driver.findElement(By.xpath("/html/body/div/div/div[2]/div[1]/div/div/div[2]/button"));
+
+        deleteExperienceButton.click();
+
+        assertTrue(
+                driver.findElements(By.xpath("/html/body/div/div/div[2]/div[1]/div/div/div[1]/p")).isEmpty()
+                        ||
+                        !driver.findElement(By.xpath("/html/body/div/div/div[2]/div[1]/div/div/div[1]/p")).getText().equals(deletedExperience)
+        );
+    }
 }
