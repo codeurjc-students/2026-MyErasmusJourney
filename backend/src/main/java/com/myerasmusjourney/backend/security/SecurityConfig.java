@@ -68,6 +68,7 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.GET, "/api/v1/users/{id}/experiences").hasRole("USER")
                     .requestMatchers(HttpMethod.GET, "/api/v1/users/{id}/comments").hasRole("USER")
                     .requestMatchers(HttpMethod.POST, "/api/v1/experiences/").hasRole("USER")
+                    .requestMatchers(HttpMethod.DELETE, "/api/v1/experiences/{id}").hasRole("USER")
                     .requestMatchers(HttpMethod.POST, "/api/v1/experiences/{id}/comments").hasRole("USER")
                     .requestMatchers(HttpMethod.POST, "/api/v1/cities/").hasRole("ADMIN")
                     // PUBLIC ENDPOINTS
