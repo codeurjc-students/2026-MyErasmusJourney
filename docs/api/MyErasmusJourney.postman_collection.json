@@ -183,6 +183,24 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Delete Experience",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{APIURL}}/experiences/1",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "experiences",
+                "1"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
