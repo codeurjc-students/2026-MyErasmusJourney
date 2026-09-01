@@ -65,10 +65,10 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
         postButton.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("/html/body/div/div/div/aside/div[1]/div/div[1]")
+                By.xpath("/html/body/div/div/div/aside/div[1]/div/div[2]")
         ));
 
-        WebElement newComment = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[1]/div/div[1]"));
+        WebElement newComment = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[1]/div/div[2]"));
         assertTrue(newComment.getText().contains("New comment"));
     }
 

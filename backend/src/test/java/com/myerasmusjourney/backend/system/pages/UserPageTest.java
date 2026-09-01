@@ -35,7 +35,7 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
         WebElement date = driver.findElement(By.id("date"));
         WebElement location = driver.findElement(By.id("location"));
         Select select = new Select(location);
-        WebElement documentation = driver.findElement(By.xpath("/html/body/div/div/form/div[1]/div[2]/div/label[3]"));
+        WebElement documentation = driver.findElement(By.xpath("/html/body/div/div/form/div[1]/div[2]/div/label[2]"));
         WebElement submit = driver.findElement(By.xpath("/html/body/div/div/form/div[1]/div[5]/button"));
 
         title.sendKeys("Selenium test");
@@ -48,6 +48,40 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div/div/div/main/div/div[2]/h3")
+        ));
+    }
+
+    private void postComment(){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.linkText("Experiences")
+        ));
+
+        WebElement linkToExperience = driver.findElement(By.linkText("Experiences"));
+
+        linkToExperience.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("experience-1")
+        ));
+
+        WebElement linkToFirstExperience = driver.findElement(By.xpath("/html/body/div/div/div/main/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/a"));
+
+        linkToFirstExperience.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div/div/div/main/div/div[2]/h3")
+        ));
+
+        WebElement commentInput = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[2]/input"));
+        WebElement postButton = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[2]/button"));
+
+        commentInput.sendKeys("New comment");
+        postButton.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div/div/div/aside/div[1]/div/div[1]")
         ));
     }
 
@@ -166,5 +200,35 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
         WebElement firstExperienceTitle = driver.findElement(By.xpath("/html/body/div/div/div[2]/div[1]/div/div/div[1]/p"));
 
         assertEquals("Selenium test", firstExperienceTitle.getText());
+    }
+
+    @Test
+    void testRenderingUserComments(){
+        authenticateWithSpecificUser("exampleuser1@email.com");
+
+        WebElement commentDescription = driver.findElement(By.xpath("/html/body/div/div/div[2]/div[2]/div/div/div[1]/p"));
+
+        assertEquals("My opinion or point of view regarding the experience", commentDescription.getText());
+    }
+
+    @Test
+    void testRendersNewComments(){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        authenticateWithSpecificUser("exampleuser1@email.com");
+
+        postComment();
+
+        WebElement userLink = driver.findElement(By.xpath("/html/body/div/header/nav/div/a"));
+
+        userLink.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div/div/div[2]/div[2]/div/div[1]/div[1]/p")
+        ));
+
+        WebElement firstCommentDescription = driver.findElement(By.xpath("/html/body/div/div/div[2]/div[2]/div/div[1]/div[1]/p"));
+
+        assertEquals("New comment", firstCommentDescription.getText());
     }
 }
