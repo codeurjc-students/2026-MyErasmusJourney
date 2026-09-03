@@ -2,11 +2,12 @@ import type { authServiceProps } from "@shared/interfaces/authServiceProps";
 import { useEffect, type FormEvent } from "react";
 import { API } from "../../api/client";
 import { createAuthService } from "@shared/services/auth.service";
-import {useUserStore} from "@shared/stores/userStore";
+import { useUserStore } from "@shared/stores/userStore";
 import "./LogInPage.css";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserService } from "@shared/services/user.service";
 import type { userServiceProps } from "@shared/interfaces/userServiceProps";
+import { ApiError } from "@shared/api/apiError";
 
 
 export default function LogInPage({ authService = createAuthService(API), userService = createUserService(API) }: authServiceProps & userServiceProps) {
@@ -31,7 +32,7 @@ export default function LogInPage({ authService = createAuthService(API), userSe
         const password = formData.get("password") as string;
 
         console.log(username);
-        if (username === ""){
+        if (username === "") {
             alert("Email missing");
             return;
         }
@@ -45,21 +46,26 @@ export default function LogInPage({ authService = createAuthService(API), userSe
             username,
             password
         };
-        
-        try{
+
+        try {
             await authService.logIn(loginRequest);
             const user = await userService.getUserInfo();
             setUser(user);
             navigate("/account");
         }
-        catch(error){
+        catch (error) {
+            if (error instanceof ApiError && error.status >= 500) {
+                console.error(error);
+                navigate("/error");
+                return;
+            }
             console.log(`Error logging in: ${error}`);
             alert(`Error logging in: ${error}`);
             return;
         }
     }
 
-    return(<>
+    return (<>
         <div className="container mx-auto max-w-4xl p-6 grid gap-10 items-center">
             <div className="row-span-1 title">
                 <h3 data-testid="title" id="loginTitle">Log In</h3>
@@ -73,7 +79,7 @@ export default function LogInPage({ authService = createAuthService(API), userSe
                     <button type="submit" className="mx-auto mt-4">Sign In</button>
                 </form>
             </div>
-             <div className="row-span-1 flex justify-center">
+            <div className="row-span-1 flex justify-center">
                 <p>Don't have an account yet? <Link to={"/sign-up"} className="link">Sign up →</Link></p>
             </div>
         </div>

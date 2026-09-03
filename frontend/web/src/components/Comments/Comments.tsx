@@ -6,50 +6,61 @@ import type { experienceServiceProps } from "@shared/interfaces/experienceServic
 import type { CommentFormDTO } from "@shared/models/CommentFormDTO";
 import type { CommentSimpleDTO } from "@shared/models/CommentSimpleDTO";
 import { useUserStore } from "@shared/stores/userStore";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ApiError } from "@shared/api/apiError";
 
-interface ExperienceIdProps{
+interface ExperienceIdProps {
     experienceId: number;
 }
 
 
-export default function Comments({ experienceService = createExperienceService(API), experienceId }: experienceServiceProps & ExperienceIdProps){
+export default function Comments({ experienceService = createExperienceService(API), experienceId }: experienceServiceProps & ExperienceIdProps) {
 
-    const{user} = useUserStore();
+    const { user } = useUserStore();
 
     const [description, setDescription] = useState("");
 
     const [comments, setComments] = useState<CommentSimpleDTO[]>([]);
 
+    const navigate = useNavigate();
+
     function onChange(e: ChangeEvent<HTMLInputElement>) {
         setDescription(e.target.value);
     }
 
-    async function getComments(){
+    async function getComments() {
         const data = await experienceService.getCommentsByExperienceId(experienceId);
         setComments(data);
     }
 
-    async function postComment(){
-        const newComment: CommentFormDTO = {description: description};
-        await experienceService.postComment(experienceId, newComment);
-        await getComments();
-        setDescription("");
+    async function postComment() {
+        const newComment: CommentFormDTO = { description: description };
+        try {
+            await experienceService.postComment(experienceId, newComment);
+            await getComments();
+            setDescription("");
+        } catch (error) {
+            if (error instanceof ApiError && error.status >= 500) {
+                console.error(error);
+                navigate("/error");
+                return;
+            }
+        }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         const fetchData = async () => {
             await getComments()
         }
         fetchData();
-    },[])
+    }, [])
 
 
-    return(<>
+    return (<>
         <div className="flex flex-col flex-1 min-h-0">
 
             <div className="space-y-4 max-h-[32rem] overflow-y-auto pr-2 pb-2">
-                {comments.map((comment)=>(
+                {comments.map((comment) => (
                     <div className="rounded-2xl bg-white shadow-md p-4">
                         <div className="flex items-center justify-between gap-3">
                             <div className="flex items-center gap-3">
@@ -65,14 +76,14 @@ export default function Comments({ experienceService = createExperienceService(A
 
         </div>
         {user !== null
-            ?(
+            ? (
                 <div className="flex items-center gap-3 mt-6">
-                    <input type="text" placeholder="Share your opinion..." className="flex-1 min-w-0" name="description" value={description} onChange={onChange}/>
+                    <input type="text" placeholder="Share your opinion..." className="flex-1 min-w-0" name="description" value={description} onChange={onChange} />
                     <button type="button" aria-label="Send comment" className="shrink-0 w-11 h-11 flex items-center justify-center rounded-full p-2" onClick={postComment}>
                         ➤
                     </button>
                 </div>
-            ):(
+            ) : (
                 <div className="flex items-center gap-3 mt-6">
                     <p>Enjoyed this experience? <Link to={"/log-in"} className="link"> Sign in </Link>and share your thoughts! </p>
                 </div>

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-export default function HomePage() {
+export default function AvailableSoonPage() {
 
     const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ export default function HomePage() {
                     pages or actions.
                 </p>
 
-                <button onClick={redirectToHome}>Back to home page</button>
+                <button onClick={redirectToHome}>🏠 Back to home page</button>
 
             </div>
         </>

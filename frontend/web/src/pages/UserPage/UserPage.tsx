@@ -1,5 +1,5 @@
 import type { userServiceProps } from "@shared/interfaces/userServiceProps";
-import type {UserDTO} from "@shared/models/UserDTO";
+import type { UserDTO } from "@shared/models/UserDTO";
 import { createUserService } from "@shared/services/user.service";
 import { API } from "../../api/client";
 import { useEffect, useState } from "react";
@@ -10,12 +10,13 @@ import { createAuthService } from "@shared/services/auth.service";
 import type { authServiceProps } from "@shared/interfaces/authServiceProps";
 import UserExperiences from "../../components/UserExperiences/UserExperiences";
 import UserComments from "../../components/UserComments/UserComments";
+import { ApiError } from "@shared/api/apiError";
 
-export default function UserPage({ authService = createAuthService(API), userService = createUserService(API) }: authServiceProps & userServiceProps){
+export default function UserPage({ authService = createAuthService(API), userService = createUserService(API) }: authServiceProps & userServiceProps) {
 
-    const [userDTO, setUserDTO] = useState<UserDTO|null>(null);
+    const [userDTO, setUserDTO] = useState<UserDTO | null>(null);
 
-    const {user, setUser} = useUserStore();
+    const { user, setUser } = useUserStore();
 
     const navigate = useNavigate();
 
@@ -32,34 +33,39 @@ export default function UserPage({ authService = createAuthService(API), userSer
     }
 
     useEffect(() => {
-            
+
         const fetchUser = async () => {
-            if(user != null){
-                try{
+            if (user != null) {
+                try {
                     {
                         const data = await userService.getUserById(user.id);
                         setUserDTO(data);
                     }
                 }
-                catch(error){
+                catch (error) {
+                    if (error instanceof ApiError && error.status >= 500) {
+                        console.error(error);
+                        navigate("/error");
+                        return;
+                    }
                     console.error(error)
                     navigate("/log-in")
                 }
             }
-            else{
+            else {
                 navigate("/log-in")
             }
         }
         fetchUser();
     }, [])
 
-    async function logOut(){
+    async function logOut() {
         authService.logOut();
         setUser(null);
         navigate("/");
     }
 
-    async function deleteAccount(){
+    async function deleteAccount() {
         const confirmed = window.confirm("This account is going to be deleted. This action cannot be undone. Are you certain?");
         if (!confirmed) {
             return;
@@ -70,7 +76,7 @@ export default function UserPage({ authService = createAuthService(API), userSer
         }
     }
 
-    return(<>
+    return (<>
         <div className="container relative mx-auto max-w-6xl rounded-3xl bg-white shadow-2xl p-10">
             <h3 className="text-center mb-10" id="profileTitle">Profile</h3>
             <button onClick={logOut} className="button absolute top-8 right-8">Log out</button>
@@ -88,11 +94,11 @@ export default function UserPage({ authService = createAuthService(API), userSer
                         <div className="space-y-4">
                             <p><span className="font-bold">Email:</span> {userDTO?.email}</p>
                             {(userDTO?.studyLocation !== null && userDTO?.studyLocation !== "")
-                            ?(
-                                <p><span className="font-bold">Studying in:</span> {userDTO?.studyLocation}</p>
-                            ):(
-                                <p><span className="font-bold">Studying in:</span> User has yet to complete this field</p> 
-                            )
+                                ? (
+                                    <p><span className="font-bold">Studying in:</span> {userDTO?.studyLocation}</p>
+                                ) : (
+                                    <p><span className="font-bold">Studying in:</span> User has yet to complete this field</p>
+                                )
                             }
                         </div>
 
@@ -100,10 +106,10 @@ export default function UserPage({ authService = createAuthService(API), userSer
 
                     <div className="flex justify-center gap-8 mt-10">
                         {(userDTO?.roles.includes("ADMIN"))
-                            ?(
+                            ? (
                                 <button className="button" onClick={addCity}>Add City</button>
                             )
-                            :null
+                            : null
                         }
                         <button className="button" onClick={notAvailable}>Edit Profile</button>
                         <button className="button" onClick={deleteAccount}>Delete Profile</button>
@@ -113,14 +119,14 @@ export default function UserPage({ authService = createAuthService(API), userSer
                 </div>
 
                 <div className="flex flex-col justify-center items-center gap-8">
-                    <img src="/images/available_soon.png" alt="profile image" className="mainProfileImage rounded-full object-cover"/>
+                    <img src="/images/available_soon.png" alt="profile image" className="mainProfileImage rounded-full object-cover" />
                     <button className="button" onClick={notAvailable}>Change Picture</button>
                 </div>
 
             </div>
             <div className="mt-16 grid md:grid-cols-2 gap-10">
-                <UserExperiences userService={userService} userExperiences={userDTO?.experiences} userId={userDTO?.id}/>
-                <UserComments userService={userService} userComments={userDTO?.comments} userId={userDTO?.id}/>
+                <UserExperiences userService={userService} userExperiences={userDTO?.experiences} userId={userDTO?.id} />
+                <UserComments userService={userService} userComments={userDTO?.comments} userId={userDTO?.id} />
             </div>
 
         </div>

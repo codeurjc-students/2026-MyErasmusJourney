@@ -4,6 +4,8 @@ import { API } from "../../api/client";
 import type { ExperienceSimpleDTO } from "@shared/models/ExperienceSimpleDTO";
 import { createExperienceService } from "@shared/services/experience.service";
 import type { experienceServiceProps } from "@shared/interfaces/experienceServiceProps";
+import { ApiError } from "@shared/api/apiError";
+import { useNavigate } from "react-router-dom";
 
 const defaultExperienceService = createExperienceService(API);
 
@@ -12,6 +14,7 @@ export default function ExperiencesPage({ experienceService = defaultExperienceS
     const [experiences, setExperiences] = useState<ExperienceSimpleDTO[]>([]);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
+    const navigate = useNavigate();
 
     const size = 6;
 
@@ -24,6 +27,11 @@ export default function ExperiencesPage({ experienceService = defaultExperienceS
                 setExperiences(data.content || []);
                 setTotalPages(data.page.totalPages ?? 1);
             } catch (error) {
+                if (error instanceof ApiError && error.status >= 500) {
+                    console.error(error);
+                    navigate("/error");
+                    return;
+                }
                 console.error(error);
             }
         };
