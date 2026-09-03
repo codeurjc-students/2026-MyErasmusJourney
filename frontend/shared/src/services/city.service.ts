@@ -1,4 +1,5 @@
-import type { ApiClient } from "../apiClient";
+import { ApiError } from "../api/apiError";
+import type { ApiClient } from "../api/apiClient";
 import type { CityFormDTO } from "../models/CityFormDTO";
 
 export type CityService = ReturnType<typeof createCityService>;
@@ -15,11 +16,11 @@ async function addCity(api: ApiClient, body: CityFormDTO){
 
     
     if (!response.ok){
-        throw new Error("Error adding city");
+      throw new ApiError(response.status, await response.text());
     }
 
     if (response.status === 200){
-        throw new Error("City already exists");
+      throw new ApiError(response.status, await response.text());
     }
 
     return await response.json();
@@ -29,7 +30,7 @@ async function getAll(api: ApiClient){
     const response = await api.get("/cities/");
     
     if (!response.ok){
-        throw new Error("Error getting cities");
+      throw new ApiError(response.status, await response.text());
     }
 
     return await response.json();

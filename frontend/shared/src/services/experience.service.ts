@@ -8,9 +8,10 @@
 **/
 
 import type { ExperienceFormDTO } from "../models/ExperienceFormDTO";
-import type { ApiClient } from "../apiClient";
+import type { ApiClient } from "../api/apiClient";
 import type { ExperiencePageDTO } from "../models/ExperienceSimpleDTO";
 import type { CommentFormDTO } from "../models/CommentFormDTO";
+import { ApiError } from "../api/apiError";
 
 
 export type ExperienceService = ReturnType<typeof createExperienceService>;
@@ -40,7 +41,7 @@ async function getAllExperiences(api: ApiClient, page?: number, size?: number) {
   const response = await api.get(url)
 
   if (!response.ok) {
-    throw new Error("Error fetching experiences")
+      throw new ApiError(response.status, await response.text());
   }
 
   return response.json() as Promise<ExperiencePageDTO>;
@@ -50,7 +51,7 @@ async function getCategories(api: ApiClient) {
   const response = await api.get("/experiences/categories")
 
   if (!response.ok) {
-    throw new Error("Error fetching categories")
+      throw new ApiError(response.status, await response.text());
   }
 
   return response.json();
@@ -60,7 +61,7 @@ async function postExperience(api: ApiClient, body: ExperienceFormDTO) {
   const response = await api.post("/experiences/", body);
 
   if (!response.ok) {
-    throw new Error("Error posting new experience")
+      throw new ApiError(response.status, await response.text());
   }
 
   return response.json();
@@ -72,7 +73,7 @@ async function getExperienceById(api: ApiClient, id:number) {
   if(response.status === 404) return null;
 
   if (!response.ok) {
-    throw new Error("Error fetching experience")
+      throw new ApiError(response.status, await response.text());
   }
 
   return response.json();
@@ -82,7 +83,7 @@ async function postComment(api: ApiClient, id:number, body:CommentFormDTO){
    const response = await api.post(`/experiences/${id}/comments`, body)
 
   if (response.status !== 201) {
-    throw new Error("Error posting new comment")
+      throw new ApiError(response.status, await response.text());
   }
 
   return response.json();
@@ -92,7 +93,7 @@ async function getCommentsByExperienceId(api: ApiClient, id:number){
    const response = await api.get(`/experiences/${id}/comments`)
 
   if (!response.ok) {
-    throw new Error("Error posting new comment")
+      throw new ApiError(response.status, await response.text());
   }
 
   return response.json();
@@ -102,8 +103,8 @@ async function deleteExperience(api: ApiClient, id:number){
   const response = await api.delete(`/experiences/${id}`)
   
   if (!response.ok) {
-    const error = await response.text();
-    throw new Error(error)
+          throw new ApiError(response.status, await response.text());
+    
   }
   
   return response.json();
