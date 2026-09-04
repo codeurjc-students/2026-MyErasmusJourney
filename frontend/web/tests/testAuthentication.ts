@@ -1,4 +1,4 @@
-import { createApiClient } from "@shared/apiClient";
+import { createApiClient } from "@shared/api/apiClient";
 import type { LoginRequest } from "@shared/models/LoginRequest";
 import type { UserSimpleDTO } from "@shared/models/UserSimpleDTO";
 import { createAuthService } from "@shared/services/auth.service";

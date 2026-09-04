@@ -6,6 +6,7 @@ import type { UserService } from "@shared/services/user.service";
 import type { AuthService } from "@shared/services/auth.service";
 import { useUserStore } from "@shared/stores/userStore";
 import type { UserDTO } from "@shared/models/UserDTO";
+import { ApiError } from "@shared/api/apiError";
 
 // ---------- mocks ----------
 
@@ -134,10 +135,12 @@ describe("UserPage", () => {
   });
 
   it("redirects to login when loading user fails", async () => {
+    const error = new ApiError(400,"Mock");
+    
 
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
-    const mockGetUser = vi.fn().mockRejectedValue(new Error("Mock"));
+    const mockGetUser = vi.fn().mockRejectedValue(error);
 
     const mockService: UserService = {
       signUp: vi.fn(),

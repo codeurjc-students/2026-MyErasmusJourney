@@ -6,6 +6,7 @@ import type { ExperienceService } from "@shared/services/experience.service";
 import "@testing-library/jest-dom";
 import type { Page } from "@shared/models/Page";
 import type { ExperienceSimpleDTO } from "@shared/models/ExperienceSimpleDTO";
+import { ApiError } from "@shared/api/apiError";
 
 describe("ExperiencesPage", () => {
   it("renders all items of experience list", async () => {
@@ -169,9 +170,9 @@ describe("ExperiencesPage", () => {
   });
 
   it("handles service errors", async () => {
+    const error = new ApiError(400,"Error fetching experience");
 
-
-    const mockGetAll = vi.fn().mockRejectedValue(new Error("Mocked error"));
+    const mockGetAll = vi.fn().mockRejectedValue(error);
 
     const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 

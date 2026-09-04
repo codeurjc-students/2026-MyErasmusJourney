@@ -4,6 +4,7 @@ import "@testing-library/jest-dom";
 import { MemoryRouter } from "react-router-dom";
 import ExperienceFormPage from "src/pages/ExperienceFormPage/ExperienceFormPage";
 import { useUserStore } from "@shared/stores/userStore";
+import { ApiError } from "@shared/api/apiError";
 
 const mockNavigate = vi.fn();
 
@@ -213,12 +214,14 @@ describe("ExperienceFormPage", () => {
   });
 
   it("alerts when the publish request fails", async () => {
+    const error = new ApiError(400,"Error fetching experience");
+    
     const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
     const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 
     const mockExperienceService = {
       getCategories: vi.fn().mockResolvedValue(["ART"]),
-      postExperience: vi.fn().mockRejectedValue(new Error("network issue")),
+      postExperience: vi.fn().mockRejectedValue(error),
     };
 
     const mockCityService = {

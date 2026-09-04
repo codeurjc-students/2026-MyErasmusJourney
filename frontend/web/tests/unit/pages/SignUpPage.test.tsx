@@ -4,6 +4,7 @@ import { MemoryRouter, Routes, Route } from "react-router-dom";
 import "@testing-library/jest-dom";
 import SignUpPage from "../../../src/pages/SignUpPage/SignUpPage";
 import type { UserService } from "@shared/services/user.service";
+import { ApiError } from "@shared/api/apiError";
 
 describe("SignUpPage", () => {
   it("should render the sign up form with all fields", () => {
@@ -106,8 +107,9 @@ describe("SignUpPage", () => {
   });
 
   it("should show error alert when sign up fails", async () => {
-    const errorMessage = "Email already exists";
-    const mockSignUp = vi.fn().mockRejectedValue(new Error(errorMessage));
+    const error = new ApiError(400,"Email already exists");
+    
+    const mockSignUp = vi.fn().mockRejectedValue(error);
     const mockService: UserService = {
       signUp: mockSignUp,
     };

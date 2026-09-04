@@ -6,6 +6,7 @@ import LogInPage from "../../../src/pages/LogInPage/LogInPage";
 import type { AuthService } from "@shared/services/auth.service";
 import type { UserService } from "@shared/services/user.service";
 import { useUserStore } from "@shared/stores/userStore";
+import { ApiError } from "@shared/api/apiError";
 
 const mockNavigate = vi.fn();
 
@@ -159,8 +160,9 @@ describe("Log In page", () => {
   });
 
   it("should show error alert when login fails", async () => {
-    const errorMessage = "Invalid credentials";
-    const mockLogIn = vi.fn().mockRejectedValue(new Error(errorMessage));
+    const error = new ApiError(400, "Invalid credentials");
+
+    const mockLogIn = vi.fn().mockRejectedValue(error);
 
     const mockAuthService: AuthService = {
       logIn: mockLogIn,

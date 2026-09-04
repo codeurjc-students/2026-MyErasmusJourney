@@ -7,6 +7,7 @@ import UserExperiences from "../../../src/components/UserExperiences/UserExperie
 import { useUserStore } from "@shared/stores/userStore";
 import type { UserService } from "@shared/services/user.service";
 import type { ExperienceService } from "@shared/services/experience.service";
+import { ApiError } from "@shared/api/apiError";
 
 describe("UserExperiences", () => {
 
@@ -344,7 +345,7 @@ it("should show an alert when deleting an experience fails", async () => {
 
   const mockDeleteExperience = vi
     .fn()
-    .mockRejectedValue(new Error("Delete failed"));
+    .mockRejectedValue(new ApiError(403, "Delete failed"));
 
   const mockGetExperiences = vi
     .fn()
@@ -372,7 +373,6 @@ it("should show an alert when deleting an experience fails", async () => {
 
   const mockExperienceService: ExperienceService = {
     deleteExperience: mockDeleteExperience,
-    // añade aquí el resto de métodos que exija tu ExperienceService
   };
 
   const alertSpy = vi
@@ -405,7 +405,7 @@ it("should show an alert when deleting an experience fails", async () => {
   });
 
   expect(alertSpy).toHaveBeenCalledWith(
-    "Error deleting experience:Error: Delete failed"
+    "Error deleting experience:ApiError: Delete failed"
   );
 
   expect(mockGetExperiences).toHaveBeenCalledTimes(1);

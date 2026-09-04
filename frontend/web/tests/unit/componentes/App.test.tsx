@@ -5,6 +5,7 @@ import { MemoryRouter } from "react-router-dom";
 import App from "src/App";
 import type { UserService } from "@shared/services/user.service";
 import { useUserStore } from "@shared/stores/userStore";
+import { ApiError } from "@shared/api/apiError";
 
 describe("App", () => {
 
@@ -62,7 +63,7 @@ describe("App", () => {
 
     //mock of getUserInfo
     const mockGetUserInfo = vi.fn().mockRejectedValue(
-      new Error("Mocked error")
+      new ApiError(400, "Mocked error")
     );
 
     //return mocked service

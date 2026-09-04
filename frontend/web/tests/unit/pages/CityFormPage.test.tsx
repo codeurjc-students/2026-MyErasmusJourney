@@ -5,6 +5,7 @@ import "@testing-library/jest-dom";
 
 import CityFormPage from "../../../src/pages/CityFormPage/CityFormPage";
 import type { CityService } from "@shared/services/city.service";
+import { ApiError } from "@shared/api/apiError";
 
 const mockNavigate = vi.fn();
 
@@ -162,7 +163,7 @@ describe("CityFormPage", () => {
 
     const mockAddCity = vi
       .fn()
-      .mockRejectedValue(new Error(errorMessage));
+      .mockRejectedValue(new ApiError(400, errorMessage));
 
     const mockCityService: CityService = {
       addCity: mockAddCity,

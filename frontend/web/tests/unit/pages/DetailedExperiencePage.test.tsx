@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import "@testing-library/jest-dom";
+import { ApiError } from "@shared/api/apiError";
 
 import DetailedExperiencePage from "../../../src/pages/DetailedExperiencePage/DetailedExperiencePage";
 import type { ExperienceService } from "@shared/services/experience.service";
@@ -50,7 +51,7 @@ describe("DetailedExperiencePage", () => {
   it("should show loading message while fetching the experience", () => {
 
     const mockGetExperienceById = vi.fn(
-      () => new Promise(() => {})
+      () => new Promise(() => { })
     );
 
     const mockService: ExperienceService = {
@@ -139,9 +140,11 @@ describe("DetailedExperiencePage", () => {
 
   it("should navigate to available-soon when the experience does not exist", async () => {
 
+    const error = new ApiError(404,"Error fetching experience");
+
     const mockGetExperienceById = vi
       .fn()
-      .mockResolvedValue(null);
+      .mockRejectedValue(error);
 
     const mockService: ExperienceService = {
       getAll: vi.fn(),
@@ -160,7 +163,7 @@ describe("DetailedExperiencePage", () => {
     );
 
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith("/available-soon");
+      expect(mockNavigate).toHaveBeenCalledWith("/error");
     });
 
     expect(mockGetExperienceById).toHaveBeenCalledWith(999);
@@ -169,7 +172,7 @@ describe("DetailedExperiencePage", () => {
 
   it("should remain in loading state when fetching the experience fails", async () => {
 
-    const error = new Error("Error fetching experience");
+    const error = new ApiError(404,"Error fetching experience");
 
     const mockGetExperienceById = vi
       .fn()
@@ -182,7 +185,7 @@ describe("DetailedExperiencePage", () => {
 
     const consoleErrorSpy = vi
       .spyOn(console, "error")
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     render(
       <MemoryRouter initialEntries={["/experiences/1"]}>
@@ -203,7 +206,50 @@ describe("DetailedExperiencePage", () => {
       screen.getByText("Loading experience...")
     ).toBeInTheDocument();
 
-    expect(mockNavigate).not.toHaveBeenCalled();
+    expect(mockNavigate).toHaveBeenCalledWith("/error");
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  it("should navigate to error page when fetching the experience fails with a server error", async () => {
+    const error = new ApiError(500, "Internal server error");
+
+    const mockGetExperienceById = vi
+      .fn()
+      .mockRejectedValue(error);
+
+    const mockService: ExperienceService = {
+      getAll: vi.fn(),
+      getExperienceById: mockGetExperienceById,
+    };
+
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => { });
+
+    render(
+      <MemoryRouter initialEntries={["/experiences/1"]}>
+        <Routes>
+          <Route
+            path="/experiences/:id"
+            element={
+              <DetailedExperiencePage
+                experienceService={mockService}
+              />
+            }
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith("/error");
+    });
+
+    expect(mockGetExperienceById).toHaveBeenCalledTimes(1);
+    expect(mockGetExperienceById).toHaveBeenCalledWith(1);
+    expect(consoleErrorSpy).toHaveBeenCalledWith(error);
+    expect(mockNavigate).toHaveBeenCalledTimes(1);
 
     consoleErrorSpy.mockRestore();
   });
