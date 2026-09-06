@@ -140,7 +140,7 @@ describe("DetailedExperiencePage", () => {
 
   it("should navigate to available-soon when the experience does not exist", async () => {
 
-    const error = new ApiError(404,"Error fetching experience");
+    const error = new ApiError(404, "Error fetching experience");
 
     const mockGetExperienceById = vi
       .fn()
@@ -172,7 +172,7 @@ describe("DetailedExperiencePage", () => {
 
   it("should remain in loading state when fetching the experience fails", async () => {
 
-    const error = new ApiError(404,"Error fetching experience");
+    const error = new ApiError(404, "Error fetching experience");
 
     const mockGetExperienceById = vi
       .fn()

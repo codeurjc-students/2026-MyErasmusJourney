@@ -122,7 +122,7 @@ describe("ExperienceFormPage", () => {
   });
 
   it("alerts and stops submission when more than 3 categories are selected", async () => {
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
+    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => { });
     const mockExperienceService = {
       getCategories: vi.fn().mockResolvedValue(["ART", "SPORT", "TRAVEL", "FOOD"]),
       postExperience: vi.fn(),
@@ -169,7 +169,7 @@ describe("ExperienceFormPage", () => {
   it("submits valid data and navigates to the detailed Experience Page", async () => {
     const mockExperienceService = {
       getCategories: vi.fn().mockResolvedValue(["ART", "SPORT"]),
-      postExperience: vi.fn().mockResolvedValue({id: 1, title: "Weekend in Lisbon", description:"A beautiful trip through the city.", date:"2026-08-15"}),
+      postExperience: vi.fn().mockResolvedValue({ id: 1, title: "Weekend in Lisbon", description: "A beautiful trip through the city.", date: "2026-08-15" }),
     };
 
     const mockCityService = {
@@ -214,10 +214,10 @@ describe("ExperienceFormPage", () => {
   });
 
   it("alerts when the publish request fails", async () => {
-    const error = new ApiError(400,"Error fetching experience");
-    
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    const error = new ApiError(400, "Error fetching experience");
+
+    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => { });
+    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => { });
 
     const mockExperienceService = {
       getCategories: vi.fn().mockResolvedValue(["ART"]),
@@ -254,6 +254,46 @@ describe("ExperienceFormPage", () => {
     await waitFor(() => {
       expect(alertSpy).toHaveBeenCalledWith("Error while publishing your experience.");
       expect(consoleSpy).toHaveBeenCalledWith(expect.any(Error));
+    });
+  });
+
+  it("redirects to error page", async () => {
+    const error = new ApiError(500, "Error posting experience");
+
+    const mockExperienceService = {
+      getCategories: vi.fn().mockResolvedValue(["ART"]),
+      postExperience: vi.fn().mockRejectedValue(error),
+    };
+
+    const mockCityService = {
+      getAll: vi.fn().mockResolvedValue([{ id: 1, name: "Madrid", country: "Spain" }]),
+    };
+
+    render(
+      <MemoryRouter>
+        <ExperienceFormPage
+          experienceService={mockExperienceService as any}
+          cityService={mockCityService as any}
+        />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getAllByRole("checkbox")).toHaveLength(1);
+    });
+
+    fireEvent.change(screen.getByLabelText(/title/i), { target: { value: "Test title" } });
+    fireEvent.change(screen.getByLabelText(/rating/i), { target: { value: "8" } });
+    fireEvent.change(screen.getByLabelText(/location/i), { target: { value: "1" } });
+    fireEvent.change(screen.getByLabelText(/date/i), { target: { value: "2026-09-01" } });
+    fireEvent.change(screen.getByLabelText(/experience description/i), {
+      target: { value: "This should fail." },
+    });
+    fireEvent.click(screen.getAllByRole("checkbox")[0]);
+    fireEvent.click(screen.getByRole("button", { name: /publish/i }));
+
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith("/error");
     });
   });
 });

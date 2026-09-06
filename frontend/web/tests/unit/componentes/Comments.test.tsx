@@ -6,6 +6,20 @@ import { MemoryRouter } from "react-router-dom";
 import Comments from "../../../src/components/Comments/Comments";
 import type { ExperienceService } from "@shared/services/experience.service";
 import { useUserStore } from "@shared/stores/userStore";
+import { ApiError } from "@shared/api/apiError";
+
+const mockNavigate = vi.fn();
+
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual<typeof import("react-router-dom")>(
+    "react-router-dom"
+  );
+
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 
 describe("Comments component", () => {
@@ -254,6 +268,80 @@ describe("Comments component", () => {
       ).toBeInTheDocument();
 
       expect(input).toHaveValue("");
+    });
+  });
+
+  it("does not navigate to error page on client error when posting a comment", async () => {
+    const mockGetComments = vi.fn().mockResolvedValue([]);
+
+    const mockPostComment = vi
+      .fn()
+      .mockRejectedValue(new ApiError(400, "Bad request"));
+
+    const mockService: ExperienceService = {
+      getCommentsByExperienceId: mockGetComments,
+      postComment: mockPostComment,
+      getAll: vi.fn(),
+      getExperienceById: vi.fn(),
+    };
+
+    useUserStore.setState({ user: { id: 1, displayName: "John", email: "john@example.com" } });
+
+    render(
+      <MemoryRouter>
+        <Comments
+          experienceService={mockService}
+          experienceId={1}
+        />
+      </MemoryRouter>
+    );
+
+    const input = await screen.findByPlaceholderText("Share your opinion...");
+
+    fireEvent.change(input, { target: { value: "Client error comment" } });
+
+    fireEvent.click(screen.getByRole("button", { name: "Send comment" }));
+
+    await waitFor(() => {
+      expect(mockPostComment).toHaveBeenCalled();
+      expect(mockNavigate).not.toHaveBeenCalled();
+    });
+  });
+
+  it("navigates to /error when posting a comment fails with server error (500)", async () => {
+    const mockGetComments = vi.fn().mockResolvedValue([]);
+
+    const mockPostComment = vi
+      .fn()
+      .mockRejectedValue(new ApiError(500, "Internal server error"));
+
+    const mockService: ExperienceService = {
+      getCommentsByExperienceId: mockGetComments,
+      postComment: mockPostComment,
+      getAll: vi.fn(),
+      getExperienceById: vi.fn(),
+    };
+
+    useUserStore.setState({ user: { id: 1, displayName: "John", email: "john@example.com" } });
+
+    render(
+      <MemoryRouter>
+        <Comments
+          experienceService={mockService}
+          experienceId={1}
+        />
+      </MemoryRouter>
+    );
+
+    const input = await screen.findByPlaceholderText("Share your opinion...");
+
+    fireEvent.change(input, { target: { value: "Server error comment" } });
+
+    fireEvent.click(screen.getByRole("button", { name: "Send comment" }));
+
+    await waitFor(() => {
+      expect(mockPostComment).toHaveBeenCalled();
+      expect(mockNavigate).toHaveBeenCalledWith("/error");
     });
   });
 });

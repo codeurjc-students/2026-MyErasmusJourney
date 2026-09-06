@@ -86,4 +86,38 @@ describe("App", () => {
     //verifies the service was called
     expect(mockGetUserInfo).toHaveBeenCalledTimes(1);
   });
+
+  it("should set user to null when fetching user information fails with server error (500)", async () => {
+    // initial user
+    const initialUser = {
+      id: 1,
+      displayName: "testuser",
+      email: "test@example.com",
+    };
+
+    useUserStore.setState({
+      user: initialUser,
+    });
+
+    // mock of getUserInfo that rejects with 500
+    const mockGetUserInfo = vi.fn().mockRejectedValue(
+      new ApiError(500, "Internal Server Error")
+    );
+
+    const mockService: UserService = {
+      getUserInfo: mockGetUserInfo,
+    };
+
+    render(
+      <MemoryRouter>
+        <App userService={mockService} />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(useUserStore.getState().user).toBeNull();
+    });
+
+    expect(mockGetUserInfo).toHaveBeenCalledTimes(1);
+  });
 });

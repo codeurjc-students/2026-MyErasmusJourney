@@ -192,6 +192,38 @@ describe("Log In page", () => {
     });
   });
 
+  it("should redirect to error page when server error appears", async () => {
+    const error = new ApiError(500, "Internal Server Error");
+
+    const mockLogIn = vi.fn().mockRejectedValue(error);
+
+    const mockAuthService: AuthService = {
+      logIn: mockLogIn,
+    };
+
+    const mockUserService: UserService = {
+      signUp: vi.fn(),
+      getUserInfo: vi.fn(),
+    };
+
+    global.alert = vi.fn();
+    global.console.log = vi.fn();
+
+    render(
+      <MemoryRouter>
+        <LogInPage authService={mockAuthService} userService={mockUserService} />
+      </MemoryRouter>
+    );
+
+    fillLoginForm();
+    fireEvent.click(screen.getByRole("button", { name: /sign in/i }));
+
+    await waitFor(() => {
+      expect(mockLogIn).toHaveBeenCalledWith({ username: "john@example.com", password: "password123" });
+      expect(mockNavigate).toHaveBeenCalledWith("/error");
+    });
+  });
+
   it("should navigate to account if user is already logged in", async () => {
     useUserStore.setState({
       user: {

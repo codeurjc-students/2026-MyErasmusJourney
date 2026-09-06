@@ -171,7 +171,7 @@ describe("CityFormPage", () => {
 
     const alertSpy = vi
       .spyOn(window, "alert")
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     render(
       <MemoryRouter>
@@ -206,5 +206,50 @@ describe("CityFormPage", () => {
     });
 
     expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  it("should redirect to error page when adding the city causes internal error", async () => {
+
+    const errorMessage = "City already exists";
+
+    const mockAddCity = vi
+      .fn()
+      .mockRejectedValue(new ApiError(500, errorMessage));
+
+    const mockCityService: CityService = {
+      addCity: mockAddCity,
+    };
+
+    render(
+      <MemoryRouter>
+        <CityFormPage cityService={mockCityService} />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText(/city name/i), {
+      target: { value: "Madrid" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/country/i), {
+      target: { value: "Spain" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/city description/i), {
+      target: { value: "A beautiful city." },
+    });
+
+    fireEvent.click(
+      screen.getByRole("button", { name: /save city/i })
+    );
+
+    await waitFor(() => {
+      expect(mockAddCity).toHaveBeenCalledWith({
+        name: "Madrid",
+        country: "Spain",
+        description: "A beautiful city.",
+      });
+      expect(mockNavigate).toHaveBeenCalledWith("/error");
+    });
+
   });
 });
