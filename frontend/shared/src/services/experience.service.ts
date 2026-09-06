@@ -70,8 +70,6 @@ async function postExperience(api: ApiClient, body: ExperienceFormDTO) {
 async function getExperienceById(api: ApiClient, id:number) {
   const response = await api.get(`/experiences/${id}`)
 
-  if(response.status === 404) return null;
-
   if (!response.ok) {
       throw new ApiError(response.status, await response.text());
   }

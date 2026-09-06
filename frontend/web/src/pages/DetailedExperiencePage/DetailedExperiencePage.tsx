@@ -47,10 +47,9 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
         const fetchExperience = async () => {
             try {
                 const data = await experienceService.getExperienceById(Number(id));
-                if (data === null) navigate("/available-soon")
                 setExperience(data);
             } catch (error) {
-                if (error instanceof ApiError && error.status >= 500) {
+                if (error instanceof ApiError && ((error.status >= 500)||(error.status === 404))) {
                     console.error(error);
                     navigate("/error");
                     return;

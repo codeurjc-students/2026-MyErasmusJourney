@@ -35,7 +35,8 @@ export default function UserComments({ userService = createUserService(API), use
                 id = user.id;
             }
             try {
-
+                const data = await userService.getComments(id);
+                setComments(data.reverse());
             } catch (error) {
                 if (error instanceof ApiError && error.status >= 500) {
                     console.error(error);
@@ -43,8 +44,6 @@ export default function UserComments({ userService = createUserService(API), use
                     return;
                 }
             }
-            const data = await userService.getComments(id);
-            setComments(data.reverse());
         };
         console.log(userComments)
 

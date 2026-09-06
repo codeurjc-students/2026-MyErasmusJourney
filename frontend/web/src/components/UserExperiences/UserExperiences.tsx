@@ -65,6 +65,11 @@ export default function UserExperiences({ userService = createUserService(API), 
             await fetchExperiences();
         }
         catch (error) {
+            if (error instanceof ApiError && error.status >= 500) {
+                console.error(error);
+                navigate("/error");
+                return;
+            }
             alert("Error deleting experience:" + error)
         }
     }
