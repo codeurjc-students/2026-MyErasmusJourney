@@ -45,7 +45,6 @@ export default function UserComments({ userService = createUserService(API), use
                 }
             }
         };
-        console.log(userComments)
 
         if (userComments === undefined || userComments.length < 1) {
             fetchExperiences();

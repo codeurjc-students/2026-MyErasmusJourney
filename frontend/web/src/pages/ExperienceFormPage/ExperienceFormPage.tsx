@@ -92,7 +92,7 @@ export default function ExperienceFormPage({ experienceService = createExperienc
                 return;
             }
             alert("Error while publishing your experience.");
-            console.log(error);
+            console.error(error);
         }
 
     }

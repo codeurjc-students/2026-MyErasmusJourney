@@ -245,13 +245,11 @@ describe("SignUpPage", () => {
     });
   });
 
-  it("should log success message on successful sign up", async () => {
+  it("should redirect to log in on successful sign up", async () => {
     const mockSignUp = vi.fn().mockResolvedValue({ id: 1, fullName: "John Doe", displayName: "johndoe", email: "john@example.com" });
     const mockService: UserService = {
       signUp: mockSignUp,
     };
-
-    global.console.log = vi.fn();
 
     delete (window as any).location;
     window.location = { href: "" } as Location;
@@ -278,7 +276,7 @@ describe("SignUpPage", () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(global.console.log).toHaveBeenCalledWith("User signed up successfully");
+      expect(mockNavigate).toHaveBeenCalledWith("/error");
     });
   });
 

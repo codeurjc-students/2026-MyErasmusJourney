@@ -29,8 +29,18 @@ export default function Comments({ experienceService = createExperienceService(A
     }
 
     async function getComments() {
-        const data = await experienceService.getCommentsByExperienceId(experienceId);
-        setComments(data);
+        try {
+            const data =
+            await experienceService.getCommentsByExperienceId(experienceId);
+
+            setComments(data);
+        } catch (error) {
+            if (error instanceof ApiError && error.status >= 500) {
+            console.error(error);
+            navigate("/error");
+            return;
+            }
+        }
     }
 
     async function postComment() {
@@ -50,7 +60,15 @@ export default function Comments({ experienceService = createExperienceService(A
 
     useEffect(() => {
         const fetchData = async () => {
-            await getComments()
+            try {
+                await getComments()
+            } catch (error) {
+                if (error instanceof ApiError && error.status >= 500) {
+                    console.error(error);
+                    navigate("/error");
+                    return;
+                }
+            }
         }
         fetchData();
     }, [])

@@ -37,9 +37,10 @@ export default function CityFormPage({ cityService = createCityService(API) }: c
             if (error instanceof ApiError && error.status >= 500) {
                 navigate("/error");
                 return;
+            }else if (error instanceof ApiError && error.status >= 200) {
+                alert(error);
             }
-            console.log(error);
-            alert(error);
+            console.error(error);
             return;
         }
     }

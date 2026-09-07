@@ -89,7 +89,6 @@ async function obtainAuthenticatedUser(
         };
 
     } catch (error) {
-        console.log("Error authenticating:", loginRequest);
         console.error(error);
 
         return {

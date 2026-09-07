@@ -71,8 +71,19 @@ export default function UserPage({ authService = createAuthService(API), userSer
             return;
         }
         if (user?.id) {
-            await userService.deleteUserById(user.id);
-            await logOut();
+            try{
+                await userService.deleteUserById(user.id);
+                await logOut();
+            }
+            catch (error) {
+                if (error instanceof ApiError && error.status >= 500) {
+                    console.log("testing delete internal error")
+                    console.error(error);
+                    navigate("/error");
+                    return;
+                }
+                console.error(error)
+            }
         }
     }
 

@@ -217,7 +217,7 @@ describe("ExperienceFormPage", () => {
     const error = new ApiError(400, "Error fetching experience");
 
     const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => { });
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => { });
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => { });
 
     const mockExperienceService = {
       getCategories: vi.fn().mockResolvedValue(["ART"]),

@@ -31,7 +31,6 @@ export default function LogInPage({ authService = createAuthService(API), userSe
         const username = formData.get("email") as string;
         const password = formData.get("password") as string;
 
-        console.log(username);
         if (username === "") {
             alert("Email missing");
             return;
@@ -59,7 +58,7 @@ export default function LogInPage({ authService = createAuthService(API), userSe
                 navigate("/error");
                 return;
             }
-            console.log(`Error logging in: ${error}`);
+            console.error(`Error logging in: ${error}`);
             alert(`Error logging in: ${error}`);
             return;
         }

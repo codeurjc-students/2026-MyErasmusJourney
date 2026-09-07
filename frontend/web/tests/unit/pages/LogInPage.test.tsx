@@ -174,7 +174,7 @@ describe("Log In page", () => {
     };
 
     global.alert = vi.fn();
-    global.console.log = vi.fn();
+    global.console.error = vi.fn();
 
     render(
       <MemoryRouter>
@@ -187,7 +187,7 @@ describe("Log In page", () => {
 
     await waitFor(() => {
       expect(mockLogIn).toHaveBeenCalledWith({ username: "john@example.com", password: "password123" });
-      expect(global.console.log).toHaveBeenCalledWith(expect.stringContaining("Error logging in"));
+      expect(global.console.error).toHaveBeenCalledWith(expect.stringContaining("Error logging in"));
       expect(global.alert).toHaveBeenCalledWith(expect.stringContaining("Error logging in:"));
     });
   });

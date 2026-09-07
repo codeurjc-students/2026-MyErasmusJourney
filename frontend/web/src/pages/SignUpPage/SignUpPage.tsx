@@ -42,7 +42,6 @@ export default function SignUpPage({ userService = createUserService(API) }: use
 
         try {
             await userService.signUp(userFormDTO);
-            console.log("User signed up successfully");
             navigate("/log-in");
         }
         catch (error) {
@@ -51,7 +50,7 @@ export default function SignUpPage({ userService = createUserService(API) }: use
                 navigate("/error");
                 return;
             }
-            console.log(`Error signing up: ${error}`);
+            console.error(`Error signing up: ${error}`);
             alert(`Error signing up: ${error}`);
             return;
         }

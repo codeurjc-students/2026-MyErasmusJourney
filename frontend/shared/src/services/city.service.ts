@@ -20,7 +20,7 @@ async function addCity(api: ApiClient, body: CityFormDTO){
     }
 
     if (response.status === 200){
-      throw new ApiError(response.status, await response.text());
+      throw new ApiError(response.status, "City already exists");
     }
 
     return await response.json();
