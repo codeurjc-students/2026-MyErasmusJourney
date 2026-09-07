@@ -3,15 +3,19 @@ import "@testing-library/jest-dom";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
-import { createApiClient } from "@shared/apiClient";
+import { createApiClient } from "@shared/api/apiClient";
 import { createAuthService } from "@shared/services/auth.service";
-import { createUserService } from "@shared/services/user.service";
+import { createUserService, type UserService } from "@shared/services/user.service";
 import { useUserStore } from "@shared/stores/userStore";
 import type { UserSimpleDTO } from "@shared/models/UserSimpleDTO";
 
 import { APIURL } from "src/config/env";
 import UserPage from "src/pages/UserPage/UserPage";
 import { authenticateUser, authenticateUserToDelete, clearFetchAndUserStore } from "tests/testAuthentication";
+import UserComments from "src/components/UserComments/UserComments";
+import type { ExperienceService } from "@shared/services/experience.service";
+import UserExperiences from "src/components/UserExperiences/UserExperiences";
+import { ApiError } from "@shared/api/apiError";
 
 const testAPI = createApiClient(APIURL);
 const testAuthService = createAuthService(testAPI);
@@ -31,7 +35,6 @@ describe("UserPage", () => {
   });
 
   it("renders the authenticated user's profile with real API data", async () => {
-    console.log("[User test] rendering UserPage with authenticated store state", authenticatedUser);
     render(
       <MemoryRouter initialEntries={["/profile"]}>
         <Routes>
@@ -52,6 +55,33 @@ describe("UserPage", () => {
     if (authenticatedUser?.email) {
       expect(await screen.findByText(String(authenticatedUser.email))).toBeInTheDocument();
     }
+  });
+
+  it("renders the error page when an internal error ocurres while fetching user data", async () => {
+    const testService: UserService = {
+      getUserById: async (userId: number) => {
+        const response = await testAPI.get("/tests/500");
+
+        if (!response.ok) {
+          throw new ApiError(response.status, await response.text());
+        }
+
+        return await response.json();
+      },
+      getExperiences: testUserService.getExperiences,
+      getComments: testUserService.getComments
+    };
+
+    render(
+      <MemoryRouter initialEntries={["/profile"]}>
+        <Routes>
+          <Route path="/profile" element={<UserPage userService={testService} authService={testAuthService} />} />
+          <Route path="/error" element={<div>Error page</div>} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByText("Error page")).toBeInTheDocument();
   });
 
   it("logs out and navigates back to the home page", async () => {
@@ -90,10 +120,6 @@ describe("UserPage", () => {
   it("deletes the authenticated user successfully", async () => {
     authenticatedUser = await authenticateUserToDelete();
     useUserStore.getState().setUser(authenticatedUser);
-
-    const experiences = await testUserService.getExperiences(authenticatedUser.id);
-
-    console.log("Experiences:", experiences);
 
     const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(true);
 
@@ -179,6 +205,68 @@ describe("UserPage", () => {
     );
 
     expect(screen.getByText("Profile")).toBeInTheDocument();
+
+    confirmSpy.mockRestore();
+  });
+
+  it("displays error page when internal error appears while deleting user", async () => {
+
+    const confirmSpy = vi
+      .spyOn(window, "confirm")
+      .mockReturnValue(true);
+
+    const testService: UserService = {
+      deleteUserById: async (userId: number) => {
+        const response = await testAPI.get("/tests/500");
+
+        if (!response.ok) {
+          throw new ApiError(response.status, await response.text());
+        }
+
+        return await response.json();
+      },
+      getUserById: testUserService.getUserById,
+      getExperiences: testUserService.getExperiences,
+      getComments: testUserService.getComments,
+      getUserInfo: testUserService.getUserInfo
+    };
+
+
+    render(
+      <MemoryRouter initialEntries={["/profile"]}>
+        <Routes>
+          <Route
+            path="/profile"
+            element={
+              <UserPage
+                authService={testAuthService}
+                userService={testService}
+              />
+            }
+          />
+          <Route
+            path="/error"
+            element={<div>Error page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Profile")).toBeInTheDocument();
+    });
+
+    fireEvent.click(
+      screen.getByRole("button", { name: /delete profile/i })
+    );
+
+    expect(confirmSpy).toHaveBeenCalledWith(
+      "This account is going to be deleted. This action cannot be undone. Are you certain?"
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Error page")).toBeInTheDocument();
+    });
 
     confirmSpy.mockRestore();
   });
@@ -446,5 +534,87 @@ describe("UserPage", () => {
     expect(
       await screen.findByText(experience.title)
     ).toBeInTheDocument();
+  });
+
+  it("should navigate to the error page when fetching user comments fails with an internal server error", async () => {
+    const testService: UserService = {
+      getComments: async (userId: number) => {
+        const response = await testAPI.get("/tests/500");
+
+        if (!response.ok) {
+          throw new ApiError(response.status, await response.text());
+        }
+
+        return await response.json();
+      },
+      // resto de métodos requeridos por UserService
+    };
+
+    render(
+      <MemoryRouter initialEntries={["/comments"]}>
+        <Routes>
+          <Route
+            path="/comments"
+            element={
+              <UserComments
+                userService={testService}
+                userComments={undefined}
+                userId={1}
+              />
+            }
+          />
+          <Route
+            path="/error"
+            element={<div>Error page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByText("Error page")).toBeInTheDocument();
+  });
+
+  it("should navigate to the error page when fetching user experiences fails with an internal server error", async () => {
+    const testService: UserService = {
+      getExperiences: async (userId: number) => {
+        const response = await testAPI.get("/tests/500");
+
+        if (!response.ok) {
+          throw new ApiError(response.status, await response.text());
+        }
+
+        return await response.json();
+      },
+      // resto de métodos requeridos por UserService
+    };
+
+    const experienceService: ExperienceService = {
+      deleteExperience: vi.fn(),
+      // resto de métodos requeridos por ExperienceService
+    };
+
+    render(
+      <MemoryRouter initialEntries={["/experiences"]}>
+        <Routes>
+          <Route
+            path="/experiences"
+            element={
+              <UserExperiences
+                userService={testService}
+                experienceService={experienceService}
+                userExperiences={undefined}
+                userId={1}
+              />
+            }
+          />
+          <Route
+            path="/error"
+            element={<div>Error page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByText("Error page")).toBeInTheDocument();
   });
 });

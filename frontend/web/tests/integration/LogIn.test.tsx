@@ -1,4 +1,4 @@
-import { createApiClient } from "@shared/apiClient";
+import { createApiClient } from "@shared/api/apiClient";
 import { createUserService } from "@shared/services/user.service";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
@@ -7,8 +7,10 @@ import { APIURL } from "src/config/env";
 import UserPage from "src/pages/UserPage/UserPage";
 import { afterAll, describe, expect, it, vi } from "vitest";
 import LogInPage from "src/pages/LogInPage/LogInPage";
-import { createAuthService } from "@shared/services/auth.service";
+import { createAuthService, type AuthService } from "@shared/services/auth.service";
 import { useUserStore } from "@shared/stores/userStore";
+import { ApiError } from "@shared/api/apiError";
+import type { LoginRequest } from "@shared/models/LoginRequest";
 
 const testAPI = createApiClient(APIURL);
 const testUserService = createUserService(testAPI);
@@ -39,11 +41,11 @@ describe("LogInPage", () => {
       expect(screen.getByTestId("title")).toBeInTheDocument();
     });
   });
-  
+
   it("should show alert when email is empty", async () => {
 
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
-    vi.spyOn(window, "alert").mockImplementation(() => {});
+    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => { });
+    vi.spyOn(window, "alert").mockImplementation(() => { });
 
     render(
       <MemoryRouter initialEntries={["/log-in"]}>
@@ -68,8 +70,8 @@ describe("LogInPage", () => {
 
   it("should show error alert when log in fails", async () => {
 
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
-    vi.spyOn(window, "alert").mockImplementation(() => {});
+    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => { });
+    vi.spyOn(window, "alert").mockImplementation(() => { });
 
     render(
       <MemoryRouter initialEntries={["/log-in"]}>
@@ -82,7 +84,7 @@ describe("LogInPage", () => {
     const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
     const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
     const submitButton = screen.getByRole("button", { name: /sign in/i });
-    
+
     fireEvent.change(emailInput, { target: { value: "vitest@email.com" } });
     fireEvent.change(passwordInput, { target: { value: "password123" } });
 
@@ -95,6 +97,43 @@ describe("LogInPage", () => {
     });
 
     expect(window.location.href).not.toBe("/");
+  });
+
+  it("should show redirect to error page when log in fails because of server internal error", async () => {
+    const testService: AuthService = {
+      logIn: async (loginRequest: LoginRequest) => {
+        const response = await testAPI.get("/tests/500");
+
+        if (!response.ok) {
+          throw new ApiError(response.status, await response.text());
+        }
+
+        return await response.json();
+      },
+    };
+
+    render(
+      <MemoryRouter initialEntries={["/log-in"]}>
+        <Routes>
+          <Route path="/log-in" element={<LogInPage authService={testService} userService={testUserService} />} />
+          <Route path="/error" element={<div>Error page</div>} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    const submitButton = screen.getByRole("button", { name: /sign in/i });
+
+    fireEvent.change(emailInput, { target: { value: "vitest@email.com" } });
+    fireEvent.change(passwordInput, { target: { value: "password123" } });
+
+    fireEvent.click(submitButton);
+
+    expect(window.location.href).not.toBe("/");
+    expect(
+      await screen.findByText("Error page")
+    ).toBeInTheDocument();
   });
 
   afterAll(() => {

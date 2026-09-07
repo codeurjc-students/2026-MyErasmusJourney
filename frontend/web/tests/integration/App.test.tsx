@@ -3,7 +3,7 @@ import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
-import { createApiClient } from "@shared/apiClient";
+import { createApiClient } from "@shared/api/apiClient";
 import { createUserService } from "@shared/services/user.service";
 import { useUserStore } from "@shared/stores/userStore";
 import type { UserSimpleDTO } from "@shared/models/UserSimpleDTO";

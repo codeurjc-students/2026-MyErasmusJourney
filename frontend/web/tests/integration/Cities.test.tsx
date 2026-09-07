@@ -6,8 +6,8 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import CityFormPage from "src/pages/CityFormPage/CityFormPage";
 import AvailableSoonPage from "src/pages/AvailableSoonPage/AvailableSoonPage";
 
-import { createApiClient } from "@shared/apiClient";
-import { createCityService } from "@shared/services/city.service";
+import { createApiClient } from "@shared/api/apiClient";
+import { createCityService, type CityService } from "@shared/services/city.service";
 import { APIURL } from "src/config/env";
 
 import { useUserStore } from "@shared/stores/userStore";
@@ -15,6 +15,9 @@ import {
   authenticateUser,
   clearFetchAndUserStore,
 } from "tests/testAuthentication";
+import type { CityFormDTO } from "@shared/models/CityFormDTO";
+import type { CitySimpleDTO } from "@shared/models/CitySimpleDTO";
+import { ApiError } from "@shared/api/apiError";
 
 const testAPI = createApiClient(APIURL);
 const testCityService = createCityService(testAPI);
@@ -146,7 +149,7 @@ describe("CityFormPage", () => {
   it("should show an alert when adding an already registered city", async () => {
     const alertSpy = vi
       .spyOn(window, "alert")
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     const cityName = `VitestCity-${Date.now()}`;
 
@@ -235,7 +238,7 @@ describe("CityFormPage", () => {
   });
 
   it("should allow adding two cities with the same name but different countries", async () => {
-  const cityName = `VitestCity-${Date.now()}`;
+    const cityName = `VitestCity-${Date.now()}`;
 
     // first city
     const firstRender = render(
@@ -328,5 +331,70 @@ describe("CityFormPage", () => {
     await waitFor(() => {
       expect(screen.getByText("Available Soon")).toBeInTheDocument();
     });
+  });
+
+  it("should navigate to the error page when adding a city fails with an internal server error", async () => {
+    const testService: CityService = {
+      addCity: async (cityFormDTO: CityFormDTO) => {
+        const response = await testAPI.get("/tests/500");
+
+        if (!response.ok) {
+          throw new ApiError(response.status, await response.text());
+        }
+
+        return await response.json();
+      },
+    };
+
+    render(
+      <MemoryRouter initialEntries={["/city-form"]}>
+        <Routes>
+          <Route
+            path="/city-form"
+            element={
+              <CityFormPage cityService={testService} />
+            }
+          />
+
+          <Route
+            path="/error"
+            element={<div>Error page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    fireEvent.change(
+      screen.getByLabelText(/city name/i),
+      {
+        target: { value: "Madrid" },
+      }
+    );
+
+    fireEvent.change(
+      screen.getByLabelText(/country/i),
+      {
+        target: { value: "Spain" },
+      }
+    );
+
+    fireEvent.change(
+      screen.getByLabelText(/city description/i),
+      {
+        target: {
+          value: "A beautiful city created by an integration test.",
+        },
+      }
+    );
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /save city/i,
+      })
+    );
+
+    expect(
+      await screen.findByText("Error page")
+    ).toBeInTheDocument();
   });
 });

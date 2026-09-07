@@ -1,12 +1,12 @@
-import { describe, beforeAll, beforeEach, afterAll, expect, it } from "vitest";
+import { describe, beforeAll, beforeEach, afterAll, expect, it, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import "@testing-library/jest-dom";
 
 import DetailedExperiencePage from "src/pages/DetailedExperiencePage/DetailedExperiencePage";
 
-import { createApiClient } from "@shared/apiClient";
-import { createExperienceService } from "@shared/services/experience.service";
+import { createApiClient, type ApiClient } from "@shared/api/apiClient";
+import { createExperienceService, type ExperienceService } from "@shared/services/experience.service";
 import { useUserStore } from "@shared/stores/userStore";
 
 import type { UserSimpleDTO } from "@shared/models/UserSimpleDTO";
@@ -17,6 +17,7 @@ import {
 } from "tests/testAuthentication";
 
 import { APIURL } from "src/config/env";
+import { ApiError } from "@shared/api/apiError";
 
 
 const testAPI = createApiClient(APIURL);
@@ -117,8 +118,8 @@ describe("DetailedExperiencePage", () => {
           />
 
           <Route
-            path="/available-soon"
-            element={<div>Available Soon Page</div>}
+            path="/error"
+            element={<div>Error Page</div>}
           />
         </Routes>
       </MemoryRouter>
@@ -126,9 +127,49 @@ describe("DetailedExperiencePage", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText("Available Soon Page")
+        screen.getByText("Error Page")
       ).toBeInTheDocument();
     });
+  });
+
+  it("should navigate to the error page when fetching the experience fails with an internal server error", async () => {
+    const testService: ExperienceService = {
+      getAll: vi.fn(),
+
+      getExperienceById: async (id: number) => {
+        const response = await testAPI.get("/tests/500");
+
+        if (!response.ok) {
+          throw new ApiError(response.status, await response.text());
+        }
+
+        return await response.json();
+      },
+    };
+
+    render(
+      <MemoryRouter initialEntries={["/experiences/1"]}>
+        <Routes>
+          <Route
+            path="/experiences/:id"
+            element={
+              <DetailedExperiencePage
+                experienceService={testService}
+              />
+            }
+          />
+
+          <Route
+            path="/error"
+            element={<div>Error page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(
+      await screen.findByText("Error page")
+    ).toBeInTheDocument();
   });
 
 });
