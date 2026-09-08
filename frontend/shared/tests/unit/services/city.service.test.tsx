@@ -1,6 +1,9 @@
 import { describe, it, expect, vi } from "vitest";
+
 import { createCityService } from "../../../src/services/city.service";
-import { ApiClient } from "../../../src/apiClient";
+
+import { ApiClient } from "../../../src/api/apiClient";
+
 import { CityFormDTO } from "../../../src/models/CityFormDTO";
 
 describe("CityService", () => {
@@ -97,9 +100,14 @@ describe("CityService", () => {
       description: "A beautiful city",
     };
 
+    const errorMessage = "Internal server error";
+
+    const textMock = vi.fn().mockResolvedValue(errorMessage);
+
     const fakeResponse = {
       ok: false,
       status: 500,
+      text: textMock,
       json: vi.fn(),
     };
 
@@ -114,12 +122,14 @@ describe("CityService", () => {
 
     await expect(
       cityService.addCity(cityFormDTO)
-    ).rejects.toThrow("Error adding city");
+    ).rejects.toThrow(errorMessage);
 
     expect(mockPost).toHaveBeenCalledWith(
       "/cities/",
       cityFormDTO
     );
+
+    expect(textMock).toHaveBeenCalledTimes(1);
 
     expect(fakeResponse.json).not.toHaveBeenCalled();
   });
@@ -158,13 +168,16 @@ describe("CityService", () => {
     const result = await cityService.addCity(cityFormDTO);
 
     expect(result).toEqual(responseData);
+
     expect(fakeResponse.json).toHaveBeenCalledTimes(1);
   });
+
 
   it("should return all cities from API", async () => {
 
     const cities = [
-      {name: "Madrid", country: "Spain"}, {name: "London", country: "United Kingdom"}
+      { name: "Madrid", country: "Spain" },
+      { name: "London", country: "United Kingdom" }
     ];
 
     const mockApi = {
@@ -183,20 +196,29 @@ describe("CityService", () => {
     expect(result).toEqual(cities);
   });
 
+
   it("should throw an error when obtaining cities request fails", async () => {
-      
-      const mockApi = {
-        get: vi.fn().mockResolvedValue({
-          ok: false,
-        }),
-      };
-  
-      const service = createCityService(mockApi);
-  
-      await expect(service.getAll()).rejects.toThrow(
-        "Error getting cities"
-      );
-  
-      expect(mockApi.get).toHaveBeenCalledWith("/cities/");
-    });
+
+    const errorMessage = "Internal server error";
+
+    const textMock = vi.fn().mockResolvedValue(errorMessage);
+
+    const mockApi = {
+      get: vi.fn().mockResolvedValue({
+        ok: false,
+        status: 500,
+        text: textMock,
+      }),
+    };
+
+    const service = createCityService(mockApi);
+
+    await expect(
+      service.getAll()
+    ).rejects.toThrow(errorMessage);
+
+    expect(mockApi.get).toHaveBeenCalledWith("/cities/");
+    expect(textMock).toHaveBeenCalledTimes(1);
+  });
+
 });
