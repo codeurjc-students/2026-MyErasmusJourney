@@ -109,6 +109,7 @@ jobs:
             DB_MODE: create-drop
             PORT: 8080
             SSL_ENABLED: false
+            SPRING_PROFILES_ACTIVE: test
 
           run: |
             cd ../backend
