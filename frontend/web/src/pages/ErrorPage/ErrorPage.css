@@ -1,4 +1,3 @@
-.mainImage{
-    height: 30rem;
-    width: 30 rem;
+.errorImage {
+    max-width: 50rem;
 }

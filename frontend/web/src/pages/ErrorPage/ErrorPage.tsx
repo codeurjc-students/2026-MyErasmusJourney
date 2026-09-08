@@ -13,7 +13,7 @@ export default function ErrorPage() {
         <>
             <div className="mx-auto flex flex-col items-center gap-8 p-6 text-center">
 
-                <img src="/images/error.png" alt="Error Image" className="mainImage max-w-sm w-3/4 h-auto"/>
+                <img src="/images/error.png" alt="Error Image" className="errorImage w-full max-w-md h-auto object-contain mx-auto" />
 
                 <button onClick={redirectToHome}>🏠 Back to home page</button>
 
