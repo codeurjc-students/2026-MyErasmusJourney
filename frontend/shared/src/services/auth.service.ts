@@ -1,5 +1,6 @@
-import type { ApiClient } from "../apiClient";
+import type { ApiClient } from "../api/apiClient";
 import type { LoginRequest } from "../models/LoginRequest";
+import { ApiError } from "../api/apiError";
 
 export type AuthService = ReturnType<typeof createAuthService>;
 
@@ -16,7 +17,7 @@ async function logIn(api: ApiClient, body: LoginRequest){
     const data =  await response.json();
     
     if (!response.ok || data.status !== "SUCCESS"){
-        throw new Error("Error loggin in");
+      throw new ApiError(response.status, await response.text());
     }
 
     return data;
@@ -26,7 +27,7 @@ async function logOut(api:ApiClient){
   const response = await api.post("/auth/logout", null);
 
     if (!response.ok){
-      throw new Error("Error loggin out");
+      throw new ApiError(response.status, await response.text());
     }
 
     return response.json();

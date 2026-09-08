@@ -4,6 +4,18 @@ import { MemoryRouter, Routes, Route } from "react-router-dom";
 import "@testing-library/jest-dom";
 import SignUpPage from "../../../src/pages/SignUpPage/SignUpPage";
 import type { UserService } from "@shared/services/user.service";
+import { ApiError } from "@shared/api/apiError";
+
+const mockNavigate = vi.fn();
+
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual<any>("react-router-dom");
+
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 describe("SignUpPage", () => {
   it("should render the sign up form with all fields", () => {
@@ -36,7 +48,6 @@ describe("SignUpPage", () => {
       <MemoryRouter initialEntries={["/signup"]}>
         <Routes>
           <Route path="/signup" element={<SignUpPage userService={mockService} />} />
-          <Route path="/log-in" element={<div>Log In</div>} />
         </Routes>
       </MemoryRouter>
     );
@@ -61,13 +72,13 @@ describe("SignUpPage", () => {
         fullName: "John Doe",
         displayName: "johndoe",
         email: "john@example.com",
-        city:null,
-        country:null,
+        city: null,
+        country: null,
         password: "password123",
         passwordConfirmation: "password123",
       });
 
-      expect(screen.getByText("Log In")).toBeInTheDocument();
+      expect(mockNavigate).toHaveBeenCalledWith("/log-in");
     });
 
   });
@@ -106,8 +117,9 @@ describe("SignUpPage", () => {
   });
 
   it("should show error alert when sign up fails", async () => {
-    const errorMessage = "Email already exists";
-    const mockSignUp = vi.fn().mockRejectedValue(new Error(errorMessage));
+    const error = new ApiError(400, "Email already exists");
+
+    const mockSignUp = vi.fn().mockRejectedValue(error);
     const mockService: UserService = {
       signUp: mockSignUp,
     };
@@ -143,6 +155,48 @@ describe("SignUpPage", () => {
       expect(global.alert).toHaveBeenCalledWith(
         expect.stringContaining("Error signing up")
       );
+    });
+
+    expect(window.location.href).not.toBe("/");
+  });
+
+  it("should redirect to error page when internal error while signing up", async () => {
+    const error = new ApiError(500, "Internal Error");
+
+    const mockSignUp = vi.fn().mockRejectedValue(error);
+    const mockService: UserService = {
+      signUp: mockSignUp,
+    };
+
+    global.alert = vi.fn();
+    global.console.log = vi.fn();
+
+    delete (window as any).location;
+    window.location = { href: "" } as Location;
+
+    render(
+      <MemoryRouter>
+        <SignUpPage userService={mockService} />
+      </MemoryRouter>
+    );
+
+    const fullNameInput = screen.getByLabelText(/full name/i) as HTMLInputElement;
+    const displayNameInput = screen.getByLabelText(/public name/i) as HTMLInputElement;
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    const passwordConfirmInput = screen.getByLabelText(/repeat password/i) as HTMLInputElement;
+    const submitButton = screen.getByRole("button", { name: /sign up/i });
+
+    fireEvent.change(fullNameInput, { target: { value: "John Doe" } });
+    fireEvent.change(displayNameInput, { target: { value: "johndoe" } });
+    fireEvent.change(emailInput, { target: { value: "john@example.com" } });
+    fireEvent.change(passwordInput, { target: { value: "password123" } });
+    fireEvent.change(passwordConfirmInput, { target: { value: "password123" } });
+
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith("/error");
     });
 
     expect(window.location.href).not.toBe("/");
@@ -191,13 +245,11 @@ describe("SignUpPage", () => {
     });
   });
 
-  it("should log success message on successful sign up", async () => {
+  it("should redirect to log in on successful sign up", async () => {
     const mockSignUp = vi.fn().mockResolvedValue({ id: 1, fullName: "John Doe", displayName: "johndoe", email: "john@example.com" });
     const mockService: UserService = {
       signUp: mockSignUp,
     };
-
-    global.console.log = vi.fn();
 
     delete (window as any).location;
     window.location = { href: "" } as Location;
@@ -224,7 +276,7 @@ describe("SignUpPage", () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(global.console.log).toHaveBeenCalledWith("User signed up successfully");
+      expect(mockNavigate).toHaveBeenCalledWith("/error");
     });
   });
 

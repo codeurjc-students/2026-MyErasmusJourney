@@ -6,6 +6,7 @@ import LogInPage from "../../../src/pages/LogInPage/LogInPage";
 import type { AuthService } from "@shared/services/auth.service";
 import type { UserService } from "@shared/services/user.service";
 import { useUserStore } from "@shared/stores/userStore";
+import { ApiError } from "@shared/api/apiError";
 
 const mockNavigate = vi.fn();
 
@@ -159,8 +160,42 @@ describe("Log In page", () => {
   });
 
   it("should show error alert when login fails", async () => {
-    const errorMessage = "Invalid credentials";
-    const mockLogIn = vi.fn().mockRejectedValue(new Error(errorMessage));
+    const error = new ApiError(400, "Invalid credentials");
+
+    const mockLogIn = vi.fn().mockRejectedValue(error);
+
+    const mockAuthService: AuthService = {
+      logIn: mockLogIn,
+    };
+
+    const mockUserService: UserService = {
+      signUp: vi.fn(),
+      getUserInfo: vi.fn(),
+    };
+
+    global.alert = vi.fn();
+    global.console.error = vi.fn();
+
+    render(
+      <MemoryRouter>
+        <LogInPage authService={mockAuthService} userService={mockUserService} />
+      </MemoryRouter>
+    );
+
+    fillLoginForm();
+    fireEvent.click(screen.getByRole("button", { name: /sign in/i }));
+
+    await waitFor(() => {
+      expect(mockLogIn).toHaveBeenCalledWith({ username: "john@example.com", password: "password123" });
+      expect(global.console.error).toHaveBeenCalledWith(expect.stringContaining("Error logging in"));
+      expect(global.alert).toHaveBeenCalledWith(expect.stringContaining("Error logging in:"));
+    });
+  });
+
+  it("should redirect to error page when server error appears", async () => {
+    const error = new ApiError(500, "Internal Server Error");
+
+    const mockLogIn = vi.fn().mockRejectedValue(error);
 
     const mockAuthService: AuthService = {
       logIn: mockLogIn,
@@ -185,8 +220,7 @@ describe("Log In page", () => {
 
     await waitFor(() => {
       expect(mockLogIn).toHaveBeenCalledWith({ username: "john@example.com", password: "password123" });
-      expect(global.console.log).toHaveBeenCalledWith(expect.stringContaining("Error logging in"));
-      expect(global.alert).toHaveBeenCalledWith(expect.stringContaining("Error logging in:"));
+      expect(mockNavigate).toHaveBeenCalledWith("/error");
     });
   });
 

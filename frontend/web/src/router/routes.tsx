@@ -10,6 +10,7 @@ import AvailableSoonPage from "../pages/AvailableSoonPage/AvailableSoonPage";
 import CityFormPage from "../pages/CityFormPage/CityFormPage";
 import ExperienceFormPage from "../pages/ExperienceFormPage/ExperienceFormPage";
 import DetailedExperiencePage from "../pages/DetailedExperiencePage/DetailedExperiencePage";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
 
 export const routes = [
   {
@@ -50,6 +51,10 @@ export const routes = [
   },
   {
     path: ROUTES.DETAILED_EXPERIENCE,
-    element: <DetailedExperiencePage/>
+    element: <DetailedExperiencePage />
+  },
+  {
+    path: ROUTES.ERROR_PAGE,
+    element: <ErrorPage />
   }
 ];

@@ -9,6 +9,20 @@ import UserComments from "../../../src/components/UserComments/UserComments";
 import type { UserService } from "@shared/services/user.service";
 
 import { useUserStore } from "@shared/stores/userStore";
+import { ApiError } from "@shared/api/apiError";
+
+const mockNavigate = vi.fn();
+
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual<typeof import("react-router-dom")>(
+    "react-router-dom"
+  );
+
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 describe("UserComments", () => {
 
@@ -220,6 +234,42 @@ describe("UserComments", () => {
     expect(
       await screen.findByText("My comment")
     ).toBeInTheDocument();
+  });
+
+  it("navigates to /error when getting comments fails with server error (500)", async () => {
+    const mockGetComments = vi.fn().mockRejectedValue(new ApiError(500, "Internal server error"));
+
+    const mockService: UserService = {
+      getComments: mockGetComments,
+      getExperiences: vi.fn(),
+      getUserInfo: vi.fn(),
+      getUserById: vi.fn(),
+      deleteUserById: vi.fn(),
+      signUp: vi.fn(),
+    };
+
+    useUserStore.setState({
+      user: {
+        id: 10,
+        displayName: "John",
+        email: "john@test.com",
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <UserComments
+          userService={mockService}
+          userComments={undefined}
+          userId={undefined}
+        />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(mockGetComments).toHaveBeenCalledWith(10);
+      expect(mockNavigate).toHaveBeenCalledWith("/error");
+    });
   });
 
 });

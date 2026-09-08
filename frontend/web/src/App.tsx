@@ -16,7 +16,6 @@ function App({userService = createUserService(API)}: userServiceProps) {
     const fetchUser = async () => {
       
       try {
-        console.log("Fetching user info in app");
         const data = await userService.getUserInfo();
         setUser(data);
       } catch {

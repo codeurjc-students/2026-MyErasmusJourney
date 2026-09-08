@@ -3,15 +3,18 @@ import "@testing-library/jest-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
-import { createApiClient } from "@shared/apiClient";
-import { createCityService } from "@shared/services/city.service";
-import { createExperienceService } from "@shared/services/experience.service";
+import { createApiClient } from "@shared/api/apiClient";
+import { createCityService, type CityService } from "@shared/services/city.service";
+import { createExperienceService, type ExperienceService } from "@shared/services/experience.service";
 import { useUserStore } from "@shared/stores/userStore";
 
 import { APIURL } from "src/config/env";
 import ExperienceFormPage from "src/pages/ExperienceFormPage/ExperienceFormPage";
 import { authenticateUser, clearFetchAndUserStore } from "tests/testAuthentication";
 import DetailedExperiencePage from "src/pages/DetailedExperiencePage/DetailedExperiencePage";
+import type { ExperienceDTO } from "@shared/models/ExperienceDTO";
+import type { ExperienceFormDTO } from "@shared/models/ExperienceFormDTO";
+import { ApiError } from "@shared/api/apiError";
 
 const testAPI = createApiClient(APIURL);
 const testCityService = createCityService(testAPI);
@@ -37,7 +40,7 @@ describe("ExperienceFormPage integration", () => {
     render(
       <MemoryRouter initialEntries={["/experiences/new"]}>
         <Routes>
-          <Route path="/experiences/new" element={<ExperienceFormPage experienceService={testExperienceService} cityService={testCityService}/>}/>
+          <Route path="/experiences/new" element={<ExperienceFormPage experienceService={testExperienceService} cityService={testCityService} />} />
           <Route path="/log-in" element={<div>Log in page</div>} />
         </Routes>
       </MemoryRouter>
@@ -55,11 +58,11 @@ describe("ExperienceFormPage integration", () => {
 
     await waitFor(() => {
       expect(screen.getByRole("checkbox", { name: /accommodation/i })).toBeInTheDocument();
-      expect(screen.getByRole("option", {name: new RegExp(`${cities[0].name}, ${cities[0].country}`, "i"),})).toBeInTheDocument();
+      expect(screen.getByRole("option", { name: new RegExp(`${cities[0].name}, ${cities[0].country}`, "i"), })).toBeInTheDocument();
     });
 
 
-    
+
   });
 
   it("redirects to the login page when there is no authenticated user", async () => {
@@ -86,7 +89,7 @@ describe("ExperienceFormPage integration", () => {
   });
 
   it("shows an alert and blocks submission when more than 3 categories are selected", async () => {
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
+    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => { });
     const cities = await testCityService.getAll();
 
     render(
@@ -95,7 +98,7 @@ describe("ExperienceFormPage integration", () => {
           <Route
             path="/experiences/new"
             element={
-              <ExperienceFormPage experienceService={testExperienceService} cityService={testCityService}/>
+              <ExperienceFormPage experienceService={testExperienceService} cityService={testCityService} />
             }
           />
         </Routes>
@@ -186,4 +189,71 @@ describe("ExperienceFormPage integration", () => {
       expect(screen.getByText(title)).toBeInTheDocument();
     });
   });
-});
+
+  it("should navigate to the error page when publishing an experience fails with an internal server error", async () => {
+    const cities = await testCityService.getAll();
+
+    const experienceService: ExperienceService = {
+      getCategories: vi.fn().mockResolvedValue([]),
+
+      postExperience: async (experienceRequest: ExperienceFormDTO) => {
+        const response = await testAPI.get("/tests/500");
+
+        if (!response.ok) {
+          throw new ApiError(response.status, await response.text());
+        }
+
+        return await response.json();
+      },
+
+      getCategories: testExperienceService.getCategories,
+
+    };
+
+    render(
+      <MemoryRouter initialEntries={["/experiences/new"]}>
+        <Routes>
+          <Route
+            path="/experiences/new"
+            element={
+              <ExperienceFormPage
+                experienceService={experienceService}
+                cityService={testCityService}
+              />
+            }
+          />
+          <Route
+            path="/error"
+            element={<div>Error page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole("checkbox", { name: /studies/i })).toBeInTheDocument();
+    });
+
+    fireEvent.change(screen.getByLabelText(/title/i), {
+      target: { value: "title" },
+    });
+    fireEvent.change(screen.getByLabelText(/rating/i), {
+      target: { value: "9.4" },
+    });
+    fireEvent.change(screen.getByLabelText(/location/i), {
+      target: { value: String(cities[0].id) },
+    });
+    fireEvent.change(screen.getByLabelText(/date/i), {
+      target: { value: "2026-08-15" },
+    });
+    fireEvent.change(screen.getByLabelText(/experience description/i), {
+      target: { value: "A real experience created in the integration suite." },
+    });
+
+    fireEvent.click(screen.getByRole("checkbox", { name: /accommodation/i }));
+
+    fireEvent.click(screen.getByRole("button", { name: /publish/i }));
+
+    expect(await screen.findByText("Error page")).toBeInTheDocument();
+  })
+})

@@ -1,10 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { createAuthService } from "../../../src/services/auth.service";
+
 import type { LoginRequest } from "../../../src/models/LoginRequest";
 
 describe("AuthService", () => {
 
   it("should successfully log in when the request succeeds", async () => {
+
     const loginRequest: LoginRequest = {
       username: "test@example.com",
       password: "password123",
@@ -31,27 +34,40 @@ describe("AuthService", () => {
     expect(result).toEqual(responseData);
   });
 
+
   it("should throw an error when the login request fails", async () => {
+
     const loginRequest: LoginRequest = {
       username: "test@example.com",
       password: "password123",
     };
 
+    const errorMessage = "Invalid credentials";
+    const textMock = vi.fn().mockResolvedValue(errorMessage);
+
     const mockApi = {
       post: vi.fn().mockResolvedValue({
         ok: false,
+        status: "FAILURE",
+        text: textMock,
         json: vi.fn(),
       }),
     };
 
     const service = createAuthService(mockApi);
 
-    await expect(service.logIn(loginRequest)).rejects.toThrow(
-      "Error loggin in"
+    await expect(
+      service.logIn(loginRequest)
+    ).rejects.toThrow(errorMessage);
+
+    expect(mockApi.post).toHaveBeenCalledWith(
+      "/auth/login",
+      loginRequest
     );
 
-    expect(mockApi.post).toHaveBeenCalledWith("/auth/login", loginRequest);
+    expect(textMock).toHaveBeenCalledTimes(1);
   });
+
 
   it("should throw an error when the login request doesn't have success status", async () => {
 
@@ -64,26 +80,34 @@ describe("AuthService", () => {
       password: "password123",
     };
 
+    const errorMessage = "Error loggin in";
+    const textMock = vi.fn().mockResolvedValue(errorMessage);
+
     const mockApi = {
       post: vi.fn().mockResolvedValue({
         ok: true,
         json: vi.fn().mockResolvedValue(responseData),
+        text: textMock,
       }),
     };
 
     const service = createAuthService(mockApi);
 
-    await expect(service.logIn(loginRequest)).rejects.toThrow(
-      "Error loggin in"
-    );
+    await expect(
+      service.logIn(loginRequest)
+    ).rejects.toThrow("Error loggin in");
 
-    expect(mockApi.post).toHaveBeenCalledWith("/auth/login", loginRequest);
+    expect(mockApi.post).toHaveBeenCalledWith(
+      "/auth/login",
+      loginRequest
+    );
   });
+
 
   it("should pass the correct request body to the API", async () => {
 
     const responseData = {
-      status: "SUCCESS",
+      status: "SUCCESS"
     };
 
     const loginRequest: LoginRequest = {
@@ -102,8 +126,12 @@ describe("AuthService", () => {
 
     await service.logIn(loginRequest);
 
-    expect(mockApi.post).toHaveBeenCalledWith("/auth/login", loginRequest);
+    expect(mockApi.post).toHaveBeenCalledWith(
+      "/auth/login",
+      loginRequest
+    );
   });
+
 
   it("should successfully log out when the request succeeds", async () => {
 
@@ -127,22 +155,32 @@ describe("AuthService", () => {
     expect(result).toEqual(responseData);
   });
 
+
   it("should throw an error when the log out request fails", async () => {
+
+    const errorMessage = "Unauthorized";
+    const textMock = vi.fn().mockResolvedValue(errorMessage);
 
     const mockApi = {
       post: vi.fn().mockResolvedValue({
         ok: false,
-        json: vi.fn(),
+        status: 401,
+        text: textMock,
       }),
     };
 
     const service = createAuthService(mockApi);
 
-    await expect(service.logOut()).rejects.toThrow(
-      "Error loggin out"
+    await expect(
+      service.logOut()
+    ).rejects.toThrow(errorMessage);
+
+    expect(mockApi.post).toHaveBeenCalledWith(
+      "/auth/logout",
+      null
     );
 
-    expect(mockApi.post).toHaveBeenCalledWith("/auth/logout", null);
+    expect(textMock).toHaveBeenCalledTimes(1);
   });
 
 });

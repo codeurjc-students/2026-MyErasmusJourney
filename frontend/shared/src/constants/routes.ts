@@ -9,4 +9,5 @@ export const ROUTES = {
     USER: "/account",
     CITY_FORM: "/cities/new",
     AVAILABLE_SOON: "/available-soon",
+    ERROR_PAGE: "*",
 };

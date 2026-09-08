@@ -6,6 +6,7 @@ import type { UserService } from "@shared/services/user.service";
 import type { AuthService } from "@shared/services/auth.service";
 import { useUserStore } from "@shared/stores/userStore";
 import type { UserDTO } from "@shared/models/UserDTO";
+import { ApiError } from "@shared/api/apiError";
 
 // ---------- mocks ----------
 
@@ -61,7 +62,7 @@ describe("UserPage", () => {
       setUser: vi.fn()
     });
 
-    render(<UserPage authService={mockAuth} userService={mockService}/>);
+    render(<UserPage authService={mockAuth} userService={mockService} />);
 
     await waitFor(() => {
       expect(screen.getByText("john")).toBeInTheDocument();
@@ -100,7 +101,7 @@ describe("UserPage", () => {
       setUser: vi.fn()
     });
 
-    render(<UserPage userService={mockService}/>);
+    render(<UserPage userService={mockService} />);
 
     await waitFor(() => {
       expect(
@@ -126,7 +127,7 @@ describe("UserPage", () => {
       setUser: vi.fn()
     });
 
-    render(<UserPage userService={mockService}/>);
+    render(<UserPage userService={mockService} />);
 
     await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith("/log-in");
@@ -134,10 +135,12 @@ describe("UserPage", () => {
   });
 
   it("redirects to login when loading user fails", async () => {
+    const error = new ApiError(400, "Mock");
 
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
-    const mockGetUser = vi.fn().mockRejectedValue(new Error("Mock"));
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => { });
+
+    const mockGetUser = vi.fn().mockRejectedValue(error);
 
     const mockService: UserService = {
       signUp: vi.fn(),
@@ -152,11 +155,40 @@ describe("UserPage", () => {
       setUser: vi.fn()
     });
 
-    render(<UserPage userService={mockService}/>);
+    render(<UserPage userService={mockService} />);
 
     await waitFor(() => {
       expect(consoleSpy).toHaveBeenCalled();
       expect(mockNavigate).toHaveBeenCalledWith("/log-in");
+    });
+  });
+
+  it("redirects to error page when API fails", async () => {
+    const error = new ApiError(500, "Mock");
+
+
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => { });
+
+    const mockGetUser = vi.fn().mockRejectedValue(error);
+
+    const mockService: UserService = {
+      signUp: vi.fn(),
+      getUserInfo: vi.fn(),
+      getUserById: mockGetUser,
+      getExperiences: vi.fn().mockResolvedValue([]),
+      getComments: vi.fn().mockResolvedValue([]),
+    };
+
+    (useUserStore as any).mockReturnValue({
+      user: { id: 1 },
+      setUser: vi.fn()
+    });
+
+    render(<UserPage userService={mockService} />);
+
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalled();
+      expect(mockNavigate).toHaveBeenCalledWith("/error");
     });
   });
 
@@ -195,7 +227,7 @@ describe("UserPage", () => {
       setUser
     });
 
-    render(<UserPage authService={mockAuth} userService={mockService}/>);
+    render(<UserPage authService={mockAuth} userService={mockService} />);
 
     await waitFor(() => {
       expect(mockGetUser).toHaveBeenCalled();
@@ -232,7 +264,7 @@ describe("UserPage", () => {
       setUser: vi.fn()
     });
 
-    render(<UserPage userService={mockService}/>);
+    render(<UserPage userService={mockService} />);
 
     await waitFor(() => {
       expect(screen.getByRole("button", { name: /log out/i })).toBeInTheDocument();
@@ -266,7 +298,7 @@ describe("UserPage", () => {
       setUser: vi.fn()
     });
 
-    render(<UserPage userService={mockService}/>);
+    render(<UserPage userService={mockService} />);
 
     await waitFor(() => {
       expect(screen.getByRole("button", { name: /log out/i })).toBeInTheDocument();
@@ -312,7 +344,7 @@ describe("UserPage", () => {
       setUser
     });
 
-    render(<UserPage authService={mockAuth} userService={mockService}/>);
+    render(<UserPage authService={mockAuth} userService={mockService} />);
 
     await waitFor(() => {
       expect(mockGetUser).toHaveBeenCalled();
@@ -337,13 +369,13 @@ describe("UserPage", () => {
     };
 
     const fakeUserDTO: UserDTO = {
-        id: 1,
-        displayName: "test",
-        fullName: "userTest",
-        email: "test@email.com",
-        studyLocation: "To be filled",
-        roles: ["USER"],
-        experiences:[]
+      id: 1,
+      displayName: "test",
+      fullName: "userTest",
+      email: "test@email.com",
+      studyLocation: "To be filled",
+      roles: ["USER"],
+      experiences: []
 
     }
 
@@ -375,7 +407,7 @@ describe("UserPage", () => {
       setUser
     });
 
-    render(<UserPage authService={mockAuth} userService={mockService}/>);
+    render(<UserPage authService={mockAuth} userService={mockService} />);
 
     await waitFor(() => {
       expect(mockGetUser).toHaveBeenCalled();
@@ -401,13 +433,13 @@ describe("UserPage", () => {
     };
 
     const fakeUserDTO: UserDTO = {
-        id: 1,
-        displayName: "test",
-        fullName: "userTest",
-        email: "test@email.com",
-        studyLocation: "To be filled",
-        roles: ["USER"],
-        experiences:[]
+      id: 1,
+      displayName: "test",
+      fullName: "userTest",
+      email: "test@email.com",
+      studyLocation: "To be filled",
+      roles: ["USER"],
+      experiences: []
     }
 
     const mockGetUser = vi.fn().mockResolvedValue(fakeUser);
@@ -438,7 +470,7 @@ describe("UserPage", () => {
       setUser
     });
 
-    render(<UserPage authService={mockAuth} userService={mockService}/>);
+    render(<UserPage authService={mockAuth} userService={mockService} />);
 
     await waitFor(() => {
       expect(mockGetUser).toHaveBeenCalled();

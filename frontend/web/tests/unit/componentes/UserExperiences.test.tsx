@@ -7,6 +7,19 @@ import UserExperiences from "../../../src/components/UserExperiences/UserExperie
 import { useUserStore } from "@shared/stores/userStore";
 import type { UserService } from "@shared/services/user.service";
 import type { ExperienceService } from "@shared/services/experience.service";
+import { ApiError } from "@shared/api/apiError";
+const mockNavigate = vi.fn();
+
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual<typeof import("react-router-dom")>(
+    "react-router-dom"
+  );
+
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 describe("UserExperiences", () => {
 
@@ -25,7 +38,7 @@ describe("UserExperiences", () => {
         date: "2026-06-25",
         cityName: "Munich",
         country: "Germany",
-        categories:["Studies"],
+        categories: ["Studies"],
         rating: 8.5,
         description: "Great experience",
         authorName: "Jeremy"
@@ -36,7 +49,7 @@ describe("UserExperiences", () => {
         cityName: "Berlin",
         country: "Germany",
         date: "2026-06-26",
-        categories:["Culture", "Social_events"],
+        categories: ["Culture", "Social_events"],
         rating: 9,
         description: "Amazing city",
         authorName: "Sam"
@@ -81,7 +94,7 @@ describe("UserExperiences", () => {
         date: "2026-06-25",
         cityName: "Munich",
         country: "Germany",
-        categories:["Studies"],
+        categories: ["Studies"],
         rating: 8.5,
         description: "Great experience",
         authorName: "Jeremy"
@@ -92,7 +105,7 @@ describe("UserExperiences", () => {
         cityName: "Berlin",
         country: "Germany",
         date: "2026-06-26",
-        categories:["Culture", "Social_events"],
+        categories: ["Culture", "Social_events"],
         rating: 9,
         description: "Amazing city",
         authorName: "Sam"
@@ -144,7 +157,7 @@ describe("UserExperiences", () => {
         date: "2026-06-25",
         cityName: "Munich",
         country: "Germany",
-        categories:["Studies"],
+        categories: ["Studies"],
         rating: 8,
         description: "Great experience",
         authorName: "Jeremy"
@@ -191,7 +204,7 @@ describe("UserExperiences", () => {
         date: "2026-06-25",
         cityName: "Munich",
         country: "Germany",
-        categories:["Studies"],
+        categories: ["Studies"],
         rating: 8,
         description: "Great experience",
         authorName: "Jeremy"
@@ -239,116 +252,7 @@ describe("UserExperiences", () => {
 
   it("should delete an experience and reload the experiences", async () => {
 
-  const initialExperiences = [
-    {
-      id: 1,
-      title: "Experience to delete",
-      date: "2026-06-25",
-      cityName: "Munich",
-      country: "Germany",
-      categories: ["Studies"],
-      rating: 8.5,
-      description: "Experience that will be deleted",
-      authorName: "Jeremy",
-    },
-    {
-      id: 2,
-      title: "Remaining experience",
-      date: "2026-06-26",
-      cityName: "Berlin",
-      country: "Germany",
-      categories: ["Culture"],
-      rating: 9,
-      description: "Another experience",
-      authorName: "Jeremy",
-    }
-  ];
-
-  const remainingExperiences = [
-    {
-      id: 2,
-      title: "Remaining experience",
-      date: "2026-06-26",
-      cityName: "Berlin",
-      country: "Germany",
-      categories: ["Culture"],
-      rating: 9,
-      description: "Another experience",
-      authorName: "Jeremy",
-    },
-  ];
-
-  const mockGetExperiences = vi
-    .fn()
-    .mockResolvedValueOnce(initialExperiences)
-    .mockResolvedValueOnce(remainingExperiences);
-
-  const mockDeleteExperience = vi
-    .fn()
-    .mockResolvedValue(initialExperiences.find(exp => exp.id === 1));
-
-  const mockUserService: UserService = {
-    getExperiences: mockGetExperiences,
-    getUserInfo: vi.fn(),
-    getUserById: vi.fn(),
-    deleteUserById: vi.fn(),
-    signUp: vi.fn(),
-  };
-
-  const mockExperienceService: ExperienceService = {
-    deleteExperience: mockDeleteExperience,
-    // añade aquí el resto de métodos que exija tu ExperienceService
-  };
-
-  render(
-    <MemoryRouter>
-      <UserExperiences
-        userService={mockUserService}
-        experienceService={mockExperienceService}
-        userExperiences={undefined}
-        userId={1}
-      />
-    </MemoryRouter>
-  );
-
-  expect(
-    await screen.findByText("Experience to delete")
-  ).toBeInTheDocument();
-
-  const deleteButton = screen.getByRole("button", {
-    name: /delete experience to delete/i,
-  });
-
-  deleteButton.click();
-
-  await waitFor(() => {
-    expect(mockDeleteExperience).toHaveBeenCalledTimes(1);
-    expect(mockDeleteExperience).toHaveBeenCalledWith(1);
-  });
-
-  await waitFor(() => {
-    expect(mockGetExperiences).toHaveBeenCalledTimes(2);
-    expect(mockGetExperiences).toHaveBeenLastCalledWith(1);
-  });
-
-  expect(
-    await screen.findByText("Remaining experience")
-  ).toBeInTheDocument();
-
-  expect(
-    screen.queryByText("Experience to delete")
-  ).not.toBeInTheDocument();
-});
-
-it("should show an alert when deleting an experience fails", async () => {
-
-  const mockDeleteExperience = vi
-    .fn()
-    .mockRejectedValue(new Error("Delete failed"));
-
-  const mockGetExperiences = vi
-    .fn()
-    .mockResolvedValue([
+    const initialExperiences = [
       {
         id: 1,
         title: "Experience to delete",
@@ -360,57 +264,263 @@ it("should show an alert when deleting an experience fails", async () => {
         description: "Experience that will be deleted",
         authorName: "Jeremy",
       },
-    ]);
+      {
+        id: 2,
+        title: "Remaining experience",
+        date: "2026-06-26",
+        cityName: "Berlin",
+        country: "Germany",
+        categories: ["Culture"],
+        rating: 9,
+        description: "Another experience",
+        authorName: "Jeremy",
+      }
+    ];
 
-  const mockUserService: UserService = {
-    getExperiences: mockGetExperiences,
-    getUserInfo: vi.fn(),
-    getUserById: vi.fn(),
-    deleteUserById: vi.fn(),
-    signUp: vi.fn(),
-  };
+    const remainingExperiences = [
+      {
+        id: 2,
+        title: "Remaining experience",
+        date: "2026-06-26",
+        cityName: "Berlin",
+        country: "Germany",
+        categories: ["Culture"],
+        rating: 9,
+        description: "Another experience",
+        authorName: "Jeremy",
+      },
+    ];
 
-  const mockExperienceService: ExperienceService = {
-    deleteExperience: mockDeleteExperience,
-    // añade aquí el resto de métodos que exija tu ExperienceService
-  };
+    const mockGetExperiences = vi
+      .fn()
+      .mockResolvedValueOnce(initialExperiences)
+      .mockResolvedValueOnce(remainingExperiences);
 
-  const alertSpy = vi
-    .spyOn(window, "alert")
-    .mockImplementation(() => {});
+    const mockDeleteExperience = vi
+      .fn()
+      .mockResolvedValue(initialExperiences.find(exp => exp.id === 1));
 
-  render(
-    <MemoryRouter>
-      <UserExperiences
-        userService={mockUserService}
-        experienceService={mockExperienceService}
-        userExperiences={undefined}
-        userId={1}
-      />
-    </MemoryRouter>
-  );
+    const mockUserService: UserService = {
+      getExperiences: mockGetExperiences,
+      getUserInfo: vi.fn(),
+      getUserById: vi.fn(),
+      deleteUserById: vi.fn(),
+      signUp: vi.fn(),
+    };
 
-  expect(
-    await screen.findByText("Experience to delete")
-  ).toBeInTheDocument();
+    const mockExperienceService: ExperienceService = {
+      deleteExperience: mockDeleteExperience,
+      // añade aquí el resto de métodos que exija tu ExperienceService
+    };
 
-  await screen
-    .getByRole("button", {
+    render(
+      <MemoryRouter>
+        <UserExperiences
+          userService={mockUserService}
+          experienceService={mockExperienceService}
+          userExperiences={undefined}
+          userId={1}
+        />
+      </MemoryRouter>
+    );
+
+    expect(
+      await screen.findByText("Experience to delete")
+    ).toBeInTheDocument();
+
+    const deleteButton = screen.getByRole("button", {
       name: /delete experience to delete/i,
-    })
-    .click();
+    });
 
-  await waitFor(() => {
-    expect(mockDeleteExperience).toHaveBeenCalledWith(1);
+    deleteButton.click();
+
+    await waitFor(() => {
+      expect(mockDeleteExperience).toHaveBeenCalledTimes(1);
+      expect(mockDeleteExperience).toHaveBeenCalledWith(1);
+    });
+
+    await waitFor(() => {
+      expect(mockGetExperiences).toHaveBeenCalledTimes(2);
+      expect(mockGetExperiences).toHaveBeenLastCalledWith(1);
+    });
+
+    expect(
+      await screen.findByText("Remaining experience")
+    ).toBeInTheDocument();
+
+    expect(
+      screen.queryByText("Experience to delete")
+    ).not.toBeInTheDocument();
   });
 
-  expect(alertSpy).toHaveBeenCalledWith(
-    "Error deleting experience:Error: Delete failed"
-  );
+  it("should show an alert when deleting an experience fails", async () => {
 
-  expect(mockGetExperiences).toHaveBeenCalledTimes(1);
+    const mockDeleteExperience = vi
+      .fn()
+      .mockRejectedValue(new ApiError(403, "Delete failed"));
 
-  alertSpy.mockRestore();
-});
+    const mockGetExperiences = vi
+      .fn()
+      .mockResolvedValue([
+        {
+          id: 1,
+          title: "Experience to delete",
+          date: "2026-06-25",
+          cityName: "Munich",
+          country: "Germany",
+          categories: ["Studies"],
+          rating: 8.5,
+          description: "Experience that will be deleted",
+          authorName: "Jeremy",
+        },
+      ]);
+
+    const mockUserService: UserService = {
+      getExperiences: mockGetExperiences,
+      getUserInfo: vi.fn(),
+      getUserById: vi.fn(),
+      deleteUserById: vi.fn(),
+      signUp: vi.fn(),
+    };
+
+    const mockExperienceService: ExperienceService = {
+      deleteExperience: mockDeleteExperience,
+    };
+
+    const alertSpy = vi
+      .spyOn(window, "alert")
+      .mockImplementation(() => { });
+
+    render(
+      <MemoryRouter>
+        <UserExperiences
+          userService={mockUserService}
+          experienceService={mockExperienceService}
+          userExperiences={undefined}
+          userId={1}
+        />
+      </MemoryRouter>
+    );
+
+    expect(
+      await screen.findByText("Experience to delete")
+    ).toBeInTheDocument();
+
+    await screen
+      .getByRole("button", {
+        name: /delete experience to delete/i,
+      })
+      .click();
+
+    await waitFor(() => {
+      expect(mockDeleteExperience).toHaveBeenCalledWith(1);
+    });
+
+    expect(alertSpy).toHaveBeenCalledWith(
+      "Error deleting experience:ApiError: Delete failed"
+    );
+
+    expect(mockGetExperiences).toHaveBeenCalledTimes(1);
+
+    alertSpy.mockRestore();
+  });
+
+  it("should redirect to error page when deleting an experience fails in server", async () => {
+
+    const mockDeleteExperience = vi
+      .fn()
+      .mockRejectedValue(new ApiError(500, "Delete failed"));
+
+    const mockGetExperiences = vi
+      .fn()
+      .mockResolvedValue([
+        {
+          id: 1,
+          title: "Experience to delete",
+          date: "2026-06-25",
+          cityName: "Munich",
+          country: "Germany",
+          categories: ["Studies"],
+          rating: 8.5,
+          description: "Experience that will be deleted",
+          authorName: "Jeremy",
+        },
+      ]);
+
+    const mockUserService: UserService = {
+      getExperiences: mockGetExperiences,
+      getUserInfo: vi.fn(),
+      getUserById: vi.fn(),
+      deleteUserById: vi.fn(),
+      signUp: vi.fn(),
+    };
+
+    const mockExperienceService: ExperienceService = {
+      deleteExperience: mockDeleteExperience,
+    };
+
+    render(
+      <MemoryRouter>
+        <UserExperiences
+          userService={mockUserService}
+          experienceService={mockExperienceService}
+          userExperiences={undefined}
+          userId={1}
+        />
+      </MemoryRouter>
+    );
+
+    expect(
+      await screen.findByText("Experience to delete")
+    ).toBeInTheDocument();
+
+    await screen
+      .getByRole("button", {
+        name: /delete experience to delete/i,
+      })
+      .click();
+
+    await waitFor(() => {
+      expect(mockDeleteExperience).toHaveBeenCalledWith(1);
+    });
+
+    expect(mockNavigate).toHaveBeenCalled();
+
+
+  });
+
+  it("should navigate to error page when fetching experiences fails with server error (500)", async () => {
+
+    const mockGetExperiences = vi
+      .fn()
+      .mockRejectedValue(new ApiError(500, "Server error"));
+
+    const mockUserService: UserService = {
+      getExperiences: mockGetExperiences,
+      getUserInfo: vi.fn(),
+      getUserById: vi.fn(),
+      deleteUserById: vi.fn(),
+      signUp: vi.fn(),
+    };
+
+    const mockExperienceService: ExperienceService = {} as any;
+
+    render(
+      <MemoryRouter>
+        <UserExperiences
+          userService={mockUserService}
+          experienceService={mockExperienceService}
+          userExperiences={undefined}
+          userId={1}
+        />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(mockGetExperiences).toHaveBeenCalledWith(1);
+      expect(mockNavigate).toHaveBeenCalledWith("/error");
+    });
+
+  });
 
 });

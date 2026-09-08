@@ -7,6 +7,7 @@ import type { ExperienceDTO } from "../../../src/models/ExperienceDTO"
 
 
 describe("ExperienceService", () => {
+
   it("should return all experiences when the request succeeds", async () => {
 
     const experiences: ExperienceSimpleDTO[] = [
@@ -31,10 +32,14 @@ describe("ExperienceService", () => {
   });
 
   it("should throw an error when the request fails", async () => {
+    const errorMessage = "Error fetching experiences";
+    const textMock = vi.fn().mockResolvedValue(errorMessage);
 
     const mockApi = {
       get: vi.fn().mockResolvedValue({
         ok: false,
+        text: textMock,
+        json: vi.fn(),
       }),
     };
 
@@ -70,10 +75,14 @@ describe("ExperienceService", () => {
   });
 
   it("should throw an error when the category request fails", async () => {
+    const errorMessage = "Error fetching categories";
+    const textMock = vi.fn().mockResolvedValue(errorMessage);
 
     const mockApi = {
       get: vi.fn().mockResolvedValue({
         ok: false,
+        text: textMock,
+        json: vi.fn(),
       }),
     };
 
@@ -140,7 +149,8 @@ describe("ExperienceService", () => {
 
     const fakeResponse = {
       ok: false,
-      json: vi.fn().mockReturnValue("Unable to post experience"),
+      json: vi.fn(),
+      text: vi.fn().mockReturnValue("Error posting new experience"),
     };
 
     const mockPost = vi.fn().mockResolvedValue(fakeResponse);
@@ -194,28 +204,15 @@ describe("ExperienceService", () => {
     expect(result).toEqual(experience);
   });
 
-  it("should return null when the experience does not exist", async () => {
-    const mockApi = {
-      get: vi.fn().mockResolvedValue({
-        ok: false,
-        status: 404
-      })
-    };
-
-    const service = createExperienceService(mockApi);
-
-    const result = await service.getExperienceById(999);
-
-    expect(mockApi.get).toHaveBeenCalledTimes(1);
-    expect(mockApi.get).toHaveBeenCalledWith("/experiences/999");
-    expect(result).toBeNull();
-  });
-
   it("should throw an error when fetching an experience fails", async () => {
+    const errorMessage = "Error fetching experience";
+    const textMock = vi.fn().mockResolvedValue(errorMessage);
+
     const mockApi = {
       get: vi.fn().mockResolvedValue({
         ok: false,
-        status: 500
+        status: 500,
+        text: textMock,
       })
     };
 
@@ -267,10 +264,13 @@ describe("ExperienceService", () => {
 
 
   it("should throw an error when posting a comment fails", async () => {
+    const errorMessage = "Error posting new comment";
+    const textMock = vi.fn().mockResolvedValue(errorMessage);
 
     const mockPost = vi.fn().mockResolvedValue({
       status: 400,
-      json: vi.fn()
+      json: vi.fn(),
+      text: textMock
     });
 
     const mockApi: ApiClient = {
@@ -337,9 +337,13 @@ describe("ExperienceService", () => {
 
   it("should throw an error when getting comments fails", async () => {
 
+    const errorMessage = "Error fetching comments";
+    const textMock = vi.fn().mockResolvedValue(errorMessage);
+
     const mockGet = vi.fn().mockResolvedValue({
       ok: false,
-      json: vi.fn()
+      json: vi.fn(),
+      text: textMock
     });
 
     const mockApi: ApiClient = {
@@ -351,7 +355,7 @@ describe("ExperienceService", () => {
 
     await expect(
       experienceService.getCommentsByExperienceId(1)
-    ).rejects.toThrow("Error posting new comment");
+    ).rejects.toThrow("Error fetching comments");
 
     expect(mockGet).toHaveBeenCalledWith(
       "/experiences/1/comments"

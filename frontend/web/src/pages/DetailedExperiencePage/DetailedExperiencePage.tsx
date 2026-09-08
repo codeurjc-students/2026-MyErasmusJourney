@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { API } from "../../api/client";
 import Comments from "../../components/Comments/Comments";
+import { ApiError } from "@shared/api/apiError";
 
 const categoryStyles: Record<string, string> = {
     STUDIES: "#4A90D9",
@@ -46,10 +47,13 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
         const fetchExperience = async () => {
             try {
                 const data = await experienceService.getExperienceById(Number(id));
-                if (data === null) navigate("/available-soon")
                 setExperience(data);
             } catch (error) {
-                console.error(error);
+                if (error instanceof ApiError && ((error.status >= 500)||(error.status === 404))) {
+                    console.error(error);
+                    navigate("/error");
+                    return;
+                }
             }
         };
 

@@ -49,20 +49,24 @@ describe("UserService", () => {
       passwordConfirmation: "password123",
     };
 
-    const errorMessage = "Email already exists";
+    const errorMessage = "Internal server error";
+    const textMock = vi.fn().mockResolvedValue(errorMessage);
+
+    const fakeResponse = {
+      ok: false,
+      status: 500,
+      text: textMock,
+    };
 
     const mockApi = {
-      post: vi.fn().mockResolvedValue({
-        ok: false,
-        text: vi.fn().mockResolvedValue(errorMessage),
-        json: vi.fn(),
-      }),
+      post: vi.fn().mockResolvedValue(fakeResponse),
     };
 
     const service = createUserService(mockApi);
 
     await expect(service.signUp(userFormData)).rejects.toThrow(errorMessage);
     expect(mockApi.post).toHaveBeenCalledWith("/users/", userFormData);
+    expect(textMock).toHaveBeenCalledTimes(1);
   });
 
   it("should pass the correct request body to the API", async () => {

@@ -1,12 +1,12 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 import Comments from "src/components/Comments/Comments";
 
-import { createApiClient } from "@shared/apiClient";
-import { createExperienceService } from "@shared/services/experience.service";
+import { createApiClient } from "@shared/api/apiClient";
+import { createExperienceService, type ExperienceService } from "@shared/services/experience.service";
 import { useUserStore } from "@shared/stores/userStore";
 
 import type { UserSimpleDTO } from "@shared/models/UserSimpleDTO";
@@ -17,6 +17,7 @@ import {
 } from "tests/testAuthentication";
 
 import { APIURL } from "src/config/env";
+import { ApiError } from "@shared/api/apiError";
 
 
 const testAPI = createApiClient(APIURL);
@@ -130,6 +131,49 @@ describe("Comments integration tests", () => {
         "Share your opinion..."
       )
     ).not.toBeInTheDocument();
+  });
+
+  it("should navigate to the error page when fetching comments fails with an internal server error", async () => {
+    const testService: ExperienceService = {
+      getAll: vi.fn(),
+
+      getCommentsByExperienceId: async (experienceId: number) => {
+        const response = await testAPI.get("/tests/500");
+
+        if (!response.ok) {
+          throw new ApiError(response.status, await response.text());
+        }
+
+        return await response.json();
+      },
+
+      postComment: vi.fn(),
+    };
+
+    render(
+      <MemoryRouter initialEntries={["/experiences/1"]}>
+        <Routes>
+          <Route
+            path="/experiences/:id"
+            element={
+              <Comments
+                experienceService={testService}
+                experienceId={1}
+              />
+            }
+          />
+
+          <Route
+            path="/error"
+            element={<div>Error page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(
+      await screen.findByText("Error page")
+    ).toBeInTheDocument();
   });
 
 });
