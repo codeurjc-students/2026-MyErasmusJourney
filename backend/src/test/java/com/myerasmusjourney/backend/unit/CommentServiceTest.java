@@ -4,16 +4,14 @@ import com.myerasmusjourney.backend.domain.City;
 import com.myerasmusjourney.backend.domain.Comment;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
-import com.myerasmusjourney.backend.dto.CommentDTO;
-import com.myerasmusjourney.backend.dto.CommentFormDTO;
-import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
-import com.myerasmusjourney.backend.dto.UserSimpleDTO;
+import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.enumeration.Category;
 import com.myerasmusjourney.backend.mapper.CommentMapper;
 import com.myerasmusjourney.backend.repository.CommentRepository;
 import com.myerasmusjourney.backend.service.CommentService;
 import com.myerasmusjourney.backend.service.ExperienceService;
 import com.myerasmusjourney.backend.service.UserService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,8 +21,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
@@ -88,5 +88,94 @@ public class CommentServiceTest {
         verify(userService).getLoggedUser();
         verify(commentMapper).toDTO(any(Comment.class));
         verify(commentRepository).save(any(Comment.class));
+    }
+
+    @Test
+    void testDeleteCommentByIdSuccess(){
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+
+        Comment comment = new Comment();
+        comment.setId(2L);
+        comment.setDescription("Deleted comment");
+        comment.setAuthor(user);
+        user.addComment(comment);
+
+        UserSimpleDTO author = new UserSimpleDTO(1L, null, null);
+
+        CommentDTO commentDTO = new CommentDTO(2L, null,  "Deleted experience", author, null);
+
+        when(userService.getLoggedUser()).thenReturn(user);
+        when(commentRepository.findById(2L)).thenReturn(Optional.of(comment));
+        when(commentMapper.toDTO(comment)).thenReturn(commentDTO);
+
+        CommentDTO result = commentService.deleteCommentById(2L);
+
+        Assertions.assertEquals(commentDTO, result);
+
+        verify(userService).getLoggedUser();
+        verify(commentRepository).findById(2L);
+        verify(commentMapper).toDTO(comment);
+    }
+
+    @Test
+    void testDeleteCommentByIdFails(){
+        User user2 = new User();
+        user2.setId(2L);
+
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+
+        Comment comment = new Comment();
+        comment.setId(2L);
+        comment.setDescription("Deleted comment");
+        comment.setAuthor(user);
+        user.addComment(comment);
+
+        when(userService.getLoggedUser()).thenReturn(user2);
+        when(commentRepository.findById(2L)).thenReturn(Optional.of(comment));
+
+        CommentDTO result = commentService.deleteCommentById(2L);
+
+        assertNull(result);
+
+        verify(userService).getLoggedUser();
+        verify(commentRepository).findById(2L);
+
+    }
+
+    @Test
+    void testDeleteCommentByAdmin(){
+        User user2 = new User();
+        user2.setId(2L);
+        user2.setRoles(List.of("USER", "ADMIN"));
+
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+
+        Comment comment = new Comment();
+        comment.setId(2L);
+        comment.setDescription("Deleted comment");
+        comment.setAuthor(user);
+        user.addComment(comment);
+
+        UserSimpleDTO author = new UserSimpleDTO(1L, null, null);
+
+        CommentDTO commentDTO = new CommentDTO(2L, null,  "Deleted experience", author, null);
+
+        when(userService.getLoggedUser()).thenReturn(user2);
+        when(commentRepository.findById(2L)).thenReturn(Optional.of(comment));
+        when(commentMapper.toDTO(comment)).thenReturn(commentDTO);
+
+        CommentDTO result = commentService.deleteCommentById(2L);
+
+        Assertions.assertEquals(commentDTO, result);
+
+        verify(userService).getLoggedUser();
+        verify(commentRepository).findById(2L);
+        verify(commentMapper).toDTO(comment);
     }
 }
