@@ -1,5 +1,7 @@
 import type { userServiceProps } from "@shared/interfaces/userServiceProps";
+import type { commentServiceProps } from "@shared/interfaces/commentServiceProps";
 import type { CommentSimpleDTO } from "@shared/models/CommentSimpleDTO";
+import { createCommentService } from "@shared/services/comment.service";
 import { createUserService } from "@shared/services/user.service";
 import { useUserStore } from "@shared/stores/userStore";
 import { useEffect, useState } from "react";
@@ -14,7 +16,7 @@ interface userIdProps {
     userId: number | undefined;
 }
 
-export default function UserComments({ userService = createUserService(API), userComments, userId }: userServiceProps & CommentsProps & userIdProps) {
+export default function UserComments({ userService = createUserService(API), commentService = createCommentService(API), userComments, userId }: userServiceProps & commentServiceProps & CommentsProps & userIdProps) {
 
     const { user } = useUserStore();
 
@@ -26,25 +28,42 @@ export default function UserComments({ userService = createUserService(API), use
 
     let id = 0;
 
+    const fetchExperiences = async () => {
+        if (userId !== undefined) {
+            id = userId;
+        }
+        else if (user !== null) {
+            id = user.id;
+        }
+        try {
+            const data = await userService.getComments(id);
+            setComments(data.reverse());
+        } catch (error) {
+            if (error instanceof ApiError && error.status >= 500) {
+                console.error(error);
+                navigate("/error");
+                return;
+            }
+        }
+    };
+
+
+    async function handleDeleteComment(commentId: number) {
+        try {
+            await commentService.deleteComment(commentId);
+            fetchExperiences();
+        }
+        catch (error) {
+            if (error instanceof ApiError && error.status >= 500) {
+                console.error(error);
+                navigate("/error");
+                return;
+            }
+        }
+    }
+
     useEffect(() => {
-        const fetchExperiences = async () => {
-            if (userId !== undefined) {
-                id = userId;
-            }
-            else if (user !== null) {
-                id = user.id;
-            }
-            try {
-                const data = await userService.getComments(id);
-                setComments(data.reverse());
-            } catch (error) {
-                if (error instanceof ApiError && error.status >= 500) {
-                    console.error(error);
-                    navigate("/error");
-                    return;
-                }
-            }
-        };
+
 
         if (userComments === undefined || userComments.length < 1) {
             fetchExperiences();
@@ -74,7 +93,7 @@ export default function UserComments({ userService = createUserService(API), use
                                         👁
                                     </Link>
 
-                                    <button type="button" aria-label={`Delete ${comment.description}`} className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#4A90D9] text-white hover:opacity-80 transition">
+                                    <button type="button" aria-label={`Delete ${comment.description}`} onClick={() => {handleDeleteComment(comment.id)}} className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#4A90D9] text-white hover:opacity-80 transition">
                                         🗑
                                     </button>
                                 </div>
