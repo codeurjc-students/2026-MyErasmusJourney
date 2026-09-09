@@ -21,10 +21,10 @@ export function createExperienceService(api: ApiClient) {
     getAll: (page?: number, size?: number) => getAllExperiences(api, page, size),
     getCategories: () => getCategories(api),
     postExperience: (body: ExperienceFormDTO) => postExperience(api, body),
-    getExperienceById: (id: number)=> getExperienceById(api, id),
-    postComment:(id:number, body: CommentFormDTO) => postComment(api, id, body),
-    getCommentsByExperienceId:(id:number) => getCommentsByExperienceId(api, id),
-    deleteExperience:(id:number) => deleteExperience(api, id)
+    getExperienceById: (id: number) => getExperienceById(api, id),
+    postComment: (id: number, body: CommentFormDTO) => postComment(api, id, body),
+    getCommentsByExperienceId: (id: number) => getCommentsByExperienceId(api, id),
+    deleteExperience: (id: number) => deleteExperience(api, id)
   };
 }
 
@@ -41,7 +41,7 @@ async function getAllExperiences(api: ApiClient, page?: number, size?: number) {
   const response = await api.get(url)
 
   if (!response.ok) {
-      throw new ApiError(response.status, await response.text());
+    throw new ApiError(response.status, await response.text());
   }
 
   return response.json() as Promise<ExperiencePageDTO>;
@@ -51,7 +51,7 @@ async function getCategories(api: ApiClient) {
   const response = await api.get("/experiences/categories")
 
   if (!response.ok) {
-      throw new ApiError(response.status, await response.text());
+    throw new ApiError(response.status, await response.text());
   }
 
   return response.json();
@@ -61,49 +61,49 @@ async function postExperience(api: ApiClient, body: ExperienceFormDTO) {
   const response = await api.post("/experiences/", body);
 
   if (!response.ok) {
-      throw new ApiError(response.status, await response.text());
+    throw new ApiError(response.status, await response.text());
   }
 
   return response.json();
 }
 
-async function getExperienceById(api: ApiClient, id:number) {
+async function getExperienceById(api: ApiClient, id: number) {
   const response = await api.get(`/experiences/${id}`)
 
   if (!response.ok) {
-      throw new ApiError(response.status, await response.text());
+    throw new ApiError(response.status, await response.text());
   }
 
   return response.json();
 }
 
-async function postComment(api: ApiClient, id:number, body:CommentFormDTO){
-   const response = await api.post(`/experiences/${id}/comments`, body)
+async function postComment(api: ApiClient, id: number, body: CommentFormDTO) {
+  const response = await api.post(`/experiences/${id}/comments`, body)
 
   if (response.status !== 201) {
-      throw new ApiError(response.status, await response.text());
+    throw new ApiError(response.status, await response.text());
   }
 
   return response.json();
 }
 
-async function getCommentsByExperienceId(api: ApiClient, id:number){
-   const response = await api.get(`/experiences/${id}/comments`)
+async function getCommentsByExperienceId(api: ApiClient, id: number) {
+  const response = await api.get(`/experiences/${id}/comments`)
 
   if (!response.ok) {
-      throw new ApiError(response.status, await response.text());
+    throw new ApiError(response.status, await response.text());
   }
 
   return response.json();
 }
 
-async function deleteExperience(api: ApiClient, id:number){
+async function deleteExperience(api: ApiClient, id: number) {
   const response = await api.delete(`/experiences/${id}`)
-  
+
   if (!response.ok) {
-          throw new ApiError(response.status, await response.text());
-    
+    throw new ApiError(response.status, await response.text());
+
   }
-  
+
   return response.json();
 }
