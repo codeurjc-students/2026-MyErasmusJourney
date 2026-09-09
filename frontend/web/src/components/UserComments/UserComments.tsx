@@ -59,6 +59,7 @@ export default function UserComments({ userService = createUserService(API), com
                 navigate("/error");
                 return;
             }
+            alert("Failed to delete comment. Please try again later.");
         }
     }
 
