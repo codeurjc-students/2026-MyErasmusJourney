@@ -359,6 +359,33 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": 2,\n    \"fullName\": \"test\",\n    \"displayName\": \"changedUser\",\n    \"email\": \"test@email.com\",\n    \"studyLocation\": null,\n    \"roles\": [\n        \"USER\"\n    ],\n    \"experiences\": [],\n    \"comments\": []\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{APIURL}}/users/2",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "users",
+                "2"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
