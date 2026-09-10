@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import "@testing-library/jest-dom";
-import SignUpPage from "../../../src/pages/SignUpPage/SignUpPage";
+import UserFormPage from "../../../src/pages/UserFormPage/UserFormPage";
 import type { UserService } from "@shared/services/user.service";
 import { ApiError } from "@shared/api/apiError";
 
@@ -17,7 +17,7 @@ vi.mock("react-router-dom", async () => {
   };
 });
 
-describe("SignUpPage", () => {
+describe("UserFormPage", () => {
   it("should render the sign up form with all fields", () => {
     const mockSignUp = vi.fn();
     const mockService: UserService = {
@@ -26,7 +26,7 @@ describe("SignUpPage", () => {
 
     render(
       <MemoryRouter>
-        <SignUpPage userService={mockService} />
+        <UserFormPage userService={mockService} mode="signup" />
       </MemoryRouter>
     );
 
@@ -47,7 +47,7 @@ describe("SignUpPage", () => {
     render(
       <MemoryRouter initialEntries={["/signup"]}>
         <Routes>
-          <Route path="/signup" element={<SignUpPage userService={mockService} />} />
+          <Route path="/signup" element={<UserFormPage userService={mockService} mode="signup" />} />
         </Routes>
       </MemoryRouter>
     );
@@ -93,7 +93,7 @@ describe("SignUpPage", () => {
 
     render(
       <MemoryRouter>
-        <SignUpPage userService={mockService} />
+        <UserFormPage userService={mockService} mode="signup" />
       </MemoryRouter>
     );
 
@@ -132,7 +132,7 @@ describe("SignUpPage", () => {
 
     render(
       <MemoryRouter>
-        <SignUpPage userService={mockService} />
+        <UserFormPage userService={mockService} mode="signup" />
       </MemoryRouter>
     );
 
@@ -176,7 +176,7 @@ describe("SignUpPage", () => {
 
     render(
       <MemoryRouter>
-        <SignUpPage userService={mockService} />
+        <UserFormPage userService={mockService} mode="signup" />
       </MemoryRouter>
     );
 
@@ -213,7 +213,7 @@ describe("SignUpPage", () => {
 
     render(
       <MemoryRouter>
-        <SignUpPage userService={mockService} />
+        <UserFormPage userService={mockService} mode="signup" />
       </MemoryRouter>
     );
 
@@ -256,7 +256,7 @@ describe("SignUpPage", () => {
 
     render(
       <MemoryRouter>
-        <SignUpPage userService={mockService} />
+        <UserFormPage userService={mockService} mode="signup" />
       </MemoryRouter>
     );
 
@@ -295,7 +295,7 @@ describe("SignUpPage", () => {
 
     render(
       <MemoryRouter>
-        <SignUpPage userService={mockService} />
+        <UserFormPage userService={mockService} mode="signup" />
       </MemoryRouter>
     );
 
@@ -353,7 +353,7 @@ describe("SignUpPage", () => {
 
     render(
       <MemoryRouter>
-        <SignUpPage userService={mockService} />
+        <UserFormPage userService={mockService} mode="signup" />
       </MemoryRouter>
     );
 
@@ -400,7 +400,7 @@ describe("SignUpPage", () => {
 
     render(
       <MemoryRouter>
-        <SignUpPage userService={mockService} />
+        <UserFormPage userService={mockService} mode="signup" />
       </MemoryRouter>
     );
 

@@ -4,23 +4,23 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { APIURL } from "src/config/env";
-import SignUpPage from "src/pages/SignUpPage/SignUpPage";
 import { describe, expect, it, vi } from "vitest";
 import LogInPage from "src/pages/LogInPage/LogInPage";
 import type { UserFormDTO } from "@shared/models/UserFormDTO";
 import { ApiError } from "@shared/api/apiError";
+import UserFormPage from "src/pages/UserFormPage/UserFormPage";
 
 const testAPI = createApiClient(APIURL);
 const testService = createUserService(testAPI);
 
-describe("SignUpPage", () => {
+describe("UserFormPage", () => {
 
   it("should successfully submit the form with valid data and render home page", async () => {
     render(
       <MemoryRouter initialEntries={["/signup"]}>
         <Routes>
           <Route path="/log-in" element={<LogInPage />} />
-          <Route path="/signup" element={<SignUpPage userService={testService} />} />
+          <Route path="/signup" element={<UserFormPage userService={testService} mode="signup"/>} />
         </Routes>
       </MemoryRouter>
     );
@@ -54,7 +54,7 @@ describe("SignUpPage", () => {
       <MemoryRouter initialEntries={["/signup"]}>
         <Routes>
           <Route path="/log-in" element={<LogInPage />} />
-          <Route path="/signup" element={<SignUpPage userService={testService} />} />
+          <Route path="/signup" element={<UserFormPage userService={testService} mode="signup" />} />
         </Routes>
       </MemoryRouter>
     );
@@ -86,7 +86,7 @@ describe("SignUpPage", () => {
       <MemoryRouter initialEntries={["/signup"]}>
         <Routes>
           <Route path="/log-in" element={<LogInPage />} />
-          <Route path="/signup" element={<SignUpPage userService={testService} />} />
+          <Route path="/signup" element={<UserFormPage userService={testService} mode="signup" />} />
         </Routes>
       </MemoryRouter>
     );
@@ -134,7 +134,7 @@ describe("SignUpPage", () => {
       <MemoryRouter initialEntries={["/signup"]}>
         <Routes>
           <Route path="/error" element={<><div>Error page</div></>} />
-          <Route path="/signup" element={<SignUpPage userService={testService} />} />
+          <Route path="/signup" element={<UserFormPage userService={testService} mode="signup" />} />
         </Routes>
       </MemoryRouter>
     );
@@ -164,7 +164,7 @@ describe("SignUpPage", () => {
       <MemoryRouter initialEntries={["/signup"]}>
         <Routes>
           <Route path="/log-in" element={<LogInPage />} />
-          <Route path="/signup" element={<SignUpPage userService={testService} />} />
+          <Route path="/signup" element={<UserFormPage userService={testService} mode="signup" />} />
         </Routes>
       </MemoryRouter>
     );
