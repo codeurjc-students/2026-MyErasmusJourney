@@ -95,8 +95,9 @@ public class UserService {
         User user = getLoggedUser();
         if (user == null || isActionNotAllowed(user, id)) return null;
         User userToDelete = userRepository.findById(id).orElseThrow(()-> new NoSuchElementException("User not found"));
+        UserDTO deletedUser = userMapper.toDTO(userToDelete);
         userRepository.delete(userToDelete);
-        return userMapper.toDTO(userToDelete);
+        return deletedUser;
     }
 
     public void addComment(Comment comment, User user) {
@@ -120,5 +121,18 @@ public class UserService {
         User savedUser = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
         List<Comment> comments = savedUser.getComments();
         return commentMapper.toSimpleDTOs(comments);
+    }
+
+    @Transactional
+    public UserDTO updateUser(Long id, UserDTO userDTO) {
+        User user = getLoggedUser();
+        if (user == null || isActionNotAllowed(user, id)) return null;
+        User savedUser = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
+        savedUser.setEmail(userDTO.email());
+        savedUser.setFullName(userDTO.fullName());
+        savedUser.setDisplayName(userDTO.displayName());
+        savedUser.setStudyLocation(userDTO.studyLocation());
+        savedUser = userRepository.save(savedUser);
+        return userMapper.toDTO(savedUser);
     }
 }
