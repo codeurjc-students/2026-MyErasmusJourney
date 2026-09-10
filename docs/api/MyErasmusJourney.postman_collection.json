@@ -502,6 +502,29 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Comment",
+      "item": [
+        {
+          "name": "Delete Comment",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{APIURL}}/comments/1",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "comments",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }

@@ -11,6 +11,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 public class CommentService {
 
@@ -26,6 +28,10 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
+    private boolean isActionNotAllowed(User user, Comment comment){
+        return !(user.getRoles().contains("ADMIN")||comment.getAuthor().getId().equals(user.getId()));
+    }
+
     @Transactional
     public CommentDTO postComment(Long experienceId, CommentFormDTO commentFormDTO) {
         Experience experience = experienceService.getExperience(experienceId);
@@ -35,6 +41,16 @@ public class CommentService {
         experienceService.addComment(savedComment, experience);
         userService.addComment(savedComment, user);
         return commentMapper.toDTO(savedComment);
+    }
+
+    @Transactional
+    public CommentDTO deleteCommentById(Long id){
+        User user = userService.getLoggedUser();
+        Comment comment = commentRepository.findById(id).orElseThrow(()-> new NoSuchElementException("Comment not found"));
+        if(user == null || isActionNotAllowed(user, comment)) return null;
+        CommentDTO deletedComment = commentMapper.toDTO(comment);
+        commentRepository.delete(comment);
+        return deletedComment;
     }
 
 }

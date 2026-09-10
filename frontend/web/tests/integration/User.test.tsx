@@ -13,9 +13,13 @@ import { APIURL } from "src/config/env";
 import UserPage from "src/pages/UserPage/UserPage";
 import { authenticateUser, authenticateUserToDelete, clearFetchAndUserStore } from "tests/testAuthentication";
 import UserComments from "src/components/UserComments/UserComments";
-import type { ExperienceService } from "@shared/services/experience.service";
+import { createExperienceService, type ExperienceService } from "@shared/services/experience.service";
 import UserExperiences from "src/components/UserExperiences/UserExperiences";
 import { ApiError } from "@shared/api/apiError";
+import type { CommentDTO } from "@shared/models/CommentDTO";
+import { type CommentService } from "@shared/services/comment.service";
+import type { ExperienceFormDTO } from "@shared/models/ExperienceFormDTO";
+import type { CommentFormDTO } from "@shared/models/CommentFormDTO";
 
 const testAPI = createApiClient(APIURL);
 const testAuthService = createAuthService(testAPI);
@@ -443,13 +447,20 @@ describe("UserPage", () => {
   it("deletes an experience of the authenticated user successfully", async () => {
     authenticatedUser = await authenticateUser("exampleuser2@email.com");
 
-    const experiencesBefore = await testUserService.getExperiences(
-      authenticatedUser.id
-    );
+    const experienceService = createExperienceService(testAPI);
 
-    expect(experiencesBefore.length).toBeGreaterThan(0);
+    const experienceForm : ExperienceFormDTO = {
+      title: "Test Experience",
+      description: "This is a test experience to be deleted.",
+      cityId: 1,
+      date: "2023-01-01",
+      rating: 5,
+      categories: ["Documentation"],
+    }
 
-    const experienceToDelete = experiencesBefore[0];
+    await experienceService.postExperience(experienceForm);
+
+    const experienceToDelete = experienceForm;
 
     render(
       <MemoryRouter initialEntries={["/profile"]}>
@@ -616,5 +627,128 @@ describe("UserPage", () => {
     );
 
     expect(await screen.findByText("Error page")).toBeInTheDocument();
+  });
+
+  it("deletes an comment of the authenticated user successfully", async () => {
+    authenticatedUser = await authenticateUser("exampleuser2@email.com");
+
+    const commentDTO: CommentFormDTO = {
+        description: "This is a test comment to be deleted.",
+
+    }
+
+    const experienceService: ExperienceService = createExperienceService(testAPI);
+
+    await experienceService.postComment(1, commentDTO);
+
+    const commentToDelete = commentDTO;
+
+    render(
+      <MemoryRouter initialEntries={["/profile"]}>
+        <Routes>
+          <Route
+            path="/profile"
+            element={
+              <UserPage
+                userService={testUserService}
+                authService={testAuthService}
+              />
+            }
+          />
+
+          <Route
+            path="/log-in"
+            element={<div>Log in page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByText("Comments")).toBeInTheDocument();
+
+    expect(await screen.findByText(commentToDelete.description)).toBeInTheDocument();
+
+    const deleteButton = screen.getByRole("button", {
+      name: `Delete ${commentToDelete.description}`,
+    });
+
+    fireEvent.click(deleteButton);
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText(commentToDelete.description)
+      ).not.toBeInTheDocument();
+    });
+
+    const commentsAfter: CommentDTO[] = await testUserService.getComments(
+      authenticatedUser.id
+    );
+
+    expect(commentsAfter.some(comment => comment.id === commentToDelete.id)).toBe(false);
+  });
+
+  it("redirects to error page when deleting a comment fails because of internal error", async () => {
+    authenticatedUser = await authenticateUser("exampleuser3@email.com");
+
+    const commentsBefore: CommentDTO[] = await testUserService.getComments(
+      authenticatedUser.id
+    );
+
+    expect(commentsBefore.length).toBeGreaterThan(0);
+
+    const commentToDelete = commentsBefore[0];
+
+    const testService: CommentService = {
+      deleteComment: async (id: number) => {
+        const response = await testAPI.get("/tests/500");
+
+        if (!response.ok) {
+          throw new ApiError(response.status, await response.text());
+        }
+
+        return await response.json();
+      },
+    };
+
+    const alertSpy = vi
+      .spyOn(window, "alert")
+      .mockImplementation(() => { });
+
+    render(
+      <MemoryRouter initialEntries={["/profile"]}>
+        <Routes>
+          <Route
+            path="/profile"
+            element={
+              <UserComments
+                userService={testUserService}
+                userComments={undefined}
+                userId={authenticatedUser.id}
+                commentService={testService}
+              />
+            }
+          />
+
+          <Route
+            path="/error"
+            element={<div>Error page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(
+      await screen.findByText(commentToDelete.description)
+    ).toBeInTheDocument();
+
+    const deleteButton = screen.getByRole("button", {
+      name: `Delete ${commentToDelete.description}`,
+    });
+
+    fireEvent.click(deleteButton);
+
+
+    expect(await screen.findByText("Error page")).toBeInTheDocument();
+
   });
 });

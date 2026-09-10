@@ -11,6 +11,7 @@ import com.myerasmusjourney.backend.repository.CommentRepository;
 import com.myerasmusjourney.backend.repository.ExperienceRepository;
 import com.myerasmusjourney.backend.repository.UserRepository;
 import com.myerasmusjourney.backend.service.CommentService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @SpringBootTest
 @Tag("integration")
@@ -45,13 +47,9 @@ public class CommentServiceTest extends TestDataBase {
     @BeforeEach
     void setupRepositories(){
         if(commentRepository.count()>0) commentRepository.deleteAll();
-        if(userRepository.count()>0) userRepository.deleteAll();
         if(experienceRepository.count()>0) experienceRepository.deleteAll();
 
-        User user = new User();
-        user.setEmail("test@email.com");
-        user.setDisplayName("Test");
-        user = userRepository.save(user);
+        User user = userRepository.findByEmail("test@email.com");
 
         Experience experience = new Experience();
         experience.setTitle("title");
@@ -62,6 +60,13 @@ public class CommentServiceTest extends TestDataBase {
         experience.setAuthor(user);
         experience.setCity(null);
         experienceRepository.save(experience);
+
+        Comment comment = new Comment("description", user, experience);
+        comment = commentRepository.save(comment);
+        experience.addComment(comment);
+        user.addComment(comment);
+        experienceRepository.save(experience);
+        userRepository.save(user);
     }
 
     @AfterEach
@@ -70,6 +75,7 @@ public class CommentServiceTest extends TestDataBase {
     }
 
     @Test
+    @Transactional
     void testPostComment(){
         Experience experience = experienceRepository.findAll().getFirst();
         User user = userRepository.findByEmail("test@email.com");
@@ -83,5 +89,49 @@ public class CommentServiceTest extends TestDataBase {
         CommentDTO expectedDTO = commentMapper.toDTO(comment);
 
         assertEquals(expectedDTO, commentDTO);
+    }
+
+    @Test
+    @Transactional
+    void testDeleteCommentByIdSuccess(){
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken("test@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User user = userRepository.findByEmail("test@email.com");
+
+        CommentDTO expected = commentMapper.toDTO(user.getComments().getFirst());
+
+        CommentDTO result = commentService.deleteCommentById(expected.id());
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    @Transactional
+    void testDeleteCommentByIdFail(){
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken("exampleuser1@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        Comment comment = commentRepository.findAll().getFirst();
+
+        CommentDTO result = commentService.deleteCommentById(comment.getId());
+
+        assertNull(result);
+    }
+
+    @Test
+    @Transactional
+    void testDeleteCommentByAdmin(){
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken("testadmin@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        CommentDTO expected = commentMapper.toDTO(commentRepository.findAll().getFirst());
+
+        CommentDTO result = commentService.deleteCommentById(expected.id());
+
+        assertEquals(expected, result);
     }
 }
