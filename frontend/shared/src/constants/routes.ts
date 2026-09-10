@@ -7,6 +7,7 @@ export const ROUTES = {
     SIGN_UP: "/sign-up",
     LOG_IN: "/log-in",
     USER: "/account",
+    USER_FORM: "/user/update",
     CITY_FORM: "/cities/new",
     AVAILABLE_SOON: "/available-soon",
     ERROR_PAGE: "*",
