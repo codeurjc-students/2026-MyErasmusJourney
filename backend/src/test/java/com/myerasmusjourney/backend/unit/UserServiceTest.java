@@ -681,8 +681,6 @@ public class UserServiceTest {
         user.addComment(comment1);
         user.addComment(comment2);
 
-
-
         User admin = new User();
         admin.setEmail("admin@email.com");
         admin.setId(2L);
@@ -754,6 +752,121 @@ public class UserServiceTest {
 
         List<ExperienceSimpleDTO> result = userService.getExperiences(1L);
 
+        assertNull(result);
+
+        verify(userRepository).findByEmail("user2@email.com");
+    }
+
+    @Test
+    void testUpdateUserByUser(){
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+        user.setDisplayName("Name to be changed");
+
+        UserDTO changedUser = new UserDTO(1L, null, "Name changed", user.getEmail(), null, List.of("USER"), null, null);
+
+        User savedUser = new User();
+        savedUser.setId(1L);
+        savedUser.setEmail(user.getEmail());
+        savedUser.setDisplayName(changedUser.displayName());
+
+        User admin = new User();
+        admin.setEmail("admin@email.com");
+        admin.setId(2L);
+        admin.setRoles(List.of("USER", "ADMIN"));
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("admin@email.com");
+        when(userRepository.findByEmail("admin@email.com")).thenReturn(admin);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userRepository.save(any(User.class))).thenReturn(savedUser);
+        when(userMapper.toDTO(any(User.class))).thenReturn(changedUser);
+
+        UserDTO result = userService.updateUser(changedUser.id(), changedUser);
+        assertEquals(changedUser, result);
+
+        verify(userRepository).findById(1L);
+        verify(userRepository).findByEmail("admin@email.com");
+        verify(userRepository).save(any(User.class));
+        verify(userMapper).toDTO(any(User.class));
+    }
+
+    @Test
+    void testUpdateUserByAdmin(){
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+        user.setDisplayName("Name to be changed");
+
+        UserDTO changedUser = new UserDTO(1L, null, "Name changed", user.getEmail(), null, List.of("USER"), null, null);
+
+        User savedUser = new User();
+        savedUser.setId(1L);
+        savedUser.setEmail(user.getEmail());
+        savedUser.setDisplayName(changedUser.displayName());
+
+        User admin = new User();
+        admin.setEmail("admin@email.com");
+        admin.setId(2L);
+        admin.setRoles(List.of("USER", "ADMIN"));
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("admin@email.com");
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userRepository.findByEmail("admin@email.com")).thenReturn(admin);
+        when(userRepository.save(any(User.class))).thenReturn(savedUser);
+        when(userMapper.toDTO(any(User.class))).thenReturn(changedUser);
+
+        UserDTO result = userService.updateUser(changedUser.id(), changedUser);
+        assertEquals(changedUser, result);
+
+        verify(userRepository).findById(1L);
+        verify(userRepository).findByEmail("admin@email.com");
+        verify(userRepository).save(any(User.class));
+        verify(userMapper).toDTO(any(User.class));
+    }
+
+    @Test
+    void testUpdateUserFail(){
+
+        User user2 = new User();
+        user2.setEmail("user2@email.com");
+        user2.setId(2L);
+        user2.setRoles(List.of("USER"));
+
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+        user.setDisplayName("Name to be changed");
+
+        UserDTO changedUser = new UserDTO(1L, null, "Name changed", user.getEmail(), null, List.of("USER"), null, null);
+
+        User savedUser = new User();
+        savedUser.setId(1L);
+        savedUser.setEmail(user.getEmail());
+        savedUser.setDisplayName(changedUser.displayName());
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("user2@email.com");
+        when(userRepository.findByEmail("user2@email.com")).thenReturn(user2);
+
+        UserDTO result = userService.updateUser(changedUser.id(), changedUser);
         assertNull(result);
 
         verify(userRepository).findByEmail("user2@email.com");

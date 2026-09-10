@@ -1,6 +1,7 @@
 package com.myerasmusjourney.backend.e2e;
 
 import com.myerasmusjourney.backend.dto.UserDTO;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import org.json.JSONException;
@@ -59,6 +60,15 @@ public class UsersTest extends AuthenticatedE2ETest {
                         .post("/api/v1/auth/login");
 
         this.token = response.getCookie("AuthToken");
+    }
+
+    private UserDTO getUser(Long id){
+        Response response = given()
+                .cookie("AuthToken", this.token)
+                .when()
+                .get("/api/v1/users/" + id);
+
+        return response.getBody().as(UserDTO.class);
     }
 
     @Test
@@ -516,6 +526,139 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .when()
                 .get("/api/v1/users/3/comments")
+                .then()
+                .statusCode(401);
+    }
+
+    @Test
+    void testUpdateUserByUser() throws JSONException {
+        try {
+            obtainToken("exampleuser1@email.com");
+        } catch (Exception e) {
+            log.error("e: ", e);
+            throw new RuntimeException(e);
+        }
+
+        UserDTO userDTO = getUser(3L);
+
+        UserDTO updatedUser = new UserDTO(
+                userDTO.id(),
+                "changedField",
+                "newDisplayName",
+                userDTO.email(),
+                userDTO.studyLocation(),
+                userDTO.roles(),
+                userDTO.experiences(),
+                userDTO.comments()
+        );
+
+        given()
+                .cookie("AuthToken", this.token)
+                .contentType(ContentType.JSON)
+                .body(updatedUser).
+                when()
+                .put("/api/v1/users/" + userDTO.id())
+                .then()
+                .statusCode(200)
+                .body("email", equalTo(userDTO.email()))
+                .body("displayName", equalTo("newDisplayName"))
+                .body("fullName", equalTo("changedField"))
+                .body("studyLocation", equalTo(userDTO.studyLocation()));
+    }
+    @Test
+    void testUpdateUserByAdmin() throws JSONException {
+        try {
+            obtainToken("testadmin@email.com");
+        } catch (Exception e) {
+            log.error("e: ", e);
+            throw new RuntimeException(e);
+        }
+
+        UserDTO userDTO = getUser(3L);
+
+        UserDTO updatedUser = new UserDTO(
+                userDTO.id(),
+                "changedField",
+                "newDisplayName",
+                userDTO.email(),
+                userDTO.studyLocation(),
+                userDTO.roles(),
+                userDTO.experiences(),
+                userDTO.comments()
+        );
+
+        given()
+                .cookie("AuthToken", this.token)
+                .contentType(ContentType.JSON)
+                .body(updatedUser).
+                when()
+                .put("/api/v1/users/" + userDTO.id())
+                .then()
+                .statusCode(200)
+                .body("email", equalTo(userDTO.email()))
+                .body("displayName", equalTo("newDisplayName"))
+                .body("fullName", equalTo("changedField"))
+                .body("studyLocation", equalTo(userDTO.studyLocation()));
+    }
+
+    @Test
+    void testUpdateUserFail() throws JSONException {
+        try {
+            obtainToken("test@email.com");
+        } catch (Exception e) {
+            log.error("e: ", e);
+            throw new RuntimeException(e);
+        }
+
+        UserDTO userDTO = getUser(2L);
+
+        UserDTO updatedUser = new UserDTO(
+                userDTO.id(),
+                "changedField",
+                "newDisplayName",
+                userDTO.email(),
+                userDTO.studyLocation(),
+                userDTO.roles(),
+                userDTO.experiences(),
+                userDTO.comments()
+        );
+
+        given()
+                .cookie("AuthToken", this.token)
+                .contentType(ContentType.JSON)
+                .body(updatedUser).
+                when()
+                .put("/api/v1/users/" + 3)
+                .then()
+                .statusCode(403);
+    }
+    @Test
+    void testUpdateWithoutAuthentication() throws JSONException {
+        try {
+            obtainToken("test@email.com");
+        } catch (Exception e) {
+            log.error("e: ", e);
+            throw new RuntimeException(e);
+        }
+
+        UserDTO userDTO = getUser(2L);
+
+        UserDTO updatedUser = new UserDTO(
+                userDTO.id(),
+                "changedField",
+                "newDisplayName",
+                userDTO.email(),
+                userDTO.studyLocation(),
+                userDTO.roles(),
+                userDTO.experiences(),
+                userDTO.comments()
+        );
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(updatedUser).
+                when()
+                .put("/api/v1/users/" + userDTO.id())
                 .then()
                 .statusCode(401);
     }
