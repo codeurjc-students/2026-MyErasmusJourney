@@ -24,6 +24,10 @@ export default function UserPage({ authService = createAuthService(API), userSer
         navigate("/available-soon");
     }
 
+    function updateUser() {
+        navigate("/user/update");
+    }
+
     function addCity() {
         navigate("/cities/new");
     }
@@ -122,7 +126,7 @@ export default function UserPage({ authService = createAuthService(API), userSer
                             )
                             : null
                         }
-                        <button className="button" onClick={notAvailable}>Edit Profile</button>
+                        <button className="button" onClick={updateUser}>Edit Profile</button>
                         <button className="button" onClick={deleteAccount}>Delete Profile</button>
                         <button className="button" onClick={addExperience}>New Experience</button>
                     </div>
