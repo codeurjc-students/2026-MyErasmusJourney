@@ -13,7 +13,7 @@ import UserFormPage from "src/pages/UserFormPage/UserFormPage";
 const testAPI = createApiClient(APIURL);
 const testService = createUserService(testAPI);
 
-describe("UserFormPage", () => {
+describe("SignUpPage", () => {
 
   it("should successfully submit the form with valid data and render home page", async () => {
     render(
