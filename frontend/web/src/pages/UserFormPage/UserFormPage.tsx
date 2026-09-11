@@ -88,7 +88,7 @@ export default function UserFormPage({mode,userService = createUserService(API)}
                 changedUserDTO
             );
 
-            navigate("/account");
+            navigate("/profile");
         }
         catch (error) {
             if (error instanceof ApiError && error.status >= 500) {
