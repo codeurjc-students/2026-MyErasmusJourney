@@ -80,14 +80,10 @@ describe("AuthService", () => {
       password: "password123",
     };
 
-    const errorMessage = "Error loggin in";
-    const textMock = vi.fn().mockResolvedValue(errorMessage);
-
     const mockApi = {
       post: vi.fn().mockResolvedValue({
         ok: true,
         json: vi.fn().mockResolvedValue(responseData),
-        text: textMock,
       }),
     };
 
@@ -95,7 +91,7 @@ describe("AuthService", () => {
 
     await expect(
       service.logIn(loginRequest)
-    ).rejects.toThrow("Error loggin in");
+    ).rejects.toThrow("Bad credentials");
 
     expect(mockApi.post).toHaveBeenCalledWith(
       "/auth/login",
