@@ -16,7 +16,6 @@ import {
   clearFetchAndUserStore,
 } from "tests/testAuthentication";
 import type { CityFormDTO } from "@shared/models/CityFormDTO";
-import type { CitySimpleDTO } from "@shared/models/CitySimpleDTO";
 import { ApiError } from "@shared/api/apiError";
 
 const testAPI = createApiClient(APIURL);

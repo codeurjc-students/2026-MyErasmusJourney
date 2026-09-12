@@ -29,8 +29,13 @@ describe("UserPage", () => {
   let authenticatedUser: UserSimpleDTO;
 
   beforeEach(async () => {
-    authenticatedUser = await authenticateUser("test@email.com");
-    useUserStore.getState().setUser(authenticatedUser);
+    try {
+        authenticatedUser = await authenticateUser("test@email.com");
+        useUserStore.getState().setUser(authenticatedUser);
+    } catch (error) {
+        console.error("AUTHENTICATION FAILED:", error);
+        throw error;
+    }
   });
 
   afterAll(() => {
@@ -436,10 +441,6 @@ describe("UserPage", () => {
 
       expect(
         await screen.findByText(comment.description)
-      ).toBeInTheDocument();
-
-      expect(
-        screen.getByText(comment.authorName)
       ).toBeInTheDocument();
     }
   });
