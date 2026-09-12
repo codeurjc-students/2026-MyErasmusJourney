@@ -8,6 +8,7 @@ import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
 import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import com.myerasmusjourney.backend.mapper.CommentMapper;
+import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import com.myerasmusjourney.backend.mapper.UserMapper;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("unit")
@@ -29,6 +29,9 @@ public class UserMapperTest {
 
     @Spy
     private CommentMapper commentMapper = Mappers.getMapper(CommentMapper.class);
+
+    @Spy
+    private ExperienceMapper experienceMapper = Mappers.getMapper(ExperienceMapper.class);
 
     @InjectMocks
     private final UserMapper mapper = Mappers.getMapper(UserMapper.class);

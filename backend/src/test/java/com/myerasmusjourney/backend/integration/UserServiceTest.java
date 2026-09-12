@@ -540,4 +540,65 @@ public class UserServiceTest extends TestDataBase{
 
         assertNull(result);
     }
+
+    @Test
+    @Transactional
+    void testUpdateUserByUser(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken("user1@gmail.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User user = userRepository.findByEmail("user1@gmail.com");
+
+        UserDTO expected = new UserDTO(user.getId(), "changedName", user.getDisplayName(), user.getEmail(), user.getStudyLocation(), user.getRoles(), experienceMapper.toDTOs(user.getExperiences()), (List<CommentSimpleDTO>) commentMapper.toSimpleDTOs(user.getComments()));
+
+        UserDTO result = userService.updateUser(user.getId(), expected);
+
+        assertEquals(expected,result);
+
+        User changedUser = userRepository.findByEmail("user1@gmail.com");
+
+        assertEquals("changedName", changedUser.getFullName());
+    }
+
+    @Test
+    @Transactional
+    void testUpdateUserByAdmin(){
+        User newAdmin = new User("admin", "TestAdmin", "integrationAdmin@email.com", passwordEncoder.encode("password"), "", "", List.of("USER", "ADMIN"));
+        userRepository.save(newAdmin);
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken("integrationAdmin@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User user = userRepository.findByEmail("user1@gmail.com");
+
+        UserDTO expected = new UserDTO(user.getId(), "changedName", user.getDisplayName(), user.getEmail(), user.getStudyLocation(), user.getRoles(), experienceMapper.toDTOs(user.getExperiences()), (List<CommentSimpleDTO>) commentMapper.toSimpleDTOs(user.getComments()));
+
+        UserDTO result = userService.updateUser(user.getId(), expected);
+
+        assertEquals(expected,result);
+
+        User changedUser = userRepository.findByEmail("user1@gmail.com");
+
+        assertEquals("changedName", changedUser.getFullName());
+    }
+
+    @Test
+    @Transactional
+    void testUpdateUserFail(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken("user2@gmail.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User user = userRepository.findByEmail("user1@gmail.com");
+
+        UserDTO changedUserDTO = new UserDTO(user.getId(), "changedName", user.getDisplayName(), user.getEmail(), user.getStudyLocation(), user.getRoles(), experienceMapper.toDTOs(user.getExperiences()), (List<CommentSimpleDTO>) commentMapper.toSimpleDTOs(user.getComments()));
+
+
+        UserDTO result = userService.updateUser(user.getId(), changedUserDTO);
+
+        assertNull(result);
+
+        User changedUser = userRepository.findByEmail("user1@gmail.com");
+
+        assertNotEquals(changedUserDTO.fullName(), changedUser.getFullName());
+    }
 }

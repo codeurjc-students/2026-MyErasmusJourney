@@ -43,6 +43,13 @@ public class UserRestController {
         return ResponseEntity.ok(dto);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO){
+        UserDTO dto = userService.updateUser(id, userDTO);
+        if (dto == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        return ResponseEntity.ok(dto);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<UserDTO> deleteUser (@PathVariable Long id){
         UserDTO userDTO = userService.deleteUser(id);

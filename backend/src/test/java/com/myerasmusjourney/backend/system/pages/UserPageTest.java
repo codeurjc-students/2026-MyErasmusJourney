@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Tag("system")
 public class UserPageTest extends AuthenticatedSeleniumTest {
 
-    private void createExperience(){
+    private void createExperience(String titleContent){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
         WebElement addExperienceButton = driver.findElement(By.xpath("/html/body/div/div/div[1]/div[1]/div[2]/button[3]"));
@@ -26,7 +26,7 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
         addExperienceButton.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("title")
+                By.xpath("/html/body/div/div/form/div[1]/div[2]/div/label[1]")
         ));
 
         WebElement title = driver.findElement(By.id("title"));
@@ -35,10 +35,10 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
         WebElement date = driver.findElement(By.id("date"));
         WebElement location = driver.findElement(By.id("location"));
         Select select = new Select(location);
-        WebElement documentation = driver.findElement(By.xpath("/html/body/div/div/form/div[1]/div[2]/div/label[2]"));
+        WebElement documentation = driver.findElement(By.xpath("/html/body/div/div/form/div[1]/div[2]/div/label[3]"));
         WebElement submit = driver.findElement(By.xpath("/html/body/div/div/form/div[1]/div[5]/button"));
 
-        title.sendKeys("Selenium test");
+        title.sendKeys(titleContent);
         description.sendKeys("This is an experience created by a Selenium test");
         date.sendKeys("01/13/2023");
         rating.sendKeys("5.3");
@@ -191,7 +191,7 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
     void testRendersNewExperiences(){
         authenticateWithSpecificUser("exampleuser1@email.com");
 
-        createExperience();
+        createExperience("Selenium test");
 
         WebElement userLink = driver.findElement(By.xpath("/html/body/div/header/nav/div/a"));
 
@@ -238,7 +238,7 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
-        createExperience();
+        createExperience("Experience to be deleted");
 
         WebElement userLink = driver.findElement(By.xpath("/html/body/div/header/nav/div/a"));
 

@@ -424,5 +424,167 @@ describe("UserService", () => {
     expect(mockApi.get).toHaveBeenCalledWith("/users/5/experiences");
   });
 
+  it("should successfully return the comments of a user", async () => {
+    const responseData = [
+      {
+        id: 1,
+        description: "Great experience!",
+        date: "2026-06-25",
+        authorName: "Jeremy",
+        experienceId: 1,
+      },
+      {
+        id: 2,
+        description: "I really enjoyed reading this.",
+        date: "2026-06-26",
+        authorName: "Jeremy",
+        experienceId: 2
+      },
+    ];
+
+    const mockApi = {
+      get: vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue(responseData),
+        text: vi.fn(),
+      }),
+    };
+
+    const service = createUserService(mockApi);
+
+    const result = await service.getComments(1);
+
+    expect(mockApi.get).toHaveBeenCalledTimes(1);
+    expect(mockApi.get).toHaveBeenCalledWith("/users/1/comments");
+    expect(result).toEqual(responseData);
+  });
+
+  it("should throw an error when getComments request fails", async () => {
+    const errorMessage = "Unauthorized";
+
+    const mockApi = {
+      get: vi.fn().mockResolvedValue({
+        ok: false,
+        text: vi.fn().mockResolvedValue(errorMessage),
+        json: vi.fn(),
+      }),
+    };
+
+    const service = createUserService(mockApi);
+
+    await expect(
+      service.getComments(1)
+    ).rejects.toThrow(errorMessage);
+
+    expect(mockApi.get).toHaveBeenCalledWith("/users/1/comments");
+  });
+
+  it("should call the correct endpoint when requesting user comments", async () => {
+    const mockApi = {
+      get: vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue([]),
+        text: vi.fn(),
+      }),
+    };
+
+    const service = createUserService(mockApi);
+
+    await service.getComments(5);
+
+    expect(mockApi.get).toHaveBeenCalledWith("/users/5/comments");
+  });
+
+  it("should successfully return the updated user", async () => {
+    const responseData: UserDTO =
+    {
+      id: 1,
+      fullName: "Jeremy Belpois",
+      displayName: "Jeremy",
+      email: "jeremy@email.com",
+      studyLocation: "Paris, France",
+      roles: ["USER"],
+      experiences: [],
+      comments: []
+    }
+
+    const mockApi = {
+      put: vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue(responseData),
+        text: vi.fn(),
+      }),
+    };
+
+    const service = createUserService(mockApi);
+
+    const result = await service.updateUser(1, responseData);
+
+    expect(mockApi.put).toHaveBeenCalledTimes(1);
+    expect(mockApi.put).toHaveBeenCalledWith("/users/1", responseData);
+    expect(result).toEqual(responseData);
+  });
+
+  it("should throw an error when updating an user fails", async () => {
+
+    const requestData: UserDTO =
+    {
+      id: 1,
+      fullName: "Jeremy Belpois",
+      displayName: "Jeremy",
+      email: "jeremy@email.com",
+      studyLocation: "Paris, France",
+      roles: ["USER"],
+      experiences: [],
+      comments: []
+    }
+
+    const errorMessage = "Unauthorized";
+
+    const mockApi = {
+      put: vi.fn().mockResolvedValue({
+        ok: false,
+        text: vi.fn().mockResolvedValue(errorMessage),
+        json: vi.fn(),
+      }),
+    };
+
+    const service = createUserService(mockApi);
+
+    await expect(
+      service.updateUser(1, requestData)
+    ).rejects.toThrow(errorMessage);
+
+    expect(mockApi.put).toHaveBeenCalledWith("/users/1", requestData);
+  });
+
+  it("should call the correct endpoint when updating the user information", async () => {
+    
+    const requestData: UserDTO =
+    {
+      id: 1,
+      fullName: "Jeremy Belpois",
+      displayName: "Jeremy",
+      email: "jeremy@email.com",
+      studyLocation: "Paris, France",
+      roles: ["USER"],
+      experiences: [],
+      comments: []
+    }
+
+    const mockApi = {
+      put: vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue([]),
+        text: vi.fn(),
+      }),
+    };
+
+    const service = createUserService(mockApi);
+
+    await service.updateUser(5, requestData);
+
+    expect(mockApi.put).toHaveBeenCalledWith("/users/5", requestData);
+  });
 
 });

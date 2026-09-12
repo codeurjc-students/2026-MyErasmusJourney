@@ -3,7 +3,6 @@ import { ROUTES } from "@shared/constants/routes";
 import ExperiencesPage from "../pages/ExperiencesPage/ExperiencesPage";
 import HomePage from "../pages/HomePage/HomePage";
 import AboutUsPage from "../pages/AboutUsPage/AboutUsPage";
-import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import LogInPage from "../pages/LogInPage/LogInPage";
 import UserPage from "../pages/UserPage/UserPage";
 import AvailableSoonPage from "../pages/AvailableSoonPage/AvailableSoonPage";
@@ -11,6 +10,7 @@ import CityFormPage from "../pages/CityFormPage/CityFormPage";
 import ExperienceFormPage from "../pages/ExperienceFormPage/ExperienceFormPage";
 import DetailedExperiencePage from "../pages/DetailedExperiencePage/DetailedExperiencePage";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
+import UserFormPage from "../pages/UserFormPage/UserFormPage";
 
 export const routes = [
   {
@@ -23,7 +23,7 @@ export const routes = [
   },
   {
     path: ROUTES.SIGN_UP,
-    element: <SignUpPage />
+    element: <UserFormPage mode="signup"  />
   },
   {
     path: ROUTES.LOG_IN,
@@ -56,5 +56,9 @@ export const routes = [
   {
     path: ROUTES.ERROR_PAGE,
     element: <ErrorPage />
+  },
+  {
+    path: ROUTES.USER_FORM,
+    element: <UserFormPage mode="edit"/>
   }
 ];
