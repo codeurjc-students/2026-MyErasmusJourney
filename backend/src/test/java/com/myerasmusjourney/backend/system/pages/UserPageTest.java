@@ -51,7 +51,7 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
         ));
     }
 
-    private void postComment(){
+    private void postComment(String descriptionContent){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -77,7 +77,7 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
         WebElement commentInput = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[2]/input"));
         WebElement postButton = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[2]/button"));
 
-        commentInput.sendKeys("New comment");
+        commentInput.sendKeys(descriptionContent);
         postButton.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -97,8 +97,8 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
         WebElement fullName = driver.findElement(By.xpath("/html/body/div/div/div[1]/div[1]/div[1]/div[1]/p[2]"));
         WebElement email = driver.findElement(By.xpath("/html/body/div/div/div[1]/div[1]/div[1]/div[2]/p[1]"));
 
-        assertTrue(displayName.getText().contains("testUser"));
-        assertTrue(fullName.getText().contains("test"));
+        assertTrue(displayName.getText().contains("test"));
+        assertTrue(fullName.getText().contains("testUser"));
         assertTrue(email.getText().contains("test@email.com"));
     }
 
@@ -217,7 +217,7 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
 
         authenticateWithSpecificUser("exampleuser1@email.com");
 
-        postComment();
+        postComment("New comment");
 
         WebElement userLink = driver.findElement(By.xpath("/html/body/div/header/nav/div/a"));
 
@@ -253,6 +253,12 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
 
         deleteExperienceButton.click();
 
+        driver.navigate().refresh();
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.xpath("//p[text()='Loading experiences...']")
+        ));
+
         assertTrue(
                 driver.findElements(By.xpath("/html/body/div/div/div[2]/div[1]/div/div/div[1]/p")).isEmpty()
                         ||
@@ -266,7 +272,7 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
-        postComment();
+        postComment("Comment to be deleted");
 
         WebElement userLink = driver.findElement(By.xpath("/html/body/div/header/nav/div/a"));
 
@@ -280,6 +286,12 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
         WebElement deleteCommentButton = driver.findElement(By.xpath("/html/body/div/div/div[2]/div[2]/div/div/div[2]/button"));
 
         deleteCommentButton.click();
+
+        driver.navigate().refresh();
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.xpath("//p[text()='Loading comments...']")
+        ));
 
         assertTrue(
                 driver.findElements(By.xpath("/html/body/div/div/div[2]/div[2]/div/div/div[1]/p")).isEmpty()

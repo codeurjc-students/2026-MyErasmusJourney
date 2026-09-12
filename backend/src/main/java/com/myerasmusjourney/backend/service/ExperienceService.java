@@ -82,7 +82,6 @@ public class ExperienceService {
         return commentMapper.toSimpleDTOs(experience.getComments());
     }
 
-    @Transactional
     public ExperienceDTO deleteExperienceById(Long id) {
         User user = userService.getLoggedUser();
         Experience experience = experienceRepository.findById(id).orElseThrow(()-> new NoSuchElementException("Experience not found"));
