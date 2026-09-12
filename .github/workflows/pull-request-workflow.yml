@@ -110,6 +110,8 @@ jobs:
             PORT: 8080
             SSL_ENABLED: false
             SPRING_PROFILES_ACTIVE: test
+            ADMIN_EMAIL: testadmin@email.com
+            ADMIN_PASSWORD: password
 
           run: |
             cd ../backend
