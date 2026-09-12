@@ -8,6 +8,7 @@ import com.myerasmusjourney.backend.service.UserService;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.List;
 
+@Profile("test")
 @Component
 public class DataInitializer {
 
@@ -34,10 +36,12 @@ public class DataInitializer {
     @PostConstruct
     @Transactional
     public void init(){
+        UserFormDTO userFormDTO = new UserFormDTO("test@email.com", "test", "testUser", null, null, "password", "password");
         UserFormDTO userFormDTO1 = new UserFormDTO("exampleuser1@email.com", "Daniel", "Daniel Grimm", "Paris", "France", "password", "password");
         UserFormDTO userFormDTO2= new UserFormDTO("exampleuser2@email.com", "Maria", "Maria Garcia", "Rome", "Italy", "password", "password");
         UserFormDTO userFormDTO3= new UserFormDTO("exampleuser3@email.com", "Max", "Max Helmut", "Copenhagen", "Denmark", "password", "password");
 
+        userService.createUser(userFormDTO);
         userService.createUser(userFormDTO1);
         userService.createUser(userFormDTO2);
         userService.createUser(userFormDTO3);
