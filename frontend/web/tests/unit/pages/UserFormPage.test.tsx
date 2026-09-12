@@ -490,7 +490,7 @@ describe("UserFormPage", () => {
                 <Routes>
 
                     <Route
-                        path="/profile"
+                        path="/account"
                         element={<div>Account page</div>}
                     />
 
@@ -636,7 +636,7 @@ describe("UserFormPage", () => {
             );
         });
 
-        expect(mockNavigate).toHaveBeenCalledWith("/profile");
+        expect(mockNavigate).toHaveBeenCalledWith("/account");
     });
 
 

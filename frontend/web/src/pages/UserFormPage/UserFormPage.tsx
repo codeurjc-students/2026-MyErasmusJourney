@@ -51,7 +51,7 @@ export default function UserFormPage({mode,userService = createUserService(API)}
 
         fetchUserInfo();
 
-    }, [isEdit, user, userService, navigate]);
+    }, [isEdit, user, navigate]);
 
 
     async function handleEditSubmit(event: FormEvent<HTMLFormElement>) {
@@ -88,7 +88,7 @@ export default function UserFormPage({mode,userService = createUserService(API)}
                 changedUserDTO
             );
 
-            navigate("/profile");
+            navigate("/account");
         }
         catch (error) {
             if (error instanceof ApiError && error.status >= 500) {

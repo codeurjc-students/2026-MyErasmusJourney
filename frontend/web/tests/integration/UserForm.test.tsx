@@ -69,7 +69,7 @@ describe("UserFormPage", () => {
             <MemoryRouter initialEntries={["/user/update"]}>
                 <Routes>
                     <Route path="/user/update" element={<UserFormPage userService={testUserService} mode="edit" />} />
-                    <Route path="/profile" element={<UserPage userService={testUserService} authService={testAuthService} />} />
+                    <Route path="/account" element={<UserPage userService={testUserService} authService={testAuthService} />} />
                 </Routes>
             </MemoryRouter>
         );
