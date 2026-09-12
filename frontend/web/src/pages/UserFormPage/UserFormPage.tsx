@@ -51,7 +51,7 @@ export default function UserFormPage({mode,userService = createUserService(API)}
 
         fetchUserInfo();
 
-    }, [isEdit, user, userService, navigate]);
+    }, [isEdit, user, navigate]);
 
 
     async function handleEditSubmit(event: FormEvent<HTMLFormElement>) {

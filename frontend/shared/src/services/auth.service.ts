@@ -14,10 +14,14 @@ export function createAuthService(api:ApiClient) {
 async function logIn(api: ApiClient, body: LoginRequest){
     const response = await api.post("/auth/login", body);
 
-    const data =  await response.json();
-    
-    if (!response.ok || data.status !== "SUCCESS"){
+    if (!response.ok){
       throw new ApiError(response.status, await response.text());
+    }
+
+    const data =  await response.json();
+
+    if(data.status !== "SUCCESS"){
+        throw new ApiError(400, "Bad credentials");
     }
 
     return data;

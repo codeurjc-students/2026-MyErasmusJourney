@@ -486,7 +486,7 @@ describe("UserFormPage", () => {
         };
 
         render(
-            <MemoryRouter initialEntries={["/account/edit"]}>
+            <MemoryRouter initialEntries={["/user/update"]}>
                 <Routes>
 
                     <Route
@@ -495,7 +495,7 @@ describe("UserFormPage", () => {
                     />
 
                     <Route
-                        path="/account/edit"
+                        path="/user/update"
                         element={
                             <UserFormPage
                                 userService={editTestService}
@@ -579,9 +579,9 @@ describe("UserFormPage", () => {
         };
 
         render(
-            <MemoryRouter initialEntries={["/account/edit"]}>
+            <MemoryRouter initialEntries={["/user/update"]}>
                 <Routes>
-                    <Route path="/account/edit" element={ <UserFormPage userService={editTestService} mode="edit"/>}/>
+                    <Route path="/user/update" element={ <UserFormPage userService={editTestService} mode="edit"/>}/>
                 </Routes>
             </MemoryRouter>
         );
@@ -669,11 +669,11 @@ describe("UserFormPage", () => {
         };
 
         render(
-            <MemoryRouter initialEntries={["/account/edit"]}>
+            <MemoryRouter initialEntries={["/user/update"]}>
                 <Routes>
 
                     <Route
-                        path="/account/edit"
+                        path="/user/update"
                         element={
                             <UserFormPage
                                 userService={editTestService}
@@ -738,9 +738,9 @@ describe("UserFormPage", () => {
         };
 
         render(
-            <MemoryRouter initialEntries={["/account/edit"]}>
+            <MemoryRouter initialEntries={["/user/update"]}>
                 <Routes>
-                    <Route path="/account/edit" element={ <UserFormPage userService={editTestService} mode="edit"/>}/>
+                    <Route path="/user/update" element={ <UserFormPage userService={editTestService} mode="edit"/>}/>
                 </Routes>
             </MemoryRouter>
         );
@@ -778,9 +778,9 @@ describe("UserFormPage", () => {
         };
 
         render(
-            <MemoryRouter initialEntries={["/account/edit"]}>
+            <MemoryRouter initialEntries={["/user/update"]}>
                 <Routes>
-                    <Route path="/account/edit" element={ <UserFormPage userService={editTestService} mode="edit"/>}/>
+                    <Route path="/user/update" element={ <UserFormPage userService={editTestService} mode="edit"/>}/>
                 </Routes>
             </MemoryRouter>
         );

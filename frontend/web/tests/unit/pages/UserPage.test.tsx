@@ -355,6 +355,52 @@ describe("UserPage", () => {
     expect(mockNavigate).toHaveBeenCalledWith("/cities/new");
   });
 
+  it("redirects to city form", async () => {
+
+    const fakeUser = {
+      id: 1,
+      displayName: "john",
+      fullName: "John Doe",
+      email: "john@test.com",
+      studyLocation: "Madrid",
+      roles: ["USER", "ADMIN"]
+    };
+
+    const mockGetUser = vi.fn().mockResolvedValue(fakeUser);
+
+    const mockLogOut = vi.fn();
+
+    const setUser = vi.fn();
+
+    const mockService: UserService = {
+      signUp: vi.fn(),
+      getUserInfo: vi.fn(),
+      getUserById: mockGetUser,
+      getExperiences: vi.fn().mockResolvedValue([]),
+      getComments: vi.fn().mockResolvedValue([]),
+    };
+
+    const mockAuth: AuthService = {
+      logIn: vi.fn(),
+      logOut: mockLogOut
+    };
+
+    (useUserStore as any).mockReturnValue({
+      user: { id: 1 },
+      setUser
+    });
+
+    render(<UserPage authService={mockAuth} userService={mockService} />);
+
+    await waitFor(() => {
+      expect(mockGetUser).toHaveBeenCalled();
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: /edit profile/i }));
+
+    expect(mockNavigate).toHaveBeenCalledWith("/user/update");
+  });
+
   it("deletes user and calls logout ", async () => {
 
     const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(true);

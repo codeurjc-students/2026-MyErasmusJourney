@@ -40,9 +40,9 @@ describe("UserPage", () => {
 
   it("renders the authenticated user's profile with real API data", async () => {
     render(
-      <MemoryRouter initialEntries={["/profile"]}>
+      <MemoryRouter initialEntries={["/account"]}>
         <Routes>
-          <Route path="/profile" element={<UserPage userService={testUserService} authService={testAuthService} />} />
+          <Route path="/account" element={<UserPage userService={testUserService} authService={testAuthService} />} />
           <Route path="/log-in" element={<div>Log in page</div>} />
         </Routes>
       </MemoryRouter>
@@ -77,9 +77,9 @@ describe("UserPage", () => {
     };
 
     render(
-      <MemoryRouter initialEntries={["/profile"]}>
+      <MemoryRouter initialEntries={["/account"]}>
         <Routes>
-          <Route path="/profile" element={<UserPage userService={testService} authService={testAuthService} />} />
+          <Route path="/account" element={<UserPage userService={testService} authService={testAuthService} />} />
           <Route path="/error" element={<div>Error page</div>} />
         </Routes>
       </MemoryRouter>
@@ -90,10 +90,10 @@ describe("UserPage", () => {
 
   it("logs out and navigates back to the home page", async () => {
     render(
-      <MemoryRouter initialEntries={["/profile"]}>
+      <MemoryRouter initialEntries={["/account"]}>
         <Routes>
           <Route path="/" element={<div>Home page</div>} />
-          <Route path="/profile" element={<UserPage userService={testUserService} authService={testAuthService} />} />
+          <Route path="/account" element={<UserPage userService={testUserService} authService={testAuthService} />} />
           <Route path="/log-in" element={<div>Log in page</div>} />
         </Routes>
       </MemoryRouter>
@@ -107,10 +107,10 @@ describe("UserPage", () => {
   it("redirects to city form", async () => {
     authenticatedUser = await authenticateUser("testadmin@email.com");
     render(
-      <MemoryRouter initialEntries={["/profile"]}>
+      <MemoryRouter initialEntries={["/account"]}>
         <Routes>
           <Route path="/cities/new" element={<div>City Form</div>} />
-          <Route path="/profile" element={<UserPage userService={testUserService} authService={testAuthService} />} />
+          <Route path="/account" element={<UserPage userService={testUserService} authService={testAuthService} />} />
           <Route path="/log-in" element={<div>Log in page</div>} />
         </Routes>
       </MemoryRouter>
@@ -128,10 +128,10 @@ describe("UserPage", () => {
     const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(true);
 
     render(
-      <MemoryRouter initialEntries={["/profile"]}>
+      <MemoryRouter initialEntries={["/account"]}>
         <Routes>
           <Route
-            path="/profile"
+            path="/account"
             element={
               <UserPage
                 authService={testAuthService}
@@ -177,10 +177,10 @@ describe("UserPage", () => {
       .mockReturnValue(false);
 
     render(
-      <MemoryRouter initialEntries={["/profile"]}>
+      <MemoryRouter initialEntries={["/account"]}>
         <Routes>
           <Route
-            path="/profile"
+            path="/account"
             element={
               <UserPage
                 authService={testAuthService}
@@ -237,10 +237,10 @@ describe("UserPage", () => {
 
 
     render(
-      <MemoryRouter initialEntries={["/profile"]}>
+      <MemoryRouter initialEntries={["/account"]}>
         <Routes>
           <Route
-            path="/profile"
+            path="/account"
             element={
               <UserPage
                 authService={testAuthService}
@@ -282,10 +282,10 @@ describe("UserPage", () => {
     const experiences = await testUserService.getExperiences(authenticatedUser.id);
 
     render(
-      <MemoryRouter initialEntries={["/profile"]}>
+      <MemoryRouter initialEntries={["/account"]}>
         <Routes>
           <Route
-            path="/profile"
+            path="/account"
             element={
               <UserPage
                 userService={testUserService}
@@ -322,10 +322,10 @@ describe("UserPage", () => {
     );
 
     render(
-      <MemoryRouter initialEntries={["/profile"]}>
+      <MemoryRouter initialEntries={["/account"]}>
         <Routes>
           <Route
-            path="/profile"
+            path="/account"
             element={
               <UserPage
                 userService={testUserService}
@@ -363,11 +363,11 @@ describe("UserPage", () => {
     );
 
     render(
-      <MemoryRouter initialEntries={["/profile"]}>
+      <MemoryRouter initialEntries={["/account"]}>
         <Routes>
 
           <Route
-            path="/profile"
+            path="/account"
             element={
               <UserPage
                 userService={testUserService}
@@ -407,11 +407,11 @@ describe("UserPage", () => {
     );
 
     render(
-      <MemoryRouter initialEntries={["/profile"]}>
+      <MemoryRouter initialEntries={["/account"]}>
         <Routes>
 
           <Route
-            path="/profile"
+            path="/account"
             element={
               <UserPage
                 userService={testUserService}
@@ -463,10 +463,10 @@ describe("UserPage", () => {
     const experienceToDelete = experienceForm;
 
     render(
-      <MemoryRouter initialEntries={["/profile"]}>
+      <MemoryRouter initialEntries={["/account"]}>
         <Routes>
           <Route
-            path="/profile"
+            path="/account"
             element={
               <UserPage
                 userService={testUserService}
@@ -522,10 +522,10 @@ describe("UserPage", () => {
       .mockImplementation(() => { });
 
     render(
-      <MemoryRouter initialEntries={["/profile"]}>
+      <MemoryRouter initialEntries={["/account"]}>
         <Routes>
           <Route
-            path="/profile"
+            path="/account"
             element={
               <UserPage
                 userService={testUserService}
@@ -644,10 +644,10 @@ describe("UserPage", () => {
     const commentToDelete = commentDTO;
 
     render(
-      <MemoryRouter initialEntries={["/profile"]}>
+      <MemoryRouter initialEntries={["/account"]}>
         <Routes>
           <Route
-            path="/profile"
+            path="/account"
             element={
               <UserPage
                 userService={testUserService}
@@ -715,10 +715,10 @@ describe("UserPage", () => {
       .mockImplementation(() => { });
 
     render(
-      <MemoryRouter initialEntries={["/profile"]}>
+      <MemoryRouter initialEntries={["/account"]}>
         <Routes>
           <Route
-            path="/profile"
+            path="/account"
             element={
               <UserComments
                 userService={testUserService}
