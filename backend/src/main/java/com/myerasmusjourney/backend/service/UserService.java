@@ -11,6 +11,7 @@ import com.myerasmusjourney.backend.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,13 +40,19 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Value("${ADMIN_EMAIL}")
+    private String adminEmail;
+
+    @Value("${ADMIN_PASSWORD}")
+    private String adminPassword;
+
     @PostConstruct
     @Transactional
-    public void init(){
-        User admin = new User("test", "testUser", "testadmin@email.com", passwordEncoder.encode("password"),"Munich", "Germany", List.of("USER", "ADMIN"));
-        User user = new User("test", "testUser", "test@email.com", passwordEncoder.encode("password"), null, "Germany");
-        userRepository.save(admin);
-        userRepository.save(user);
+    public void init() {
+        if (userRepository.findByEmail(adminEmail) == null){
+            User admin = new User("test", "testUser", adminEmail, passwordEncoder.encode(adminPassword), "Munich", "Germany", List.of("USER", "ADMIN"));
+            userRepository.save(admin);
+        }
     }
 
     public User getLoggedUser() {
