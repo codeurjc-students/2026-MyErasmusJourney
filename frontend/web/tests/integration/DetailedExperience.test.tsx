@@ -1,11 +1,11 @@
-import { describe, beforeAll, beforeEach, afterAll, expect, it, vi } from "vitest";
+import { describe, beforeAll, beforeEach, afterAll, expect, it } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import "@testing-library/jest-dom";
 
 import DetailedExperiencePage from "src/pages/DetailedExperiencePage/DetailedExperiencePage";
 
-import { createApiClient, type ApiClient } from "@shared/api/apiClient";
+import { createApiClient } from "@shared/api/apiClient";
 import { createExperienceService, type ExperienceService } from "@shared/services/experience.service";
 import { useUserStore } from "@shared/stores/userStore";
 
@@ -134,17 +134,22 @@ describe("DetailedExperiencePage", () => {
 
   it("should navigate to the error page when fetching the experience fails with an internal server error", async () => {
     const testService: ExperienceService = {
-      getAll: vi.fn(),
-
+      getAll: testExperienceService.getAll,
+      getCategories: testExperienceService.getCategories,
+      getCommentsByExperienceId: testExperienceService.getCommentsByExperienceId,
       getExperienceById: async (id: number) => {
         const response = await testAPI.get("/tests/500");
 
         if (!response.ok) {
+          console.error("Error fetching experience with id: " + id)
           throw new ApiError(response.status, await response.text());
         }
 
         return await response.json();
       },
+      postComment: testExperienceService.postComment,
+      postExperience: testExperienceService.postExperience,
+      deleteExperience: testExperienceService.deleteExperience
     };
 
     render(

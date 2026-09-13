@@ -141,13 +141,18 @@ describe("Comments integration tests", () => {
         const response = await testAPI.get("/tests/500");
 
         if (!response.ok) {
+          console.log("Error getting comments from experience with id: " + experienceId)
           throw new ApiError(response.status, await response.text());
         }
 
         return await response.json();
       },
 
-      postComment: vi.fn(),
+      postComment: testExperienceService.postComment,
+      getCategories: testExperienceService.getCategories,
+      getExperienceById: testExperienceService.getExperienceById,
+      postExperience: testExperienceService.postExperience,
+      deleteExperience: testExperienceService.deleteExperience
     };
 
     render(

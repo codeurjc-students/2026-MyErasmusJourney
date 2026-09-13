@@ -9,13 +9,13 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { ApiError } from "@shared/api/apiError";
 
 const testAPI = createApiClient(APIURL)
-const testService = createExperienceService(testAPI);
+const testExperienceService = createExperienceService(testAPI);
 
 describe("Experiences", () => {
     it("renders data from API", async () => {
         render(
             <MemoryRouter>
-                <ExperiencesPage experienceService={testService} />
+                <ExperiencesPage experienceService={testExperienceService} />
             </MemoryRouter>
         );
 
@@ -28,15 +28,22 @@ describe("Experiences", () => {
 
     it("should navigate to the error page when fetching experiences fails with an internal server error", async () => {
         const testService: ExperienceService = {
-            getAll: async (page: number, size: number) => {
+            getAll: async (page?: number, size?: number) => {
                 const response = await testAPI.get("/tests/500");
 
                 if (!response.ok) {
+                    console.error("Unable to fetch experiences with page " + page + " and size " + size)
                     throw new ApiError(response.status, await response.text());
                 }
 
                 return await response.json();
             },
+            getCategories: testExperienceService.getCategories,
+            getCommentsByExperienceId: testExperienceService.getCommentsByExperienceId,
+            getExperienceById: testExperienceService.getExperienceById,
+            postComment: testExperienceService.postComment,
+            postExperience: testExperienceService.postExperience,
+            deleteExperience: testExperienceService.deleteExperience
         };
 
         render(

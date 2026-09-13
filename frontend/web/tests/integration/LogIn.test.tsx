@@ -105,11 +105,14 @@ describe("LogInPage", () => {
         const response = await testAPI.get("/tests/500");
 
         if (!response.ok) {
+          console.error("unable to log in with the following credentials")
+          console.error(loginRequest)
           throw new ApiError(response.status, await response.text());
         }
 
         return await response.json();
       },
+      logOut: testAuthService.logOut
     };
 
     render(

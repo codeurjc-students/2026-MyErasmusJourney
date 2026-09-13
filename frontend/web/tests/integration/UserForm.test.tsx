@@ -105,12 +105,19 @@ describe("UserFormPage", () => {
                 const response = await testAPI.get("/tests/500");
 
                 if (!response.ok) {
+                    console.error("error updating user with id: " + id)
+                    console.error(body)
                     throw new ApiError(response.status, await response.text());
                 }
 
                 return await response.json();
             },
-            getUserById: testUserService.getUserById
+            getUserById: testUserService.getUserById,
+            getComments: testUserService.getComments,
+            signUp: testUserService.signUp,
+            getExperiences: testUserService.getExperiences,
+            getUserInfo: testUserService.getUserInfo,
+            deleteUserById: testUserService.deleteUserById
         }
         render(
             <MemoryRouter initialEntries={["/user/update"]}>

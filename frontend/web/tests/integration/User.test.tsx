@@ -633,14 +633,14 @@ describe("UserPage", () => {
   it("deletes an comment of the authenticated user successfully", async () => {
     authenticatedUser = await authenticateUser("exampleuser2@email.com");
 
-    const commentDTO: CommentFormDTO = {
+    const commentFormDTO: CommentFormDTO = {
         description: "This is a test comment to be deleted.",
 
     }
 
     const experienceService: ExperienceService = createExperienceService(testAPI);
 
-    await experienceService.postComment(1, commentDTO);
+    const commentDTO: CommentDTO = await experienceService.postComment(1, commentFormDTO);
 
     const commentToDelete = commentDTO;
 
@@ -667,7 +667,7 @@ describe("UserPage", () => {
 
     expect(await screen.findByText("Comments")).toBeInTheDocument();
 
-    expect(await screen.findByText(commentToDelete.description)).toBeInTheDocument();
+    expect(await screen.findByText(String(commentToDelete.description))).toBeInTheDocument();
 
     const deleteButton = screen.getByRole("button", {
       name: `Delete ${commentToDelete.description}`,
@@ -704,16 +704,13 @@ describe("UserPage", () => {
         const response = await testAPI.get("/tests/500");
 
         if (!response.ok) {
+          console.error("Error deleting comment" + id)
           throw new ApiError(response.status, await response.text());
         }
 
         return await response.json();
       },
     };
-
-    const alertSpy = vi
-      .spyOn(window, "alert")
-      .mockImplementation(() => { });
 
     render(
       <MemoryRouter initialEntries={["/account"]}>

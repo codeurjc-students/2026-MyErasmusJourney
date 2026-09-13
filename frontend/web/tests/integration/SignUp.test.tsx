@@ -11,7 +11,7 @@ import { ApiError } from "@shared/api/apiError";
 import UserFormPage from "src/pages/UserFormPage/UserFormPage";
 
 const testAPI = createApiClient(APIURL);
-const testService = createUserService(testAPI);
+const testUserService = createUserService(testAPI);
 
 describe("SignUpPage", () => {
 
@@ -20,7 +20,7 @@ describe("SignUpPage", () => {
       <MemoryRouter initialEntries={["/signup"]}>
         <Routes>
           <Route path="/log-in" element={<LogInPage />} />
-          <Route path="/signup" element={<UserFormPage userService={testService} mode="signup"/>} />
+          <Route path="/signup" element={<UserFormPage userService={testUserService} mode="signup" />} />
         </Routes>
       </MemoryRouter>
     );
@@ -54,7 +54,7 @@ describe("SignUpPage", () => {
       <MemoryRouter initialEntries={["/signup"]}>
         <Routes>
           <Route path="/log-in" element={<LogInPage />} />
-          <Route path="/signup" element={<UserFormPage userService={testService} mode="signup" />} />
+          <Route path="/signup" element={<UserFormPage userService={testUserService} mode="signup" />} />
         </Routes>
       </MemoryRouter>
     );
@@ -86,7 +86,7 @@ describe("SignUpPage", () => {
       <MemoryRouter initialEntries={["/signup"]}>
         <Routes>
           <Route path="/log-in" element={<LogInPage />} />
-          <Route path="/signup" element={<UserFormPage userService={testService} mode="signup" />} />
+          <Route path="/signup" element={<UserFormPage userService={testUserService} mode="signup" />} />
         </Routes>
       </MemoryRouter>
     );
@@ -123,11 +123,19 @@ describe("SignUpPage", () => {
         const response = await testAPI.get("/tests/500");
 
         if (!response.ok) {
+          console.error("Unable to sign up the following user")
+          console.error(body)
           throw new ApiError(response.status, await response.text());
         }
 
         return await response.json();
-      }
+      },
+      getComments: testUserService.getComments,
+      getExperiences: testUserService.getExperiences,
+      getUserById: testUserService.getUserById,
+      getUserInfo: testUserService.getUserInfo,
+      deleteUserById: testUserService.deleteUserById,
+      updateUser: testUserService.updateUser
     }
 
     render(
@@ -164,7 +172,7 @@ describe("SignUpPage", () => {
       <MemoryRouter initialEntries={["/signup"]}>
         <Routes>
           <Route path="/log-in" element={<LogInPage />} />
-          <Route path="/signup" element={<UserFormPage userService={testService} mode="signup" />} />
+          <Route path="/signup" element={<UserFormPage userService={testUserService} mode="signup" />} />
         </Routes>
       </MemoryRouter>
     );
