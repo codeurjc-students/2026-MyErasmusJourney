@@ -20,6 +20,7 @@ import type { CommentDTO } from "@shared/models/CommentDTO";
 import { type CommentService } from "@shared/services/comment.service";
 import type { ExperienceFormDTO } from "@shared/models/ExperienceFormDTO";
 import type { CommentFormDTO } from "@shared/models/CommentFormDTO";
+import type { ExperienceDTO } from "@shared/models/ExperienceDTO";
 
 const testAPI = createApiClient(APIURL);
 const testAuthService = createAuthService(testAPI);
@@ -30,11 +31,11 @@ describe("UserPage", () => {
 
   beforeEach(async () => {
     try {
-        authenticatedUser = await authenticateUser("test@email.com");
-        useUserStore.getState().setUser(authenticatedUser);
+      authenticatedUser = await authenticateUser("test@email.com");
+      useUserStore.getState().setUser(authenticatedUser);
     } catch (error) {
-        console.error("AUTHENTICATION FAILED:", error);
-        throw error;
+      console.error("AUTHENTICATION FAILED:", error);
+      throw error;
     }
   });
 
@@ -72,13 +73,18 @@ describe("UserPage", () => {
         const response = await testAPI.get("/tests/500");
 
         if (!response.ok) {
+          console.error("error rendering user information with id: " + userId)
           throw new ApiError(response.status, await response.text());
         }
 
         return await response.json();
       },
       getExperiences: testUserService.getExperiences,
-      getComments: testUserService.getComments
+      getComments: testUserService.getComments,
+      getUserInfo: testUserService.getUserInfo,
+      updateUser: testUserService.updateUser,
+      signUp: testUserService.signUp,
+      deleteUserById: testUserService.deleteUserById
     };
 
     render(
@@ -229,6 +235,7 @@ describe("UserPage", () => {
         const response = await testAPI.get("/tests/500");
 
         if (!response.ok) {
+          console.error("Error deleting user with id " + userId)
           throw new ApiError(response.status, await response.text());
         }
 
@@ -237,7 +244,9 @@ describe("UserPage", () => {
       getUserById: testUserService.getUserById,
       getExperiences: testUserService.getExperiences,
       getComments: testUserService.getComments,
-      getUserInfo: testUserService.getUserInfo
+      getUserInfo: testUserService.getUserInfo,
+      updateUser: testUserService.updateUser,
+      signUp: testUserService.signUp
     };
 
 
@@ -450,7 +459,7 @@ describe("UserPage", () => {
 
     const experienceService = createExperienceService(testAPI);
 
-    const experienceForm : ExperienceFormDTO = {
+    const experienceForm: ExperienceFormDTO = {
       title: "Test Experience",
       description: "This is a test experience to be deleted.",
       cityId: 1,
@@ -459,9 +468,7 @@ describe("UserPage", () => {
       categories: ["Documentation"],
     }
 
-    await experienceService.postExperience(experienceForm);
-
-    const experienceToDelete = experienceForm;
+    const experienceToDelete: ExperienceDTO = await experienceService.postExperience(experienceForm);
 
     render(
       <MemoryRouter initialEntries={["/account"]}>
@@ -486,7 +493,7 @@ describe("UserPage", () => {
 
     expect(await screen.findByText("Experiences")).toBeInTheDocument();
 
-    expect(await screen.findByText(experienceToDelete.title)).toBeInTheDocument();
+    expect(await screen.findByText(String(experienceToDelete.title))).toBeInTheDocument();
 
     const deleteButton = screen.getByRole("button", {
       name: `Delete ${experienceToDelete.title}`,
@@ -496,11 +503,11 @@ describe("UserPage", () => {
 
     await waitFor(() => {
       expect(
-        screen.queryByText(experienceToDelete.title)
+        screen.queryByText(String(experienceToDelete.title))
       ).not.toBeInTheDocument();
     });
 
-    const experiencesAfter = await testUserService.getExperiences(
+    const experiencesAfter: ExperienceDTO[] = await testUserService.getExperiences(
       authenticatedUser.id
     );
 
@@ -517,10 +524,6 @@ describe("UserPage", () => {
     expect(experiences.length).toBeGreaterThan(0);
 
     const experience = experiences[0];
-
-    const alertSpy = vi
-      .spyOn(window, "alert")
-      .mockImplementation(() => { });
 
     render(
       <MemoryRouter initialEntries={["/account"]}>
@@ -554,12 +557,18 @@ describe("UserPage", () => {
         const response = await testAPI.get("/tests/500");
 
         if (!response.ok) {
+          console.error("Error getting comments of user with id " + userId)
           throw new ApiError(response.status, await response.text());
         }
 
         return await response.json();
       },
-      // resto de métodos requeridos por UserService
+      getExperiences: testUserService.getExperiences,
+      getUserById: testUserService.getUserById,
+      getUserInfo: testUserService.getUserInfo,
+      signUp: testUserService.signUp,
+      updateUser: testUserService.updateUser,
+      deleteUserById: testUserService.deleteUserById
     };
 
     render(
@@ -592,17 +601,30 @@ describe("UserPage", () => {
         const response = await testAPI.get("/tests/500");
 
         if (!response.ok) {
+          console.error("Error getting comments of user with id " + userId)
           throw new ApiError(response.status, await response.text());
         }
 
         return await response.json();
       },
-      // resto de métodos requeridos por UserService
+      getUserById: testUserService.getUserById,
+      getUserInfo: testUserService.getUserInfo,
+      signUp: testUserService.signUp,
+      updateUser: testUserService.updateUser,
+      deleteUserById: testUserService.deleteUserById,
+      getComments: testUserService.getComments
     };
 
+    const testExperienceService = createExperienceService(testAPI)
+
     const experienceService: ExperienceService = {
-      deleteExperience: vi.fn(),
-      // resto de métodos requeridos por ExperienceService
+      deleteExperience: testExperienceService.deleteExperience,
+      getAll: testExperienceService.getAll,
+      getCategories: testExperienceService.getCategories,
+      getCommentsByExperienceId: testExperienceService.getCommentsByExperienceId,
+      getExperienceById: testExperienceService.getExperienceById,
+      postComment: testExperienceService.postComment,
+      postExperience: testExperienceService.postExperience
     };
 
     render(
@@ -634,7 +656,7 @@ describe("UserPage", () => {
     authenticatedUser = await authenticateUser("exampleuser2@email.com");
 
     const commentFormDTO: CommentFormDTO = {
-        description: "This is a test comment to be deleted.",
+      description: "This is a test comment to be deleted.",
 
     }
 

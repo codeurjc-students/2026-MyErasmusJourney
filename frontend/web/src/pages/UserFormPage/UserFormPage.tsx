@@ -184,7 +184,7 @@ export default function UserFormPage({mode,userService = createUserService(API)}
                     {/* FULL NAME */}
                     <div className="flex flex-col gap-2">
                         <label htmlFor="fullName">Full name</label>
-                        <input type="text" id="fullName" name="fullName" defaultValue={userDTO?.fullName ?? ""} required/>
+                        <input type="text" id="fullName" name="fullName" defaultValue={String(userDTO?.fullName ?? "")} required/>
                     </div>
 
 
@@ -199,7 +199,7 @@ export default function UserFormPage({mode,userService = createUserService(API)}
 
                     <div className="flex flex-col gap-2">
                         <label htmlFor="displayName">Public name</label>
-                        <input type="text" id="displayName" name="displayName" defaultValue={userDTO?.displayName ?? ""} required/>
+                        <input type="text" id="displayName" name="displayName" defaultValue={String(userDTO?.displayName ?? "")} required/>
                     </div>
 
 
@@ -208,7 +208,7 @@ export default function UserFormPage({mode,userService = createUserService(API)}
                     {isEdit ? (
                         <div className="flex flex-col gap-2">
                             <label htmlFor="studyLocation">Study Location</label>
-                            <input type="text" id="studyLocation" name="studyLocation" defaultValue={userDTO?.studyLocation ?? ""}/>
+                            <input type="text" id="studyLocation" name="studyLocation" defaultValue={String(userDTO?.studyLocation ?? "")}/>
                         </div>
 
                     ) : (
@@ -232,7 +232,7 @@ export default function UserFormPage({mode,userService = createUserService(API)}
 
                     <div className="flex flex-col gap-2">
                         <label htmlFor="email">Email</label>
-                        <input type="email" id="email" name="email" defaultValue={userDTO?.email ?? ""} required/>
+                        <input type="email" id="email" name="email" defaultValue={String(userDTO?.email ?? "")} required/>
                     </div>
 
 

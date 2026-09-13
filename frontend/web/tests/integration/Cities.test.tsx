@@ -338,11 +338,14 @@ describe("CityFormPage", () => {
         const response = await testAPI.get("/tests/500");
 
         if (!response.ok) {
+          console.error("Error saving new city ")
+          console.error(cityFormDTO)
           throw new ApiError(response.status, await response.text());
         }
 
         return await response.json();
       },
+      getAll: testCityService.getAll
     };
 
     render(
