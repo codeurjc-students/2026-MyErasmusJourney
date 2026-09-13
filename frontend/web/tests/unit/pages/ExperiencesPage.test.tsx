@@ -36,6 +36,12 @@ describe("ExperiencesPage", () => {
     //return mocked service
     const mockService: ExperienceService = {
       getAll: mockGetAll,
+      getCategories: vi.fn(),
+      getCommentsByExperienceId: vi.fn(),
+      getExperienceById: vi.fn(),
+      postComment: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn()
     };
 
     //render component (DOM virtual)
@@ -61,6 +67,12 @@ describe("ExperiencesPage", () => {
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
+      getCategories: vi.fn(),
+      getCommentsByExperienceId: vi.fn(),
+      getExperienceById: vi.fn(),
+      postComment: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn()
     };
 
     render(
@@ -93,6 +105,12 @@ describe("ExperiencesPage", () => {
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
+      getCategories: vi.fn(),
+      getCommentsByExperienceId: vi.fn(),
+      getExperienceById: vi.fn(),
+      postComment: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn()
     };
 
     render(
@@ -126,6 +144,12 @@ describe("ExperiencesPage", () => {
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
+      getCategories: vi.fn(),
+      getCommentsByExperienceId: vi.fn(),
+      getExperienceById: vi.fn(),
+      postComment: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn()
     };
 
     render(
@@ -162,6 +186,12 @@ describe("ExperiencesPage", () => {
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
+      getCategories: vi.fn(),
+      getCommentsByExperienceId: vi.fn(),
+      getExperienceById: vi.fn(),
+      postComment: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn()
     };
 
     render(
@@ -191,6 +221,12 @@ describe("ExperiencesPage", () => {
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
+      getCategories: vi.fn(),
+      getCommentsByExperienceId: vi.fn(),
+      getExperienceById: vi.fn(),
+      postComment: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn()
     };
 
     render(
@@ -217,6 +253,12 @@ describe("ExperiencesPage", () => {
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
+      getCategories: vi.fn(),
+      getCommentsByExperienceId: vi.fn(),
+      getExperienceById: vi.fn(),
+      postComment: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn()
     };
 
     render(
@@ -249,6 +291,12 @@ describe("ExperiencesPage", () => {
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
+      getCategories: vi.fn(),
+      getCommentsByExperienceId: vi.fn(),
+      getExperienceById: vi.fn(),
+      postComment: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn()
     };
 
     render(

@@ -1,10 +1,10 @@
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import "@testing-library/jest-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 import { createApiClient } from "@shared/api/apiClient";
-import { createCityService, type CityService } from "@shared/services/city.service";
+import { createCityService } from "@shared/services/city.service";
 import { createExperienceService, type ExperienceService } from "@shared/services/experience.service";
 import { useUserStore } from "@shared/stores/userStore";
 
@@ -12,7 +12,6 @@ import { APIURL } from "src/config/env";
 import ExperienceFormPage from "src/pages/ExperienceFormPage/ExperienceFormPage";
 import { authenticateUser, clearFetchAndUserStore } from "tests/testAuthentication";
 import DetailedExperiencePage from "src/pages/DetailedExperiencePage/DetailedExperiencePage";
-import type { ExperienceDTO } from "@shared/models/ExperienceDTO";
 import type { ExperienceFormDTO } from "@shared/models/ExperienceFormDTO";
 import { ApiError } from "@shared/api/apiError";
 
@@ -194,12 +193,13 @@ describe("ExperienceFormPage integration", () => {
     const cities = await testCityService.getAll();
 
     const experienceService: ExperienceService = {
-      getCategories: vi.fn().mockResolvedValue([]),
 
       postExperience: async (experienceRequest: ExperienceFormDTO) => {
         const response = await testAPI.get("/tests/500");
 
         if (!response.ok) {
+          console.error("Error posting the following experience")
+          console.error(experienceRequest)
           throw new ApiError(response.status, await response.text());
         }
 
@@ -207,7 +207,11 @@ describe("ExperienceFormPage integration", () => {
       },
 
       getCategories: testExperienceService.getCategories,
-
+      getAll: testExperienceService.getAll,
+      getCommentsByExperienceId: testExperienceService.getCommentsByExperienceId,
+      getExperienceById: testExperienceService.getExperienceById,
+      postComment: testExperienceService.postComment,
+      deleteExperience: testExperienceService.deleteExperience
     };
 
     render(

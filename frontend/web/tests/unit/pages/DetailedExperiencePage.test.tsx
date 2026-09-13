@@ -57,6 +57,11 @@ describe("DetailedExperiencePage", () => {
     const mockService: ExperienceService = {
       getAll: vi.fn(),
       getExperienceById: mockGetExperienceById,
+      getCategories: vi.fn(),
+      getCommentsByExperienceId: vi.fn(),
+      postComment: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn()
     };
 
     render(
@@ -87,6 +92,10 @@ describe("DetailedExperiencePage", () => {
       getAll: vi.fn(),
       getExperienceById: mockGetExperienceById,
       getCommentsByExperienceId: vi.fn().mockResolvedValue([]),
+      getCategories: vi.fn(),
+      postComment: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn()
     };
 
     render(
@@ -149,6 +158,11 @@ describe("DetailedExperiencePage", () => {
     const mockService: ExperienceService = {
       getAll: vi.fn(),
       getExperienceById: mockGetExperienceById,
+      getCategories: vi.fn(),
+      getCommentsByExperienceId: vi.fn(),
+      postComment: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn()
     };
 
     render(
@@ -181,6 +195,11 @@ describe("DetailedExperiencePage", () => {
     const mockService: ExperienceService = {
       getAll: vi.fn(),
       getExperienceById: mockGetExperienceById,
+      getCategories: vi.fn(),
+      getCommentsByExperienceId: vi.fn(),
+      postComment: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn()
     };
 
     const consoleErrorSpy = vi
@@ -221,6 +240,11 @@ describe("DetailedExperiencePage", () => {
     const mockService: ExperienceService = {
       getAll: vi.fn(),
       getExperienceById: mockGetExperienceById,
+      getCategories: vi.fn(),
+      getCommentsByExperienceId: vi.fn(),
+      postComment: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn()
     };
 
     const consoleErrorSpy = vi

@@ -1,4 +1,4 @@
-import { ApiClient } from "../api/apiClient";
+import type { ApiClient } from "../api/apiClient";
 import { ApiError } from "../api/apiError";
 
 export type CommentService = ReturnType<typeof createCommentService>;

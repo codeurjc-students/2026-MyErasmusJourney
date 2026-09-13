@@ -62,6 +62,9 @@ describe("UserExperiences", () => {
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
+      getComments: vi.fn(),
+      updateUser: vi.fn()
+
     };
 
     render(
@@ -122,6 +125,9 @@ describe("UserExperiences", () => {
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
+      getComments: vi.fn(),
+      updateUser: vi.fn()
+
     };
 
     render(
@@ -172,8 +178,11 @@ describe("UserExperiences", () => {
       getExperiences: mockGetExperiences,
       getUserInfo: vi.fn(),
       getUserById: vi.fn(),
+      getComments: vi.fn(),
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
+      updateUser: vi.fn()
+
     };
 
     render(
@@ -220,7 +229,10 @@ describe("UserExperiences", () => {
       getUserInfo: vi.fn(),
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
+      getComments: vi.fn(),
       signUp: vi.fn(),
+      updateUser: vi.fn()
+
     };
 
     useUserStore.setState({
@@ -306,11 +318,19 @@ describe("UserExperiences", () => {
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
+      getComments: vi.fn(),
+      updateUser: vi.fn()
+
     };
 
     const mockExperienceService: ExperienceService = {
       deleteExperience: mockDeleteExperience,
-      // añade aquí el resto de métodos que exija tu ExperienceService
+      getAll: vi.fn(),
+      getCategories: vi.fn(),
+      getCommentsByExperienceId: vi.fn(),
+      getExperienceById: vi.fn(),
+      postComment: vi.fn(),
+      postExperience: vi.fn(),
     };
 
     render(
@@ -381,10 +401,18 @@ describe("UserExperiences", () => {
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
+      getComments: vi.fn(),
+      updateUser: vi.fn()
     };
 
     const mockExperienceService: ExperienceService = {
       deleteExperience: mockDeleteExperience,
+      getAll: vi.fn(),
+      getCategories: vi.fn(),
+      getCommentsByExperienceId: vi.fn(),
+      getExperienceById: vi.fn(),
+      postComment: vi.fn(),
+      postExperience: vi.fn(),
     };
 
     const alertSpy = vi
@@ -453,10 +481,18 @@ describe("UserExperiences", () => {
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
+      updateUser: vi.fn(),
+      getComments: vi.fn()
     };
 
     const mockExperienceService: ExperienceService = {
       deleteExperience: mockDeleteExperience,
+      getAll: vi.fn(),
+      getCategories: vi.fn(),
+      getCommentsByExperienceId: vi.fn(),
+      getExperienceById: vi.fn(),
+      postComment: vi.fn(),
+      postExperience: vi.fn(),
     };
 
     render(
@@ -501,6 +537,8 @@ describe("UserExperiences", () => {
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
+      getComments: vi.fn(),
+      updateUser: vi.fn()
     };
 
     const mockExperienceService: ExperienceService = {} as any;
