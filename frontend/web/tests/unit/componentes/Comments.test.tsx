@@ -55,6 +55,9 @@ describe("Comments component", () => {
       postComment: vi.fn(),
       getAll: vi.fn(),
       getExperienceById: vi.fn(),
+      deleteExperience: vi.fn(),
+      getCategories: vi.fn(),
+      postExperience: vi.fn()
     };
 
     render(
@@ -87,6 +90,9 @@ describe("Comments component", () => {
       postComment: vi.fn(),
       getAll: vi.fn(),
       getExperienceById: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn(),
+      getCategories: vi.fn()
     };
 
     render(
@@ -135,6 +141,9 @@ describe("Comments component", () => {
       postComment: mockPostComment,
       getAll: vi.fn(),
       getExperienceById: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn(),
+      getCategories: vi.fn()
     };
 
     useUserStore.setState({
@@ -222,6 +231,9 @@ describe("Comments component", () => {
       postComment: mockPostComment,
       getAll: vi.fn(),
       getExperienceById: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn(),
+      getCategories: vi.fn()
     };
 
     useUserStore.setState({
@@ -283,6 +295,9 @@ describe("Comments component", () => {
       postComment: mockPostComment,
       getAll: vi.fn(),
       getExperienceById: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn(),
+      getCategories: vi.fn()
     };
 
     useUserStore.setState({ user: { id: 1, displayName: "John", email: "john@example.com" } });
@@ -320,6 +335,9 @@ describe("Comments component", () => {
       postComment: mockPostComment,
       getAll: vi.fn(),
       getExperienceById: vi.fn(),
+      postExperience: vi.fn(),
+      deleteExperience: vi.fn(),
+      getCategories: vi.fn()
     };
 
     useUserStore.setState({ user: { id: 1, displayName: "John", email: "john@example.com" } });

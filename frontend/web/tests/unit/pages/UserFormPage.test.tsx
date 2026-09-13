@@ -18,11 +18,11 @@ vi.mock("react-router-dom", async () => {
 });
 
 vi.mock("@shared/stores/userStore", () => ({
-    useUserStore: () => ({
-        user: {
-            id: 1,
-        },
-    }),
+  useUserStore: () => ({
+    user: {
+      id: 1,
+    },
+  }),
 }));
 
 describe("SignUpPage", () => {
@@ -30,6 +30,12 @@ describe("SignUpPage", () => {
     const mockSignUp = vi.fn();
     const mockService: UserService = {
       signUp: mockSignUp,
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserById: vi.fn(),
+      getUserInfo: vi.fn(),
+      updateUser: vi.fn(),
+      deleteUserById: vi.fn()
     };
 
     render(
@@ -50,6 +56,12 @@ describe("SignUpPage", () => {
     const mockSignUp = vi.fn().mockResolvedValue({ id: 1, fullName: "John Doe", displayName: "johndoe", email: "john@example.com" });
     const mockService: UserService = {
       signUp: mockSignUp,
+      deleteUserById: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserById: vi.fn(),
+      getUserInfo: vi.fn(),
+      updateUser: vi.fn(),
     };
 
     render(
@@ -95,9 +107,15 @@ describe("SignUpPage", () => {
     const mockSignUp = vi.fn();
     const mockService: UserService = {
       signUp: mockSignUp,
+      deleteUserById: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserById: vi.fn(),
+      getUserInfo: vi.fn(),
+      updateUser: vi.fn(),
     };
 
-    global.alert = vi.fn();
+    window.alert = vi.fn();
 
     render(
       <MemoryRouter>
@@ -120,7 +138,7 @@ describe("SignUpPage", () => {
 
     fireEvent.click(submitButton);
 
-    expect(global.alert).toHaveBeenCalledWith("Passwords do not match");
+    expect(window.alert).toHaveBeenCalledWith("Passwords do not match");
     expect(mockSignUp).not.toHaveBeenCalled();
   });
 
@@ -130,13 +148,16 @@ describe("SignUpPage", () => {
     const mockSignUp = vi.fn().mockRejectedValue(error);
     const mockService: UserService = {
       signUp: mockSignUp,
+      deleteUserById: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserById: vi.fn(),
+      getUserInfo: vi.fn(),
+      updateUser: vi.fn(),
     };
 
-    global.alert = vi.fn();
-    global.console.log = vi.fn();
-
-    delete (window as any).location;
-    window.location = { href: "" } as Location;
+    window.alert = vi.fn();
+    console.log = vi.fn();
 
     render(
       <MemoryRouter>
@@ -160,7 +181,7 @@ describe("SignUpPage", () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(global.alert).toHaveBeenCalledWith(
+      expect(window.alert).toHaveBeenCalledWith(
         expect.stringContaining("Error signing up")
       );
     });
@@ -174,13 +195,16 @@ describe("SignUpPage", () => {
     const mockSignUp = vi.fn().mockRejectedValue(error);
     const mockService: UserService = {
       signUp: mockSignUp,
+      deleteUserById: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserById: vi.fn(),
+      getUserInfo: vi.fn(),
+      updateUser: vi.fn(),
     };
 
-    global.alert = vi.fn();
-    global.console.log = vi.fn();
-
-    delete (window as any).location;
-    window.location = { href: "" } as Location;
+    window.alert = vi.fn();
+    console.log = vi.fn();
 
     render(
       <MemoryRouter>
@@ -214,10 +238,13 @@ describe("SignUpPage", () => {
     const mockSignUp = vi.fn().mockResolvedValue({ id: 1, fullName: "Jane Smith", displayName: "janesmith", email: "jane@example.com" });
     const mockService: UserService = {
       signUp: mockSignUp,
+      deleteUserById: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserById: vi.fn(),
+      getUserInfo: vi.fn(),
+      updateUser: vi.fn(),
     };
-
-    delete (window as any).location;
-    window.location = { href: "" } as Location;
 
     render(
       <MemoryRouter>
@@ -257,10 +284,13 @@ describe("SignUpPage", () => {
     const mockSignUp = vi.fn().mockResolvedValue({ id: 1, fullName: "John Doe", displayName: "johndoe", email: "john@example.com" });
     const mockService: UserService = {
       signUp: mockSignUp,
+      deleteUserById: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserById: vi.fn(),
+      getUserInfo: vi.fn(),
+      updateUser: vi.fn(),
     };
-
-    delete (window as any).location;
-    window.location = { href: "" } as Location;
 
     render(
       <MemoryRouter>
@@ -299,6 +329,10 @@ describe("SignUpPage", () => {
       signUp: mockSignUp,
       getUserInfo: vi.fn(),
       getUserById: vi.fn(),
+      deleteUserById: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      updateUser: vi.fn(),
     };
 
     render(
@@ -355,8 +389,12 @@ describe("SignUpPage", () => {
 
     const mockService: UserService = {
       signUp: mockSignUp,
-      getUserInfo: vi.fn(),
+      deleteUserById: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
       getUserById: vi.fn(),
+      getUserInfo: vi.fn(),
+      updateUser: vi.fn(),
     };
 
     render(
@@ -404,6 +442,10 @@ describe("SignUpPage", () => {
       signUp: mockSignUp,
       getUserInfo: vi.fn(),
       getUserById: vi.fn(),
+      deleteUserById: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      updateUser: vi.fn(),
     };
 
     render(
@@ -455,337 +497,362 @@ describe("SignUpPage", () => {
 
 describe("UserFormPage", () => {
 
-    it("should load the user information and render the edit form", async () => {
+  it("should load the user information and render the edit form", async () => {
 
-        const editTestService: UserService = {
-            getUserById: async (id: number) => {
-                return {
-                    id,
-                    fullName: "John Doe",
-                    displayName: "johndoe",
-                    email: "john@example.com",
-                    studyLocation: "Madrid, Spain",
-                    experiences: [],
-                    comments: [],
-                    roles: ["USER"],
-                };
-            },
-
-            updateUser: async () => {
-                return {
-                    id: 1,
-                    fullName: "John Doe",
-                    displayName: "johndoe",
-                    email: "john@example.com",
-                    studyLocation: "Madrid, Spain",
-                    experiences: [],
-                    comments: [],
-                    roles: ["USER"],
-                };
-            },
+    const editTestService: UserService = {
+      getUserById: async (id: number) => {
+        return {
+          id,
+          fullName: "John Doe",
+          displayName: "johndoe",
+          email: "john@example.com",
+          studyLocation: "Madrid, Spain",
+          experiences: [],
+          comments: [],
+          roles: ["USER"],
         };
+      },
 
-        render(
-            <MemoryRouter initialEntries={["/user/update"]}>
-                <Routes>
+      updateUser: async () => {
+        return {
+          id: 1,
+          fullName: "John Doe",
+          displayName: "johndoe",
+          email: "john@example.com",
+          studyLocation: "Madrid, Spain",
+          experiences: [],
+          comments: [],
+          roles: ["USER"],
+        };
+      },
+      deleteUserById: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserInfo: vi.fn(),
+      signUp: vi.fn()
+    };
 
-                    <Route
-                        path="/account"
-                        element={<div>Account page</div>}
-                    />
+    render(
+      <MemoryRouter initialEntries={["/user/update"]}>
+        <Routes>
 
-                    <Route
-                        path="/user/update"
-                        element={
-                            <UserFormPage
-                                userService={editTestService}
-                                mode="edit"
-                            />
-                        }
-                    />
+          <Route
+            path="/account"
+            element={<div>Account page</div>}
+          />
 
-                </Routes>
-            </MemoryRouter>
-        );
+          <Route
+            path="/user/update"
+            element={
+              <UserFormPage
+                userService={editTestService}
+                mode="edit"
+              />
+            }
+          />
 
-        expect(
-            await screen.findByRole("heading", {
-                name: /edit profile/i,
-            })
-        ).toBeInTheDocument();
+        </Routes>
+      </MemoryRouter>
+    );
 
-        expect(
-            screen.getByLabelText(/full name/i)
-        ).toHaveValue("John Doe");
+    expect(
+      await screen.findByRole("heading", {
+        name: /edit profile/i,
+      })
+    ).toBeInTheDocument();
 
-        expect(
-            screen.getByLabelText(/public name/i)
-        ).toHaveValue("johndoe");
+    expect(
+      screen.getByLabelText(/full name/i)
+    ).toHaveValue("John Doe");
 
-        expect(
-            screen.getByLabelText(/email/i)
-        ).toHaveValue("john@example.com");
+    expect(
+      screen.getByLabelText(/public name/i)
+    ).toHaveValue("johndoe");
 
-        expect(
-            screen.getByLabelText(/study location/i)
-        ).toHaveValue("Madrid, Spain");
+    expect(
+      screen.getByLabelText(/email/i)
+    ).toHaveValue("john@example.com");
 
-        expect(
-            screen.queryByLabelText(/^password$/i)
-        ).not.toBeInTheDocument();
+    expect(
+      screen.getByLabelText(/study location/i)
+    ).toHaveValue("Madrid, Spain");
 
-        expect(
-            screen.queryByLabelText(/repeat password/i)
-        ).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText(/^password$/i)
+    ).not.toBeInTheDocument();
 
-        expect(
-            screen.queryByLabelText(/destination city/i)
-        ).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText(/repeat password/i)
+    ).not.toBeInTheDocument();
 
-        expect(
-            screen.queryByLabelText(/destination country/i)
-        ).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText(/destination city/i)
+    ).not.toBeInTheDocument();
+
+    expect(
+      screen.queryByLabelText(/destination country/i)
+    ).not.toBeInTheDocument();
+  });
+
+
+  it("should successfully update the user with valid data", async () => {
+
+    const updateUser = vi.fn().mockResolvedValue({
+      id: 1,
+      fullName: "Updated Name",
+      displayName: "updatedName",
+      email: "updated@example.com",
+      studyLocation: "Paris, France",
+      experiences: [],
+      comments: [],
+      roles: ["USER"],
     });
 
-
-    it("should successfully update the user with valid data", async () => {
-
-        const updateUser = vi.fn().mockResolvedValue({
-            id: 1,
-            fullName: "Updated Name",
-            displayName: "updatedName",
-            email: "updated@example.com",
-            studyLocation: "Paris, France",
-            experiences: [],
-            comments: [],
-            roles: ["USER"],
-        });
-
-        const editTestService: UserService = {
-            getUserById: async (id: number) => {
-                return {
-                    id,
-                    fullName: "John Doe",
-                    displayName: "johndoe",
-                    email: "john@example.com",
-                    studyLocation: "Madrid, Spain",
-                    experiences: [],
-                    comments: [],
-                    roles: ["USER"],
-                };
-            },
-
-            updateUser,
+    const editTestService: UserService = {
+      getUserById: async (id: number) => {
+        return {
+          id,
+          fullName: "John Doe",
+          displayName: "johndoe",
+          email: "john@example.com",
+          studyLocation: "Madrid, Spain",
+          experiences: [],
+          comments: [],
+          roles: ["USER"],
         };
+      },
 
-        render(
-            <MemoryRouter initialEntries={["/user/update"]}>
-                <Routes>
-                    <Route path="/user/update" element={ <UserFormPage userService={editTestService} mode="edit"/>}/>
-                </Routes>
-            </MemoryRouter>
-        );
+      updateUser,
+      deleteUserById: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserInfo: vi.fn(),
+      signUp: vi.fn()
+    };
 
-        const fullNameInput =
-            await screen.findByLabelText(/full name/i);
+    render(
+      <MemoryRouter initialEntries={["/user/update"]}>
+        <Routes>
+          <Route path="/user/update" element={<UserFormPage userService={editTestService} mode="edit" />} />
+        </Routes>
+      </MemoryRouter>
+    );
 
-        const displayNameInput =
-            screen.getByLabelText(/public name/i);
+    const fullNameInput =
+      await screen.findByLabelText(/full name/i);
 
-        const emailInput =
-            screen.getByLabelText(/email/i);
+    const displayNameInput =
+      screen.getByLabelText(/public name/i);
 
-        const studyLocationInput =
-            screen.getByLabelText(/study location/i);
+    const emailInput =
+      screen.getByLabelText(/email/i);
 
-        fireEvent.change(fullNameInput, {
-            target: { value: "Updated Name" },
-        });
+    const studyLocationInput =
+      screen.getByLabelText(/study location/i);
 
-        fireEvent.change(displayNameInput, {
-            target: { value: "updatedName" },
-        });
-
-        fireEvent.change(emailInput, {
-            target: { value: "updated@example.com" },
-        });
-
-        fireEvent.change(studyLocationInput, {
-            target: { value: "Paris, France" },
-        });
-
-        fireEvent.click(
-            screen.getByRole("button", {
-                name: /save changes/i,
-            })
-        );
-
-        await waitFor(() => {
-            expect(updateUser).toHaveBeenCalledWith(
-                1,
-                expect.objectContaining({
-                    id: 1,
-                    fullName: "Updated Name",
-                    displayName: "updatedName",
-                    email: "updated@example.com",
-                    studyLocation: "Paris, France",
-                    experiences: [],
-                    comments: [],
-                    roles: ["USER"],
-                })
-            );
-        });
-
-        expect(mockNavigate).toHaveBeenCalledWith("/account");
+    fireEvent.change(fullNameInput, {
+      target: { value: "Updated Name" },
     });
 
-
-    it("should show an error alert when updating the user fails", async () => {
-
-        const alertSpy = vi
-            .spyOn(window, "alert")
-            .mockImplementation(() => {});
-
-        const editTestService: UserService = {
-            getUserById: async (id: number) => {
-                return {
-                    id,
-                    fullName: "John Doe",
-                    displayName: "johndoe",
-                    email: "john@example.com",
-                    studyLocation: "Madrid, Spain",
-                    experiences: [],
-                    comments: [],
-                    roles: ["USER"],
-                };
-            },
-
-            updateUser: async () => {
-                throw new ApiError(
-                    400,
-                    "Email already exists"
-                );
-            },
-        };
-
-        render(
-            <MemoryRouter initialEntries={["/user/update"]}>
-                <Routes>
-
-                    <Route
-                        path="/user/update"
-                        element={
-                            <UserFormPage
-                                userService={editTestService}
-                                mode="edit"
-                            />
-                        }
-                    />
-
-                </Routes>
-            </MemoryRouter>
-        );
-
-        const emailInput =
-            await screen.findByLabelText(/email/i);
-
-        fireEvent.change(emailInput, {
-            target: {
-                value: "existing@example.com",
-            },
-        });
-
-        fireEvent.click(
-            screen.getByRole("button", {
-                name: /save changes/i,
-            })
-        );
-
-        await waitFor(() => {
-            expect(alertSpy).toHaveBeenCalledWith(
-                expect.stringContaining(
-                    "Error updating user"
-                )
-            );
-        });
-
-        alertSpy.mockRestore();
+    fireEvent.change(displayNameInput, {
+      target: { value: "updatedName" },
     });
 
-
-    it("should render the error page when updating the user fails because of a server error", async () => {
-
-        const editTestService: UserService = {
-            getUserById: async (id: number) => {
-                return {
-                    id,
-                    fullName: "John Doe",
-                    displayName: "johndoe",
-                    email: "john@example.com",
-                    studyLocation: "Madrid, Spain",
-                    experiences: [],
-                    comments: [],
-                    roles: ["USER"],
-                };
-            },
-
-            updateUser: async () => {
-                throw new ApiError(
-                    500,
-                    "Internal server error"
-                );
-            },
-        };
-
-        render(
-            <MemoryRouter initialEntries={["/user/update"]}>
-                <Routes>
-                    <Route path="/user/update" element={ <UserFormPage userService={editTestService} mode="edit"/>}/>
-                </Routes>
-            </MemoryRouter>
-        );
-
-        const fullNameInput =
-            await screen.findByLabelText(/full name/i);
-
-        fireEvent.change(fullNameInput, {
-            target: {
-                value: "Updated Name",
-            },
-        });
-
-        fireEvent.click(
-            screen.getByRole("button", {
-                name: /save changes/i,
-            })
-        );
-
-        expect(mockNavigate).toHaveBeenCalledWith("/error");
+    fireEvent.change(emailInput, {
+      target: { value: "updated@example.com" },
     });
 
-
-    it("should render the error page when fetching user information fails because of a server error", async () => {
-
-        const editTestService: UserService = {
-            getUserById: async () => {
-                throw new ApiError(
-                    500,
-                    "Internal server error"
-                );
-            },
-
-            updateUser: vi.fn(),
-        };
-
-        render(
-            <MemoryRouter initialEntries={["/user/update"]}>
-                <Routes>
-                    <Route path="/user/update" element={ <UserFormPage userService={editTestService} mode="edit"/>}/>
-                </Routes>
-            </MemoryRouter>
-        );
-
-        expect(mockNavigate).toHaveBeenCalledWith("/error");
+    fireEvent.change(studyLocationInput, {
+      target: { value: "Paris, France" },
     });
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /save changes/i,
+      })
+    );
+
+    await waitFor(() => {
+      expect(updateUser).toHaveBeenCalledWith(
+        1,
+        expect.objectContaining({
+          id: 1,
+          fullName: "Updated Name",
+          displayName: "updatedName",
+          email: "updated@example.com",
+          studyLocation: "Paris, France",
+          experiences: [],
+          comments: [],
+          roles: ["USER"],
+        })
+      );
+    });
+
+    expect(mockNavigate).toHaveBeenCalledWith("/account");
+  });
+
+
+  it("should show an error alert when updating the user fails", async () => {
+
+    const alertSpy = vi
+      .spyOn(window, "alert")
+      .mockImplementation(() => { });
+
+    const editTestService: UserService = {
+      getUserById: async (id: number) => {
+        return {
+          id,
+          fullName: "John Doe",
+          displayName: "johndoe",
+          email: "john@example.com",
+          studyLocation: "Madrid, Spain",
+          experiences: [],
+          comments: [],
+          roles: ["USER"],
+        };
+      },
+
+      updateUser: async () => {
+        throw new ApiError(
+          400,
+          "Email already exists"
+        );
+      },
+      deleteUserById: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserInfo: vi.fn(),
+      signUp: vi.fn()
+    };
+
+    render(
+      <MemoryRouter initialEntries={["/user/update"]}>
+        <Routes>
+
+          <Route
+            path="/user/update"
+            element={
+              <UserFormPage
+                userService={editTestService}
+                mode="edit"
+              />
+            }
+          />
+
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const emailInput =
+      await screen.findByLabelText(/email/i);
+
+    fireEvent.change(emailInput, {
+      target: {
+        value: "existing@example.com",
+      },
+    });
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /save changes/i,
+      })
+    );
+
+    await waitFor(() => {
+      expect(alertSpy).toHaveBeenCalledWith(
+        expect.stringContaining(
+          "Error updating user"
+        )
+      );
+    });
+
+    alertSpy.mockRestore();
+  });
+
+
+  it("should render the error page when updating the user fails because of a server error", async () => {
+
+    const editTestService: UserService = {
+      getUserById: async (id: number) => {
+        return {
+          id,
+          fullName: "John Doe",
+          displayName: "johndoe",
+          email: "john@example.com",
+          studyLocation: "Madrid, Spain",
+          experiences: [],
+          comments: [],
+          roles: ["USER"],
+        };
+      },
+
+      updateUser: async () => {
+        throw new ApiError(
+          500,
+          "Internal server error"
+        );
+      },
+      deleteUserById: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserInfo: vi.fn(),
+      signUp: vi.fn()
+    };
+
+    render(
+      <MemoryRouter initialEntries={["/user/update"]}>
+        <Routes>
+          <Route path="/user/update" element={<UserFormPage userService={editTestService} mode="edit" />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const fullNameInput =
+      await screen.findByLabelText(/full name/i);
+
+    fireEvent.change(fullNameInput, {
+      target: {
+        value: "Updated Name",
+      },
+    });
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /save changes/i,
+      })
+    );
+
+    expect(mockNavigate).toHaveBeenCalledWith("/error");
+  });
+
+
+  it("should render the error page when fetching user information fails because of a server error", async () => {
+
+    const editTestService: UserService = {
+      getUserById: async () => {
+        throw new ApiError(
+          500,
+          "Internal server error"
+        );
+      },
+
+      updateUser: vi.fn(),
+      deleteUserById: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserInfo: vi.fn(),
+      signUp: vi.fn()
+    };
+
+    render(
+      <MemoryRouter initialEntries={["/user/update"]}>
+        <Routes>
+          <Route path="/user/update" element={<UserFormPage userService={editTestService} mode="edit" />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    expect(mockNavigate).toHaveBeenCalledWith("/error");
+  });
 
 });

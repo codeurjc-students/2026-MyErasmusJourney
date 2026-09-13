@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { MemoryRouter, Routes, Route } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import "@testing-library/jest-dom";
 import LogInPage from "../../../src/pages/LogInPage/LogInPage";
 import type { AuthService } from "@shared/services/auth.service";
@@ -39,11 +39,17 @@ describe("Log In page", () => {
     const mockLogIn = vi.fn();
     const mockAuthService: AuthService = {
       logIn: mockLogIn,
+      logOut: vi.fn()
     };
 
     const mockUserService: UserService = {
       signUp: vi.fn(),
       getUserInfo: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserById: vi.fn(),
+      updateUser: vi.fn(),
+      deleteUserById: vi.fn()
     };
 
     render(
@@ -69,11 +75,17 @@ describe("Log In page", () => {
 
     const mockAuthService: AuthService = {
       logIn: mockLogIn,
+      logOut: vi.fn()
     };
 
     const mockUserService: UserService = {
       signUp: vi.fn(),
       getUserInfo: mockGetUserInfo,
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserById: vi.fn(),
+      updateUser: vi.fn(),
+      deleteUserById: vi.fn()
     };
 
     render(
@@ -106,14 +118,20 @@ describe("Log In page", () => {
   it("should show alert when email is empty", async () => {
     const mockAuthService: AuthService = {
       logIn: vi.fn(),
+      logOut: vi.fn()
     };
 
     const mockUserService: UserService = {
       signUp: vi.fn(),
       getUserInfo: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserById: vi.fn(),
+      updateUser: vi.fn(),
+      deleteUserById: vi.fn()
     };
 
-    global.alert = vi.fn();
+    window.alert = vi.fn();
 
     render(
       <MemoryRouter>
@@ -126,7 +144,7 @@ describe("Log In page", () => {
     fireEvent.submit(form!);
 
     await waitFor(() => {
-      expect(global.alert).toHaveBeenCalledWith("Email missing");
+      expect(window.alert).toHaveBeenCalledWith("Email missing");
       expect(mockAuthService.logIn).not.toHaveBeenCalled();
     });
   });
@@ -134,14 +152,20 @@ describe("Log In page", () => {
   it("should show alert when password is empty", async () => {
     const mockAuthService: AuthService = {
       logIn: vi.fn(),
+      logOut: vi.fn()
     };
 
     const mockUserService: UserService = {
       signUp: vi.fn(),
       getUserInfo: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserById: vi.fn(),
+      updateUser: vi.fn(),
+      deleteUserById: vi.fn()
     };
 
-    global.alert = vi.fn();
+    window.alert = vi.fn();
 
     render(
       <MemoryRouter>
@@ -154,7 +178,7 @@ describe("Log In page", () => {
     fireEvent.submit(form!);
 
     await waitFor(() => {
-      expect(global.alert).toHaveBeenCalledWith("Passwords needed");
+      expect(window.alert).toHaveBeenCalledWith("Passwords needed");
       expect(mockAuthService.logIn).not.toHaveBeenCalled();
     });
   });
@@ -166,15 +190,21 @@ describe("Log In page", () => {
 
     const mockAuthService: AuthService = {
       logIn: mockLogIn,
+      logOut: vi.fn()
     };
 
     const mockUserService: UserService = {
       signUp: vi.fn(),
       getUserInfo: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserById: vi.fn(),
+      deleteUserById: vi.fn(),
+      updateUser: vi.fn()
     };
 
-    global.alert = vi.fn();
-    global.console.error = vi.fn();
+    window.alert = vi.fn();
+    console.error = vi.fn();
 
     render(
       <MemoryRouter>
@@ -187,8 +217,8 @@ describe("Log In page", () => {
 
     await waitFor(() => {
       expect(mockLogIn).toHaveBeenCalledWith({ username: "john@example.com", password: "password123" });
-      expect(global.console.error).toHaveBeenCalledWith(expect.stringContaining("Error logging in"));
-      expect(global.alert).toHaveBeenCalledWith(expect.stringContaining("Error logging in:"));
+      expect(console.error).toHaveBeenCalledWith(expect.stringContaining("Error logging in"));
+      expect(window.alert).toHaveBeenCalledWith(expect.stringContaining("Error logging in:"));
     });
   });
 
@@ -199,15 +229,21 @@ describe("Log In page", () => {
 
     const mockAuthService: AuthService = {
       logIn: mockLogIn,
+      logOut: vi.fn()
     };
 
     const mockUserService: UserService = {
       signUp: vi.fn(),
       getUserInfo: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserById: vi.fn(),
+      updateUser: vi.fn(),
+      deleteUserById: vi.fn()
     };
 
-    global.alert = vi.fn();
-    global.console.log = vi.fn();
+    window.alert = vi.fn();
+    console.log = vi.fn();
 
     render(
       <MemoryRouter>
@@ -235,11 +271,17 @@ describe("Log In page", () => {
 
     const mockAuthService: AuthService = {
       logIn: vi.fn(),
+      logOut: vi.fn()
     };
 
     const mockUserService: UserService = {
       signUp: vi.fn(),
       getUserInfo: vi.fn(),
+      getComments: vi.fn(),
+      getExperiences: vi.fn(),
+      getUserById: vi.fn(),
+      updateUser: vi.fn(),
+      deleteUserById: vi.fn()
     };
 
     render(

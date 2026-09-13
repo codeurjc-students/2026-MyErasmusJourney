@@ -31,6 +31,8 @@ describe("CityFormPage", () => {
 
     const mockCityService: CityService = {
       addCity: vi.fn(),
+      getAll: vi.fn()
+
     };
 
     render(
@@ -60,6 +62,8 @@ describe("CityFormPage", () => {
 
     const mockCityService: CityService = {
       addCity: mockAddCity,
+      getAll: vi.fn()
+
     };
 
     render(
@@ -101,6 +105,8 @@ describe("CityFormPage", () => {
 
     const mockCityService: CityService = {
       addCity: mockAddCity,
+      getAll: vi.fn()
+
     };
 
     render(
@@ -138,6 +144,8 @@ describe("CityFormPage", () => {
 
     const mockCityService: CityService = {
       addCity: mockAddCity,
+      getAll: vi.fn()
+
     };
 
     render(
@@ -167,6 +175,8 @@ describe("CityFormPage", () => {
 
     const mockCityService: CityService = {
       addCity: mockAddCity,
+      getAll: vi.fn()
+
     };
 
     const alertSpy = vi
@@ -218,6 +228,7 @@ describe("CityFormPage", () => {
 
     const mockCityService: CityService = {
       addCity: mockAddCity,
+      getAll: vi.fn()
     };
 
     render(

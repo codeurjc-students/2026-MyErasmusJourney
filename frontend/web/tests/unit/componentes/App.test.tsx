@@ -30,6 +30,12 @@ describe("App", () => {
     //return mocked service
     const mockService: UserService = {
       getUserInfo: mockGetUserInfo,
+      getUserById: vi.fn(),
+      getComments: vi.fn(),
+      signUp: vi.fn(),
+      getExperiences: vi.fn(),
+      deleteUserById: vi.fn(),
+      updateUser: vi.fn()
     };
 
     //render component (DOM virtual)
@@ -69,6 +75,12 @@ describe("App", () => {
     //return mocked service
     const mockService: UserService = {
       getUserInfo: mockGetUserInfo,
+      getUserById: vi.fn(),
+      getComments: vi.fn(),
+      signUp: vi.fn(),
+      getExperiences: vi.fn(),
+      deleteUserById: vi.fn(),
+      updateUser: vi.fn()
     };
 
     //render component (DOM virtual)
@@ -106,6 +118,12 @@ describe("App", () => {
 
     const mockService: UserService = {
       getUserInfo: mockGetUserInfo,
+      getUserById: vi.fn(),
+      getComments: vi.fn(),
+      signUp: vi.fn(),
+      getExperiences: vi.fn(),
+      deleteUserById: vi.fn(),
+      updateUser: vi.fn()
     };
 
     render(

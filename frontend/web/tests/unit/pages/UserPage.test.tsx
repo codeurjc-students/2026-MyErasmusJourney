@@ -50,6 +50,8 @@ describe("UserPage", () => {
       getUserById: mockGetUser,
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
+      updateUser: vi.fn(),
+      deleteUserById: vi.fn()
     };
 
     const mockAuth: AuthService = {
@@ -94,6 +96,8 @@ describe("UserPage", () => {
       getUserById: mockGetUser,
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
+      updateUser: vi.fn(),
+      deleteUserById: vi.fn()
     };
 
     (useUserStore as any).mockReturnValue({
@@ -120,6 +124,8 @@ describe("UserPage", () => {
       getUserById: vi.fn(),
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
+      updateUser: vi.fn(),
+      deleteUserById: vi.fn()
     };
 
     (useUserStore as any).mockReturnValue({
@@ -148,6 +154,8 @@ describe("UserPage", () => {
       getUserById: mockGetUser,
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
+      updateUser: vi.fn(),
+      deleteUserById: vi.fn()
     };
 
     (useUserStore as any).mockReturnValue({
@@ -177,6 +185,8 @@ describe("UserPage", () => {
       getUserById: mockGetUser,
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
+      updateUser: vi.fn(),
+      deleteUserById: vi.fn()
     };
 
     (useUserStore as any).mockReturnValue({
@@ -215,6 +225,8 @@ describe("UserPage", () => {
       getUserById: mockGetUser,
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
+      deleteUserById: vi.fn(),
+      updateUser: vi.fn()
     };
 
     const mockAuth: AuthService = {
@@ -257,6 +269,8 @@ describe("UserPage", () => {
       getUserById: vi.fn().mockResolvedValue(fakeUser),
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
+      updateUser: vi.fn(),
+      deleteUserById: vi.fn()
     };
 
     (useUserStore as any).mockReturnValue({
@@ -291,6 +305,8 @@ describe("UserPage", () => {
       getUserById: vi.fn().mockResolvedValue(fakeUser),
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
+      updateUser: vi.fn(),
+      deleteUserById: vi.fn()
     };
 
     (useUserStore as any).mockReturnValue({
@@ -332,6 +348,8 @@ describe("UserPage", () => {
       getUserById: mockGetUser,
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
+      deleteUserById: vi.fn(),
+      updateUser: vi.fn()
     };
 
     const mockAuth: AuthService = {
@@ -378,6 +396,8 @@ describe("UserPage", () => {
       getUserById: mockGetUser,
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
+      updateUser: vi.fn(),
+      deleteUserById: vi.fn()
     };
 
     const mockAuth: AuthService = {
@@ -421,8 +441,8 @@ describe("UserPage", () => {
       email: "test@email.com",
       studyLocation: "To be filled",
       roles: ["USER"],
-      experiences: []
-
+      experiences: [],
+      comments: []
     }
 
     const mockGetUser = vi.fn().mockResolvedValue(fakeUser);
@@ -441,6 +461,7 @@ describe("UserPage", () => {
       deleteUserById: mockDeleteUserById,
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
+      updateUser: vi.fn()
     };
 
     const mockAuth: AuthService = {
@@ -485,7 +506,8 @@ describe("UserPage", () => {
       email: "test@email.com",
       studyLocation: "To be filled",
       roles: ["USER"],
-      experiences: []
+      experiences: [],
+      comments: []
     }
 
     const mockGetUser = vi.fn().mockResolvedValue(fakeUser);
@@ -504,6 +526,7 @@ describe("UserPage", () => {
       deleteUserById: mockDeleteUserById,
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
+      updateUser: vi.fn(),
     };
 
     const mockAuth: AuthService = {

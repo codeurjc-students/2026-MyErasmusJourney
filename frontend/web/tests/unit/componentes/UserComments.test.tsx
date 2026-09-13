@@ -60,6 +60,8 @@ describe("UserComments", () => {
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
       getComments: vi.fn(),
+      updateUser: vi.fn()
+
     };
 
     render(
@@ -114,6 +116,8 @@ describe("UserComments", () => {
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
       getComments: mockGetComments,
+      updateUser: vi.fn()
+
     };
 
     render(
@@ -164,6 +168,8 @@ describe("UserComments", () => {
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
+      updateUser: vi.fn()
+
     };
 
     render(
@@ -209,6 +215,8 @@ describe("UserComments", () => {
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
+      updateUser: vi.fn()
+
     };
 
     useUserStore.setState({
@@ -248,6 +256,8 @@ describe("UserComments", () => {
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
+      updateUser: vi.fn()
+
     };
 
     useUserStore.setState({
@@ -361,6 +371,8 @@ describe("UserComments", () => {
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
+      updateUser: vi.fn()
+
     };
 
     const mockCommentService: CommentService = {
@@ -443,7 +455,10 @@ describe("UserComments", () => {
       getUserInfo: vi.fn(),
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
+      getExperiences: vi.fn(),
       signUp: vi.fn(),
+      updateUser: vi.fn()
+
     };
 
     const mockCommentService: CommentService = {
@@ -526,6 +541,9 @@ describe("UserComments", () => {
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
+      getExperiences: vi.fn(),
+      updateUser: vi.fn()
+
     };
 
     const mockCommentService: CommentService = {
