@@ -34,7 +34,7 @@ public class ExperienceMapperTest {
     private CityMapper cityMapper = Mappers.getMapper(CityMapper.class);
 
     @InjectMocks
-    private ExperienceMapperImpl mapper;
+    private ExperienceMapper mapper =  Mappers.getMapper(ExperienceMapper.class);;
 
     @Test
     void testToDTOs() {
