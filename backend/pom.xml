@@ -12,7 +12,7 @@
 
     <groupId>com.myerasmusjourney</groupId>
     <artifactId>myerasmusjourney-api</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0</version>
     <name>backend</name>
     <description>backend</description>
 
