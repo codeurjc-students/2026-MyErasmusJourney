@@ -1,4 +1,4 @@
-import { CityService } from "../services/city.service";
+import type { CityService } from "../services/city.service";
 
 export interface cityServiceProps {
     cityService?: CityService;
