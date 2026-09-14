@@ -4,7 +4,7 @@ services:
     platform: linux/amd64
 
     ports:
-      - target: ${PORT}
+      - target: 8443
         published: 8443
 
     environment:
@@ -12,7 +12,7 @@ services:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_MODE: ${DB_MODE}
-      PORT: ${PORT}
+      PORT: 8443
       SSL_ENABLED: ${SSL_ENABLED}
       KEY_STORE: ${KEY_STORE}
       KEY_PASSWORD: ${KEY_PASSWORD}
