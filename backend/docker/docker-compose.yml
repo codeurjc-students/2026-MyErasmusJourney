@@ -2,8 +2,11 @@ services:
   app:
     image: granlobo2004/myerasmusjourney:${TAG}
     platform: linux/amd64
+    
     ports:
-      - "${PORT}:${PORT}"
+      - target: ${PORT}
+        published: "${PORT}"
+
     environment:
       DB_URL: ${DB_URL}
       DB_USERNAME: ${DB_USERNAME}
@@ -28,7 +31,8 @@ services:
     volumes:
       - db_data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - target: 3306
+        published: "3306"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p$MYSQL_ROOT_PASSWORD"]
       interval: 5s
