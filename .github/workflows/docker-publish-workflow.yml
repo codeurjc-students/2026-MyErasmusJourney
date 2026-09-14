@@ -1,0 +1,64 @@
+name: Docker publish
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v6
+
+      - name: Set up JDK 21 
+        uses: actions/setup-java@v5 
+        with: 
+            distribution: temurin 
+            java-version: '21' 
+            cache: maven
+
+      - name: Install pnpm 
+        uses: pnpm/action-setup@v4 
+        with: 
+            version: 11
+
+      - name: Set up Node.js 
+        uses: actions/setup-node@v6 
+        with: 
+            node-version: 24 
+            cache: pnpm 
+            cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Install dependencies 
+        run: pnpm install
+
+      - name: Create build 
+        run: pnpm --filter web build 
+      
+      - name: Copy build into static 
+        run: cp -r web/dist/* ../backend/src/main/resources/static/
+        
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t granlobo2004/myerasmusjourney:${{ inputs.tag }} \
+            -f backend/docker/Dockerfile \
+            backend
+
+      - name: Login Docker
+        run: docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
+
+      - name: Publish image
+        run: docker push granlobo2004/myerasmusjourney:${{ inputs.tag }}
+
+      - name: Publish docker compose
+        run: docker compose -f backend/docker/docker-compose.yml \backend publish granlobo2004/myerasmusjourney-app:"${{inputs.tag}}"
