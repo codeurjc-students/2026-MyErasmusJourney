@@ -26,6 +26,221 @@ All AI-generated outputs have been reviewed, understood and adapted before being
 
 # Usage Log
 
+## 2026-09-08
+
+### Phase
+
+Phase 3 — Basic Functionality
+
+### Objective
+
+Continue the implementation and testing of the application's basic functionality, resolving development issues and improving the existing frontend and backend components.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Assisted with debugging problems encountered during development.
+- Reviewed existing frontend and backend code to identify the causes of errors.
+- Helped improve and adapt automated tests to the current implementation.
+- Assisted with the refinement of existing React components and their behaviour.
+- Reviewed proposed solutions to ensure that they remained consistent with the project's existing architecture and implementation.
+
+### Complements
+
+None.
+
+### Context Files
+
+- Existing project source code.
+- Existing React frontend components.
+- Existing backend services and entities.
+- Existing automated test files.
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- Current React frontend components.
+- Backend implementation files.
+- Related automated test files.
+
+### Human Review
+
+All suggestions and proposed changes were reviewed by the user and manually validated before being incorporated into the project.
+
+## 2026-09-07
+
+### Phase
+
+Phase 3 — Basic Functionality
+
+### Objective
+
+Continue the development of the application's basic functionality, focusing on the implementation, testing and refinement of the current features.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Assisted with the implementation and refinement of the current application functionality.
+- Reviewed existing code and helped identify implementation problems.
+- Analysed errors encountered during development and proposed possible solutions.
+- Assisted with automated tests related to the current functionality.
+- Reviewed the implementation to ensure consistency with the existing project architecture and development approach.
+
+### Complements
+
+None.
+
+### Context Files
+
+- Existing project source code.
+- Existing backend and frontend implementation.
+- Existing automated tests.
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- Current backend and frontend implementation files.
+- Related automated test files.
+
+### Human Review
+
+All suggestions and proposed changes were reviewed by the user and manually validated before being incorporated into the project.
+
+## 2026-09-06
+
+### Phase
+
+Phase 3 — Testing
+
+### Objective
+
+Add a server-error (500) unit test to `frontend/web/tests/unit/componentes/UserComments.test.tsx` and update `frontend/web/src/components/UserComments/UserComments.tsx` to navigate to `/error` on ApiError status >= 500.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5 mini
+
+### Configuration
+
+* Model: GPT-5 mini
+* Interaction mode: Conversational chat integrated with IDE
+* Reasoning: Standard
+* Agentic mode: Enabled (IDE-integrated edits)
+* IDE integration: VS Code (apply_patch edits)
+
+### How it was used
+
+* Edited the `UserComments` component to wrap `getComments` in a `try/catch` and call `navigate("/error")` when an `ApiError` with status >= 500 is thrown.
+* Added a unit test that mocks `userService.getComments` to reject with `new ApiError(500, "Internal server error")` and asserts `useNavigate` is called with `/error`.
+* Ran the updated test file with Vitest to verify the change; the tests passed locally.
+
+### Files Affected
+
+- frontend/web/src/components/UserComments/UserComments.tsx
+- frontend/web/tests/unit/componentes/UserComments.test.tsx
+
+### Human Review
+
+Developer reviewed and accepted the changes; the updated unit tests for `UserComments` pass locally.
+
+## 2026-08-30
+
+### Phase
+
+Phase 3 — Basic Functionality
+
+### Objective
+
+Continue the development of the React frontend, focusing on the implementation and refinement of the Experiences section and its presentation.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+* Model: GPT-5.5
+* Interaction mode: Conversational chat
+* Reasoning: Standard
+* Agentic mode: Disabled
+* IDE integration: None
+* Plugins/Skills: None
+
+### How it was used
+
+* Helped review and improve the rendering of experiences in the React frontend.
+* Assisted with the ordering and presentation of experience elements.
+* Helped design responsive Tailwind CSS layouts for displaying experiences.
+* Reviewed the use of relative and responsive sizing to maintain a consistent layout across screen sizes.
+* Assisted with adjusting the visual hierarchy and formatting of experience information.
+
+### Complements
+
+None.
+
+### Context Files
+
+* Existing React Experiences components.
+* Existing Tailwind CSS configuration and frontend structure.
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+* React Experiences-related components.
+
+### Human Review
+
+All proposed changes and styling suggestions were reviewed by the user and manually validated in the application before being incorporated into the project.
+
 ## 2026-08-28
 
 ### Phase

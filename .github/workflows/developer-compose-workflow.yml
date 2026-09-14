@@ -1,7 +1,6 @@
 name: Docker compose dev tag
 
 on:
-  workflow_dispatch:
   pull_request:
     branches:
       - main
