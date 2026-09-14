@@ -3,18 +3,18 @@ services:
     image: granlobo2004/myerasmusjourney:0.1
     platform: linux/amd64
     ports:
-      - "8443:8443"
+      - "${PORT}:${PORT}"
     environment:
-      DB_URL: jdbc:mysql://db:3306/myerasmusjourney
-      DB_USERNAME: root
-      DB_PASSWORD: password
-      DB_MODE: create-drop
-      PORT: 8443
-      SSL_ENABLED: true
-      KEY_STORE: keystore.jks
-      KEY_PASSWORD: 9GBCXfQfshkjn5VqBvJy
-      ADMIN_EMAIL: testadmin@email.com
-      ADMIN_PASSWORD: password
+      DB_URL: ${DB_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_MODE: ${DB_MODE}
+      PORT: ${PORT}
+      SSL_ENABLED: ${SSL_ENABLED}
+      KEY_STORE: ${KEY_STORE}
+      KEY_PASSWORD: ${KEY_PASSWORD}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
 
     depends_on:
       db:
@@ -23,7 +23,7 @@ services:
   db:
     image: mysql:9.2
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: myerasmusjourney
     volumes:
       - db_data:/var/lib/mysql
