@@ -5,7 +5,7 @@ services:
 
     ports:
       - target: ${PORT}
-        published: ${PORT}
+        published: 8443
 
     environment:
       DB_URL: ${DB_URL}
