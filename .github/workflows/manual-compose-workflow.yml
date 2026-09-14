@@ -1,0 +1,31 @@
+name: Docker compose manual
+
+on:
+  workflow_dispatch:
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+
+    outputs:
+      image_tag: ${{ steps.tag.outputs.image_tag }}
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v6
+
+      - name: Generate image tag
+        id: tag
+        run: |
+          BRANCH=$(echo "${GITHUB_REF_NAME}" | tr '/' '-')
+          COMMIT=$(git rev-parse --short HEAD)
+          TIME=$(date -u +%H%M)
+
+          echo "image_tag=${BRANCH}-${COMMIT}-${TIME}" >> "$GITHUB_OUTPUT"
+
+  publish:
+    needs: tag
+    uses: ./.github/workflows/docker-publish-workflow.yml
+    with:
+      tag: ${{ needs.tag.outputs.image_tag }}
+    secrets: inherit
