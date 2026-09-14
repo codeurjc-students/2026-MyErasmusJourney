@@ -71,4 +71,4 @@ jobs:
 
       - name: Publish docker compose
         working-directory: backend
-        run: docker compose -f docker/docker-compose.yml . publish granlobo2004/myerasmusjourney-app:"${{inputs.tag}}"
+        run: docker compose -f docker/docker-compose.yml publish granlobo2004/myerasmusjourney-app:"${{inputs.tag}}"
