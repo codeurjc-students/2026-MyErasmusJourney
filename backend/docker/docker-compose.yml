@@ -1,6 +1,6 @@
 services:
   app:
-    image: granlobo2004/myerasmusjourney:0.1
+    image: granlobo2004/myerasmusjourney:${TAG}
     platform: linux/amd64
     ports:
       - "${PORT}:${PORT}"
