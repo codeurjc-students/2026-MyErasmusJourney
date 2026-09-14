@@ -2,6 +2,105 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.0.3 - 2026-08-10
+
+### Added
+
+- 
+
+### Notes
+
+-  
+
+## 0.0.3 - 2026-08-09
+
+### Added
+
+- Authenticated test base for selenium tests, automating user authentication before tests.
+- User page selenium tests checking user information renders and logging out
+
+### Notes
+
+-  After looking at the glitch I noticed the tokens are deleted correctly from the browser's storage which makes stranger how the API still recognizes the tokens even when deleted from the browser.
+
+## 0.0.3 - 2026-08-04
+
+### Updated
+
+- Log in tests in client, taking into account redirection to user page
+- User service  and user page tests in client
+
+## 0.0.3 - 2026-08-01
+
+### Updated
+
+- Log in unit tests, taking into account redirection to user page after successful log in.
+- Authentication service in front-end with unit tests for log out method.
+
+### Notes
+
+-  I don't know why in Vitest integration tests when you try to obtain credentials before the test, they are not shared, therefore when user page is rendered API sends an unauthorized response.
+
+## 0.0.3 - 2026-07-31
+
+### Added
+
+- Log out button
+
+### Updated
+
+- User page and authentication service in web, adding the logout button.
+
+### Notes
+
+- There's a glitch, when an user logs out and then reloads the site, somehow the tokens persist, allowing the site to authenticate the user again without filling the log in form.
+
+## 0.0.3 - 2026-07-30
+
+### Added
+
+- User page in client
+- User DTO in web
+- Unit and integration tests for user page and user service in client end.
+
+### Updated
+
+- User entity and related DTOs with study location attribute.
+- Unit, integration and end to end in API, adapting them for change in user entity and DTOs.
+- User service to call API for user information
+
+### Notes
+
+- A new attribute has been given to the user entity which allows to store the city and country the user is studying or will be studying at during the its Erasmus program. It's an optional attribute, in case it has not been filled an alternative message its displayed instead.
+
+## 0.0.3 - 2026-07-29
+
+### Added
+
+- Get user by id endpoint
+- Unit, integration and end to end tests for get user by id logic in API
+-  No such element controller, for not found exceptions.
+
+### Updated
+
+- User mapper entity and unit tests.
+- User service tests adding tests for new functionality
+- Security configuration, allowing only authenticated users to get an user's information.
+
+### Notes
+
+- In order to get any user's information a method has been added to user service, this method forbids any user without administrator role to access other user's information, therefore an user can only look up its own information.
+## 0.0.3 - 2026-07-28
+
+### Added
+
+- Home page selenium test
+- About us page selenium test
+
+### Updated
+
+- Sign up selenium test adding a wait and checking the login page is displayed after successful sign up.
+
 ## 0.0.3 - 2026-07-27
 
 ### Added
@@ -17,7 +116,6 @@ All notable changes to this project will be documented in this file.
 - Log in page, completing the styles.
 - Postman collection adding log in and get user information requests.
 - User service unit tests, adding get user information test and a before all method to obtain credentials.
-
 
 ### Notes
 

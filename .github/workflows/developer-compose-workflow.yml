@@ -1,0 +1,13 @@
+name: Docker compose dev tag
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  publish:
+    uses: ./.github/workflows/docker-publish-workflow.yml
+    with:
+      tag: dev
+    secrets: inherit
