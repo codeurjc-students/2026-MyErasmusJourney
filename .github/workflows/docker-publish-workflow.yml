@@ -13,6 +13,7 @@ jobs:
 
     env:
       TAG: ${{ inputs.tag }}
+      PORT: 8443
 
     defaults:
       run:
