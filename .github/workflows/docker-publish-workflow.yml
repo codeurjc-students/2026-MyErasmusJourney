@@ -53,10 +53,10 @@ jobs:
       - name: Copy build into static 
         run: 
           cp -r web/dist/* ../backend/src/main/resources/static/
-          cd ../backend
             
         
       - name: Build Docker image
+        working-directory: backend
         run: |
           docker build \
             -t granlobo2004/myerasmusjourney:${{ inputs.tag }} \
@@ -70,4 +70,5 @@ jobs:
         run: docker push granlobo2004/myerasmusjourney:${{ inputs.tag }}
 
       - name: Publish docker compose
+        working-directory: backend
         run: docker compose -f docker/docker-compose.yml . publish granlobo2004/myerasmusjourney-app:"${{inputs.tag}}"
