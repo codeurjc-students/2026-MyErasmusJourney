@@ -70,6 +70,11 @@ jobs:
       - name: Publish image
         run: docker push granlobo2004/myerasmusjourney:${{ inputs.tag }}
 
+      - name: Check compose configuration
+        run: docker compose -f docker/docker-compose.yml config
+
       - name: Publish docker compose
         working-directory: backend
         run: docker compose -f docker/docker-compose.yml publish granlobo2004/myerasmusjourney-app:"${{inputs.tag}}"
+        env:
+          PORT: ${{ env.PORT }}
