@@ -8,8 +8,11 @@ on:
         type: string
 
 jobs:
-  image:
+  compose:
     runs-on: ubuntu-latest
+
+    env:
+      TAG: ${{ inputs.tag }}
 
     defaults:
       run:
@@ -43,16 +46,22 @@ jobs:
 
       - name: Create build 
         run: pnpm --filter web build 
+
+      - name: Ensure static directory exists
+        run: mkdir -p ../backend/src/main/resources/static
       
       - name: Copy build into static 
-        run: cp -r web/dist/* ../backend/src/main/resources/static/
+        run: 
+          cp -r web/dist/* ../backend/src/main/resources/static/
+          cd ../backend
+            
         
       - name: Build Docker image
         run: |
           docker build \
             -t granlobo2004/myerasmusjourney:${{ inputs.tag }} \
-            -f backend/docker/Dockerfile \
-            backend
+            -f docker/Dockerfile \
+            .
 
       - name: Login Docker
         run: docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
@@ -61,4 +70,4 @@ jobs:
         run: docker push granlobo2004/myerasmusjourney:${{ inputs.tag }}
 
       - name: Publish docker compose
-        run: docker compose -f backend/docker/docker-compose.yml \backend publish granlobo2004/myerasmusjourney-app:"${{inputs.tag}}"
+        run: docker compose -f docker/docker-compose.yml . publish granlobo2004/myerasmusjourney-app:"${{inputs.tag}}"
