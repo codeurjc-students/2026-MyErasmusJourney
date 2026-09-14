@@ -2,10 +2,10 @@ services:
   app:
     image: granlobo2004/myerasmusjourney:${TAG}
     platform: linux/amd64
-    
+
     ports:
       - target: ${PORT}
-        published: "${PORT}"
+        published: ${PORT}
 
     environment:
       DB_URL: ${DB_URL}
@@ -32,7 +32,7 @@ services:
       - db_data:/var/lib/mysql
     ports:
       - target: 3306
-        published: "3306"
+        published: 3306
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p$MYSQL_ROOT_PASSWORD"]
       interval: 5s
