@@ -8,7 +8,8 @@
 4. [🏛️ Architecture](#️-architecture)
 5. [🛡️ Quality Assurance](#️-quality-assurance)
 6. [🔄 Development Process](#-development-process)
-7. [🚀 Application Execution and Code Edition](#-application-execution-and-code-edition)
+7. [🚀 Application Execution](#-application-execution)
+8.  [🎮 Code Edition](#-code-edition)
 
 ---
 
@@ -543,7 +544,339 @@ Only after all quality controls have passed can the changes be merged into the m
 
 ---
 
-## 🚀 Application Execution and Code Edition
+## 🚀 Application Execution 
+
+### Requirements
+
+To run the published version of _MyErasmusJourney_, Docker must be installed and running on the host machine.
+
+#### Windows and macOS
+
+On Windows and macOS, **Docker Desktop** is required. Docker Desktop includes Docker Engine, Docker CLI and Docker Compose, so no additional Docker Compose installation is necessary.
+
+- [Docker Desktop for Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
+    
+- [Docker Desktop for Mac](https://docs.docker.com/desktop/setup/install/mac-install/)
+    
+
+#### Linux
+
+On Linux, **Docker Engine** and the **Docker Compose plugin** are required.
+
+- [Docker Engine installation](https://docs.docker.com/engine/install/)
+    
+- [Docker Compose installation](https://docs.docker.com/compose/install/linux/)
+    
+
+The Docker Compose OCI artifact functionality requires Docker Compose 2.34.0 or later.
+
+The installation can be verified with:
+
+```bash
+docker --version
+docker compose version
+```
+
+---
+
+### 📦 Published Docker Compose Application
+
+The application is distributed using **Docker Compose as an OCI artifact** published on Docker Hub. This allows the complete Compose configuration to be downloaded directly from the container registry without requiring the user to clone the source repository.
+
+The published application is available in the following Docker Hub repository:
+
+[MyErasmusJourney on Docker Hub](https://hub.docker.com/repository/docker/granlobo2004/myerasmusjourney-app)
+
+Docker Compose supports OCI artifacts through the `oci://` prefix, allowing a published Compose application to be used directly with the `docker compose` command.
+
+---
+
+### ▶️ Running the Latest Available Version
+
+The latest published version can be executed directly from the Docker Hub OCI artifact using:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest up
+```
+
+This command downloads the published Compose configuration and starts the application and MySQL database containers.
+
+The default configuration is used automatically, so no additional environment variables are required for a standard execution.
+
+The application will be available at:
+
+```text
+https://localhost:8443
+```
+
+Because Version 0.1 uses a self-signed certificate for HTTPS, the browser may display a security warning when accessing the application locally. This is expected for the development/demo certificate.
+
+To run the containers in the background instead, use:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest up -d
+```
+
+To stop the application:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest down
+```
+
+---
+
+### 🏷️ Running a Specific Version
+
+A specific published version can be executed by replacing the `latest` tag with the desired version.
+
+For example, to run Version 0.1.0:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:0.1.0 up
+```
+
+Or, to run it in the background:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:0.1.0 up -d
+```
+
+Using a version-specific tag makes it possible to reproduce the exact published version of the application instead of using whichever version is currently associated with `latest`.
+
+---
+
+### ⚙️ Default Configuration
+
+The published Compose application provides default values for the configuration variables, allowing the application to be started without creating an additional `.env` file.
+
+The main default values are:
+
+|Variable|Default value|
+|:--|:--|
+|`DB_URL`|`jdbc:mysql://db:3306/myerasmusjourney`|
+|`DB_USERNAME`|`root`|
+|`DB_PASSWORD`|`password`|
+|`DB_MODE`|`update`|
+|`PORT`|`8443`|
+|`SSL_ENABLED`|`true`|
+|`KEY_STORE`|`example.jks`|
+|`KEY_PASSWORD`|`password`|
+|`ADMIN_EMAIL`|`admin@example.com`|
+|`ADMIN_PASSWORD`|`password`|
+|`SPRING_PROFILES_ACTIVE`|`default`|
+
+The application container is exposed through port `8443` and the MySQL container uses a persistent Docker volume named `db_data`.
+
+The Compose configuration also includes a MySQL health check. The application container waits for the database service to become healthy before starting.
+
+---
+
+### 👤 Accessing the Application
+
+Once the containers have started, open the following URL in a web browser:
+
+```text
+https://localhost:8443
+```
+
+The default administrator account is:
+
+|Field|Value|
+|:--|:--|
+|Email|`admin@example.com`|
+|Password|`password`|
+
+This account can be used to access the administrator functionality of Version 0.1.
+
+For security reasons, these credentials are intended only for the local/demo execution of the application and should be changed before using the application in a real deployment.
+
+---
+
+
+### 🧪 Example Data
+
+The application includes a set of example data that can be loaded to facilitate the demonstration and testing of the main functionalities of Version 0.1.
+
+To activate the example data, the Spring profile must be set to `test` through the `SPRING_PROFILES_ACTIVE` environment variable.
+
+For example:
+
+``bash SPRING_PROFILES_ACTIVE=test \ docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest up -d
+
+#### 👤 Example Users
+
+|Email|Nickname|Full name|Destination|Password|
+|---|---|---|---|---|
+|`test@email.com`|`test`|`testUser`|—|`password`|
+|`exampleuser1@email.com`|`Daniel`|`Daniel Grimm`|Paris, France|`password`|
+|`exampleuser2@email.com`|`Maria`|`Maria Garcia`|Rome, Italy|`password`|
+|`exampleuser3@email.com`|`Max`|`Max Helmut`|Copenhagen, Denmark|`password`|
+
+The `test@email.com` account is an additional test user without a destination. The other three users represent students associated with the example destinations.
+
+#### 🌍 Example Cities
+
+The following cities are included in the example data:
+
+|City|Description|Country|
+|---|---|---|
+|Copenhagen|Capital of Denmark|Denmark|
+|Paris|Capital of France|France|
+|Rome|Capital of Italy|Italy|
+
+#### 📝 Example Experiences
+
+Three example experiences are created, one for each example city:
+
+|Title|Rating|Categories|City|
+|---|---|---|---|
+|Example experience 1|5.4|Studies, Documentation|Copenhagen|
+|Example experience 2|9.0|Studies, Documentation|Paris|
+|Example experience 3|3.1|Studies, Documentation|Rome|
+
+Each experience contains a sample description:
+
+> Long description about an amazing adventure or small story
+
+The dates of the example experiences are generated using the current date when the example data is initialized.
+
+#### 💬 Example Comments
+
+Three example comments are also created. Each comment contains the following text:
+
+> My opinion or point of view regarding the experience
+
+The comments are associated with the example experiences as follows:
+
+|Comment author|Experience|
+|---|---|
+|Max Helmut|Example experience 1|
+|Maria Garcia|Example experience 3|
+|Daniel Grimm|Example experience 2|
+
+#### 🔄 Running with Example Data
+
+The `test` Spring profile must be explicitly enabled when the example data is required. For example:
+
+```
+SPRING_PROFILES_ACTIVE=test \
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:0.1.0 up -d
+```
+
+If the profile is not set to `test`, the example data is not loaded by this initialization process.
+
+The administrator account is independent from these example users and is created using the administrator configuration described in the Accessing the Application section.
+
+---
+
+### 💾 Persistent Database
+
+The MySQL database is configured with a named Docker volume:
+
+```text
+db_data
+```
+
+This volume persists the database contents when the application containers are stopped or recreated.
+
+Therefore, running:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest down
+```
+
+does not remove the database volume or its stored data.
+
+The data can be preserved and reused by starting the application again:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest up -d
+```
+
+This is the recommended procedure when the existing database contents must be preserved.
+
+---
+
+### 🆕 Starting with a Fresh Database
+
+To execute the application again using a clean database and therefore recreate the initial example data, the existing Docker volume must be removed.
+
+First, stop the application:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest down
+```
+
+Then remove the database volume:
+
+```bash
+docker volume rm <project>_db_data
+```
+
+Alternatively, the volumes associated with the Compose application can be removed directly with:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest down -v
+```
+
+The application can then be started again:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest up -d
+```
+
+This creates a new MySQL database using the default configuration.
+
+> **Warning:** Removing the volume permanently deletes the data stored in the Docker database volume. This option should only be used when a fresh database is desired.
+
+---
+
+### 🔧 Custom Configuration
+
+Although the application can be executed using the default configuration, the main configuration values can be overridden through environment variables.
+
+For example:
+
+```bash
+DB_PASSWORD=mysecurepassword \
+ADMIN_EMAIL=myadmin@example.com \
+ADMIN_PASSWORD=myadminpassword \
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest up -d
+```
+
+The same mechanism can be used to configure the database connection, HTTPS settings, application port and other environment-dependent values defined in the Compose file.
+
+This allows the published application to be reused with different configurations without modifying the published OCI artifact.
+
+---
+
+### ☁️ Deployment on an External Server or Cloud Provider
+
+Version 0.1 provides the application as a Docker Compose OCI artifact so that it can be executed on any machine with a compatible Docker installation.
+
+A deployment on an external server or cloud provider is planned for a later phase of the project. According to the project development plan, the external deployment will be carried out as part of **Version 0.2 — Intermediate Functionality and Deployment**.
+
+Therefore, Version 0.1 does not include a production deployment on an external server or cloud provider.
+
+When the external deployment is implemented, this section will be updated with:
+
+- The selected hosting or cloud provider.
+    
+- Server or platform configuration.
+    
+- Network and firewall configuration.
+    
+- Application deployment procedure.
+    
+- Database persistence configuration.
+    
+- HTTPS certificate configuration.
+    
+- Access URL.
+    
+- Any additional deployment or Continuous Delivery configuration.
+
+##  🎮 Code Edition
 
 This section explains how to prepare the development environment, clone the repository and execute the complete application locally.
 
