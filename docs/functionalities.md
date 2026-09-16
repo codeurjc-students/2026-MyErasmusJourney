@@ -1,48 +1,114 @@
-# Functionalities
+# Detailed Functionalities
 
-This document describes all the different functionalities which are going to be developed in this project. 
-### Legend
+This document displays all the functionalities already implemented.
 
-✅ Done
-🏗️ In progress
-🔜 Coming soon
-### Basic Functionalities 🛠️
+## 🛠️ Basic Functionalities
 
-|     | Funcitonality        | Current State | User access                         | Description                                                                                                           |
-| :-- | :------------------- | :-----------: | :---------------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
-| 1   | Create an account    |      ✅       | Unauthenticated user                | Generate an account with an email, a nickname and a password.                                                         |
-| 2   | Log in               |      ✅      | Unauthenticated user                | Authenticate an user, by sending email and password. The user receives a token through cookies.                       |
-| 3   | Update user          |      🔜       | Authenticated user / Administrator  | The user can update its account information                                                                           |
-| 4   | Delete user          |      ✅       | Authenticated user /  Administrator | User can delete its own account or it can be deleted by an administrator.                                             |
-| 5   | Post experience      |      ✅       | Authenticated user                  | Create and publish a post with information provided by the user                                                       |
-| 6   | Delete experience    |      🔜       | Authenticated user / Administrator  | The author of a post as well as an administrator can delete the post.                                                 |
-| 7   | Comment post         |      ✅       | Authenticated user                  | Any user can comment in any post                                                                                      |
-| 8   | Delete comment       |      🔜       | Authenticated user / Administrator  | Comments can be deleted by their author or an administrator.                                                          |
-| 9   | Add city             |      ✅       | Administrator                       | Administrator user can add a city therefore an authenticated user can post experiences related to the new city.       |
-| 10  | Show user's posts    |      ✅       | Authenticated user / Administrator  | An authenticated user will be able to see its posts on its account page. Administrators can see anyone's posts.       |
-| 11  | Show user's comments |      🏗️       | Authenticated user / Administrator  | An authenticated user will be able to see its comments on its account page. Administrators can see anyone's comments. |
+The following sections describe the main functionalities implemented in Version 0.1. Each functionality is illustrated with screenshots showing its implementation in the application.
 
-### Intermediate Functionalities ⚙️
+### 1. Create an account
 
-|     | Funcionalidad              | Estado | Usuarios con acceso  | Descripción                                                                                                     |
-| :-- | :------------------------- | :----: | :------------------- | :-------------------------------------------------------------------------------------------------------------- |
-| 1   | Filter posts               |   🔜   | Unauthenticated user | Any user has the option to filter the posts/experiences by date, city, rating, type...                          |
-| 2   | Add user's profile image   |   🔜   | Authenticated user   | Every user with an account will have the opportunity upload a profile image.                                    |
-| 3   | Add multimedia to post     |   🔜   | Authenticated user   | Posts will have the possibility to attach multimedia files such as videos or images.                            |
-| 4   | Show city related posts    |   🔜   | Unauthenticated user | City page will show the posts related to the city, allowing any user to access this page.                       |
-| 5   | Show city average rating   |   🔜   | Unauthenticated user | In the city page the average rating of the posts related to the city will be displayed.                         |
-| 6   | Share post                 |   🔜   | Unauthenticated user | Users will be able to share the link to access a post through other social media applications such as WhatsApp. |
-| 7   | Show trending Destinations |   🔜   | Unauthenticated user | Cities pages will show a list sorted by the recent activity.                                                    |
+Unauthenticated users can create a new account by providing the required registration information, including their email, nickname and password. Once the registration form is successfully completed, the account is created and the user can access the application by logging in. Only one account per email is allowed, if an email is already registered the app will reject the sign up petition and notify the user.
 
-### Advances Functionalities 🚀
-|     | Funcionalidad             | Estado | Usuarios con acceso  | Descripción                                                                                                                                                                                                |
-| :-- | :------------------------ | :----: | :------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Reply comment             |   🔜   | Authenticated user   | Users will have the possibility to reply to a comment made in a post.                                                                                                                                      |
-| 2   | Email verification        |   🔜   | Unauthenticated user | After filling up the register form a code will be sent to the provided email to verify the email and activate the account.                                                                                 |
-| 3   | Show experiences city map |   🔜   | Unauthenticated user | In the city page a map will be displayed. The map will show different pinpointed locations, each pin will show the experience related to the location.                                                     |
-| 4   | Show cities map           |   🔜   | Unauthenticated user | The cities page will show a map of Europe pinpointing the cities that have been added to the system.                                                                                                       |
-| 5   | Ranking of destinations   |   🔜   | Authenticated users  | The destinations page is developed, ranking all the possible destinations according to the reliability and rating. The reliability will be calculated according to the number of experiences the city has. |
+![image](/docs/images/basic_functionalities/signUp.png)
 
 ---
-🏠 [Home](../README.md) | 📚 Documentation
+
+### 2. Log in
+
+Unauthenticated users can authenticate by providing their email and password. After successful authentication, the application stores the authentication token in cookies and the user can access the functionalities available to authenticated users.
+
+![image](/docs/images/basic_functionalities/logIn.png)
+
 ---
+
+### 3. Update user
+
+Authenticated users can update their own account information through their profile. Administrators can also update user information when managing other users.
+
+![image](/docs/images/basic_functionalities/editProfile.png)
+
+---
+
+### 4. Delete user
+
+Authenticated users can delete their own account. Administrators can additionally delete other users from the application.
+
+![image](/docs/images/basic_functionalities/deleteAccount.png)
+
+---
+
+### 5. Post experience
+
+Authenticated users can create and publish an Erasmus experience by completing the experience form with the information they want to share and relating the experience to a city. Published experiences can then be accessed through the application.
+
+![image](/docs/images/basic_functionalities/addExperience.png)
+
+---
+
+### 6. Delete experience
+
+Users can delete experiences they have created from the account page, by clicking the bin button. Administrators can also delete experiences published by other users.
+
+![image](/docs/images/basic_functionalities/deleteExperience.png)
+
+
+---
+
+### 7. Comment post
+
+Authenticated users can comment on any published experience. This allows users to interact with the experiences shared by other members of the application.
+
+![image](/docs/images/basic_functionalities/comment.png)
+
+---
+
+### 8. Delete comment
+
+Users can delete comments they have created, this functionality works by pressing the bin button next to the comment in the account page. Administrators can also delete comments made by other users.
+
+![image](/docs/images/basic_functionalities/deleteComment.png)
+
+---
+
+### 9. Add city
+
+Administrators can add new cities to the application. Once a city has been added, authenticated users can associate their experiences with that destination.
+
+![image](/docs/images/basic_functionalities/addCity.png)
+
+---
+
+### 10. Show user's posts
+
+Authenticated users can access their profile and see the experiences they have published. Administrators can also access the posts belonging to other users.
+
+![image](/docs/images/basic_functionalities/viewExperiencesandComments.png)
+
+---
+
+### 11. Show user's comments
+
+Authenticated users can access their profile and see the comments they have published. Administrators can also access the comments belonging to other users.
+
+![image](/docs/images/basic_functionalities/viewExperiencesandComments.png)
+
+---
+
+### 📋 Functionality Summary
+
+The following table summarizes the basic functionalities implemented in Version 0.1 and the users who can access them.
+
+| # | Functionality | User access |
+| :-- | :--- | :--- |
+| 1 | Create an account | Unauthenticated user |
+| 2 | Log in | Unauthenticated user |
+| 3 | Update user | Authenticated user / Administrator |
+| 4 | Delete user | Authenticated user / Administrator |
+| 5 | Post experience | Authenticated user |
+| 6 | Delete experience | Authenticated user / Administrator |
+| 7 | Comment post | Authenticated user |
+| 8 | Delete comment | Authenticated user / Administrator |
+| 9 | Add city | Administrator |
+| 10 | Show user's posts | Authenticated user / Administrator |
+| 11 | Show user's comments | Authenticated user / Administrator |
