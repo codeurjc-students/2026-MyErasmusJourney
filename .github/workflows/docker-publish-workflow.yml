@@ -75,6 +75,6 @@ jobs:
 
       - name: Publish docker compose
         working-directory: backend
-        run: 
-          export TAG=${{ inputs.tag }}
+        run: |
+          export TAG="${{ inputs.tag }}"
           docker compose -f docker/docker-compose.yml publish granlobo2004/myerasmusjourney:${{ inputs.tag }}
