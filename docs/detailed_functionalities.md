@@ -22,8 +22,6 @@ This document describes all the different functionalities which are going to be 
 | 10  | Show user's posts    |       ✅       | Authenticated user / Administrator  | An authenticated user will be able to see its posts on its account page. Administrators can see anyone's posts.       |
 | 11  | Show user's comments |       ✅       | Authenticated user / Administrator  | An authenticated user will be able to see its comments on its account page. Administrators can see anyone's comments. |
 
-
-
 ### Intermediate Functionalities ⚙️
 
 |     | Funcionalidad              | Estado | Usuarios con acceso  | Descripción                                                                                                     |
