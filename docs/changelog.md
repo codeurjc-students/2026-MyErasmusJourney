@@ -2,15 +2,655 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.0.3 - 2026-09-20
+
+### Added
+
+-  Backend architecture diagram, displaying all the different components of the backend and their relationships.
+
+### Updated
+
+- Development guide documentation, adding the new environment variables to the documentation and updated diagrams
+- API documentation, adding all the existing endpoints to html file.
+
+### Removed
+
+- Backend class diagram
+
+## 0.0.3 - 2026-09-19
+
+### Added
+
+-  Frontend architecture diagram, this diagram shows only the frontend side of the app with all its components, interfaces and services.
+
+### Updated
+
+- General architecture diagram, changing the components and classes for the respective folders.
+
+### Removed
+
+- Frontend class diagram
+
+## 0.0.3 - 2026-09-18
+
+### Added
+
+- Database architecture diagram
+
+### Updated
+
+- Architecture documentation, adding database diagram and explaining relationships between entities.
+
+## 0.0.3 - 2026-09-17
+
+### Added
+
+- Video displaying basic functionalities
+
+## 0.0.3 - 2026-09-16
+
+### Added
+
+- App execution documentation, explaining how to run the app in local
+
+### Updated
+
+- Docker compose publish workflow
+- Docker compose file
+
+### Notes
+
+- Docker compose now publishes with environment variables instead of fixed values.
+
+## 0.0.3 - 2026-09-14
+
+### Added
+
+- Environment variables to Docker Compose publishing commands.
+- Example environment variables in Docker Compose.
+- Port environment variable in the workflow.
+
+### Updated
+
+- Docker workflows and Compose publishing configuration.
+- Docker Compose ports to use port 8443.
+- Environment variable validation in workflows.
+- Docker Compose port configuration and environment variable handling.
+- Docker Compose tag configuration.
+- Compose publishing workflow.
+- Docker workflow working directory.
+- Manual Docker workflow configuration.
+
+### Removed
+
+- Manual trigger from the Docker workflows.
+
+### Notes
+
+- Detected bug in API working with database in update mode, data initializer doesn't take into account if data already exists on database.
+
+## 0.0.3 - 2026-09-13
+
+### Added
+
+- Dockerfile for the application.
+- Docker Compose configuration.
+- Docker Compose publishing workflow.
+- Developer Compose publishing workflow.
+- Release publishing workflow for Docker.
+- Manual Compose publishing workflow.
+
+### Updated
+
+- Maven and frontend package versions.
+- Experience mapper unit tests.
+- Integration tests and user form page.
+- Frontend service interfaces.
+- `ApiError` handling.
+- Integration tests with completed mock services.
+- Unit tests and mock services.
+- Docker workflows.
+- Docker Compose configuration.
+- Docker Compose tag and port configuration.
+
+### Notes
+
+- Docker compose is not publishing with environment variables but resolved values.
+
+## 0.0.3 - 2026-09-12
+
+### Added
+
+- Test profile for example data.
+- Environment variables for the administrator user.
+- Workflow configuration for administrator environment variables.
+
+### Updated
+
+- User page integration tests.
+- User comments Selenium tests.
+- User form and related tests.
+
+## 0.0.3 - 2026-09-11
+
+### Added
+
+- User form integration tests.
+- User form Selenium tests.
+- User form unit tests.
+
+### Updated
+
+- User page and related unit tests.
+- User form page redirection.
+- User service unit tests for updating users.
+- User page Selenium tests.
+- User page route.
+
+### Notes
+
+- 
+
+## 0.0.3 - 2026-09-10
+
+### Added
+
+- Update user endpoint and related user service method.
+- Server unit and integration tests for updating users.
+- User form page based on the existing sign up page.
+
+### Updated
+
+- Security configuration for the update user endpoint.
+- User form page unit tests.
+- Postman collection with the update user request.
+- User page Selenium tests.
+
+### Notes
+
+- 
+
+## 0.0.3 - 2026-09-09
+
+### Added
+
+- Delete comment endpoint and related backend logic.
+- Unit, integration and end-to-end tests for deleting comments.
+- Frontend comment service.
+- Comment service unit tests.
+- Selenium test for deleting comments.
+
+### Updated
+
+- Security configuration for the delete comment endpoint.
+- User comments component.
+- Postman collection.
+- User page unit and integration tests for deleting comments.
+- Error endpoint E2E tests.
+  
+### Notes
+
+- 
+
+## 0.0.3 - 2026-09-08
+
+### Added
+
+- Error page unit, integration and Selenium tests.
+
+### Updated
+
+- Error page styles.
+- Test `application.properties`.
+- Frontend service unit tests.
+- E2E authentication base test.
+- Workflow environment variables.
+  
+### Notes
+
+- 
+## 0.0.3 - 2026-09-07
+
+### Added
+
+- Integration tests for internal server errors.
+
+### Updated
+
+- Console logs replaced with console errors.
+  
+### Notes
+
+- 
+
+## 0.0.3 - 2026-09-06
+
+### Added
+
+- Internal server error tests.
+
+### Updated
+
+- Frontend services, components and pages to handle `ApiError`.
+- Unit tests for pages and components.
+- Tests covering internal server errors.
+  
+### Notes
+
+- 
+
+## 0.0.3 - 2026-09-04
+
+### Updated
+
+- Unit tests to use `ApiError` and cover API error handling.
+
+### Notes
+
+- 
+
+## 0.0.3 - 2026-09-03
+
+### Added
+
+- `ApiError` class.
+- Error page and error page route.
+- Error controller tests.
+
+### Updated
+
+- Services to use `ApiError`.
+- Components and pages to handle API errors.
+- Routes to include the error page.
+  
+### Notes
+
+- 
+
+## 0.0.3 - 2026-09-01
+
+### Added
+
+- Delete experience endpoint and related backend logic.
+- Delete experience button in the frontend.
+- Unit, integration and end-to-end tests for deleting experiences.
+- User comments component in the user page.
+- Unit, integration and Selenium tests for user comments.
+
+### Updated
+
+- Security configuration for the delete experience endpoint.
+- Web experience service tests for deleting experiences.
+- User page unit tests.
+- Comment simple DTO, user DTO and frontend user service.
+- User mapper unit tests.
+- Postman collection.
+  
+### Notes
+
+- 
+
+## 0.0.3 - 2026-08-31
+
+### Added
+
+- Get user comments endpoint and related backend logic.
+- Unit, integration and end-to-end tests for getting user comments.
+
+### Updated
+
+- Comment simple DTO to include the experience ID.
+- DTOs and related tests for user comments.
+- Security configuration for the user comments endpoint.
+- Data initializer.
+- Postman collection.
+- Functionalities documentation.
+  
+### Notes
+
+- 
+
+## 0.0.3 - 2026-08-30
+
+### Added
+
+- Get user experiences endpoint and related backend logic.
+- User experiences component in user page.
+- Unit, integration and end-to-end tests for getting user experiences.
+- Selenium test for user experiences.
+
+### Updated
+
+- User DTO and frontend user service to include experiences.
+- Security configuration for the new endpoint.
+- User service unit and integration tests.
+- Authentication cookie handling in integration tests.
+- Experiences ordering to show the most recent experiences first.
+- Experience form integration test to wait for cities to load.
+- Postman collection.
+
+### Fixed
+
+- Endless requests issue in the frontend.
+  
+### Notes
+
+- 
+
+## 0.0.3 - 2026-08-29
+
+### Updated
+
+- Error handling for lazy fetching.
+
+### Notes
+
+- 
+
+## 0.0.3 - 2026-08-28
+
+### Updated
+
+- Comments component styling with scrolling and a maximum height.
+- Comments component rendering to handle errors correctly.
+- Selenium test for posting comments.
+- Selenium test naming.
+
+### Notes
+
+- 
+
+## 0.0.3 - 2026-08-27
+
+### Added
+
+- Comment entity, repository, service and DTOs.
+- Unit and integration tests for posting and getting comments.
+- End-to-end tests for posting and getting comments.
+- Comment DTOs and frontend methods for posting and getting comments.
+- Comments component with unit and integration tests.
+- Selenium tests for comments.
+
+### Updated
+
+- User and experience entities to support comments.
+- Experience tests to include comments.
+- DTOs and mappers, simplifying their structure.
+- Security configuration with the new comment endpoint.
+- Postman collection with the post comment request.
+- Comment endpoint to return HTTP 201 when creating a comment.
+- Selenium tests related to the new functionality.
+
+### Notes
+
+- 
+
+## 0.0.3 - 2026-08-26
+
+### Added
+
+- Detailed experience page with unit and integration tests.
+- Data initializer for the API.
+- Unit and integration tests for the detailed experience page.
+
+### Updated
+
+- Experience form Selenium and page tests.
+- Tests affected by the new data initializer and pagination.
+- Postman collection.
+- City service `addCity` method and tests.
+- User service `createUser` method.
+- Experience service unit tests.
+- Experience form tests to handle the new redirection.
+- Detailed experience page to fix a bug.
+- Pagination handling to prevent undefined pagination issues.
+
+### Notes
+
+- 
+
+## 0.0.3 - 2026-08-25
+
+### Added
+
+- Detailed Experience page.
+- Route for the Detailed Experience page.
+- Frontend Experience DTO.
+- Experience service method to retrieve an experience by ID.
+- Unit, integration and E2E tests for retrieving an experience by ID.
+
+### Updated
+
+- Experience component.
+- Experiences page styles.
+- Experiences page and component tests.
+- Frontend pagination DTO and Experience service tests.
+
+### Notes
+
+- 
+
+## 0.0.3 - 2026-08-24
+
+### Added
+
+- Pagination support for retrieving experiences.
+
+### Updated
+
+- Experience retrieval tests to support pagination.
+- Frontend DTO for paginated experience responses.
+- Frontend Experience service and related tests.
+
+### Notes
+
+- 
+
+## 0.0.3 - 2026-08-23
+
+### Added
+
+- Updated Experience Simple DTO and mapper to support the current experience data.
+
+### Updated
+
+- Experience unit and integration tests.
+- Frontend DTOs and Experience service tests.
+- Functionalities documentation.
+
+### Notes
+
+- 
+
+## 0.0.3 - 2026-08-21
+
+### Added
+
+- Delete user endpoint.
+- User account deletion functionality.
+- Delete user by ID unit and integration tests.
+- User page delete account button.
+- E2E tests for deleting a user by ID.
+- Selenium tests for the delete account button.
+
+### Updated
+
+- Security configuration to support user deletion.
+- Client API types to support DELETE requests.
+- User service with the delete user by ID method.
+- Postman collection with the delete user request.
+- Authenticated Selenium test setup with a dedicated user for deletion.
+- Experience Form Selenium tests.
+
+### Notes
+
+- 
+
+## 0.0.3 - 2026-08-20
+
+### Added
+
+- Experience Form page.
+- Unit and integration tests for the Experience Form page.
+- DTOs for Experience and City required by the form.
+- Service methods required by the Experience Form.
+
+### Updated
+
+- Experience entity constructor.
+- Experience tests to support multiple categories, limited to three categories.
+- Postman collection.
+- Backend unit tests.
+- Service unit tests.
+- Routes for the Experience Form page.
+
+### Notes
+
+- 
+
+## 0.0.3 - 2026-08-18
+
+### Added
+
+- Experience DTO and Experience Form DTO.
+- Endpoint and service method to create new experiences.
+- Integration tests for creating experiences.
+- E2E tests for posting experiences.
+
+### Updated
+
+- City, User and Experience entities with additional attributes.
+- Database relationships between Experience, City and User.
+- Security configuration for experience creation.
+- Experience Simple DTO and related tests after the entity changes.
+- Postman collection with the new experience functionality.
+- Functionalities documentation.
+- Enumeration naming.
+
+### Notes
+
+- 
+
+## 0.0.3 - 2026-08-17
+
+### Added
+
+- Categories enumeration and endpoint to retrieve available categories.
+- Tests for retrieving categories.
+- Integration and unit tests for the Get Cities endpoint.
+- E2E test for retrieving cities.
+- Selenium test for the City Form with administrator authentication.
+
+### Updated
+
+- Categories unit tests.
+- Postman collection with the Get Categories request.
+- Postman collection for city-related requests.
+- City service and mapper to support retrieving cities.
+- City and User DTOs and User page.
+- City validation to prevent duplicated cities by name and country.
+- City name and country formatting.
+
+### Notes
+
+- 
+
+## 0.0.3 - 2026-08-16
+
+### Added
+
+- City service and City Form page.
+- City Form route.
+- City Form unit tests.
+- Integration tests for city functionality.
+- Authentication support for client integration tests.
+
+### Updated
+
+- General application styles.
+- Login button and general styles.
+- Login tests.
+- App and User integration tests.
+- Functionalities documentation.
+
+### Notes
+
+- 
+
+## 0.0.3 - 2026-08-15
+
+### Added
+
+- City entity and repository.
+- City DTOs and mapper.
+- City service and REST controller.
+- Unit tests for the City entity and City service.
+- Integration tests for city-related functionality.
+
+### Updated
+
+- Security configuration to support the new city functionality.
+- User service integration tests to correctly handle the security context.
+- User integration tests to check authenticated and administrator users.
+- Test configuration to improve compatibility with GitHub Actions.
+
+### Notes
+
+-
+
+## 0.0.3 - 2026-08-14
+
+### Added
+
+- Automatic retrieval of the authenticated user when the application starts.
+
+### Updated
+
+- Authentication flow to restore the authenticated user after a page reload.
+- Login redirection to the User page when the user is already authenticated.
+- Authentication REST controller and security configuration.
+- Log in tests to cover the updated authentication flow.
+- App unit and integration tests.
+- User service integration tests.
+- Password encoder configuration.
+
+### Notes
+
+-
+
+## 0.0.3 - 2026-08-11
+
+### Added
+
+- Available Soon page.
+- Available Soon route.
+- Functions to redirect to the Available Soon page.
+
+### Updated
+
+- Sign Up page styles and layout.
+- Sign Up Selenium tests to reflect the updated page.
+
+### Notes
+
+-
+
 ## 0.0.3 - 2026-08-10
 
 ### Added
 
-- 
+- User Profile integration tests using the real API and authentication cookies.
+- Cookie-aware authentication handling in integration tests.
+- User Profile integration test covering the retrieval and rendering of user information.
+
+### Updated
+
+- Authentication tests to correctly handle the login and signup integration flows.
+- User E2E and integration test setup to wait for asynchronously loaded user information.
 
 ### Notes
 
--  
+-
 
 ## 0.0.3 - 2026-08-09
 
