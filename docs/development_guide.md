@@ -7,8 +7,10 @@
 3. [🧰 Tools](#-tools)
 4. [🏛️ Architecture](#️-architecture)
 5. [🛡️ Quality Assurance](#️-quality-assurance)
-6. [🔄 Development Process](#-development-process)
-7. [🚀 Application Execution and Code Edition](#-application-execution-and-code-edition)
+6. [🌐 Deployment](#-deployment)
+7. [🔄 Development Process](#-development-process)
+8. [🚀 Application Execution](#-application-execution)
+9.  [🎮 Code Edition](#-code-edition)
 
 ---
 
@@ -214,15 +216,23 @@ This separation of responsibilities improves maintainability, scalability and al
 
 ---
 
+### Database Architecture
+
+![image](./diagrams/database_diagram.png)
+
+The database is formed by four entities City, Comment, Experience and User. As can be seen in the diagram all relationships between the entities are bidirectional. All relationships are 0:N, a city can be related to numerous experiences, just like the experiences can have N comments. Lastly an user can post as many experiences and comments as wanted.
+
+---
+
 ### Client Architecture
 
-![image](./diagrams/client_class_diagram.png)
+![image](./diagrams/client_architecture_diagram.png)
 
 The client is divided into two main modules: **Web** and **Shared**.
 
 The **Web** module contains the React components responsible for rendering the user interface, handling navigation and managing the application's pages. The execution starts in the `Main` component, which initializes the `RouterProvider`. The router loads the route configuration and renders the `App` component, where common elements such as the header remain persistent while the `Outlet` dynamically displays the page associated with the current URL.
 
-The **Shared** module contains reusable components that are independent of the user interface, including DTOs, service interfaces, API communication utilities and configuration constants. This architecture reduces coupling between the presentation layer and the communication layer while allowing the same business logic to be reused by future client applications, such as the planned mobile application.
+The **Shared** module contains reusable components that are independent of the user interface, including DTOs, service interfaces, stores, API communication utilities and configuration constants. This architecture reduces coupling between the presentation layer and the communication layer while allowing the same business logic to be reused by future client applications, such as the planned mobile application.
 
 Whenever a page needs to communicate with the backend, it does so through the corresponding service, which internally uses the `ApiClient` abstraction to perform the HTTP requests.
 
@@ -230,7 +240,7 @@ Whenever a page needs to communicate with the backend, it does so through the co
 
 ### Server Architecture
 
-![image](./diagrams/server_class_diagram.png)
+![image|700](./diagrams/backend_architecture_diagram.png)
 
 The backend follows the layered architecture recommended by Spring Boot, separating presentation, business logic and persistence responsibilities.
 
@@ -386,20 +396,149 @@ These tests verify complete user workflows such as:
 
 The following table shows the relationship between the implemented automated tests and the functional requirements defined during the analysis phase.
 
-| Functional Requirement | Tested | Test Type   | Test Class                   | Layer  |
-| ---------------------- | :----: | ----------- | ---------------------------- | ------ |
-| Showing Experiences    |   ✅    | Unit        | ExperienceMapperTest         | Server |
-| Showing Experiences    |   ✅    | Unit        | ExperienceRestControllerTest | Server |
-| Showing Experiences    |   ✅    | Unit        | ExperienceServiceTest        | Server |
-| Showing Experiences    |   ✅    | Unit        | ExperienceSimpleDTOTest      | Server |
-| Showing Experiences    |   ✅    | Unit        | ExperienceTest               | Server |
-| Showing Experiences    |   ✅    | Integration | ExperienceServiceTest        | Server |
-| Showing Experiences    |   ✅    | E2E         | ExperiencesTest              | Server |
-| Showing Experiences    |   ✅    | System      | ExperiencesPageTest          | Server |
-| Showing Experiences    |   ✅    | Unit        | Experience.service.test      | Client |
-| Showing Experiences    |   ✅    | Unit        | Experience.test              | Client |
-| Showing Experiences    |   ✅    | Unit        | ExperiencesPage.test         | Client |
-| Showing Experiences    |   ✅    | Integration | Experiences.test             | Client |
+| Functional Requirement   | Tested | Test Type   | Test Class                   | Layer  |
+| ------------------------ | :----: | ----------- | ---------------------------- | ------ |
+| Showing Experiences      |   ✅    | Unit        | ExperienceMapperTest         | Server |
+| Showing Experiences      |   ✅    | Unit        | ExperienceRestControllerTest | Server |
+| Showing Experiences      |   ✅    | Unit        | ExperienceServiceTest        | Server |
+| Showing Experiences      |   ✅    | Unit        | ExperienceSimpleDTOTest      | Server |
+| Showing Experiences      |   ✅    | Unit        | ExperienceTest               | Server |
+| Showing Experiences      |   ✅    | Integration | ExperienceServiceTest        | Server |
+| Showing Experiences      |   ✅    | E2E         | ExperiencesTest              | Server |
+| Showing Experiences      |   ✅    | System      | ExperiencesPageTest          | Server |
+| Showing Experiences      |   ✅    | Unit        | Experience.service.test      | Client |
+| Showing Experiences      |   ✅    | Unit        | Experience.test              | Client |
+| Showing Experiences      |   ✅    | Unit        | ExperiencesPage.test         | Client |
+| Showing Experiences      |   ✅    | Integration | Experiences.test             | Client |
+| Post Experience          |   ✅    | Unit        | ExperienceMapperTest         | Server |
+| Post Experience          |   ✅    | Unit        | ExperienceServiceTest        | Server |
+| Post Experience          |   ✅    | Unit        | ExperienceDTOTest            | Server |
+| Post Experience          |   ✅    | Unit        | ExperienceTest               | Server |
+| Post Experience          |   ✅    | Integration | ExperienceServiceTest        | Server |
+| Post Experience          |   ✅    | E2E         | ExperiencesTest              | Server |
+| Post Experience          |   ✅    | System      | ExperienceFormPageTest       | Server |
+| Post Experience          |   ✅    | Unit        | Experience.service.test      | Client |
+| Post Experience          |   ✅    | Unit        | ExperienceFormPage.test      | Client |
+| Post Experience          |   ✅    | Integration | ExperiencesForm.test         | Client |
+| Post Comment             |   ✅    | Unit        | CommentMapperTest            | Server |
+| Post Comment             |   ✅    | Unit        | ExperienceServiceTest        | Server |
+| Post Comment             |   ✅    | Unit        | CommentDTOTest               | Server |
+| Post Comment             |   ✅    | Unit        | CommentTest                  | Server |
+| Post Comment             |   ✅    | Unit        | ExperienceTest               | Server |
+| Post Comment             |   ✅    | Integration | ExperienceServiceTest        | Server |
+| Post Comment             |   ✅    | E2E         | ExperiencesTest              | Server |
+| Post Comment             |   ✅    | System      | ExperiencesTest              | Server |
+| Post Comment             |   ✅    | Unit        | Comment.service.test         | Client |
+| Post Comment             |   ✅    | Unit        | Comments.test                | Client |
+| Post Comment             |   ✅    | Integration | Comments.test                | Client |
+| View detailed Experience |   ✅    | Unit        | ExperienceMapperTest         | Server |
+| View detailed Experience |   ✅    | Unit        | ExperienceServiceTest        | Server |
+| View detailed Experience |   ✅    | Unit        | ExperienceDTOTest            | Server |
+| View detailed Experience |   ✅    | Unit        | ExperienceTest               | Server |
+| View detailed Experience |   ✅    | Integration | ExperienceServiceTest        | Server |
+| View detailed Experience |   ✅    | E2E         | ExperiencesTest              | Server |
+| View detailed Experience |   ✅    | System      | ExperiencesTest              | Server |
+| View detailed Experience |   ✅    | Unit        | Experience.service.test      | Client |
+| View detailed Experience |   ✅    | Unit        | DetailedExperiencePage.test  | Client |
+| View detailed Experience |   ✅    | Integration | DetailedExperience.test      | Client |
+| SignUp                   |   ✅    | Unit        | UserMapperTest               | Server |
+| SignUp                   |   ✅    | Unit        | UserServiceTest              | Server |
+| SignUp                   |   ✅    | Unit        | UserDTOTest                  | Server |
+| SignUp                   |   ✅    | Unit        | UserTest                     | Server |
+| SignUp                   |   ✅    | Integration | UserServiceTest              | Server |
+| SignUp                   |   ✅    | E2E         | UsersTest                    | Server |
+| SignUp                   |   ✅    | System      | UsersTest                    | Server |
+| SignUp                   |   ✅    | Unit        | User.service.test            | Client |
+| SignUp                   |   ✅    | Unit        | UserFormPage.test            | Client |
+| SignUp                   |   ✅    | Integration | SignUp.test                  | Client |
+| Edit User                |   ✅    | Unit        | UserMapperTest               | Server |
+| Edit User                |   ✅    | Unit        | UserServiceTest              | Server |
+| Edit User                |   ✅    | Unit        | UserDTOTest                  | Server |
+| Edit User                |   ✅    | Unit        | UserTest                     | Server |
+| Edit User                |   ✅    | Integration | UserServiceTest              | Server |
+| Edit User                |   ✅    | E2E         | UsersTest                    | Server |
+| Edit User                |   ✅    | System      | UsersTest                    | Server |
+| Edit User                |   ✅    | Unit        | User.service.test            | Client |
+| Edit User                |   ✅    | Unit        | UserFormPage.test            | Client |
+| Edit User                |   ✅    | Integration | UserForm.test                | Client |
+| Log In                   |   ✅    | Unit        | Auth.service.test            | Client |
+| Log In                   |   ✅    | Unit        | LogInPage.test               | Client |
+| Log In                   |   ✅    | Integration | LogIn.test                   | Client |
+| Log Out                  |   ✅    | Unit        | Auth.service.test            | Client |
+| Log Out                  |   ✅    | Unit        | UserPage.test                | Client |
+| Log Out                  |   ✅    | Integration | Users.test                   | Client |
+| Add City                 |   ✅    | Unit        | CityMapperTest               | Server |
+| Add City                 |   ✅    | Unit        | CityServiceTest              | Server |
+| Add City                 |   ✅    | Unit        | CityDTOTest                  | Server |
+| Add City                 |   ✅    | Unit        | CityTest                     | Server |
+| Add City                 |   ✅    | Integration | CityServiceTest              | Server |
+| Add City                 |   ✅    | E2E         | CitiesTest                   | Server |
+| Add City                 |   ✅    | System      | CitiesTest                   | Server |
+| Add City                 |   ✅    | Unit        | City.service.test            | Client |
+| Add City                 |   ✅    | Unit        | CityFormPage.test            | Client |
+| Add City                 |   ✅    | Integration | CityForm.test                | Client |
+| Get Cities               |   ✅    | Unit        | CityMapperTest               | Server |
+| Get Cities               |   ✅    | Unit        | CityServiceTest              | Server |
+| Get Cities               |   ✅    | Unit        | CitySimpleDTOTest            | Server |
+| Get Cities               |   ✅    | Unit        | CityTest                     | Server |
+| Get Cities               |   ✅    | Integration | CityServiceTest              | Server |
+| Get Cities               |   ✅    | E2E         | CitiesTest                   | Server |
+| Get Cities               |   ✅    | System      | CitiesTest                   | Server |
+| Get Cities               |   ✅    | Unit        | City.service.test            | Client |
+| Get Cities               |   ✅    | Unit        | ExperienceFormPage.test      | Client |
+| Get Cities               |   ✅    | Integration | ExperienceForm.test          | Client |
+| Show user's experiences  |   ✅    | Unit        | ExperienceMapperTest         | Server |
+| Show user's experiences  |   ✅    | Unit        | UserServiceTest              | Server |
+| Show user's experiences  |   ✅    | Unit        | ExperienceSimpleDTOTest      | Server |
+| Show user's experiences  |   ✅    | Unit        | UserTest                     | Server |
+| Show user's experiences  |   ✅    | Unit        | ExperienceTest               | Server |
+| Show user's experiences  |   ✅    | Integration | UserServiceTest              | Server |
+| Show user's experiences  |   ✅    | E2E         | UsersTest                    | Server |
+| Show user's experiences  |   ✅    | System      | UsersTest                    | Server |
+| Show user's experiences  |   ✅    | Unit        | User.service.test            | Client |
+| Show user's experiences  |   ✅    | Unit        | UserPage.test                | Client |
+| Show user's experiences  |   ✅    | Integration | User.test                    | Client |
+| Show user's comments     |   ✅    | Unit        | CommentMapperTest            | Server |
+| Show user's comments     |   ✅    | Unit        | UserServiceTest              | Server |
+| Show user's comments     |   ✅    | Unit        | CommentSimpleDTOTest         | Server |
+| Show user's comments     |   ✅    | Unit        | UserTest                     | Server |
+| Show user's comments     |   ✅    | Unit        | CommentTest                  | Server |
+| Show user's comments     |   ✅    | Integration | UserServiceTest              | Server |
+| Show user's comments     |   ✅    | E2E         | UsersTest                    | Server |
+| Show user's comments     |   ✅    | System      | UsersTest                    | Server |
+| Show user's comments     |   ✅    | Unit        | User.service.test            | Client |
+| Show user's comments     |   ✅    | Unit        | UserPage.test                | Client |
+| Show user's comments     |   ✅    | Integration | User.test                    | Client |
+| Delete Experience        |   ✅    | Unit        | ExperienceMapperTest         | Server |
+| Delete Experience        |   ✅    | Unit        | ExperienceServiceTest        | Server |
+| Delete Experience        |   ✅    | Unit        | ExperienceDTOTest            | Server |
+| Delete Experience        |   ✅    | Unit        | ExperienceTest               | Server |
+| Delete Experience        |   ✅    | Integration | ExperienceServiceTest        | Server |
+| Delete Experience        |   ✅    | E2E         | ExperiencesTest              | Server |
+| Delete Experience        |   ✅    | System      | ExperiencesTest              | Server |
+| Delete Experience        |   ✅    | Unit        | Experience.service.test      | Client |
+| Delete Experience        |   ✅    | Unit        | UserPage.test                | Client |
+| Delete Experience        |   ✅    | Integration | User.test                    | Client |
+| Delete Comment           |   ✅    | Unit        | CommentMapperTest            | Server |
+| Delete Comment           |   ✅    | Unit        | CommentServiceTest           | Server |
+| Delete Comment           |   ✅    | Unit        | CommentDTOTest               | Server |
+| Delete Comment           |   ✅    | Unit        | CommentTest                  | Server |
+| Delete Comment           |   ✅    | Integration | CommentServiceTest           | Server |
+| Delete Comment           |   ✅    | E2E         | CommentsTest                 | Server |
+| Delete Comment           |   ✅    | System      | CommentsTest                 | Server |
+| Delete Comment           |   ✅    | Unit        | Comment.service.test         | Client |
+| Delete Comment           |   ✅    | Unit        | UserPage.test                | Client |
+| Delete Comment           |   ✅    | Integration | User.test                    | Client |
+| Delete User              |   ✅    | Unit        | UserMapperTest               | Server |
+| Delete Comment           |   ✅    | Unit        | UserServiceTest              | Server |
+| Delete Comment           |   ✅    | Unit        | UserDTOTest                  | Server |
+| Delete Comment           |   ✅    | Unit        | UserTest                     | Server |
+| Delete Comment           |   ✅    | Integration | UserServiceTest              | Server |
+| Delete Comment           |   ✅    | E2E         | UsersTest                    | Server |
+| Delete Comment           |   ✅    | System      | UsersTest                    | Server |
+| Delete Comment           |   ✅    | Unit        | User.service.test            | Client |
+| Delete Comment           |   ✅    | Unit        | UserPage.test                | Client |
+| Delete Comment           |   ✅    | Integration | User.test                    | Client |
 
 ---
 
@@ -482,6 +621,25 @@ The combination of automated testing, code coverage analysis and continuous inte
 
 ---
 
+
+## 🌐 Deployment
+
+The application is packaged and distributed using Docker and Docker Compose. The backend and frontend are packaged together into a single Docker image, while Docker Compose is used to coordinate the application container and its MySQL database.
+
+The Docker Compose configuration defines the services required to run the application, including:
+
+- **Application:** contains both the React frontend and Spring Boot backend and exposes the application through port `8443`.
+- **MySQL database:** provides the persistent database required by the backend.
+- **Persistent volume:** stores the MySQL data so that the database contents are preserved when the application containers are restarted.
+
+The resulting Docker image is published to Docker Hub and is used by the Docker Compose artifact for distributing the application. Different versions of the application can be identified through their corresponding Docker tags.
+
+The application Docker image and its published artifacts are available at:
+
+	https://hub.docker.com/r/granlobo2004/myerasmusjourney-app
+
+Docker Compose is therefore the main mechanism used to package the complete application environment and facilitate its distribution and deployment on machines with Docker installed.
+
 ## 🔄 Development Process
 
 The project follows an **Iterative and Incremental Development** methodology.
@@ -495,7 +653,8 @@ The development workflow follows these steps:
 3. The functionality is implemented together with its corresponding automated tests.
 4. Local quality checks are executed.
 5. GitHub Actions automatically validates the changes.
-6. The branch is merged into the main branch after all quality checks have passed.
+6. A new Docker Compose is published with the **"dev"** tag.
+7. The branch is merged into the main branch after all quality checks have passed.
 
 This workflow ensures that every increment of the application remains functional and that software quality is maintained throughout the project.
 
@@ -537,13 +696,406 @@ The CI workflow performs the following checks:
 
 Only after all quality controls have passed can the changes be merged into the main branch.
 
+### 🗞️ Continuous Deployment
+
+The application uses GitHub Actions to automate the publication of Docker Compose artifacts to Docker Hub. Three different workflows are available, each intended for a different stage of the development and release process. 
+#### 📦 Release Deployment 
+
+The release deployment workflow is triggered automatically whenever a new GitHub Release is created. The workflow: 
+1. Obtains the version from the GitHub Release tag. 
+2. Builds the application Docker image. 
+3. Publishes the Docker Compose artifact to Docker Hub using the same version as its tag.
+
+For example, creating a release with the tag `0.1.0` results in the following Docker Compose artifact being published: 
+
+```text granlobo2004/myerasmusjourney:0.1.0```
+
+This allows each released version to be published with a stable and identifiable tag.
+
+#### 🔧 Development Deployment
+
+The development deployment workflow is triggered automatically whenever a Pull Request targeting the `main` branch is created or updated.
+
+The workflow builds and publishes the current state of the Pull Request as a Docker Compose artifact using the `dev` tag:
+
+```
+granlobo2004/myerasmusjourney:dev
+```
+
+The `dev` tag is overwritten whenever a new deployment is generated, so it always represents the most recently published development version.
+
+This deployment can therefore be used to test the changes proposed in Pull Requests before they are incorporated into the `main` branch.
+
+#### 🧪 Manual Deployment
+
+A third workflow can be triggered manually by a developer whenever a temporary or specific version of the application needs to be published.
+
+The generated Docker Compose artifact uses a tag containing:
+
+- The branch name.
+- The hash of the latest commit.
+- The date and time of the deployment.
+
+The resulting tag follows this format:
+
+```
+<branch>-<last-commit>-<date-time>
+```
+
+For example:
+
+```
+feature-new-profile-a1b2c3d-20260920-155200
+```
+
+This makes each manually generated deployment uniquely identifiable and allows developers to distinguish different deployments without overwriting previously published artifacts.
+
+#### 🔄 Deployment Workflow Summary
+
+| Workflow               | Trigger                           | Docker Compose Tag              | Purpose                                             |
+| ---------------------- | --------------------------------- | ------------------------------- | --------------------------------------------------- |
+| Release Deployment     | GitHub Release                    | Release version                 | Publish a stable version                            |
+| Development Deployment | Pull Request targeting `main`     | `dev`                           | Publish the latest Pull Request version             |
+| Manual Deployment      | Manually triggered by a developer | `<branch>-<commit>-<date-time>` | Publish a uniquely identifiable development version |
 #### CI Pipeline
 
 ![GitHub Actions](./images/github_actions.png)
 
 ---
 
-## 🚀 Application Execution and Code Edition
+## 🚀 Application Execution 
+
+### Requirements
+
+To run the published version of _MyErasmusJourney_, Docker must be installed and running on the host machine.
+
+#### Windows and macOS
+
+On Windows and macOS, **Docker Desktop** is required. Docker Desktop includes Docker Engine, Docker CLI and Docker Compose, so no additional Docker Compose installation is necessary.
+
+- [Docker Desktop for Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
+    
+- [Docker Desktop for Mac](https://docs.docker.com/desktop/setup/install/mac-install/)
+    
+
+#### Linux
+
+On Linux, **Docker Engine** and the **Docker Compose plugin** are required.
+
+- [Docker Engine installation](https://docs.docker.com/engine/install/)
+    
+- [Docker Compose installation](https://docs.docker.com/compose/install/linux/)
+    
+
+The Docker Compose OCI artifact functionality requires Docker Compose 2.34.0 or later.
+
+The installation can be verified with:
+
+```bash
+docker --version
+docker compose version
+```
+
+---
+
+### 📦 Published Docker Compose Application
+
+The application is distributed using **Docker Compose as an OCI artifact** published on Docker Hub. This allows the complete Compose configuration to be downloaded directly from the container registry without requiring the user to clone the source repository.
+
+The published application is available in the following Docker Hub repository:
+
+[MyErasmusJourney on Docker Hub](https://hub.docker.com/repository/docker/granlobo2004/myerasmusjourney-app)
+
+Docker Compose supports OCI artifacts through the `oci://` prefix, allowing a published Compose application to be used directly with the `docker compose` command.
+
+---
+
+### ▶️ Running the Latest Available Version
+
+The latest published version can be executed directly from the Docker Hub OCI artifact using:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest up
+```
+
+This command downloads the published Compose configuration and starts the application and MySQL database containers.
+
+The default configuration is used automatically, so no additional environment variables are required for a standard execution.
+
+The application will be available at:
+
+```text
+https://localhost:8443
+```
+
+Because Version 0.1 uses a self-signed certificate for HTTPS, the browser may display a security warning when accessing the application locally. This is expected for the development/demo certificate.
+
+To run the containers in the background instead, use:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest up -d
+```
+
+To stop the application:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest down
+```
+
+---
+
+### 🏷️ Running a Specific Version
+
+A specific published version can be executed by replacing the `latest` tag with the desired version.
+
+For example, to run Version 0.1.0:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:0.1.0 up
+```
+
+Or, to run it in the background:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:0.1.0 up -d
+```
+
+Using a version-specific tag makes it possible to reproduce the exact published version of the application instead of using whichever version is currently associated with `latest`.
+
+---
+
+### ⚙️ Default Configuration
+
+The published Compose application provides default values for the configuration variables, allowing the application to be started without creating an additional `.env` file.
+
+The main default values are:
+
+|Variable|Default value|
+|:--|:--|
+|`DB_URL`|`jdbc:mysql://db:3306/myerasmusjourney`|
+|`DB_USERNAME`|`root`|
+|`DB_PASSWORD`|`password`|
+|`DB_MODE`|`update`|
+|`PORT`|`8443`|
+|`SSL_ENABLED`|`true`|
+|`KEY_STORE`|`example.jks`|
+|`KEY_PASSWORD`|`password`|
+|`ADMIN_EMAIL`|`admin@example.com`|
+|`ADMIN_PASSWORD`|`password`|
+|`SPRING_PROFILES_ACTIVE`|`default`|
+
+The application container is exposed through port `8443` and the MySQL container uses a persistent Docker volume named `db_data`.
+
+The Compose configuration also includes a MySQL health check. The application container waits for the database service to become healthy before starting.
+
+---
+
+### 👤 Accessing the Application
+
+Once the containers have started, open the following URL in a web browser:
+
+```text
+https://localhost:8443
+```
+
+The default administrator account is:
+
+|Field|Value|
+|:--|:--|
+|Email|`admin@example.com`|
+|Password|`password`|
+
+This account can be used to access the administrator functionality of Version 0.1.
+
+For security reasons, these credentials are intended only for the local/demo execution of the application and should be changed before using the application in a real deployment.
+
+---
+
+
+### 🧪 Example Data
+
+The application includes a set of example data that can be loaded to facilitate the demonstration and testing of the main functionalities of Version 0.1.
+
+To activate the example data, the Spring profile must be set to `test` through the `SPRING_PROFILES_ACTIVE` environment variable.
+
+For example:
+
+``bash SPRING_PROFILES_ACTIVE=test \ docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest up -d
+
+#### 👤 Example Users
+
+|Email|Nickname|Full name|Destination|Password|
+|---|---|---|---|---|
+|`test@email.com`|`test`|`testUser`|—|`password`|
+|`exampleuser1@email.com`|`Daniel`|`Daniel Grimm`|Paris, France|`password`|
+|`exampleuser2@email.com`|`Maria`|`Maria Garcia`|Rome, Italy|`password`|
+|`exampleuser3@email.com`|`Max`|`Max Helmut`|Copenhagen, Denmark|`password`|
+
+The `test@email.com` account is an additional test user without a destination. The other three users represent students associated with the example destinations.
+
+#### 🌍 Example Cities
+
+The following cities are included in the example data:
+
+|City|Description|Country|
+|---|---|---|
+|Copenhagen|Capital of Denmark|Denmark|
+|Paris|Capital of France|France|
+|Rome|Capital of Italy|Italy|
+
+#### 📝 Example Experiences
+
+Three example experiences are created, one for each example city:
+
+|Title|Rating|Categories|City|
+|---|---|---|---|
+|Example experience 1|5.4|Studies, Documentation|Copenhagen|
+|Example experience 2|9.0|Studies, Documentation|Paris|
+|Example experience 3|3.1|Studies, Documentation|Rome|
+
+Each experience contains a sample description:
+
+> Long description about an amazing adventure or small story
+
+The dates of the example experiences are generated using the current date when the example data is initialized.
+
+#### 💬 Example Comments
+
+Three example comments are also created. Each comment contains the following text:
+
+> My opinion or point of view regarding the experience
+
+The comments are associated with the example experiences as follows:
+
+|Comment author|Experience|
+|---|---|
+|Max Helmut|Example experience 1|
+|Maria Garcia|Example experience 3|
+|Daniel Grimm|Example experience 2|
+
+#### 🔄 Running with Example Data
+
+The `test` Spring profile must be explicitly enabled when the example data is required. For example:
+
+```
+SPRING_PROFILES_ACTIVE=test \
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:0.1.0 up -d
+```
+
+If the profile is not set to `test`, the example data is not loaded by this initialization process.
+
+The administrator account is independent from these example users and is created using the administrator configuration described in the Accessing the Application section.
+
+---
+
+### 💾 Persistent Database
+
+The MySQL database is configured with a named Docker volume:
+
+```text
+db_data
+```
+
+This volume persists the database contents when the application containers are stopped or recreated.
+
+Therefore, running:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest down
+```
+
+does not remove the database volume or its stored data.
+
+The data can be preserved and reused by starting the application again:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest up -d
+```
+
+This is the recommended procedure when the existing database contents must be preserved.
+
+---
+
+### 🆕 Starting with a Fresh Database
+
+To execute the application again using a clean database and therefore recreate the initial example data, the existing Docker volume must be removed.
+
+First, stop the application:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest down
+```
+
+Then remove the database volume:
+
+```bash
+docker volume rm <project>_db_data
+```
+
+Alternatively, the volumes associated with the Compose application can be removed directly with:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest down -v
+```
+
+The application can then be started again:
+
+```bash
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest up -d
+```
+
+This creates a new MySQL database using the default configuration.
+
+> **Warning:** Removing the volume permanently deletes the data stored in the Docker database volume. This option should only be used when a fresh database is desired.
+
+---
+
+### 🔧 Custom Configuration
+
+Although the application can be executed using the default configuration, the main configuration values can be overridden through environment variables.
+
+For example:
+
+```bash
+DB_PASSWORD=mysecurepassword \
+ADMIN_EMAIL=myadmin@example.com \
+ADMIN_PASSWORD=myadminpassword \
+docker compose -f oci://docker.io/granlobo2004/myerasmusjourney:latest up -d
+```
+
+The same mechanism can be used to configure the database connection, HTTPS settings, application port and other environment-dependent values defined in the Compose file.
+
+This allows the published application to be reused with different configurations without modifying the published OCI artifact.
+
+---
+
+### ☁️ Deployment on an External Server or Cloud Provider
+
+Version 0.1 provides the application as a Docker Compose OCI artifact so that it can be executed on any machine with a compatible Docker installation.
+
+A deployment on an external server or cloud provider is planned for a later phase of the project. According to the project development plan, the external deployment will be carried out as part of **Version 0.2 — Intermediate Functionality and Deployment**.
+
+Therefore, Version 0.1 does not include a production deployment on an external server or cloud provider.
+
+When the external deployment is implemented, this section will be updated with:
+
+- The selected hosting or cloud provider.
+    
+- Server or platform configuration.
+    
+- Network and firewall configuration.
+    
+- Application deployment procedure.
+    
+- Database persistence configuration.
+    
+- HTTPS certificate configuration.
+    
+- Access URL.
+    
+- Any additional deployment or Continuous Delivery configuration.
+
+##  🎮 Code Edition
 
 This section explains how to prepare the development environment, clone the repository and execute the complete application locally.
 

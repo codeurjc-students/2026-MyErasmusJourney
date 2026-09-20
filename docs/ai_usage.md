@@ -24,7 +24,314 @@ All AI-generated outputs have been reviewed, understood and adapted before being
 
 ---
 
+## 2026-09-20
+
+### Phase
+Phase 3 — Basic Functionality and Docker
+
+### Objective
+Document the application's continuous deployment and deployment process, including the automated publication of Docker Compose artifacts and the packaging and distribution of the application through Docker Hub.
+
+### Tool
+ChatGPT
+
+### Version
+GPT-5.6 Luna
+
+### Configuration
+- Model: GPT-5.6 Luna
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+- MCP Servers: None
+
+### How it was used
+- Helped rewrite the Continuous Deployment section of the project documentation.
+- Documented the three GitHub Actions deployment workflows:
+  - Release deployment triggered by GitHub Releases, using the release version as the Docker tag.
+  - Development deployment triggered by Pull Requests targeting `main`, using the `dev` tag.
+  - Manual deployment triggered by the developer, using a tag based on the branch, latest commit and deployment date and time.
+- Helped document the application's packaging and distribution through Docker and Docker Compose.
+- Described the role of the Docker image, Docker Compose configuration and MySQL database in the deployment environment.
+- Helped improve the wording and structure of the deployment documentation and select an appropriate section heading emoji.
+
+### Complements
+None.
+
+### Context Files
+None.
+
+### AI-assisted Development Files
+None.
+
+### Files Affected
+- `README.md` / deployment documentation.
+
+### Human Review
+The generated documentation was reviewed and adapted by the developer to ensure that the described deployment workflows, Docker tags and packaging process accurately reflect the implemented project configuration.
+
+## 2026-09-16
+
+### Phase
+
+Phase 3 — Docker and Deployment
+
+### Objective
+
+Help validate the Docker Compose deployment for the backend, diagnose the keystore startup issue, and explain how to publish the compose setup as an OCI artifact while allowing users to provide their own environment variables.
+
+### Tool
+
+ChatGPT / GitHub Copilot
+
+### Version
+
+GPT-5.6 / GPT-5.1
+
+### Configuration
+
+- Model: GPT-5.6 / GPT-5.1
+- Interaction mode: Conversational chat / IDE integration
+- Reasoning: Standard
+- Agentic mode: Enabled (IDE-integrated subagents)
+- IDE integration: VS Code GitHub Copilot
+- Plugins/Skills: create-agent, agent-customization
+
+### How it was used
+
+- Reviewed the backend Dockerfile and Compose configuration to identify the root cause of the build-context and deployment problems.
+- Helped diagnose why the Spring Boot application failed to start when the keystore was expected from the classpath during HTTPS startup.
+- Verified that the JKS file was present in the packaged jar and that the issue was resolved by building the image from the repository source rather than reusing a stale published image.
+- Helped validate the final Compose configuration using the exact environment values provided by the user for the `0.1.0` release.
+- Explained the difference between a local `docker compose up --build` workflow and a published OCI artifact.
+- Clarified that `docker compose publish` does not require `--with-env` unless the goal is to freeze environment variables into the artifact.
+- Recommended a reusable setup in which users provide their own `.env` file while the published Compose artifact remains generic and portable.
+
+### Complements
+
+None.
+
+### Context Files
+
+- Backend `Dockerfile`
+- Backend `docker-compose.yml`
+- Backend `.env` values
+- Spring Boot `application.properties`
+- Docker build logs and runtime logs
+- Docker Compose publish help output
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- `backend/docker/Dockerfile`
+- `backend/docker/docker-compose.yml`
+- `backend/.env`
+- `docs/ai_usage.md`
+
+### Human Review
+
+The Docker build and Compose configuration fixes were reviewed by the user, validated through local container startup, and the final guidance was adapted to the project's requirement that users should be able to provide their own environment variables when running the published OCI artifact.
+
 # Usage Log
+
+## 2026-09-14
+
+### Phase
+
+Phase 3 — Docker and Deployment
+
+### Objective
+
+Debug the Docker Compose deployment, resolve the backend `CityMapper` initialization problem, and prepare a Java keystore for HTTPS configuration.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.6 Luna
+
+### Configuration
+
+- Model: GPT-5.6 Luna
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Helped investigate a Docker Compose startup failure where Spring Boot could not find the MapStruct-generated `CityMapper` bean.
+- Inspected the `CityMapper` implementation and backend Dockerfile to determine whether the problem could be related to MapStruct annotation processing or a stale Docker image.
+- Helped verify the generated `CityMapperImpl` and the relationship between the mapper configuration and the Docker build.
+- Helped configure a self-signed HTTPS certificate for local/demo deployment.
+- Converted the certificate generation approach from PKCS#12 to a Java KeyStore (JKS).
+- Configured the JKS keystore with the `myerasmusjourney` alias, RSA 2048-bit key, `localhost` hostname, `password` password, and a 3650-day validity period.
+- Helped review the Docker image tagging and Compose publication configuration using the `${TAG}` variable.
+
+### Complements
+
+None.
+
+### Context Files
+
+- `CityMapper`
+- Backend `Dockerfile`
+- Docker Compose configuration
+- GitHub Actions workflow files
+- HTTPS/keystore configuration
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- `docker/Dockerfile`
+- `docker-compose.yml`
+- GitHub Actions workflow files
+- HTTPS/keystore configuration
+
+### Human Review
+
+The proposed Docker, MapStruct and HTTPS configuration changes were reviewed by the user and tested against the local deployment setup.
+
+## 2026-09-13
+
+### Phase
+
+Phase 3 — Docker and Deployment
+
+### Objective
+
+Containerize the MyErasmusJourney application and configure Docker Compose and the CI/CD workflows for building and publishing the application.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.6 Luna
+
+### Configuration
+
+- Model: GPT-5.6 Luna
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Helped create and debug the multi-stage backend Dockerfile using Maven and Java 21.
+- Helped identify and fix Docker build-context problems when copying the backend `pom.xml` and source code.### Phase
+
+Phase 3 — Basic Functionality
+
+### Objective
+
+Continue the development of the application's basic functionality, focusing on the implementation and refinement of the current features.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+    
+- Interaction mode: Conversational chat
+    
+- Reasoning: Standard
+    
+- Agentic mode: Disabled
+    
+- IDE integration: None
+    
+- Plugins/Skills: None
+    
+
+### How it was used
+
+- Assisted with the implementation and refinement of the current application functionality.
+    
+- Reviewed existing code and helped identify potential implementation problems.
+    
+- Analysed errors encountered during development and proposed possible solutions.
+    
+- Reviewed the implementation to ensure consistency with the existing project architecture and development approach.
+    
+
+### Complements
+
+None.
+
+### Context Files
+
+- Existing project source code.
+    
+- Existing backend and frontend implementation.
+    
+- Existing automated tests.
+    
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- Current backend and frontend implementation files.
+    
+
+### Human Review
+
+All suggestions and proposed changes were reviewed by the user and manually validated before being incorporated into the project.
+- Helped configure Docker Compose so the backend could communicate correctly with the MySQL container.
+- Diagnosed the use of `localhost` instead of the Compose service name `db` for the database connection.
+- Helped configure the database volume and recreate it so the `myerasmusjourney` database could be initialized correctly.
+- Helped design GitHub Actions workflows for building the frontend, copying the generated `web/dist` files into the backend static resources, and building and publishing Docker images.
+- Helped design a reusable workflow using `workflow_call` and a manually triggered workflow for generating Docker image tags based on the branch, last commit and execution time.
+
+### Complements
+
+None.
+
+### Context Files
+
+- `docker/Dockerfile`
+- `docker-compose.yml`
+- Backend Maven configuration
+- GitHub Actions workflow files
+- Frontend build configuration
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- `docker/Dockerfile`
+- `docker-compose.yml`
+- GitHub Actions workflow files
+- Backend/frontend Docker build configuration
+
+### Human Review
+
+The Docker configuration, Compose setup and workflow changes were reviewed by the user and validated through local builds and execution.
 
 ## 2026-09-08
 
@@ -184,6 +491,62 @@ GPT-5 mini
 ### Human Review
 
 Developer reviewed and accepted the changes; the updated unit tests for `UserComments` pass locally.
+
+## 2026-09-01
+
+### Phase
+
+Phase 3 — Basic Functionality
+
+### Objective
+
+Continue the development of the application's basic functionality, focusing on the implementation and refinement of the current features.
+
+### Tool
+
+ChatGPT
+
+### Version
+
+GPT-5.5
+
+### Configuration
+
+- Model: GPT-5.5
+- Interaction mode: Conversational chat
+- Reasoning: Standard
+- Agentic mode: Disabled
+- IDE integration: None
+- Plugins/Skills: None
+
+### How it was used
+
+- Assisted with the implementation and refinement of the current application functionality.
+- Reviewed existing code and helped identify potential implementation problems.
+- Analysed errors encountered during development and proposed possible solutions.
+- Reviewed the implementation to ensure consistency with the existing project architecture and development approach.
+
+### Complements
+
+None.
+
+### Context Files
+
+- Existing project source code.
+- Existing backend and frontend implementation.
+- Existing automated tests.
+
+### AI-assisted Development Files
+
+None.
+
+### Files Affected
+
+- Current backend and frontend implementation files.
+
+### Human Review
+
+All suggestions and proposed changes were reviewed by the user and manually validated before being incorporated into the project.
 
 ## 2026-08-30
 

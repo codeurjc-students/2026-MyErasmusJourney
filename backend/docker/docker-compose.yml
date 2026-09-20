@@ -1,23 +1,24 @@
 services:
   app:
-    image: granlobo2004/myerasmusjourney:${TAG}
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: granlobo2004/myerasmusjourney:${TAG:-0.1.0}
     platform: linux/amd64
-
     ports:
-      - target: 8443
-        published: 8443
-
+      - "8443:8443"
     environment:
-      DB_URL: jdbc:mysql://db:3306/myerasmusjourney
-      DB_USERNAME: root
-      DB_PASSWORD: password
-      DB_MODE: update
-      PORT: 8443
-      SSL_ENABLED: true
-      KEY_STORE: example.jks
-      KEY_PASSWORD: password
-      ADMIN_EMAIL: admin@example.com
-      ADMIN_PASSWORD: password
+      DB_URL: ${DB_URL:-jdbc:mysql://db:3306/myerasmusjourney}
+      DB_USERNAME: ${DB_USERNAME:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_MODE: ${DB_MODE:-update}
+      PORT: ${PORT:-8443}
+      SSL_ENABLED: ${SSL_ENABLED:-true}
+      KEY_STORE: ${KEY_STORE:-example.jks}
+      KEY_PASSWORD: ${KEY_PASSWORD:-password}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-password}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-default}
 
     depends_on:
       db:
@@ -26,19 +27,18 @@ services:
   db:
     image: mysql:9.2
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-password}
       MYSQL_DATABASE: myerasmusjourney
     volumes:
       - db_data:/var/lib/mysql
     ports:
-      - target: 3306
-        published: 3306
+      - "3306:3306"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p$MYSQL_ROOT_PASSWORD"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$${MYSQL_ROOT_PASSWORD} --silent"]
       interval: 5s
       timeout: 5s
-      start_period: 10s
-      retries: 5
+      start_period: 15s
+      retries: 10
 
 volumes:
   db_data:
