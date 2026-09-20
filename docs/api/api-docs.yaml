@@ -1,27 +1,534 @@
-openapi: 3.1.0
+﻿openapi: 3.1.0
 info:
   title: OpenAPI definition
   version: v0
 servers:
-- url: http://localhost:8080
-  description: Generated server url
+  - url: 'http://localhost:8443'
+    description: Generated server url
 paths:
-  /api/experiences/:
+  '/api/v1/users/{id}':
     get:
       tags:
-      - experience-rest-controller
-      operationId: getExperiences
+        - user-rest-controller
+      operationId: getUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-        "200":
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+    put:
+      tags:
+        - user-rest-controller
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+    delete:
+      tags:
+        - user-rest-controller
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+  /api/v1/users/:
+    post:
+      tags:
+        - user-rest-controller
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserFormDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+  '/api/v1/experiences/{id}/comments':
+    get:
+      tags:
+        - experience-rest-controller
+      operationId: getComments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
           description: OK
           content:
             '*/*':
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ExperienceSimpleDTO"
+                  $ref: '#/components/schemas/CommentSimpleDTO'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+    post:
+      tags:
+        - experience-rest-controller
+      operationId: postComment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentFormDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CommentDTO'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+  /api/v1/experiences/:
+    get:
+      tags:
+        - experience-rest-controller
+      operationId: getExperiences
+      parameters:
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PagedModelExperienceSimpleDTO'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+    post:
+      tags:
+        - experience-rest-controller
+      operationId: createExperience
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExperienceFormDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+  /api/v1/cities/:
+    get:
+      tags:
+        - city-rest-controller
+      operationId: getCities
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CitySimpleDTO'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+    post:
+      tags:
+        - city-rest-controller
+      operationId: createCity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CityFormDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CityDTO'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+  /api/v1/auth/refresh:
+    post:
+      tags:
+        - auth-rest-controller
+      operationId: refreshToken
+      parameters:
+        - name: RefreshToken
+          in: cookie
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+  /api/v1/auth/logout:
+    post:
+      tags:
+        - auth-rest-controller
+      operationId: logOut
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+  /api/v1/auth/login:
+    post:
+      tags:
+        - auth-rest-controller
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+  '/api/v1/users/{id}/experiences':
+    get:
+      tags:
+        - user-rest-controller
+      operationId: getExperiencesByUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExperienceSimpleDTO'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+  '/api/v1/users/{id}/comments':
+    get:
+      tags:
+        - user-rest-controller
+      operationId: getCommentsByUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommentSimpleDTO'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+  /api/v1/users/me:
+    get:
+      tags:
+        - user-rest-controller
+      operationId: getUserInfo
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserSimpleDTO'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+  /api/v1/tests/500:
+    get:
+      tags:
+        - test-error-controller
+      operationId: internalError
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+  '/api/v1/experiences/{id}':
+    get:
+      tags:
+        - experience-rest-controller
+      operationId: getExperienceById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ExperienceDTO'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+    delete:
+      tags:
+        - experience-rest-controller
+      operationId: deleteExperienceById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ExperienceDTO'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+  /api/v1/experiences/categories:
+    get:
+      tags:
+        - experience-rest-controller
+      operationId: getCategories
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  type: string
+                  enum:
+                    - Accommodation
+                    - Culture
+                    - Documentation
+                    - Gastronomy
+                    - Personal_Experience
+                    - Social_Events
+                    - Studies
+                    - Transportation
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
+  '/api/v1/comments/{id}':
+    delete:
+      tags:
+        - comment-rest-controller
+      operationId: deleteCommentById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CommentDTO'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: string
 components:
   schemas:
+    CommentSimpleDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        date:
+          type: string
+          format: date
+        description:
+          type: string
+        authorName:
+          type: string
+        experienceId:
+          type: integer
+          format: int64
     ExperienceSimpleDTO:
       type: object
       properties:
@@ -38,3 +545,247 @@ components:
           type: string
         description:
           type: string
+        categories:
+          type: array
+          items:
+            type: string
+            enum:
+              - Accommodation
+              - Culture
+              - Documentation
+              - Gastronomy
+              - Personal_Experience
+              - Social_Events
+              - Studies
+              - Transportation
+        cityName:
+          type: string
+        country:
+          type: string
+        authorName:
+          type: string
+    UserDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        fullName:
+          type: string
+        displayName:
+          type: string
+        email:
+          type: string
+        studyLocation:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+        experiences:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExperienceSimpleDTO'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentSimpleDTO'
+    UserFormDTO:
+      type: object
+      properties:
+        email:
+          type: string
+        displayName:
+          type: string
+        fullName:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        password:
+          type: string
+        passwordConfirmation:
+          type: string
+    CommentFormDTO:
+      type: object
+      properties:
+        description:
+          type: string
+    CommentDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        date:
+          type: string
+          format: date
+        description:
+          type: string
+        author:
+          $ref: '#/components/schemas/UserSimpleDTO'
+        experience:
+          $ref: '#/components/schemas/ExperienceSimpleDTO'
+    UserSimpleDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        displayName:
+          type: string
+        email:
+          type: string
+    ExperienceFormDTO:
+      type: object
+      properties:
+        rating:
+          type: number
+          format: float
+        title:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        categories:
+          type: array
+          items:
+            type: string
+        cityId:
+          type: integer
+          format: int64
+    CityFormDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        country:
+          type: string
+    CityDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        country:
+          type: string
+        experiences:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExperienceSimpleDTO'
+    AuthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - SUCCESS
+            - FAILURE
+        message:
+          type: string
+        error:
+          type: string
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    CitySimpleDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        country:
+          type: string
+    ExperienceDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        date:
+          type: string
+          format: date
+        rating:
+          type: number
+          format: float
+        title:
+          type: string
+        description:
+          type: string
+        categories:
+          type: array
+          items:
+            type: string
+            enum:
+              - Accommodation
+              - Culture
+              - Documentation
+              - Gastronomy
+              - Personal_Experience
+              - Social_Events
+              - Studies
+              - Transportation
+        city:
+          $ref: '#/components/schemas/CitySimpleDTO'
+        author:
+          $ref: '#/components/schemas/UserSimpleDTO'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentSimpleDTO'
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+        size:
+          type: integer
+          format: int32
+          minimum: 1
+        sort:
+          type: array
+          items:
+            type: string
+    PageMetadata:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: int64
+        number:
+          type: integer
+          format: int64
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int64
+    PagedModelExperienceSimpleDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExperienceSimpleDTO'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
