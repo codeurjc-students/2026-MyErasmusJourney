@@ -36,7 +36,7 @@ This project is still in development, more functionalities will be added and exi
 
 The following video presents the main functionalities implemented in Version 0.1. The demonstration is divided according to the different types of users and includes a voice-over explaining the functionality shown.
 
-![video](./videos/functionalities.mp4)
+![video](./docs/videos/functionalities.mp4)
 
 Future versions of *MyErasmusJourney* will extend the current basic functionality with new features focused on improving the discovery, interaction and sharing of Erasmus experiences. Users will be able to filter experiences by criteria such as date, city, rating and category, add profile images and multimedia content to their posts, and share experiences through external applications. City pages will also provide related experiences, average ratings and information about trending destinations. More advanced functionality will include comment replies, email verification, interactive maps for cities and experiences, and a destination ranking based on the rating and reliability of the available experiences. These additions will progressively turn the application into a more complete platform for discovering and comparing Erasmus destinations.
 

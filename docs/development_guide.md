@@ -571,9 +571,9 @@ Code coverage is measured independently for both application layers.
 
 Coverage summary:
 
-- Line coverage: 96 %
-- Branch coverage: 66 %
-- Classes covered: 8 / 8
+- Line coverage: 90 %
+- Branch coverage: 72 %
+- Classes covered: 49 / 49
 
 ---
 
@@ -583,17 +583,17 @@ Coverage summary:
 
 Coverage summary:
 
-- Statements: 100 %
-- Branches: 100 %
-- Functions: 100 %
-- Lines: 100 %
+- Statements: 94.48 %
+- Branches: 85.78 %
+- Functions: 92 %
+- Lines: 95.4 %
 
 ![Frontend Coverage](./images/shared_coverage.png)
 
 Coverage summary:
 
 - Statements: 100 %
-- Branches: 100 %
+- Branches: 92 %
 - Functions: 100 %
 - Lines: 100 %
 
