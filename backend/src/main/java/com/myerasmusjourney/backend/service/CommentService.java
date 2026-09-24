@@ -53,4 +53,8 @@ public class CommentService {
         return deletedComment;
     }
 
+    public void emptyComments(){
+        commentRepository.deleteAll();
+    }
+
 }
