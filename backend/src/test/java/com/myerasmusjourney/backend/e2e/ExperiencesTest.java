@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
@@ -264,5 +265,38 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .delete("/api/v1/experiences/1")
                 .then()
                 .statusCode(401);
+    }
+
+    @Test
+    void testFilterWithoutCategories(){
+        given()
+            .param("cityName", "Paris")
+            .param("maxRating", 9)
+            .param("size", 6)
+        .when()
+            .get("/api/v1/experiences/query")
+            .then()
+                .statusCode(200)
+                .body("content", hasSize(greaterThan(0)))
+                .body("page.number", equalTo(0))
+                .body("page.size", equalTo(6))
+                .body("page.totalElements", equalTo(4));
+    }
+
+    @Test
+    void testFilterWithCategories(){
+        given()
+                .param("from", LocalDate.now().minusMonths(5).toString())
+                .param("categories", List.of("Studies"))
+                .param("size", 6)
+                .when()
+                .get("/api/v1/experiences/query")
+                .then()
+                .statusCode(200)
+                .body("content", hasSize(greaterThan(0)))
+                .body("page.number", equalTo(0))
+                .body("page.size", equalTo(6))
+                .body("page.totalElements", equalTo(5));
+
     }
 }

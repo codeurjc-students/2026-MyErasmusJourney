@@ -152,6 +152,7 @@ public class ExperienceServiceTest extends TestDataBase {
     @AfterEach
     void resetDatabase(){
         experienceRepository.deleteAll();
+        SecurityContextHolder.clearContext();
     }
 
     @Test
@@ -476,5 +477,32 @@ public class ExperienceServiceTest extends TestDataBase {
         ExperienceDTO result = experienceService.deleteExperienceById(experience.getId());
 
         assertEquals(expected, result);
+    }
+
+    @Test
+    void testFilterExperiences(){
+
+        Pageable pageable = PageRequest.of(0, 6);
+
+        Page<ExperienceSimpleDTO> result = experienceService.filterExperiences(null, null, 5F, null, null, null, pageable);
+
+        assertEquals(9, result.getTotalElements());
+        assertEquals(6, result.getNumberOfElements());
+
+        for(int i = 0; i < 6; i++){
+            ExperienceSimpleDTO res = result.getContent().get(i);
+            assertTrue(res.rating()>=5F);
+        }
+
+        result = experienceService.filterExperiences(null, null, 5F, null, null, List.of("Transportation"), pageable);
+
+        assertEquals(2, result.getTotalElements());
+        assertEquals(2, result.getNumberOfElements());
+
+        for(int i = 0; i < 2; i++){
+            ExperienceSimpleDTO res = result.getContent().get(i);
+            assertTrue(res.rating()>=5F);
+            assertTrue(res.categories().contains(Category.Transportation));
+        }
     }
 }
