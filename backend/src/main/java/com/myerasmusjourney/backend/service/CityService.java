@@ -70,4 +70,8 @@ public class CityService {
         city.addExperience(savedExperience);
         cityRepository.save(city);
     }
+
+    public void emptyCities(){
+        cityRepository.deleteAll();
+    }
 }

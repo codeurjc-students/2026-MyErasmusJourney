@@ -90,4 +90,8 @@ public class ExperienceService {
         experienceRepository.delete(experience);
         return deletedExperience;
     }
+
+    public void emptyExperiences(){
+        experienceRepository.deleteAll();
+    }
 }

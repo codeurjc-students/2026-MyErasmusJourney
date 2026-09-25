@@ -142,4 +142,11 @@ public class UserService {
         savedUser = userRepository.save(savedUser);
         return userMapper.toDTO(savedUser);
     }
+
+    public void emptyUsers() {
+        Collection<User> users = userRepository.findAll();
+        for (User u: users){
+            if (!u.getRoles().contains("ADMIN")) userRepository.delete(u);
+        }
+    }
 }

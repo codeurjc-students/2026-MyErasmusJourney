@@ -197,6 +197,12 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
 
         userLink.click();
 
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("html/body/div/div/div[2]/div[1]/div/div/div[1]/p")
+        ));
+
         WebElement firstExperienceTitle = driver.findElement(By.xpath("/html/body/div/div/div[2]/div[1]/div/div/div[1]/p"));
 
         assertEquals("Selenium test", firstExperienceTitle.getText());

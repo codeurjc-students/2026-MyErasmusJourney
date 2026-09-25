@@ -36,6 +36,12 @@ public class DataInitializer {
     @PostConstruct
     @Transactional
     public void init(){
+
+        commentService.emptyComments();
+        experienceService.emptyExperiences();
+        cityService.emptyCities();
+        userService.emptyUsers();
+
         UserFormDTO userFormDTO = new UserFormDTO("test@email.com", "test", "testUser", null, null, "password", "password");
         UserFormDTO userFormDTO1 = new UserFormDTO("exampleuser1@email.com", "Daniel", "Daniel Grimm", "Paris", "France", "password", "password");
         UserFormDTO userFormDTO2= new UserFormDTO("exampleuser2@email.com", "Maria", "Maria Garcia", "Rome", "Italy", "password", "password");
