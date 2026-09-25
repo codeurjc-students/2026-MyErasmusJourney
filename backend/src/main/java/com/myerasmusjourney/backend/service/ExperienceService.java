@@ -15,7 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -93,5 +95,19 @@ public class ExperienceService {
 
     public void emptyExperiences(){
         experienceRepository.deleteAll();
+    }
+
+    public Page<ExperienceSimpleDTO> filterExperiences(String from, String to, Float minimumRate, Float maximumRate, String cityName, List<String> categories, Pageable pageable) {
+        if(minimumRate == null) minimumRate = 0F;
+        if (maximumRate == null) maximumRate = 10F;
+        Page<ExperienceSimpleDTO> experienceSimpleDTOPage;
+        if(categories != null && !categories.isEmpty()){
+            List<Category> categoryList = categories.stream().map(Category::valueOf).toList();
+            experienceSimpleDTOPage = experienceRepository.findFilteredWithCategories(cityName, categoryList, categoryList.size(), minimumRate, maximumRate, from == null ? null : LocalDate.parse(from), to == null ? null : LocalDate.parse(to),  pageable).map(experienceMapper::toSimpleDTO);
+        }
+        else{
+            experienceSimpleDTOPage =  experienceRepository.findFilteredWithoutCategories(cityName, minimumRate, maximumRate, from == null ? null : LocalDate.parse(from), to == null ? null : LocalDate.parse(to),  pageable).map(experienceMapper::toSimpleDTO);
+        }
+        return experienceSimpleDTOPage;
     }
 }

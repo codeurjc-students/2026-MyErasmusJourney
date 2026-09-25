@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/experiences")
@@ -46,6 +47,20 @@ public class ExperienceRestController {
     @GetMapping("/{id}")
     public ExperienceDTO getExperienceById(@PathVariable Long id){
         return experienceService.getExperienceById(id);
+    }
+
+    @GetMapping("/query")
+    public Page<ExperienceSimpleDTO> filterExperiences(
+            @RequestParam(required = false) String from,
+            @RequestParam(required = false) String to,
+            @RequestParam(required = false) Float minimumRate,
+            @RequestParam(required = false) Float maximumRate,
+            @RequestParam(required = false) String cityName,
+            @RequestParam(required = false) List<String> categories,
+            Pageable pageable
+            )
+    {
+        return experienceService.filterExperiences(from, to, minimumRate, maximumRate, cityName, categories, pageable);
     }
 
     @DeleteMapping("/{id}")
