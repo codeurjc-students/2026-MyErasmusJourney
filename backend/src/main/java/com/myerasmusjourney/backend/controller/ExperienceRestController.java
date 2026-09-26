@@ -27,8 +27,16 @@ public class ExperienceRestController {
     private CommentService commentService;
 
     @GetMapping("/")
-    public Page<ExperienceSimpleDTO> getExperiences(Pageable pageable){
-        return experienceService.getAllExperiences(pageable);
+    public Page<ExperienceSimpleDTO> getExperiences(
+        @RequestParam(required = false) String from,
+        @RequestParam(required = false) String to,
+        @RequestParam(required = false) Float minimumRate,
+        @RequestParam(required = false) Float maximumRate,
+        @RequestParam(required = false) String cityName,
+        @RequestParam(required = false) List<String> categories,
+        Pageable pageable
+    ){
+        return experienceService.getAllExperiences(from, to, minimumRate, maximumRate, cityName, categories, pageable);
     }
 
     @PostMapping("/")
@@ -47,20 +55,6 @@ public class ExperienceRestController {
     @GetMapping("/{id}")
     public ExperienceDTO getExperienceById(@PathVariable Long id){
         return experienceService.getExperienceById(id);
-    }
-
-    @GetMapping("/query")
-    public Page<ExperienceSimpleDTO> filterExperiences(
-            @RequestParam(required = false) String from,
-            @RequestParam(required = false) String to,
-            @RequestParam(required = false) Float minimumRate,
-            @RequestParam(required = false) Float maximumRate,
-            @RequestParam(required = false) String cityName,
-            @RequestParam(required = false) List<String> categories,
-            Pageable pageable
-            )
-    {
-        return experienceService.filterExperiences(from, to, minimumRate, maximumRate, cityName, categories, pageable);
     }
 
     @DeleteMapping("/{id}")
