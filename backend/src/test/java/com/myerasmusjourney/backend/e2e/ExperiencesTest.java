@@ -227,7 +227,6 @@ class ExperiencesTest extends AuthenticatedE2ETest {
             throw new RuntimeException(e);
         }
 
-
         given()
                 .cookie("AuthToken", this.token)
                 .when()
@@ -274,7 +273,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
             .param("maxRating", 9)
             .param("size", 6)
         .when()
-            .get("/api/v1/experiences/query")
+            .get("/api/v1/experiences/")
             .then()
                 .statusCode(200)
                 .body("content", hasSize(greaterThan(0)))
@@ -290,7 +289,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .param("categories", List.of("Studies"))
                 .param("size", 6)
                 .when()
-                .get("/api/v1/experiences/query")
+                .get("/api/v1/experiences/")
                 .then()
                 .statusCode(200)
                 .body("content", hasSize(greaterThan(0)))

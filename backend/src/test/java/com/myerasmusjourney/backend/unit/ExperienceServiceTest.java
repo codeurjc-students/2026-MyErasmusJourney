@@ -34,6 +34,7 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -64,17 +65,16 @@ public class ExperienceServiceTest {
 
         Page<Experience> emptyPage = new PageImpl<>(List.of(), pageable, 0);
 
-        when(experienceRepository.findAll(pageable)).thenReturn(emptyPage);
+        when(experienceRepository.findFilteredWithoutCategories(null, 0F, 10F, null, null, pageable)).thenReturn(emptyPage);
 
-        Page<ExperienceSimpleDTO> result =
-                experienceService.getAllExperiences(pageable);
+        Page<ExperienceSimpleDTO> result = experienceService.getAllExperiences(null, null, null, null, null, null, pageable);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
         assertEquals(0, result.getTotalElements());
         assertEquals(0, result.getTotalPages());
 
-        verify(experienceRepository).findAll(pageable);
+        verify(experienceRepository).findFilteredWithoutCategories(null, 0F, 10F, null, null, pageable);
         verifyNoInteractions(experienceMapper);
     }
 
@@ -174,20 +174,18 @@ public class ExperienceServiceTest {
                 )
         );
 
-        when(experienceRepository.findAll(pageable))
-                .thenReturn(experiencePage);
+        when(experienceRepository.findFilteredWithoutCategories(null, 0F, 10F, null, null, pageable)).thenReturn(experiencePage);
 
-        when(experienceMapper.toSimpleDTO(experiences.get(0)))
-                .thenReturn(expected.get(0));
-        when(experienceMapper.toSimpleDTO(experiences.get(1)))
-                .thenReturn(expected.get(1));
-        when(experienceMapper.toSimpleDTO(experiences.get(2)))
-                .thenReturn(expected.get(2));
-        when(experienceMapper.toSimpleDTO(experiences.get(3)))
-                .thenReturn(expected.get(3));
+        when(experienceMapper.toSimpleDTO(experiences.get(0))).thenReturn(expected.get(0));
 
-        Page<ExperienceSimpleDTO> result =
-                experienceService.getAllExperiences(pageable);
+        when(experienceMapper.toSimpleDTO(experiences.get(1))).thenReturn(expected.get(1));
+
+        when(experienceMapper.toSimpleDTO(experiences.get(2))).thenReturn(expected.get(2));
+
+        when(experienceMapper.toSimpleDTO(experiences.get(3))).thenReturn(expected.get(3));
+
+        Page<ExperienceSimpleDTO> result = experienceService.getAllExperiences(null, null, null, null, null, null, pageable);
+
 
         assertNotNull(result);
 
@@ -204,7 +202,7 @@ public class ExperienceServiceTest {
         assertEquals(4, result.getTotalElements());
         assertEquals(1, result.getTotalPages());
 
-        verify(experienceRepository).findAll(pageable);
+        verify(experienceRepository).findFilteredWithoutCategories(null, 0F, 10F, null, null, pageable);
 
         verify(experienceMapper).toSimpleDTO(experiences.get(0));
         verify(experienceMapper).toSimpleDTO(experiences.get(1));
@@ -582,7 +580,7 @@ public class ExperienceServiceTest {
         when(experienceMapper.toSimpleDTO(experiences.get(3))).thenReturn(expected.get(3));
 
         Page<ExperienceSimpleDTO> result =
-                experienceService.filterExperiences(null, null, 4F, null, null, null, pageable);
+                experienceService.getAllExperiences(null, null, 4F, null, null, null, pageable);
 
         assertNotNull(result);
 
