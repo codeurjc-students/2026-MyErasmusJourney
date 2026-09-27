@@ -11,6 +11,7 @@ import type { ExperienceFormDTO } from "../models/ExperienceFormDTO";
 import type { ApiClient } from "../api/apiClient";
 import type { ExperiencePageDTO } from "../models/ExperienceSimpleDTO";
 import type { CommentFormDTO } from "../models/CommentFormDTO";
+import type { ExperienceFilters } from "../models/ExperienceFilters";
 import { ApiError } from "../api/apiError";
 
 
@@ -18,7 +19,7 @@ export type ExperienceService = ReturnType<typeof createExperienceService>;
 
 export function createExperienceService(api: ApiClient) {
   return {
-    getAll: (page?: number, size?: number) => getAllExperiences(api, page, size),
+    getAll: (filters: ExperienceFilters) => getAllExperiences(api, filters),
     getCategories: () => getCategories(api),
     postExperience: (body: ExperienceFormDTO) => postExperience(api, body),
     getExperienceById: (id: number) => getExperienceById(api, id),
@@ -28,17 +29,31 @@ export function createExperienceService(api: ApiClient) {
   };
 }
 
-async function getAllExperiences(api: ApiClient, page?: number, size?: number) {
+async function getAllExperiences(api: ApiClient, filters?: ExperienceFilters) {
   let url = "/experiences/";
+  const params = new URLSearchParams();
 
-  if (typeof page === "number" || typeof size === "number") {
-    const params = new URLSearchParams();
-    if (typeof page === "number") params.append("page", String(page));
-    if (typeof size === "number") params.append("size", String(size));
+  if (typeof filters?.page === "number") params.append("page", String(filters.page));
+  else params.append("page", String(0))
+  if (typeof filters?.size === "number") params.append("size", String(filters.size));
+  else params.append("size", String(6));
+  if (typeof filters?.minRating === "number") params.append("minimumRate", String(filters.minRating));
+  if (typeof filters?.maxRating === "number") params.append("maximumRate", String(filters.maxRating));
+  if (filters?.from) params.append("from", filters.from);
+  if (filters?.to) params.append("to", filters.to);
+  if (typeof filters?.cityName === "string") params.append("cityName", String(filters.cityName));
+
+  filters?.categories?.forEach(category => {
+    params.append("categories", category);
+  });
+
+  if (params.toString()) {
     url = `${url}?${params.toString()}`;
   }
 
-  const response = await api.get(url)
+  console.log(params)
+
+  const response = await api.get(url);
 
   if (!response.ok) {
     throw new ApiError(response.status, await response.text());
@@ -48,7 +63,7 @@ async function getAllExperiences(api: ApiClient, page?: number, size?: number) {
 }
 
 async function getCategories(api: ApiClient) {
-  const response = await api.get("/experiences/categories")
+  const response = await api.get("/experiences/categories");
 
   if (!response.ok) {
     throw new ApiError(response.status, await response.text());
