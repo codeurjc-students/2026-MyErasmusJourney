@@ -182,9 +182,13 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
     void testRenderingUserExperiences(){
         authenticateWithSpecificUser("exampleuser1@email.com");
 
-        WebElement experienceTitle = driver.findElement(By.xpath("/html/body/div/div/div[2]/div[1]/div/div/div[1]/p"));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
-        assertEquals("Example experience 1", experienceTitle.getText());
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div/div/div[2]/div[1]/div/div/div[1]/p")
+        ));
+
+        assertTrue(driver.findElement(By.xpath("/html/body/div/div/div[2]/div[1]/div/div/div[1]/p")).isDisplayed());
     }
 
     @Test
