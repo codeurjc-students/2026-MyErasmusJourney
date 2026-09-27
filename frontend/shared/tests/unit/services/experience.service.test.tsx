@@ -1,9 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
 import { createExperienceService } from "../../../src/services/experience.service";
+import { ApiClient } from "../../../src/api/apiClient";
 
 import type { ExperienceFormDTO } from "../../../src/models/ExperienceFormDTO"
 import type { ExperienceSimpleDTO } from "../../../src/models/ExperienceSimpleDTO"
 import type { ExperienceDTO } from "../../../src/models/ExperienceDTO"
+import type{ CommentFormDTO } from "../../../src/models/CommentFormDTO";
+import type{ CommentSimpleDTO } from "../../../src/models/CommentSimpleDTO";
+
 
 
 describe("ExperienceService", () => {
@@ -11,8 +15,8 @@ describe("ExperienceService", () => {
   it("should return all experiences when the request succeeds", async () => {
 
     const experiences: ExperienceSimpleDTO[] = [
-      { id: 1, title: "Experience 1", description: "description 1", date: "2022-02-12", rating: 9.1, cityName: "Paris", country: "France", authorName: "author1" },
-      { id: 2, title: "Experience 2", description: "description 2", date: "2025-03-01", rating: 1.5, cityName: "Rome", country: "Italy", authorName: "author2" }
+      { id: 1, title: "Experience 1", description: "description 1", date: "2022-02-12", rating: 9.1, cityName: "Paris", country: "France", authorName: "author1", categories: ["Studies"] },
+      { id: 2, title: "Experience 2", description: "description 2", date: "2025-03-01", rating: 1.5, cityName: "Rome", country: "Italy", authorName: "author2",  categories: ["Accomodation", "Transportation"]}
     ];
 
     const mockApi = {
@@ -20,14 +24,17 @@ describe("ExperienceService", () => {
         ok: true,
         json: vi.fn().mockResolvedValue({ content: experiences }),
       }),
+      post: vi.fn(),
+      put: vi.fn(),
+      delete: vi.fn()
     };
 
     const service = createExperienceService(mockApi);
 
-    const result = await service.getAll(0, 10);
+    const result = await service.getAll({});
 
     expect(mockApi.get).toHaveBeenCalledTimes(1);
-    expect(mockApi.get).toHaveBeenCalledWith("/experiences/?page=0&size=10");
+    expect(mockApi.get).toHaveBeenCalledWith("/experiences/?page=0&size=6");
     expect(result.content).toEqual(experiences);
   });
 
@@ -41,11 +48,15 @@ describe("ExperienceService", () => {
         text: textMock,
         json: vi.fn(),
       }),
+
+      post: vi.fn(),
+      put: vi.fn(),
+      delete: vi.fn()
     };
 
     const service = createExperienceService(mockApi);
 
-    await expect(service.getAll(1, 5)).rejects.toThrow(
+    await expect(service.getAll({page:1, size:5})).rejects.toThrow(
       "Error fetching experiences"
     );
 
@@ -63,6 +74,9 @@ describe("ExperienceService", () => {
         ok: true,
         json: vi.fn().mockResolvedValue(experiences),
       }),
+      post: vi.fn(),
+      put: vi.fn(),
+      delete: vi.fn()
     };
 
     const service = createExperienceService(mockApi);
@@ -84,6 +98,9 @@ describe("ExperienceService", () => {
         text: textMock,
         json: vi.fn(),
       }),
+      post: vi.fn(),
+      put: vi.fn(),
+      delete: vi.fn()
     };
 
     const service = createExperienceService(mockApi);
@@ -126,6 +143,8 @@ describe("ExperienceService", () => {
     const mockAPI: ApiClient = {
       get: vi.fn(),
       post: mockPost,
+      put: vi.fn(),
+      delete: vi.fn()
     };
 
     const experienceService = createExperienceService(mockAPI);
@@ -158,6 +177,8 @@ describe("ExperienceService", () => {
     const mockAPI: ApiClient = {
       get: vi.fn(),
       post: mockPost,
+      put: vi.fn(),
+      delete: vi.fn()
     };
 
     const experienceService = createExperienceService(mockAPI);
@@ -192,7 +213,10 @@ describe("ExperienceService", () => {
         ok: true,
         status: 200,
         json: vi.fn().mockResolvedValue(experience)
-      })
+      }),
+      post: vi.fn(),
+      put: vi.fn(),
+      delete: vi.fn()
     };
 
     const service = createExperienceService(mockApi);
@@ -203,6 +227,7 @@ describe("ExperienceService", () => {
     expect(mockApi.get).toHaveBeenCalledWith("/experiences/1");
     expect(result).toEqual(experience);
   });
+      put: vi.fn(),
 
   it("should throw an error when fetching an experience fails", async () => {
     const errorMessage = "Error fetching experience";
@@ -213,7 +238,10 @@ describe("ExperienceService", () => {
         ok: false,
         status: 500,
         text: textMock,
-      })
+      }),
+      post: vi.fn(),
+      put: vi.fn(),
+      delete: vi.fn()
     };
 
     const service = createExperienceService(mockApi);
@@ -232,7 +260,8 @@ describe("ExperienceService", () => {
       id: 1,
       description: "Great experience!",
       date: "2026-08-28",
-      authorName: "John"
+      authorName: "John",
+      experienceId: 1
     };
 
     const mockPost = vi.fn().mockResolvedValue({
@@ -243,6 +272,8 @@ describe("ExperienceService", () => {
     const mockApi: ApiClient = {
       post: mockPost,
       get: vi.fn(),
+      put: vi.fn(),
+      delete: vi.fn()
     };
 
     const experienceService = createExperienceService(mockApi);
@@ -262,7 +293,6 @@ describe("ExperienceService", () => {
     expect(result).toEqual(fakeComment);
   });
 
-
   it("should throw an error when posting a comment fails", async () => {
     const errorMessage = "Error posting new comment";
     const textMock = vi.fn().mockResolvedValue(errorMessage);
@@ -276,6 +306,8 @@ describe("ExperienceService", () => {
     const mockApi: ApiClient = {
       post: mockPost,
       get: vi.fn(),
+      put: vi.fn(),
+      delete: vi.fn()
     };
 
     const experienceService = createExperienceService(mockApi);
@@ -294,7 +326,6 @@ describe("ExperienceService", () => {
     );
   });
 
-
   it("should get comments successfully", async () => {
 
     const fakeComments: CommentSimpleDTO[] = [
@@ -302,13 +333,15 @@ describe("ExperienceService", () => {
         id: 1,
         description: "Great experience!",
         date: "2026-08-28",
-        authorName: "John"
+        authorName: "John",
+        experienceId: 1
       },
       {
         id: 2,
         description: "I really enjoyed it.",
         date: "2026-08-27",
-        authorName: "Jane"
+        authorName: "Jane",
+        experienceId: 1
       }
     ];
 
@@ -320,6 +353,8 @@ describe("ExperienceService", () => {
     const mockApi: ApiClient = {
       post: vi.fn(),
       get: mockGet,
+      put: vi.fn(),
+      delete: vi.fn()
     };
 
     const experienceService = createExperienceService(mockApi);
@@ -333,7 +368,6 @@ describe("ExperienceService", () => {
 
     expect(result).toEqual(fakeComments);
   });
-
 
   it("should throw an error when getting comments fails", async () => {
 
@@ -349,6 +383,8 @@ describe("ExperienceService", () => {
     const mockApi: ApiClient = {
       post: vi.fn(),
       get: mockGet,
+      put: vi.fn(),
+      delete: vi.fn()
     };
 
     const experienceService = createExperienceService(mockApi);
@@ -377,6 +413,7 @@ describe("ExperienceService", () => {
       get: vi.fn(),
       post: vi.fn(),
       delete: mockDelete,
+      put: vi.fn()
     };
 
     const service = createExperienceService(mockApi);
@@ -403,6 +440,7 @@ describe("ExperienceService", () => {
       get: vi.fn(),
       post: vi.fn(),
       delete: mockDelete,
+      put: vi.fn()
     };
 
     const service = createExperienceService(mockApi);
@@ -414,5 +452,30 @@ describe("ExperienceService", () => {
     expect(mockDelete).toHaveBeenCalledTimes(1);
     expect(mockDelete).toHaveBeenCalledWith("/experiences/1");
     expect(textMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("should return all experiences when the request succeeds", async () => {
+
+    const experiences: ExperienceSimpleDTO[] = [
+      { id: 1, title: "Experience 1", description: "description 1", date: "2022-02-12", rating: 9, cityName: "Paris", country: "France", authorName: "author1", categories: ["Studies"] }
+    ];
+
+    const mockApi = {
+      get: vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue({ content: experiences }),
+      }),
+      post: vi.fn(),
+      put: vi.fn(),
+      delete: vi.fn()
+    };
+
+    const service = createExperienceService(mockApi);
+
+    const result = await service.getAll({minRating: 5.6, maxRating:9});
+
+    expect(mockApi.get).toHaveBeenCalledTimes(1);
+    expect(mockApi.get).toHaveBeenCalledWith("/experiences/?page=0&size=6&minimumRate=5.6&maximumRate=9");
+    expect(result.content).toEqual(experiences);
   });
 });
