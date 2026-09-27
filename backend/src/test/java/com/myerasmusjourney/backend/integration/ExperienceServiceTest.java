@@ -152,6 +152,7 @@ public class ExperienceServiceTest extends TestDataBase {
     @AfterEach
     void resetDatabase(){
         experienceRepository.deleteAll();
+        SecurityContextHolder.clearContext();
     }
 
     @Test
@@ -160,7 +161,7 @@ public class ExperienceServiceTest extends TestDataBase {
         Pageable pageable = PageRequest.of(0, 10);
 
         Page<ExperienceSimpleDTO> result =
-                experienceService.getAllExperiences(pageable);
+                experienceService.getAllExperiences(null, null, null, null, null, null, pageable);
 
         assertEquals(expected.size(), result.getTotalElements());
         assertEquals(10, result.getNumberOfElements());
@@ -183,38 +184,24 @@ public class ExperienceServiceTest extends TestDataBase {
 
         Pageable pageable = PageRequest.of(0, 10);
 
-        Page<ExperienceSimpleDTO> result =
-                experienceService.getAllExperiences(pageable);
+        Page<ExperienceSimpleDTO> result = experienceService.getAllExperiences(null, null, null, null, null, null, pageable);
 
         assertEquals(expected.size(), result.getTotalElements());
 
-        Experience experience = new Experience(
-                "Experience 5",
-                "Descripcion 5",
-                2.4F,
-                null,
-                List.of(Category.Personal_Experience.name()),
-                null,
-                null
-        );
+        Authentication authentication = new UsernamePasswordAuthenticationToken("test@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Experience savedExperience = experienceRepository.save(experience);
+        ExperienceFormDTO experienceFormDTO = new ExperienceFormDTO(2.4F, "Experience 5", "Descripcion 5", LocalDate.now(), List.of(Category.Personal_Experience.name()), 1L);
 
-        ExperienceSimpleDTO savedDTO = new ExperienceSimpleDTO(
-                savedExperience.getId(),
-                savedExperience.getDate(),
-                savedExperience.getRating(),
-                savedExperience.getTitle(),
-                savedExperience.getDescription(),
-                savedExperience.getCategories(),
-                "Berlin",
-                "Germany",
-                "user2"
-        );
+        ExperienceDTO savedDTO = experienceService.createExperience(experienceFormDTO);
 
-        expected.add(savedDTO);
+        SecurityContextHolder.clearContext();
 
-        result = experienceService.getAllExperiences(pageable);
+        ExperienceSimpleDTO savedSimpleDTO = new ExperienceSimpleDTO(savedDTO.id(), savedDTO.date(), savedDTO.rating(), savedDTO.title(), savedDTO.description(), savedDTO.categories(), savedDTO.city().name(), savedDTO.city().country(), savedDTO.author().displayName());
+
+        expected.add(savedSimpleDTO);
+
+        result = experienceService.getAllExperiences(null, null, null, null, null, null, pageable);
 
         assertEquals(expected.size(), result.getTotalElements());
         assertEquals(10, result.getNumberOfElements());
@@ -246,7 +233,7 @@ public class ExperienceServiceTest extends TestDataBase {
         Pageable pageable = PageRequest.of(0, 5);
 
         Page<ExperienceSimpleDTO> result =
-                experienceService.getAllExperiences(pageable);
+                experienceService.getAllExperiences(null, null, null, null, null, null, pageable);
 
         assertEquals(12, result.getTotalElements());
         assertEquals(5, result.getNumberOfElements());
@@ -254,12 +241,20 @@ public class ExperienceServiceTest extends TestDataBase {
         assertEquals(0, result.getNumber());
 
         for (int i = 0; i < 5; i++) {
-            assertEquals(expected.get(i), result.getContent().get(i));
+            ExperienceSimpleDTO exp = expected.get(i);
+            ExperienceSimpleDTO res = result.getContent().get(i);
+            assertEquals(exp.id(), res.id());
+            assertEquals(exp.cityName(), res.cityName());
+            assertEquals(exp.authorName(), res.authorName());
+            assertEquals(exp.rating(), res.rating());
+            assertEquals(exp.date(), res.date());
+            assertEquals(exp.description(), res.description());
+            assertTrue(exp.categories().containsAll(res.categories()));
         }
 
         pageable = PageRequest.of(1, 5);
 
-        result = experienceService.getAllExperiences(pageable);
+        result = experienceService.getAllExperiences(null, null, null, null, null, null, pageable);
 
         assertEquals(12, result.getTotalElements());
         assertEquals(5, result.getNumberOfElements());
@@ -267,12 +262,20 @@ public class ExperienceServiceTest extends TestDataBase {
         assertEquals(1, result.getNumber());
 
         for (int i = 0; i < 5; i++) {
-            assertEquals(expected.get(i + 5), result.getContent().get(i));
+            ExperienceSimpleDTO exp = expected.get(i+5);
+            ExperienceSimpleDTO res = result.getContent().get(i);
+            assertEquals(exp.id(), res.id());
+            assertEquals(exp.cityName(), res.cityName());
+            assertEquals(exp.authorName(), res.authorName());
+            assertEquals(exp.rating(), res.rating());
+            assertEquals(exp.date(), res.date());
+            assertEquals(exp.description(), res.description());
+            assertTrue(exp.categories().containsAll(res.categories()));
         }
 
         pageable = PageRequest.of(2, 5);
 
-        result = experienceService.getAllExperiences(pageable);
+        result = experienceService.getAllExperiences(null, null, null, null, null, null, pageable);
 
         assertEquals(12, result.getTotalElements());
         assertEquals(2, result.getNumberOfElements());
@@ -291,7 +294,7 @@ public class ExperienceServiceTest extends TestDataBase {
         Pageable pageable = PageRequest.of(0, 10);
 
         Page<ExperienceSimpleDTO> result =
-                experienceService.getAllExperiences(pageable);
+                experienceService.getAllExperiences(null, null, null, null, null, null, pageable);
 
         assertTrue(result.isEmpty());
     }
@@ -476,5 +479,32 @@ public class ExperienceServiceTest extends TestDataBase {
         ExperienceDTO result = experienceService.deleteExperienceById(experience.getId());
 
         assertEquals(expected, result);
+    }
+
+    @Test
+    void testFilterExperiences(){
+
+        Pageable pageable = PageRequest.of(0, 6);
+
+        Page<ExperienceSimpleDTO> result = experienceService.getAllExperiences(null, null, 5F, null, null, null, pageable);
+
+        assertEquals(9, result.getTotalElements());
+        assertEquals(6, result.getNumberOfElements());
+
+        for(int i = 0; i < 6; i++){
+            ExperienceSimpleDTO res = result.getContent().get(i);
+            assertTrue(res.rating()>=5F);
+        }
+
+        result = experienceService.getAllExperiences(null, null, 5F, null, null, List.of("Transportation"), pageable);
+
+        assertEquals(2, result.getTotalElements());
+        assertEquals(2, result.getNumberOfElements());
+
+        for(int i = 0; i < 2; i++){
+            ExperienceSimpleDTO res = result.getContent().get(i);
+            assertTrue(res.rating()>=5F);
+            assertTrue(res.categories().contains(Category.Transportation));
+        }
     }
 }

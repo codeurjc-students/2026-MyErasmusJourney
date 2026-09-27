@@ -30,7 +30,7 @@ In this phase, the development environment is configured. The GitHub repository 
 
 - **Start date:** 2026-07-15
 - **Estimated deadline:** 2026-09-15  
-- **Actual completion date:** Not completed yet
+- **Actual completion date:** 2026-09-24
 
 This phase introduces the first usable version (MVP). Basic functionalities such as user authentication, experience creation, and city browsing are implemented. Docker is introduced for containerization and deployment.
 
@@ -38,7 +38,7 @@ This phase introduces the first usable version (MVP). Basic functionalities such
 
 ## 🔧 Phase 4: Version 0.2 – Intermediate Features and Deployment
 
-- **Start date:** Not started yet
+- **Start date:** 2026-09-24
 - **Estimated deadline:** 2026-10-15  
 - **Actual completion date:** Not completed yet  
 

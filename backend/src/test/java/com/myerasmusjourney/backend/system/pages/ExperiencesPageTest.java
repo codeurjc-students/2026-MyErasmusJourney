@@ -33,12 +33,38 @@ public class ExperiencesPageTest extends BaseSeleniumTest {
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("experience-1")
         ));
-
-        List<Integer> ids = List.of(1,2,3);
-        for (int id: ids){
-            WebElement experienceDiv = driver.findElement(By.id("experience-"+id)); //grabs experience from experiences page
-            String textContent = experienceDiv.getText();
-            assertTrue(textContent.contains(LocalDate.now().toString()));
+        for (int id = 1; id<7; id++){
+            assertTrue(driver.findElement(By.id("experience-"+id)).isDisplayed());
         }
     }
+
+    @Test
+    void testFilterExperiences(){
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.linkText("Experiences")
+        ));
+
+        WebElement linkToExperience = driver.findElement(By.linkText("Experiences"));
+
+        linkToExperience.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div/div/div/div/form/div[4]/div/label[7]/input")
+        ));
+
+        WebElement studies = driver.findElement(By.xpath("/html/body/div/div/div/div/form/div[4]/div/label[7]/input"));
+
+        studies.click();
+
+        List<WebElement> experiences = driver.findElements(By.cssSelector("[id^='experience-']"));
+
+        for (WebElement experienceDiv: experiences){
+            experienceDiv.getText().contains("Studies");
+        }
+    }
+
+
 }

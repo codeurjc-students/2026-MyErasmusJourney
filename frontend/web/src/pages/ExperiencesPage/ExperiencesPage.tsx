@@ -1,29 +1,29 @@
+import type { ExperienceFilters } from "@shared/models/ExperienceFilters";
+import type { ExperienceSimpleDTO } from "@shared/models/ExperienceSimpleDTO";
+import type { experienceServiceProps } from "@shared/interfaces/experienceServiceProps";
 import { useEffect, useState } from "react";
 import Experience from "../../components/Experience/Experience";
 import { API } from "../../api/client";
-import type { ExperienceSimpleDTO } from "@shared/models/ExperienceSimpleDTO";
 import { createExperienceService } from "@shared/services/experience.service";
-import type { experienceServiceProps } from "@shared/interfaces/experienceServiceProps";
 import { ApiError } from "@shared/api/apiError";
 import { useNavigate } from "react-router-dom";
+import Filter from "../../components/Filter/Filter";
+import type { cityServiceProps } from "@shared/interfaces/cityServiceProps";
+import { createCityService } from "@shared/services/city.service";
 
 const defaultExperienceService = createExperienceService(API);
 
-export default function ExperiencesPage({ experienceService = defaultExperienceService }: experienceServiceProps) {
+export default function ExperiencesPage({ experienceService = defaultExperienceService, cityService = createCityService(API) }: experienceServiceProps & cityServiceProps) {
 
     const [experiences, setExperiences] = useState<ExperienceSimpleDTO[]>([]);
-    const [page, setPage] = useState(0);
+    const [filters, setFilters] = useState<ExperienceFilters>({ page: 0 });
     const [totalPages, setTotalPages] = useState(1);
     const navigate = useNavigate();
-
-    const size = 6;
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await experienceService.getAll(page, size);
-
-                console.log(data.page.totalPages)
+                const data = await experienceService.getAll(filters);
                 setExperiences(data.content || []);
                 setTotalPages(data.page.totalPages ?? 1);
             } catch (error) {
@@ -37,36 +37,41 @@ export default function ExperiencesPage({ experienceService = defaultExperienceS
         };
 
         fetchData();
-    }, [experienceService, page]);
+    }, [experienceService, filters]);
 
-    const hasPreviousPage = page > 0;
-    const hasNextPage = page < totalPages - 1;
+    const hasPreviousPage = (filters.page ?? 0) > 0;
+    const hasNextPage = (filters.page ?? 0) < totalPages - 1;
 
     function handlePreviousPage() {
         if (hasPreviousPage) {
-            setPage((currentPage) => currentPage - 1);
+            setFilters(currentFilters => ({
+                ...currentFilters,
+                page: (currentFilters.page ?? 0) - 1
+            }));
         }
     }
 
     function handleNextPage() {
         if (hasNextPage) {
-            setPage((currentPage) => currentPage + 1);
+            setFilters(currentFilters => ({
+                ...currentFilters,
+                page: (currentFilters.page ?? 0) + 1
+            }));
         }
     }
 
     return (
         <div id="experiences" className="mx-auto w-[97%] max-w-none p-4 md:p-6">
-            <div className="grid grid-cols-1 lg:grid-cols-[minmax(17rem,1fr)_minmax(0,13fr)] gap-6 items-stretch">
-
-                <div className="w-full rounded-2xl bg-white shadow-xl p-6 flex items-center justify-center">
-                    <img src="/images/available-soon.png" alt="Experience filter" className="w-full h-auto object-contain" />
+            <div className="grid grid-cols-1 lg:grid-cols-[minmax(27rem,1fr)_minmax(0,4fr)] gap-6 items-stretch">
+                <div className="w-full rounded-2xl bg-white shadow-xl p-5 md:p-6">
+                    <Filter setFilters={setFilters} experienceService={experienceService} cityService={cityService}/>
                 </div>
 
                 <main className="w-full rounded-2xl bg-white shadow-xl p-4 md:p-6">
                     <h3 className="text-center mb-6">Experiences</h3>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                        {experiences.map((experience) => (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        {experiences.map(experience => (
                             <Experience key={experience.id} experience={experience} />
                         ))}
                     </div>
@@ -76,14 +81,13 @@ export default function ExperiencesPage({ experienceService = defaultExperienceS
                             Previous
                         </button>
 
-                        <p>Page {page + 1} of {totalPages}</p>
+                        <p>Page {(filters.page ?? 0) + 1} of {totalPages}</p>
 
                         <button type="button" onClick={handleNextPage} disabled={!hasNextPage} className="disabled:opacity-40 disabled:cursor-not-allowed">
                             Next
                         </button>
                     </div>
                 </main>
-
             </div>
         </div>
     );

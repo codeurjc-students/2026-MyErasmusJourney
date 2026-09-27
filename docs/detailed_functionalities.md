@@ -26,7 +26,7 @@ This document describes all the different functionalities which are going to be 
 
 |     | Funcionalidad              | Estado | Usuarios con acceso  | Descripción                                                                                                     |
 | :-- | :------------------------- | :----: | :------------------- | :-------------------------------------------------------------------------------------------------------------- |
-| 1   | Filter posts               |   🔜   | Unauthenticated user | Any user has the option to filter the posts/experiences by date, city, rating, type...                          |
+| 1   | Filter posts               |   🏗️   | Unauthenticated user | Any user has the option to filter the posts/experiences by date, city, rating, type...                          |
 | 2   | Add user's profile image   |   🔜   | Authenticated user   | Every user with an account will have the opportunity upload a profile image.                                    |
 | 3   | Add multimedia to post     |   🔜   | Authenticated user   | Posts will have the possibility to attach multimedia files such as videos or images.                            |
 | 4   | Show city related posts    |   🔜   | Unauthenticated user | City page will show the posts related to the city, allowing any user to access this page.                       |

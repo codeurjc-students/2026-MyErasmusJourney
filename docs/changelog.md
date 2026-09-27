@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.0.3 - 2026-09-25
+
+### Added
+- Unit, Integration and E2E tests for experience filter in backend.
+
+### Updated
+
+- Experience service and endpoint adding a GET endpoint which recieves parameters such as minimum rating, categories and city name to filter the experiences.
+- Experience repostory to methods have been added one to filter with experiences and another one to filter without experiences.
+
+### Notes
+
+- I had to add a hibernate annotation in order to make the filter with categories work properly for testing
+
 ## 0.0.3 - 2026-09-20
 
 ### Added

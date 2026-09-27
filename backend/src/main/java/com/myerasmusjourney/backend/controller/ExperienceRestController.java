@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/experiences")
@@ -26,8 +27,16 @@ public class ExperienceRestController {
     private CommentService commentService;
 
     @GetMapping("/")
-    public Page<ExperienceSimpleDTO> getExperiences(Pageable pageable){
-        return experienceService.getAllExperiences(pageable);
+    public Page<ExperienceSimpleDTO> getExperiences(
+        @RequestParam(required = false) String from,
+        @RequestParam(required = false) String to,
+        @RequestParam(required = false) Float minimumRate,
+        @RequestParam(required = false) Float maximumRate,
+        @RequestParam(required = false) String cityName,
+        @RequestParam(required = false) List<String> categories,
+        Pageable pageable
+    ){
+        return experienceService.getAllExperiences(from, to, minimumRate, maximumRate, cityName, categories, pageable);
     }
 
     @PostMapping("/")

@@ -201,6 +201,43 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Query experiences",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{APIURL}}/experiences/query?page=0&size=5&categories=Studies",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "experiences",
+                "query"
+              ],
+              "query": [
+                {
+                  "key": "minimumRate",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                },
+                {
+                  "key": "categories",
+                  "value": "Studies"
+                }
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },

@@ -7,6 +7,7 @@ import "@testing-library/jest-dom";
 import type { Page } from "@shared/models/Page";
 import type { ExperienceSimpleDTO } from "@shared/models/ExperienceSimpleDTO";
 import { ApiError } from "@shared/api/apiError";
+import type { CityService } from "@shared/services/city.service";
 
 const mockNavigate = vi.fn();
 
@@ -20,6 +21,13 @@ vi.mock("react-router-dom", async () => {
     useNavigate: () => mockNavigate,
   };
 });
+
+const mockCityService: CityService = {
+  addCity: vi.fn().mockResolvedValue([]),
+  getAll: vi.fn().mockResolvedValue([])
+}
+
+const mockGetCategories = vi.fn().mockResolvedValue([]);
 
 describe("ExperiencesPage", () => {
   it("renders all items of experience list", async () => {
@@ -36,7 +44,7 @@ describe("ExperiencesPage", () => {
     //return mocked service
     const mockService: ExperienceService = {
       getAll: mockGetAll,
-      getCategories: vi.fn(),
+      getCategories: mockGetCategories,
       getCommentsByExperienceId: vi.fn(),
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
@@ -47,7 +55,7 @@ describe("ExperiencesPage", () => {
     //render component (DOM virtual)
     render(
       <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} />
+        <ExperiencesPage experienceService={mockService} cityService={mockCityService} />
       </MemoryRouter>
     );
 
@@ -67,7 +75,7 @@ describe("ExperiencesPage", () => {
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
-      getCategories: vi.fn(),
+      getCategories: mockGetCategories,
       getCommentsByExperienceId: vi.fn(),
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
@@ -77,7 +85,7 @@ describe("ExperiencesPage", () => {
 
     render(
       <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} />
+        <ExperiencesPage experienceService={mockService} cityService={mockCityService}/>
       </MemoryRouter>
     );
 
@@ -85,7 +93,7 @@ describe("ExperiencesPage", () => {
       expect(screen.queryAllByText("Title")).toHaveLength(0);
 
       //only the Experiences header is render, no experiences to render no more headers
-      expect(screen.queryAllByRole("heading")).toHaveLength(1);
+      expect(screen.queryAllByRole("heading")).toHaveLength(4);
     });
 
     expect(mockGetAll).toHaveBeenCalledTimes(1);
@@ -105,7 +113,7 @@ describe("ExperiencesPage", () => {
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
-      getCategories: vi.fn(),
+      getCategories: mockGetCategories,
       getCommentsByExperienceId: vi.fn(),
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
@@ -115,7 +123,7 @@ describe("ExperiencesPage", () => {
 
     render(
       <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} />
+        <ExperiencesPage experienceService={mockService} cityService={mockCityService}/>
       </MemoryRouter>
     );
 
@@ -144,7 +152,7 @@ describe("ExperiencesPage", () => {
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
-      getCategories: vi.fn(),
+      getCategories: mockGetCategories,
       getCommentsByExperienceId: vi.fn(),
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
@@ -154,7 +162,7 @@ describe("ExperiencesPage", () => {
 
     render(
       <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} />
+        <ExperiencesPage experienceService={mockService} cityService={mockCityService}/>
       </MemoryRouter>
     );
 
@@ -168,7 +176,7 @@ describe("ExperiencesPage", () => {
     expect(experiences[0]).toHaveTextContent("Title 1");
 
     // header + experience title (experience title may be rendered as heading depending on markup)
-    expect(screen.queryAllByRole("heading")).toHaveLength(1);
+    expect(screen.queryAllByRole("heading")).toHaveLength(4);
 
 
     expect(mockGetAll).toHaveBeenCalledTimes(1);
@@ -186,7 +194,7 @@ describe("ExperiencesPage", () => {
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
-      getCategories: vi.fn(),
+      getCategories: mockGetCategories,
       getCommentsByExperienceId: vi.fn(),
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
@@ -196,7 +204,7 @@ describe("ExperiencesPage", () => {
 
     render(
       <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} />
+        <ExperiencesPage experienceService={mockService} cityService={mockCityService}/>
       </MemoryRouter>
     );
 
@@ -221,7 +229,7 @@ describe("ExperiencesPage", () => {
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
-      getCategories: vi.fn(),
+      getCategories: mockGetCategories,
       getCommentsByExperienceId: vi.fn(),
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
@@ -231,7 +239,7 @@ describe("ExperiencesPage", () => {
 
     render(
       <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} />
+        <ExperiencesPage experienceService={mockService} cityService={mockCityService}/>
       </MemoryRouter>
     );
 
@@ -253,7 +261,7 @@ describe("ExperiencesPage", () => {
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
-      getCategories: vi.fn(),
+      getCategories: mockGetCategories,
       getCommentsByExperienceId: vi.fn(),
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
@@ -263,7 +271,7 @@ describe("ExperiencesPage", () => {
 
     render(
       <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} />
+        <ExperiencesPage experienceService={mockService} cityService={mockCityService}/>
       </MemoryRouter>
     );
 
@@ -291,7 +299,7 @@ describe("ExperiencesPage", () => {
 
     const mockService: ExperienceService = {
       getAll: mockGetAll,
-      getCategories: vi.fn(),
+      getCategories: mockGetCategories,
       getCommentsByExperienceId: vi.fn(),
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
@@ -301,7 +309,7 @@ describe("ExperiencesPage", () => {
 
     render(
       <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} />
+        <ExperiencesPage experienceService={mockService} cityService={mockCityService}/>
       </MemoryRouter>
     );
 
