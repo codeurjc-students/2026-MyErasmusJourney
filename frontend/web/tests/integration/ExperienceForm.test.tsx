@@ -14,6 +14,7 @@ import { authenticateUser, clearFetchAndUserStore } from "tests/testAuthenticati
 import DetailedExperiencePage from "src/pages/DetailedExperiencePage/DetailedExperiencePage";
 import type { ExperienceFormDTO } from "@shared/models/ExperienceFormDTO";
 import { ApiError } from "@shared/api/apiError";
+import { toast } from "sonner";
 
 const testAPI = createApiClient(APIURL);
 const testCityService = createCityService(testAPI);
@@ -88,7 +89,9 @@ describe("ExperienceFormPage integration", () => {
   });
 
   it("shows an alert and blocks submission when more than 3 categories are selected", async () => {
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => { });
+    const alertSpy = vi
+      .spyOn(toast, "warning")
+      .mockImplementation(() => { return "mock-toast-id" });
     const cities = await testCityService.getAll();
 
     render(
@@ -132,10 +135,10 @@ describe("ExperienceFormPage integration", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /publish/i }));
 
+    const errorMessage = "No more than 3 categories are allowed for an experience";
+
     await waitFor(() => {
-      expect(alertSpy).toHaveBeenCalledWith(
-        "No more than 3 categories are allowed for an experience"
-      );
+      expect(alertSpy).toHaveBeenCalledWith(errorMessage);
     });
   });
 

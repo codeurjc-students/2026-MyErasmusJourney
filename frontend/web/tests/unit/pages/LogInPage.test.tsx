@@ -7,6 +7,7 @@ import type { AuthService } from "@shared/services/auth.service";
 import type { UserService } from "@shared/services/user.service";
 import { useUserStore } from "@shared/stores/userStore";
 import { ApiError } from "@shared/api/apiError";
+import { toast } from "sonner";
 
 const mockNavigate = vi.fn();
 
@@ -131,7 +132,9 @@ describe("Log In page", () => {
       deleteUserById: vi.fn()
     };
 
-    window.alert = vi.fn();
+    const alertSpy = vi
+      .spyOn(toast, "warning")
+      .mockImplementation(() => {return "mock-toast-id"});
 
     render(
       <MemoryRouter>
@@ -144,7 +147,7 @@ describe("Log In page", () => {
     fireEvent.submit(form!);
 
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith("Email missing");
+      expect(alertSpy).toHaveBeenCalledWith("Email missing");
       expect(mockAuthService.logIn).not.toHaveBeenCalled();
     });
   });
@@ -165,7 +168,9 @@ describe("Log In page", () => {
       deleteUserById: vi.fn()
     };
 
-    window.alert = vi.fn();
+    const alertSpy = vi
+      .spyOn(toast, "warning")
+      .mockImplementation(() => {return "mock-toast-id"});
 
     render(
       <MemoryRouter>
@@ -178,7 +183,7 @@ describe("Log In page", () => {
     fireEvent.submit(form!);
 
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith("Passwords needed");
+      expect(alertSpy).toHaveBeenCalledWith("Passwords needed");
       expect(mockAuthService.logIn).not.toHaveBeenCalled();
     });
   });
@@ -203,7 +208,9 @@ describe("Log In page", () => {
       updateUser: vi.fn()
     };
 
-    window.alert = vi.fn();
+    const alertSpy = vi
+      .spyOn(toast, "error")
+      .mockImplementation(() => {return "mock-toast-id"});
     console.error = vi.fn();
 
     render(
@@ -218,7 +225,7 @@ describe("Log In page", () => {
     await waitFor(() => {
       expect(mockLogIn).toHaveBeenCalledWith({ username: "john@example.com", password: "password123" });
       expect(console.error).toHaveBeenCalledWith(expect.stringContaining("Error logging in"));
-      expect(window.alert).toHaveBeenCalledWith(expect.stringContaining("Error logging in:"));
+      expect(alertSpy).toHaveBeenCalledWith(expect.stringContaining("Error logging in"));
     });
   });
 

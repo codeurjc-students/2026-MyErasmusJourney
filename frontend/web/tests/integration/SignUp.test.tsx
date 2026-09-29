@@ -9,6 +9,7 @@ import LogInPage from "src/pages/LogInPage/LogInPage";
 import type { UserFormDTO } from "@shared/models/UserFormDTO";
 import { ApiError } from "@shared/api/apiError";
 import UserFormPage from "src/pages/UserFormPage/UserFormPage";
+import { toast } from "sonner";
 
 const testAPI = createApiClient(APIURL);
 const testUserService = createUserService(testAPI);
@@ -47,8 +48,9 @@ describe("SignUpPage", () => {
 
   it("should show alert when passwords do not match", async () => {
 
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => { });
-    vi.spyOn(window, "alert").mockImplementation(() => { });
+    const alertSpy = vi
+      .spyOn(toast, "warning")
+      .mockImplementation(() => { return "mock-toast-id" });
 
     render(
       <MemoryRouter initialEntries={["/signup"]}>
@@ -79,8 +81,9 @@ describe("SignUpPage", () => {
 
   it("should show error alert when sign up fails", async () => {
 
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => { });
-    vi.spyOn(window, "alert").mockImplementation(() => { });
+    const alertSpy = vi
+      .spyOn(toast, "error")
+      .mockImplementation(() => { return "mock-toast-id" });
 
     render(
       <MemoryRouter initialEntries={["/signup"]}>

@@ -8,6 +8,7 @@ import type { CitySimpleDTO } from "@shared/models/CitySimpleDTO";
 import type { ExperienceFilters } from "@shared/models/ExperienceFilters";
 import type { CityService } from "@shared/services/city.service";
 import type { ExperienceService } from "@shared/services/experience.service";
+import { toast } from "sonner";
 
 const navigateMock = vi.fn();
 
@@ -323,8 +324,8 @@ describe("Filter", () => {
 
 
         const alertMock = vi
-            .spyOn(window, "alert")
-            .mockImplementation(() => { });
+            .spyOn(toast, "error")
+            .mockImplementation(() => { return "mock-toast-id" });
 
         render(
             <MemoryRouter>
@@ -337,7 +338,7 @@ describe("Filter", () => {
         );
 
         await waitFor(() => {
-            expect(alertMock).toHaveBeenCalledWith(error);
+            expect(alertMock).toHaveBeenCalledWith(error.message);
         });
 
         expect(navigateMock).not.toHaveBeenCalled();
@@ -411,8 +412,8 @@ describe("Filter", () => {
 
 
         const alertMock = vi
-            .spyOn(window, "alert")
-            .mockImplementation(() => { });
+            .spyOn(toast, "error")
+            .mockImplementation(() => { return "mock-toast-id" });
 
         render(
             <MemoryRouter>
@@ -425,7 +426,7 @@ describe("Filter", () => {
         );
 
         await waitFor(() => {
-            expect(alertMock).toHaveBeenCalledWith(error);
+            expect(alertMock).toHaveBeenCalledWith(error.message);
         });
 
         expect(navigateMock).not.toHaveBeenCalled();

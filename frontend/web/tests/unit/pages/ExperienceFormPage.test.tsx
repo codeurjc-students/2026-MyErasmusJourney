@@ -5,6 +5,7 @@ import { MemoryRouter } from "react-router-dom";
 import ExperienceFormPage from "src/pages/ExperienceFormPage/ExperienceFormPage";
 import { useUserStore } from "@shared/stores/userStore";
 import { ApiError } from "@shared/api/apiError";
+import { toast } from "sonner";
 
 const mockNavigate = vi.fn();
 
@@ -122,7 +123,9 @@ describe("ExperienceFormPage", () => {
   });
 
   it("alerts and stops submission when more than 3 categories are selected", async () => {
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => { });
+    const alertSpy = vi
+      .spyOn(toast, "warning")
+      .mockImplementation(() => { return "mock-toast-id" });
     const mockExperienceService = {
       getCategories: vi.fn().mockResolvedValue(["ART", "SPORT", "TRAVEL", "FOOD"]),
       postExperience: vi.fn(),
@@ -214,10 +217,11 @@ describe("ExperienceFormPage", () => {
   });
 
   it("alerts when the publish request fails", async () => {
-    const error = new ApiError(400, "Error fetching experience");
+    const error = new ApiError(400, "Error while publishing your experience.");
 
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => { });
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => { });
+    const alertSpy = vi
+      .spyOn(toast, "error")
+      .mockImplementation(() => { return "mock-toast-id" });
 
     const mockExperienceService = {
       getCategories: vi.fn().mockResolvedValue(["ART"]),
@@ -253,7 +257,6 @@ describe("ExperienceFormPage", () => {
 
     await waitFor(() => {
       expect(alertSpy).toHaveBeenCalledWith("Error while publishing your experience.");
-      expect(consoleSpy).toHaveBeenCalledWith(expect.any(Error));
     });
   });
 
