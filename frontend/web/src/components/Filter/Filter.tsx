@@ -9,13 +9,14 @@ import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { API } from "../../api/client";
 import "./Filter.css";
+import { toast } from "sonner";
 
 interface filterProps {
     setFilters: (filters: ExperienceFilters) => void;
 }
 
 export default function Filter({ setFilters, experienceService = createExperienceService(API), cityService = createCityService(API) }: filterProps & experienceServiceProps & cityServiceProps) {
-    
+
     const [cities, setCities] = useState<CitySimpleDTO[]>([]);
     const [categories, setCategories] = useState<string[]>([]);
     const navigate = useNavigate();
@@ -42,8 +43,11 @@ export default function Filter({ setFilters, experienceService = createExperienc
                     navigate("/error");
                     return;
                 }
-
-                alert(error);
+                else if (error instanceof Error) {
+                    toast.error(error.message);
+                } else {
+                    toast.error("An unexpected error occurred");
+                }
             }
         };
 
@@ -57,7 +61,11 @@ export default function Filter({ setFilters, experienceService = createExperienc
                     navigate("/error");
                     return;
                 }
-                alert(error);
+                else if (error instanceof Error) {
+                    toast.error(error.message);
+                } else {
+                    toast.error("An unexpected error occurred while fetching categories");
+                }
             }
         };
 

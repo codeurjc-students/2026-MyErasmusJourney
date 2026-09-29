@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API } from "../../api/client";
 import { ApiError } from "@shared/api/apiError";
+import { toast } from "sonner";
 
 export default function ExperienceFormPage({ experienceService = createExperienceService(API), cityService = createCityService(API) }: experienceServiceProps & cityServiceProps) {
 
@@ -68,7 +69,7 @@ export default function ExperienceFormPage({ experienceService = createExperienc
         const categories = formData.getAll("categories") as string[];
 
         if (categories.length > 3) {
-            alert("No more than 3 categories are allowed for an experience");
+            toast.warning("No more than 3 categories are allowed for an experience");
             return;
         }
 
@@ -91,8 +92,11 @@ export default function ExperienceFormPage({ experienceService = createExperienc
                 navigate("/error");
                 return;
             }
-            alert("Error while publishing your experience.");
-            console.error(error);
+            else if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error("Error while publishing your experience.");
+            }
         }
 
     }

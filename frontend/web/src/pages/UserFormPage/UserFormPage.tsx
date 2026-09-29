@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ApiError } from "@shared/api/apiError";
 import { useUserStore } from "@shared/stores/userStore";
 import type { UserDTO } from "@shared/models/UserDTO";
+import { toast } from "sonner";
 
 interface UserFormPageProps {
     mode: "signup" | "edit";
@@ -42,7 +43,7 @@ export default function UserFormPage({mode,userService = createUserService(API)}
                 }
 
                 console.error(`Error fetching user info: ${error}`);
-                alert(`Error fetching user info: ${error}`);
+                toast.error(`Error fetching user info: ${error}`);
             }
             finally {
                 setLoading(false);
@@ -98,7 +99,7 @@ export default function UserFormPage({mode,userService = createUserService(API)}
             }
 
             console.error(`Error updating user: ${error}`);
-            alert(`Error updating user: ${error}`);
+            toast.error(`Error updating user: ${error}`);
         }
     }
 
@@ -125,7 +126,7 @@ export default function UserFormPage({mode,userService = createUserService(API)}
             formData.get("passwordConfirmation") as string;
 
         if (password !== passwordConfirmation) {
-            alert("Passwords do not match");
+            toast.warning("Passwords do not match");
             return;
         }
 
@@ -150,9 +151,8 @@ export default function UserFormPage({mode,userService = createUserService(API)}
                 navigate("/error");
                 return;
             }
-
             console.error(`Error signing up: ${error}`);
-            alert(`Error signing up: ${error}`);
+            toast.error(`Error signing up: ${error}`);
         }
     }
 

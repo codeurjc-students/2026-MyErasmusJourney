@@ -8,6 +8,7 @@ import { API } from "../../api/client";
 import { createExperienceService } from "@shared/services/experience.service";
 import type { experienceServiceProps } from "@shared/interfaces/experienceServiceProps";
 import { ApiError } from "@shared/api/apiError";
+import { toast } from "sonner";
 
 interface experiencesProps {
     userExperiences: ExperienceSimpleDTO[] | undefined;
@@ -70,7 +71,11 @@ export default function UserExperiences({ userService = createUserService(API), 
                 navigate("/error");
                 return;
             }
-            alert("Error deleting experience:" + error)
+            else if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error("An unexpected error occurred");
+            }
         }
     }
 
