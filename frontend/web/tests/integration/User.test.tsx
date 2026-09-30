@@ -1,4 +1,4 @@
-import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import "@testing-library/jest-dom";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
@@ -136,8 +136,6 @@ describe("UserPage", () => {
     authenticatedUser = await authenticateUserToDelete();
     useUserStore.getState().setUser(authenticatedUser);
 
-    const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(true);
-
     render(
       <MemoryRouter initialEntries={["/account"]}>
         <Routes>
@@ -164,28 +162,20 @@ describe("UserPage", () => {
       expect(screen.queryByText("Loading comments...")).not.toBeInTheDocument();
     });
 
-    fireEvent.click(
-      screen.getByRole("button", { name: /delete profile/i })
-    );
+    fireEvent.click(screen.getByRole("button", { name: /delete profile/i }));
 
-    expect(confirmSpy).toHaveBeenCalledWith(
-      "This account is going to be deleted. This action cannot be undone. Are you certain?"
-    );
+    expect(screen.getByRole("alertdialog")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Confirm" }));
 
     await waitFor(() => {
       expect(screen.getByText("Home page")).toBeInTheDocument();
     });
 
-    confirmSpy.mockRestore();
-
     authenticateUser("test@email.com")
   });
 
   it("cancels deleting the authenticated user", async () => {
-
-    const confirmSpy = vi
-      .spyOn(window, "confirm")
-      .mockReturnValue(false);
 
     render(
       <MemoryRouter initialEntries={["/account"]}>
@@ -211,24 +201,17 @@ describe("UserPage", () => {
       expect(screen.getByText("Profile")).toBeInTheDocument();
     });
 
-    fireEvent.click(
-      screen.getByRole("button", { name: /delete profile/i })
-    );
+    fireEvent.click(screen.getByRole("button", { name: /delete profile/i }));
 
-    expect(confirmSpy).toHaveBeenCalledWith(
-      "This account is going to be deleted. This action cannot be undone. Are you certain?"
-    );
+    expect(screen.getByRole("alertdialog")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
 
     expect(screen.getByText("Profile")).toBeInTheDocument();
 
-    confirmSpy.mockRestore();
   });
 
   it("displays error page when internal error appears while deleting user", async () => {
-
-    const confirmSpy = vi
-      .spyOn(window, "confirm")
-      .mockReturnValue(true);
 
     const testService: UserService = {
       deleteUserById: async (userId: number) => {
@@ -274,19 +257,16 @@ describe("UserPage", () => {
       expect(screen.getByText("Profile")).toBeInTheDocument();
     });
 
-    fireEvent.click(
-      screen.getByRole("button", { name: /delete profile/i })
-    );
+    fireEvent.click(screen.getByRole("button", { name: /delete profile/i }));
 
-    expect(confirmSpy).toHaveBeenCalledWith(
-      "This account is going to be deleted. This action cannot be undone. Are you certain?"
-    );
+    expect(screen.getByRole("alertdialog")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Confirm" }));
 
     await waitFor(() => {
       expect(screen.getByText("Error page")).toBeInTheDocument();
     });
 
-    confirmSpy.mockRestore();
   });
 
   it("renders the authenticated user's experiences with real API data", async () => {

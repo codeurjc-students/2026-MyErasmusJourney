@@ -5,3 +5,110 @@
 .container{
     padding:3rem;
 }
+
+.alert-dialog-content {
+    width: min(90vw, 40rem);
+    max-width: 40rem;
+    padding: 1.5rem;
+}
+
+.alert-dialog-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.alert-dialog-media {
+    flex-shrink: 0;
+    width: 3.5rem;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.alert-dialog-media svg {
+    width: 1.6rem;
+    height: 1.6rem;
+}
+
+.alert-dialog-text {
+    min-width: 0;
+    flex: 1;
+}
+
+.alert-dialog-title {
+    font-size: 1.5rem !important;
+    line-height: 1.2;
+    font-weight: bold;
+    color: #1E3A5F;
+    margin: 0;
+}
+
+.alert-dialog-description {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #526B86;
+}
+
+.alert-dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+@media (max-width: 40rem) {
+    .alert-dialog-content {
+        width: calc(100vw - 2rem);
+        max-width: none;
+        padding: 1.25rem;
+    }
+
+    .alert-dialog-header {
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .alert-dialog-media {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .alert-dialog-media svg {
+        width: 1.35rem;
+        height: 1.35rem;
+    }
+
+    .alert-dialog-title {
+        font-size: 1.25rem !important;
+    }
+
+    .alert-dialog-description {
+        font-size: 0.9rem;
+    }
+
+    .alert-dialog-footer {
+        flex-direction: column-reverse;
+        width: 100%;
+    }
+
+    .alert-dialog-footer button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 25rem) {
+    .alert-dialog-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .alert-dialog-text {
+        width: 100%;
+    }
+}
