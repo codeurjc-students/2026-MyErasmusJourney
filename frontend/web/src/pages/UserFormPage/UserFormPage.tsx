@@ -1,19 +1,19 @@
 import { createUserService } from "@shared/services/user.service";
 import type { userServiceProps } from "@shared/interfaces/userServiceProps";
+import type { UserDTO } from "@shared/models/UserDTO";
 import { API } from "../../api/client";
 import { useEffect, useState, type FormEvent } from "react";
 import "./UserFormPage.css";
 import { Link, useNavigate } from "react-router-dom";
 import { ApiError } from "@shared/api/apiError";
 import { useUserStore } from "@shared/stores/userStore";
-import type { UserDTO } from "@shared/models/UserDTO";
 import { toast } from "sonner";
 
 interface UserFormPageProps {
     mode: "signup" | "edit";
 }
 
-export default function UserFormPage({mode,userService = createUserService(API)}: UserFormPageProps & userServiceProps) {
+export default function UserFormPage({ mode, userService = createUserService(API) }: UserFormPageProps & userServiceProps) {
 
     const navigate = useNavigate();
     const { user } = useUserStore();
@@ -151,8 +151,11 @@ export default function UserFormPage({mode,userService = createUserService(API)}
                 navigate("/error");
                 return;
             }
-            console.error(`Error signing up: ${error}`);
-            toast.error(`Error signing up: ${error}`);
+            else if (error instanceof Error){
+                console.error(`Error signing up: ${error}`);
+                toast.error(`Error signing up: ${error.message}`);
+            }
+            
         }
     }
 
@@ -179,19 +182,19 @@ export default function UserFormPage({mode,userService = createUserService(API)}
 
             <div className="row-span-1">
 
-                <form onSubmit={isEdit? handleEditSubmit: handleSignUpSubmit}className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                <form onSubmit={isEdit ? handleEditSubmit : handleSignUpSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
 
                     {/* FULL NAME */}
                     <div className="flex flex-col gap-2">
                         <label htmlFor="fullName">Full name</label>
-                        <input type="text" id="fullName" name="fullName" defaultValue={String(userDTO?.fullName ?? "")} required/>
+                        <input type="text" id="fullName" name="fullName" defaultValue={String(userDTO?.fullName ?? "")} required />
                     </div>
 
 
                     {/* IMAGE */}
 
                     <div className="md:row-span-5 flex justify-center items-center">
-                        <img className="w-3/4 max-w-sm h-auto profileImg" src="/images/available_soon.png" alt="opened book with a quill inside a compass"/>
+                        <img className="w-3/4 max-w-sm h-auto profileImg" src="/images/available_soon.png" alt="opened book with a quill inside a compass" />
                     </div>
 
 
@@ -199,7 +202,7 @@ export default function UserFormPage({mode,userService = createUserService(API)}
 
                     <div className="flex flex-col gap-2">
                         <label htmlFor="displayName">Public name</label>
-                        <input type="text" id="displayName" name="displayName" defaultValue={String(userDTO?.displayName ?? "")} required/>
+                        <input type="text" id="displayName" name="displayName" defaultValue={String(userDTO?.displayName ?? "")} required />
                     </div>
 
 
@@ -208,7 +211,7 @@ export default function UserFormPage({mode,userService = createUserService(API)}
                     {isEdit ? (
                         <div className="flex flex-col gap-2">
                             <label htmlFor="studyLocation">Study Location</label>
-                            <input type="text" id="studyLocation" name="studyLocation" defaultValue={String(userDTO?.studyLocation ?? "")}/>
+                            <input type="text" id="studyLocation" name="studyLocation" defaultValue={String(userDTO?.studyLocation ?? "")} />
                         </div>
 
                     ) : (
@@ -216,12 +219,12 @@ export default function UserFormPage({mode,userService = createUserService(API)}
                         <>
                             <div className="flex flex-col gap-2">
                                 <label htmlFor="city">Destination City</label>
-                                <input type="text"id="city"name="city"/>
+                                <input type="text" id="city" name="city" />
                             </div>
 
                             <div className="flex flex-col gap-2">
                                 <label htmlFor="country">Destination Country</label>
-                                <input type="text" id="country"name="country"/>
+                                <input type="text" id="country" name="country" />
                             </div>
                         </>
 
@@ -232,7 +235,7 @@ export default function UserFormPage({mode,userService = createUserService(API)}
 
                     <div className="flex flex-col gap-2">
                         <label htmlFor="email">Email</label>
-                        <input type="email" id="email" name="email" defaultValue={String(userDTO?.email ?? "")} required/>
+                        <input type="email" id="email" name="email" defaultValue={String(userDTO?.email ?? "")} required />
                     </div>
 
 
@@ -242,19 +245,19 @@ export default function UserFormPage({mode,userService = createUserService(API)}
                         <>
                             <div className="flex flex-col gap-2">
                                 <label htmlFor="password">Password</label>
-                                <input type="password" id="password" name="password" required/>
+                                <input type="password" id="password" name="password" required />
                             </div>
 
                             <div className="flex flex-col gap-2">
                                 <label htmlFor="passwordConfirmation">Repeat Password</label>
-                                <input type="password" id="passwordConfirmation" name="passwordConfirmation"required/>
+                                <input type="password" id="passwordConfirmation" name="passwordConfirmation" required />
                             </div>
                         </>
                     )}
 
                     {/* SUBMIT */}
                     <div className="md:col-span-2 flex justify-center mt-4">
-                        <button type="submit">{isEdit? "Save Changes" : "Sign Up"}</button>
+                        <button type="submit">{isEdit ? "Save Changes" : "Sign Up"}</button>
                     </div>
 
                 </form>
@@ -264,7 +267,7 @@ export default function UserFormPage({mode,userService = createUserService(API)}
             {/* LOGIN LINK */}
             {!isEdit && (
                 <div className="row-span-1 flex justify-center">
-                    <p>Do you have an account?{" "}<Link to="/log-in"className="link">Log in →</Link></p>
+                    <p>Do you have an account?{" "}<Link to="/log-in" className="link">Log in →</Link></p>
                 </div>
             )}
 
