@@ -11,10 +11,8 @@ import { createCityService, type CityService } from "@shared/services/city.servi
 import { APIURL } from "src/config/env";
 
 import { useUserStore } from "@shared/stores/userStore";
-import {
-  authenticateUser,
-  clearFetchAndUserStore,
-} from "tests/testAuthentication";
+import { authenticateUser, clearFetchAndUserStore, } from "tests/testAuthentication";
+import { toast } from "sonner";
 import type { CityFormDTO } from "@shared/models/CityFormDTO";
 import { ApiError } from "@shared/api/apiError";
 
@@ -35,6 +33,7 @@ describe("CityFormPage", () => {
   afterAll(() => {
     clearFetchAndUserStore();
   });
+
 
   it("should render the city form with all fields", () => {
 
@@ -147,8 +146,8 @@ describe("CityFormPage", () => {
 
   it("should show an alert when adding an already registered city", async () => {
     const alertSpy = vi
-      .spyOn(window, "alert")
-      .mockImplementation(() => { });
+      .spyOn(toast, "warning")
+      .mockImplementation(() => { return "mock-toast-id" });
 
     const cityName = `VitestCity-${Date.now()}`;
 
@@ -228,9 +227,7 @@ describe("CityFormPage", () => {
     });
 
     expect(alertSpy).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: "City already exists",
-      })
+       "City already exists",
     );
 
     alertSpy.mockRestore();

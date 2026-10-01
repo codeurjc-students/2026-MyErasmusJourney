@@ -3,7 +3,6 @@ package com.myerasmusjourney.backend.system.pages;
 import com.myerasmusjourney.backend.system.AuthenticatedSeleniumTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -133,16 +132,13 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
 
         deleteButton.click();
 
-        wait.until(ExpectedConditions.alertIsPresent());
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div[2]/div[3]/div[2]/div/button[2]")
+        ));
 
-        Alert alert = driver.switchTo().alert();
+        WebElement confirmButton = driver.findElement(By.xpath("/html/body/div[2]/div[3]/div[2]/div/button[2]"));
 
-        assertEquals(
-                "This account is going to be deleted. This action cannot be undone. Are you certain?",
-                alert.getText()
-        );
-
-        alert.accept();
+        confirmButton.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.className("mainInfo")
@@ -162,16 +158,13 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
 
         deleteButton.click();
 
-        wait.until(ExpectedConditions.alertIsPresent());
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div[2]/div[3]/div[2]/div/button[1]")
+        ));
 
-        Alert alert = driver.switchTo().alert();
+        WebElement cancelButton = driver.findElement(By.xpath("/html/body/div[2]/div[3]/div[2]/div/button[1]"));
 
-        assertEquals(
-                "This account is going to be deleted. This action cannot be undone. Are you certain?",
-                alert.getText()
-        );
-
-        alert.dismiss();
+        cancelButton.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("profileTitle")

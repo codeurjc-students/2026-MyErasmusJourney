@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { API } from "../../api/client";
 import { ApiError } from "@shared/api/apiError";
+import { toast } from "sonner";
 
 interface CommentsProps {
     userComments: CommentSimpleDTO[] | undefined;
@@ -44,6 +45,11 @@ export default function UserComments({ userService = createUserService(API), com
                 navigate("/error");
                 return;
             }
+            else if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error("An unexpected error occurred");
+            }
         }
     };
 
@@ -59,7 +65,11 @@ export default function UserComments({ userService = createUserService(API), com
                 navigate("/error");
                 return;
             }
-            alert("Failed to delete comment. Please try again later.");
+            else if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error("An unexpected error occurred");
+            }
         }
     }
 
@@ -94,7 +104,7 @@ export default function UserComments({ userService = createUserService(API), com
                                         👁
                                     </Link>
 
-                                    <button type="button" aria-label={`Delete ${comment.description}`} onClick={() => {handleDeleteComment(comment.id)}} className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#4A90D9] text-white hover:opacity-80 transition">
+                                    <button type="button" aria-label={`Delete ${comment.description}`} onClick={() => { handleDeleteComment(comment.id) }} className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#4A90D9] text-white hover:opacity-80 transition">
                                         🗑
                                     </button>
                                 </div>

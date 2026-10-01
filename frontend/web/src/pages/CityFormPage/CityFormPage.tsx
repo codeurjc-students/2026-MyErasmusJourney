@@ -5,6 +5,7 @@ import type { CityFormDTO } from "@shared/models/CityFormDTO";
 import { useNavigate } from "react-router-dom";
 import type { FormEvent } from "react";
 import { ApiError } from "@shared/api/apiError";
+import { toast } from "sonner";
 
 export default function CityFormPage({ cityService = createCityService(API) }: cityServiceProps) {
 
@@ -37,11 +38,14 @@ export default function CityFormPage({ cityService = createCityService(API) }: c
             if (error instanceof ApiError && error.status >= 500) {
                 navigate("/error");
                 return;
-            }else if (error instanceof ApiError && error.status >= 200) {
-                alert(error);
+            } else if (error instanceof ApiError && error.status >= 200) {
+                toast.warning(error.message);
             }
-            console.error(error);
-            return;
+            else if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error("An unexpected error occurred");
+            }
         }
     }
 
