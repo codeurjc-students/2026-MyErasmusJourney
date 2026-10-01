@@ -133,10 +133,10 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
         deleteButton.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//*[@id=\"_r_0_\"]")
+                By.xpath("/html/body/div[2]/div[3]/div[2]/div/button[2]")
         ));
 
-        WebElement confirmButton = driver.findElement(By.xpath("/html/body/div[2]/div[3]/div[2]/button[2]"));
+        WebElement confirmButton = driver.findElement(By.xpath("/html/body/div[2]/div[3]/div[2]/div/button[2]"));
 
         confirmButton.click();
 
@@ -159,10 +159,10 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
         deleteButton.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//*[@id=\"_r_0_\"]")
+                By.xpath("/html/body/div[2]/div[3]/div[2]/div/button[1]")
         ));
 
-        WebElement cancelButton = driver.findElement(By.xpath("/html/body/div[2]/div[3]/div[2]/button[1]"));
+        WebElement cancelButton = driver.findElement(By.xpath("/html/body/div[2]/div[3]/div[2]/div/button[1]"));
 
         cancelButton.click();
 

@@ -80,6 +80,10 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
 
         goToExperience();
 
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.linkText("Sign in")
+        ));
+
         WebElement signInLink = driver.findElement(By.linkText("Sign in"));
         signInLink.click();
 
