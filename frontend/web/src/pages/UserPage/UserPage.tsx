@@ -146,7 +146,7 @@ export default function UserPage({ authService = createAuthService(API), userSer
                                         <Trash2Icon />
                                     </AlertDialogMedia>
 
-                                    <div className="alert-dialog-text">
+                                    <div className="alert-dialog-body">
                                         <AlertDialogTitle className="alert-dialog-title">Delete your account?</AlertDialogTitle>
 
                                         <AlertDialogDescription className="alert-dialog-description">
@@ -156,8 +156,10 @@ export default function UserPage({ authService = createAuthService(API), userSer
                                 </AlertDialogHeader>
 
                                 <AlertDialogFooter className="alert-dialog-footer">
-                                    <AlertDialogCancel variant="outline">Cancel</AlertDialogCancel>
-                                    <AlertDialogAction variant="destructive" onClick={deleteAccount}>Confirm</AlertDialogAction>
+                                    <div className="alert-dialog-actions">
+                                        <AlertDialogCancel variant="outline">Cancel</AlertDialogCancel>
+                                        <AlertDialogAction variant="destructive" onClick={deleteAccount}>Confirm</AlertDialogAction>
+                                    </div>
                                 </AlertDialogFooter>
                             </AlertDialogContent>
                         </AlertDialog>
