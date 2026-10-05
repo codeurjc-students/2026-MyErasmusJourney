@@ -12,6 +12,7 @@ import type { CommentDTO } from "@shared/models/CommentDTO";
 import { useUserStore } from "@shared/stores/userStore";
 import { ApiError } from "@shared/api/apiError";
 import type { CommentService } from "@shared/services/comment.service";
+import { toast } from "sonner";
 
 const mockNavigate = vi.fn();
 
@@ -444,7 +445,7 @@ describe("UserComments", () => {
 
     const mockDeleteComment = vi
       .fn()
-      .mockRejectedValue(new ApiError(403, "Delete failed"));
+      .mockRejectedValue(new ApiError(403, "Failed to delete comment. Please try again later."));
 
     const mockGetComments = vi
       .fn()
@@ -466,8 +467,8 @@ describe("UserComments", () => {
     };
 
     const alertSpy = vi
-      .spyOn(window, "alert")
-      .mockImplementation(() => { });
+      .spyOn(toast, "error")
+      .mockImplementation(() => {return "mock-toast-id"});
 
     render(
       <MemoryRouter>

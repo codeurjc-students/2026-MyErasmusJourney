@@ -6,6 +6,7 @@ import { useUserStore } from '@shared/stores/userStore.ts';
 import { createUserService } from '@shared/services/user.service.ts';
 import { API } from './api/client.ts';
 import type { userServiceProps } from '@shared/interfaces/userServiceProps.ts';
+import { Toaster } from "../@/components/ui/sonner";
 
 
 function App({userService = createUserService(API)}: userServiceProps) {
@@ -30,6 +31,7 @@ function App({userService = createUserService(API)}: userServiceProps) {
     <>
       <Header/>
       <Outlet/>
+      <Toaster />
     </>
   )
 }

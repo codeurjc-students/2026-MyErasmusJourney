@@ -6,6 +6,7 @@ import "@testing-library/jest-dom";
 import CityFormPage from "../../../src/pages/CityFormPage/CityFormPage";
 import type { CityService } from "@shared/services/city.service";
 import { ApiError } from "@shared/api/apiError";
+import { toast } from "sonner";
 
 const mockNavigate = vi.fn();
 
@@ -165,8 +166,7 @@ describe("CityFormPage", () => {
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
-  it("should show an alert when adding the city fails", async () => {
-
+  it("should show a warning toast when adding the city fails", async () => {
     const errorMessage = "City already exists";
 
     const mockAddCity = vi
@@ -175,13 +175,12 @@ describe("CityFormPage", () => {
 
     const mockCityService: CityService = {
       addCity: mockAddCity,
-      getAll: vi.fn()
-
+      getAll: vi.fn(),
     };
 
-    const alertSpy = vi
-      .spyOn(window, "alert")
-      .mockImplementation(() => { });
+    const warningSpy = vi
+      .spyOn(toast, "warning")
+      .mockImplementation(() => "mock-toast-id");
 
     render(
       <MemoryRouter>
@@ -212,9 +211,9 @@ describe("CityFormPage", () => {
         description: "A beautiful city.",
       });
 
-      expect(alertSpy).toHaveBeenCalled();
+      expect(warningSpy).toHaveBeenCalledWith(errorMessage);
     });
-
+    
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 

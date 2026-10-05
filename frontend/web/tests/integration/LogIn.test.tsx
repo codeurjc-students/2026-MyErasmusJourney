@@ -11,6 +11,7 @@ import { createAuthService, type AuthService } from "@shared/services/auth.servi
 import { useUserStore } from "@shared/stores/userStore";
 import { ApiError } from "@shared/api/apiError";
 import type { LoginRequest } from "@shared/models/LoginRequest";
+import { toast } from "sonner";
 
 const testAPI = createApiClient(APIURL);
 const testUserService = createUserService(testAPI);
@@ -44,8 +45,9 @@ describe("LogInPage", () => {
 
   it("should show alert when email is empty", async () => {
 
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => { });
-    vi.spyOn(window, "alert").mockImplementation(() => { });
+    const alertSpy = vi
+      .spyOn(toast, "warning")
+      .mockImplementation(() => { return "mock-toast-id" });
 
     render(
       <MemoryRouter initialEntries={["/log-in"]}>
@@ -70,8 +72,9 @@ describe("LogInPage", () => {
 
   it("should show error alert when log in fails", async () => {
 
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => { });
-    vi.spyOn(window, "alert").mockImplementation(() => { });
+    const alertSpy = vi
+      .spyOn(toast, "error")
+      .mockImplementation(() => { return "mock-toast-id" });
 
     render(
       <MemoryRouter initialEntries={["/log-in"]}>

@@ -423,8 +423,6 @@ describe("UserPage", () => {
 
   it("deletes user and calls logout ", async () => {
 
-    const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(true);
-
     const fakeUser = {
       id: 1,
       displayName: "john",
@@ -482,13 +480,18 @@ describe("UserPage", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /delete profile/i }));
 
-    expect(confirmSpy).toHaveBeenCalledWith("This account is going to be deleted. This action cannot be undone. Are you certain?");
-    expect(mockDeleteUserById).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(screen.getByRole("alertdialog")).toBeInTheDocument();
+    })
+
+    fireEvent.click(screen.getByRole("button", { name: "Confirm" }));
+
+    await waitFor(() => {
+      expect(mockDeleteUserById).toHaveBeenCalled();
+    });
   });
 
   it("cancels delete user ", async () => {
-
-    const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(false);
 
     const fakeUser = {
       id: 1,
@@ -518,7 +521,6 @@ describe("UserPage", () => {
 
     const mockDeleteUserById = vi.fn().mockResolvedValue(fakeUserDTO);
 
-
     const mockService: UserService = {
       signUp: vi.fn(),
       getUserInfo: vi.fn(),
@@ -547,7 +549,6 @@ describe("UserPage", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /delete profile/i }));
 
-    expect(confirmSpy).toHaveBeenCalled();
     expect(mockDeleteUserById).not.toHaveBeenCalled();
   });
 

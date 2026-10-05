@@ -5,6 +5,7 @@ import "@testing-library/jest-dom";
 import UserFormPage from "../../../src/pages/UserFormPage/UserFormPage";
 import type { UserService } from "@shared/services/user.service";
 import { ApiError } from "@shared/api/apiError";
+import { toast } from "sonner";
 
 const mockNavigate = vi.fn();
 
@@ -115,7 +116,9 @@ describe("SignUpPage", () => {
       updateUser: vi.fn(),
     };
 
-    window.alert = vi.fn();
+    const alertSpy = vi
+      .spyOn(toast, "warning")
+      .mockImplementation(() => {return "mock-toast-id"});
 
     render(
       <MemoryRouter>
@@ -138,7 +141,7 @@ describe("SignUpPage", () => {
 
     fireEvent.click(submitButton);
 
-    expect(window.alert).toHaveBeenCalledWith("Passwords do not match");
+    expect(alertSpy).toHaveBeenCalledWith("Passwords do not match");
     expect(mockSignUp).not.toHaveBeenCalled();
   });
 
@@ -156,7 +159,9 @@ describe("SignUpPage", () => {
       updateUser: vi.fn(),
     };
 
-    window.alert = vi.fn();
+    const alertSpy = vi
+      .spyOn(toast, "error")
+      .mockImplementation(() => {return "mock-toast-id"});
     console.log = vi.fn();
 
     render(
@@ -181,7 +186,7 @@ describe("SignUpPage", () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith(
+      expect(alertSpy).toHaveBeenCalledWith(
         expect.stringContaining("Error signing up")
       );
     });
@@ -695,8 +700,8 @@ describe("UserFormPage", () => {
   it("should show an error alert when updating the user fails", async () => {
 
     const alertSpy = vi
-      .spyOn(window, "alert")
-      .mockImplementation(() => { });
+      .spyOn(toast, "error")
+      .mockImplementation(() => {return "mock-toast-id"});
 
     const editTestService: UserService = {
       getUserById: async (id: number) => {

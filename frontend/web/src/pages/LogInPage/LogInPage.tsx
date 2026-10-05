@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { createUserService } from "@shared/services/user.service";
 import type { userServiceProps } from "@shared/interfaces/userServiceProps";
 import { ApiError } from "@shared/api/apiError";
+import { toast } from "sonner";
 
 
 export default function LogInPage({ authService = createAuthService(API), userService = createUserService(API) }: authServiceProps & userServiceProps) {
@@ -32,12 +33,12 @@ export default function LogInPage({ authService = createAuthService(API), userSe
         const password = formData.get("password") as string;
 
         if (username === "") {
-            alert("Email missing");
+            toast.warning("Email missing");
             return;
         }
 
         if (password === "") {
-            alert("Passwords needed");
+            toast.warning("Passwords needed");
             return;
         }
 
@@ -59,7 +60,7 @@ export default function LogInPage({ authService = createAuthService(API), userSe
                 return;
             }
             console.error(`Error logging in: ${error}`);
-            alert(`Error logging in: ${error}`);
+            toast.error(`Error logging in: ${error}`);
             return;
         }
     }

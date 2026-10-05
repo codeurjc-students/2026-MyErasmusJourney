@@ -1,0 +1,95 @@
+.cn-toast {
+    width: 100%;
+    max-width: 30rem;
+    padding: 1rem 1.25rem;
+    background-color: #F7FBFF !important;
+    color: #1E3A5F !important;
+    border: 0.1rem solid #D5E1EE !important;
+    border-radius: 1.25rem !important;
+    box-shadow: 0.35rem 0.35rem 0.75rem rgba(213, 225, 238, 0.9),
+                0.75rem 0.75rem 1rem rgba(213, 225, 238, 0.5) !important;
+    font-family: "Inter", sans-serif;
+}
+
+.cn-toast-title {
+    color: #1E3A5F !important;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.cn-toast-description {
+    color: #4A6380 !important;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.cn-toast-close {
+    color: #4A90C2 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.cn-toast-success {
+    border-left: 0.3rem solid #63C7BE !important;
+}
+
+.cn-toast-error {
+    border-left: 0.3rem solid #E56B6F !important;
+}
+
+.cn-toast-warning {
+    border-left: 0.3rem solid #F4B25E !important;
+}
+
+.cn-toast-info {
+    border-left: 0.3rem solid #4A90D9 !important;
+}
+
+.cn-toast-loading {
+    border-left: 0.3rem solid #4A90D9 !important;
+}
+
+@media (max-width: 40rem) {
+    .cn-toast {
+        width: calc(100vw - 2rem);
+        max-width: none;
+        padding: 0.9rem 1rem;
+    }
+
+    .cn-toast-title {
+        font-size: 0.95rem;
+    }
+
+    .cn-toast-description {
+        font-size: 0.85rem;
+    }
+}
+
+.toast-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    min-width: 1.25rem;
+    flex-shrink: 0;
+    background: transparent !important;
+}
+
+.cn-toast-success .toast-icon {
+    color: #2FA89A;
+}
+
+.cn-toast-error .toast-icon {
+    color: #D94F55;
+}
+
+.cn-toast-warning .toast-icon {
+    color: #E49632;
+}
+
+.cn-toast-info .toast-icon {
+    color: #4A90D9;
+}
+
+.cn-toast-loading .toast-icon {
+    color: #4A90D9;
+}

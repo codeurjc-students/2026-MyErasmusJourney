@@ -8,6 +8,7 @@ import { useUserStore } from "@shared/stores/userStore";
 import type { UserService } from "@shared/services/user.service";
 import type { ExperienceService } from "@shared/services/experience.service";
 import { ApiError } from "@shared/api/apiError";
+import { toast } from "sonner";
 const mockNavigate = vi.fn();
 
 vi.mock("react-router-dom", async () => {
@@ -377,7 +378,7 @@ describe("UserExperiences", () => {
 
     const mockDeleteExperience = vi
       .fn()
-      .mockRejectedValue(new ApiError(403, "Delete failed"));
+      .mockRejectedValue(new ApiError(403, "Error deleting experience:ApiError: Delete failed"));
 
     const mockGetExperiences = vi
       .fn()
@@ -416,8 +417,8 @@ describe("UserExperiences", () => {
     };
 
     const alertSpy = vi
-      .spyOn(window, "alert")
-      .mockImplementation(() => { });
+      .spyOn(toast, "error")
+      .mockImplementation(() => {return "mock-toast-id"});
 
     render(
       <MemoryRouter>

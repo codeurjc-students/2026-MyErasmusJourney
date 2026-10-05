@@ -1,4 +1,5 @@
 import type { userServiceProps } from "@shared/interfaces/userServiceProps";
+import type { authServiceProps } from "@shared/interfaces/authServiceProps";
 import type { UserDTO } from "@shared/models/UserDTO";
 import { createUserService } from "@shared/services/user.service";
 import { API } from "../../api/client";
@@ -7,10 +8,22 @@ import { useUserStore } from "@shared/stores/userStore";
 import { useNavigate } from "react-router-dom";
 import "./UserPage.css";
 import { createAuthService } from "@shared/services/auth.service";
-import type { authServiceProps } from "@shared/interfaces/authServiceProps";
 import UserExperiences from "../../components/UserExperiences/UserExperiences";
 import UserComments from "../../components/UserComments/UserComments";
 import { ApiError } from "@shared/api/apiError";
+import { Trash2Icon } from "lucide-react"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogMedia,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "../../../@/components/ui/alert-dialog"
 
 export default function UserPage({ authService = createAuthService(API), userService = createUserService(API) }: authServiceProps & userServiceProps) {
 
@@ -70,12 +83,8 @@ export default function UserPage({ authService = createAuthService(API), userSer
     }
 
     async function deleteAccount() {
-        const confirmed = window.confirm("This account is going to be deleted. This action cannot be undone. Are you certain?");
-        if (!confirmed) {
-            return;
-        }
         if (user?.id) {
-            try{
+            try {
                 await userService.deleteUserById(user.id);
                 await logOut();
             }
@@ -127,7 +136,54 @@ export default function UserPage({ authService = createAuthService(API), userSer
                             : null
                         }
                         <button className="button" onClick={updateUser}>Edit Profile</button>
-                        <button className="button" onClick={deleteAccount}>Delete Profile</button>
+
+                        <AlertDialog>
+    <AlertDialogTrigger render={<button className="button">Delete Profile</button>} />
+
+    <AlertDialogContent
+        size="sm"
+        className="container alert-dialog-content"
+    >
+        <AlertDialogHeader className="alert-dialog-header">
+
+            <AlertDialogMedia
+                className="alert-dialog-media bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive"
+            >
+                <Trash2Icon />
+            </AlertDialogMedia>
+
+            <div className="alert-dialog-body">
+                <AlertDialogTitle className="alert-dialog-title">
+                    Delete your account?
+                </AlertDialogTitle>
+
+                <AlertDialogDescription className="alert-dialog-description">
+                    This action cannot be undone. Your account and associated
+                    data will be permanently deleted.
+                </AlertDialogDescription>
+            </div>
+
+        </AlertDialogHeader>
+
+        <AlertDialogFooter className="alert-dialog-footer">
+
+            <div className="alert-dialog-actions">
+                <AlertDialogCancel variant="outline">
+                    Cancel
+                </AlertDialogCancel>
+
+                <AlertDialogAction
+                    variant="destructive"
+                    onClick={deleteAccount}
+                >
+                    Confirm
+                </AlertDialogAction>
+            </div>
+
+        </AlertDialogFooter>
+    </AlertDialogContent>
+</AlertDialog>
+
                         <button className="button" onClick={addExperience}>New Experience</button>
                     </div>
 
