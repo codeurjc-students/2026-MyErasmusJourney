@@ -5,86 +5,101 @@
 
 @custom-variant dark (&:is(.dark *));
 
-:root{
-  background-color: #DCEFFD;
+:root {
+  --radius: 0.75rem;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: 1.5rem;
+  --radius-4xl: calc(var(--radius) * 2.6);
+  background-color: #dceffd;
   font-family: "Inter", sans-serif;
-  color: #1E3A5F;
+  color: #1e3a5f;
   text-align: left;
 }
 
-p{
-  color: #1E3A5F;
+p {
+  color: #1e3a5f;
   text-align: left;
 }
 
-h2, h3, h4{
+h2,
+h3,
+h4 {
   font-weight: bold;
 }
 
-h2{
+h2 {
   font-size: 3rem;
 }
 
-h3{
+h3 {
   font-size: 2rem;
 }
 
-h4{
+h4 {
   font-size: 1.5rem;
 }
 
-.link{
-  color: #4A90C2;
+.link {
+  color: #4a90c2;
 }
 
-.container, .card{
+.container,
+.card {
   padding: 1.5rem;
-  background-color: #F7FBFF;
+  background-color: #f7fbff;
   border-radius: 1.25rem;
-  box-shadow: 0.35rem 0.35rem 0.75rem rgba(213, 225, 238, 0.9),
-              0.75rem 0.75rem 1rem rgba(213, 225, 238, 0.5);
+  box-shadow:
+    0.35rem 0.35rem 0.75rem rgba(213, 225, 238, 0.9),
+    0.75rem 0.75rem 1rem rgba(213, 225, 238, 0.5);
 }
 
-img{
-    max-width: 100%;
-    height: auto;
-    display: block;
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
-label{
+label {
   font-size: 1.1rem;
   margin-left: 0.75rem;
   margin-bottom: -0.5rem;
   text-decoration: underline;
 }
 
-input, textarea, select{
+input,
+textarea,
+select {
   padding: 0.4rem;
   margin-bottom: 0.25rem;
   max-width: 30rem;
-  background-color: #F7FBFF;
+  background-color: #f7fbff;
   border-radius: 1.25rem;
-  border: 0.1rem solid #D5E1EE;
-  box-shadow: 0.4rem 0.4rem 0.85rem rgba(213, 225, 238, 0.95),
-              0.9rem 0.9rem 1.1rem rgba(213, 225, 238, 0.6);
+  border: 0.1rem solid #d5e1ee;
+  box-shadow:
+    0.4rem 0.4rem 0.85rem rgba(213, 225, 238, 0.95),
+    0.9rem 0.9rem 1.1rem rgba(213, 225, 238, 0.6);
 }
 
-button{
-  background-color: #4A90D9;
+button {
+  background-color: #4a90d9;
   padding: 0.5rem 1rem;
   border-radius: 1.25rem;
   color: white;
 }
 
-.title{
-    text-align: center;
-    padding: 1rem;
-    max-width: 100%;
+.title {
+  text-align: center;
+  padding: 1rem;
+  max-width: 100%;
 }
 
 @theme inline {
   --font-heading: var(--font-sans);
-  --font-sans: 'Inter Variable', sans-serif;
+  --font-sans: "Inter Variable", sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -121,7 +136,7 @@ button{
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
   --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-3xl: 1.5rem;
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 

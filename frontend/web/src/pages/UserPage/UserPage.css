@@ -1,9 +1,9 @@
-.mainProfileImage{
+.mainProfileImage {
     max-height: 10rem;
 }
 
-.container{
-    padding:3rem;
+.container {
+    padding: 3rem;
 }
 
 .alert-dialog-content {
@@ -61,15 +61,36 @@
 }
 
 .alert-dialog-footer {
-    display: grid !important;
-    grid-template-columns: auto minmax(0, 1fr);
-    margin-top: 1.25rem;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.75rem;
     padding: 0;
 }
 
 .alert-dialog-actions {
-    grid-column: 2;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 0.75rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .container {
+        padding: 1.5rem;
+    }
+
+    .alert-dialog-content {
+        width: 90vw;
+        padding: 1.5rem;
+    }
+
+    .alert-dialog-footer {
+        grid-template-columns: 1fr;
+    }
+
+    .alert-dialog-actions {
+        grid-column: 1;
+        justify-content: flex-end;
+    }
 }

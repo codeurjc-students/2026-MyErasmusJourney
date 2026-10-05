@@ -138,31 +138,51 @@ export default function UserPage({ authService = createAuthService(API), userSer
                         <button className="button" onClick={updateUser}>Edit Profile</button>
 
                         <AlertDialog>
-                            <AlertDialogTrigger render={<button className="button">Delete Profile</button>} />
+    <AlertDialogTrigger render={<button className="button">Delete Profile</button>} />
 
-                            <AlertDialogContent size="sm" className="container alert-dialog-content">
-                                <AlertDialogHeader className="alert-dialog-header">
-                                    <AlertDialogMedia className="alert-dialog-media bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive">
-                                        <Trash2Icon />
-                                    </AlertDialogMedia>
+    <AlertDialogContent
+        size="sm"
+        className="container alert-dialog-content"
+    >
+        <AlertDialogHeader className="alert-dialog-header">
 
-                                    <div className="alert-dialog-body">
-                                        <AlertDialogTitle className="alert-dialog-title">Delete your account?</AlertDialogTitle>
+            <AlertDialogMedia
+                className="alert-dialog-media bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive"
+            >
+                <Trash2Icon />
+            </AlertDialogMedia>
 
-                                        <AlertDialogDescription className="alert-dialog-description">
-                                            This action cannot be undone. Your account and associated data will be permanently deleted.
-                                        </AlertDialogDescription>
-                                    </div>
-                                </AlertDialogHeader>
+            <div className="alert-dialog-body">
+                <AlertDialogTitle className="alert-dialog-title">
+                    Delete your account?
+                </AlertDialogTitle>
 
-                                <AlertDialogFooter className="alert-dialog-footer">
-                                    <div className="alert-dialog-actions">
-                                        <AlertDialogCancel variant="outline">Cancel</AlertDialogCancel>
-                                        <AlertDialogAction variant="destructive" onClick={deleteAccount}>Confirm</AlertDialogAction>
-                                    </div>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
+                <AlertDialogDescription className="alert-dialog-description">
+                    This action cannot be undone. Your account and associated
+                    data will be permanently deleted.
+                </AlertDialogDescription>
+            </div>
+
+        </AlertDialogHeader>
+
+        <AlertDialogFooter className="alert-dialog-footer">
+
+            <div className="alert-dialog-actions">
+                <AlertDialogCancel variant="outline">
+                    Cancel
+                </AlertDialogCancel>
+
+                <AlertDialogAction
+                    variant="destructive"
+                    onClick={deleteAccount}
+                >
+                    Confirm
+                </AlertDialogAction>
+            </div>
+
+        </AlertDialogFooter>
+    </AlertDialogContent>
+</AlertDialog>
 
                         <button className="button" onClick={addExperience}>New Experience</button>
                     </div>
