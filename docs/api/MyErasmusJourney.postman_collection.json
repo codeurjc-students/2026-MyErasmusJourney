@@ -208,7 +208,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{APIURL}}/experiences/query?page=0&size=5&categories=Studies",
+              "raw": "{{APIURL}}/experiences/query?page=0&categories=Studies&size=6",
               "host": [
                 "{{APIURL}}"
               ],
@@ -227,12 +227,12 @@
                   "value": "0"
                 },
                 {
-                  "key": "size",
-                  "value": "5"
-                },
-                {
                   "key": "categories",
                   "value": "Studies"
+                },
+                {
+                  "key": "size",
+                  "value": "6"
                 }
               ]
             }
@@ -560,6 +560,24 @@
               "path": [
                 "cities",
                 ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Trending Cities",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{APIURL}}/cities/trending",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "cities",
+                "trending"
               ]
             }
           },
