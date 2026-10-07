@@ -79,7 +79,7 @@ public class CityService {
     }
 
     @Transactional
-    public Collection<CitySimpleDTO> getTrendingCities() {
+    public List<CitySimpleDTO> getTrendingCities() {
         List <City> cities = cityRepository.findAll();
         List<Experience> experiences;
         List<Map.Entry<Double, City>> trendingCities = new ArrayList<>();
@@ -89,34 +89,36 @@ public class CityService {
 
         int totalExperiences = 0;
         for (City city: cities){
-            experiences = cityRepository.findRecentExperiencesOfCity(city.getName(), city.getCountry(), LocalDate.now(),LocalDate.now().minusDays(14));
-            float recentRating = 0;
-            float previousRating = 0;
+            experiences = cityRepository.findRecentExperiencesOfCity(city.getName(), city.getCountry(), LocalDate.now().minusDays(14),LocalDate.now());
+            float totalRecentRating = 0;
+            float totalPreviousRating = 0;
             float cityRatingTrend = 0;
             float cityPublicationGrowth = 0;
             int previousExperiences = 0;
             int recentExperiences = 0;
 
             for(Experience experience: experiences){
-                if (experience.getDate().isBefore(LocalDate.now().minusDays(8))){
-                    recentRating += experience.getRating();
+                if (experience.getDate().isAfter(LocalDate.now().minusDays(8))){
+                    totalRecentRating += experience.getRating();
                     recentExperiences++;
                 }
                 else{
-                    previousRating += experience.getRating();
+                    totalPreviousRating += experience.getRating();
                     previousExperiences ++;
                 }
             }
 
             if (!experiences.isEmpty()){
+                float recentRating = totalRecentRating/recentExperiences;
+                float previousRating = totalPreviousRating/previousExperiences;
                 if (previousRating >0) cityRatingTrend = (recentRating/previousRating) - 1;
-                else cityRatingTrend = recentRating - 1;
+                else cityRatingTrend = Math.min(1, recentRating);
                 if (previousExperiences>0) cityPublicationGrowth =  ((float) recentExperiences /previousExperiences) - 1;
-                else cityPublicationGrowth = recentRating - 1;
+                else cityPublicationGrowth = 1;
             }
             totalExperiences += experiences.size();
-            ratingTrend.put(city, cityRatingTrend);
-            publicationGrowth.put(city, cityPublicationGrowth);
+            ratingTrend.put(city, Math.max(0, cityRatingTrend));
+            publicationGrowth.put(city, Math.max(0, cityPublicationGrowth));
             nCityExperiences.put(city, experiences.size());
         }
 
@@ -126,6 +128,6 @@ public class CityService {
         }
         trendingCities.sort(Map.Entry.<Double, City>comparingByKey().reversed());
 
-        return cityMapper.toSimpleDTOs(trendingCities.stream().map(Map.Entry::getValue).toList());
+        return cityMapper.toSimpleDTOs(trendingCities.stream().map(Map.Entry::getValue).toList().subList(0,4));
     }
 }
