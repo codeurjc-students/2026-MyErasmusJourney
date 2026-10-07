@@ -6,9 +6,10 @@ import com.myerasmusjourney.backend.dto.CitySimpleDTO;
 import org.mapstruct.Mapper;
 
 import java.util.Collection;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CityMapper {
     CityDTO toDTO(City city);
-    Collection<CitySimpleDTO> toSimpleDTOs(Collection<City> cities);
+    List<CitySimpleDTO> toSimpleDTOs(Collection<City> cities);
 }
