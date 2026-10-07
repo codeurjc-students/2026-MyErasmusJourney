@@ -22,6 +22,16 @@ public class CityRestController {
         return cityService.getCities();
     }
 
+    @GetMapping("/trending")
+    public Collection<CitySimpleDTO> getTrendingCities(){
+        return cityService.getTrendingCities();
+    }
+
+    @GetMapping("/{id}")
+    public CityDTO getCity(@PathVariable Long id){
+        return cityService.getCity(id);
+    }
+
     @PostMapping("/")
     public ResponseEntity<CityDTO> createCity(@RequestBody CityFormDTO cityFormDTO){
         CityService.CityResult result = cityService.addCity(cityFormDTO);
@@ -30,4 +40,6 @@ public class CityRestController {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cityDTO.id()).toUri();
         return ResponseEntity.created(location).body(cityDTO);
     }
+
+
 }

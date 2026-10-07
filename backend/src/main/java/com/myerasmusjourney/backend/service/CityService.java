@@ -11,10 +11,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,6 +59,11 @@ public class CityService {
         return cityMapper.toSimpleDTOs(cities);
     }
 
+    @Transactional
+    public CityDTO getCity(Long id) {
+        return cityMapper.toDTO(findById(id));
+    }
+
     public City findById(Long id) {
         return cityRepository.findById(id).orElseThrow(() -> new NoSuchElementException("City not found"));
     }
@@ -73,5 +76,56 @@ public class CityService {
 
     public void emptyCities(){
         cityRepository.deleteAll();
+    }
+
+    @Transactional
+    public Collection<CitySimpleDTO> getTrendingCities() {
+        List <City> cities = cityRepository.findAll();
+        List<Experience> experiences;
+        List<Map.Entry<Double, City>> trendingCities = new ArrayList<>();
+        HashMap<City, Float> publicationGrowth = new HashMap<>();
+        HashMap<City, Float> ratingTrend = new HashMap<>();
+        HashMap<City, Integer> nCityExperiences = new HashMap<>();
+
+        int totalExperiences = 0;
+        for (City city: cities){
+            experiences = cityRepository.findRecentExperiencesOfCity(city.getName(), city.getCountry(), LocalDate.now(),LocalDate.now().minusDays(14));
+            float recentRating = 0;
+            float previousRating = 0;
+            float cityRatingTrend = 0;
+            float cityPublicationGrowth = 0;
+            int previousExperiences = 0;
+            int recentExperiences = 0;
+
+            for(Experience experience: experiences){
+                if (experience.getDate().isBefore(LocalDate.now().minusDays(8))){
+                    recentRating += experience.getRating();
+                    recentExperiences++;
+                }
+                else{
+                    previousRating += experience.getRating();
+                    previousExperiences ++;
+                }
+            }
+
+            if (!experiences.isEmpty()){
+                if (previousRating >0) cityRatingTrend = (recentRating/previousRating) - 1;
+                else cityRatingTrend = recentRating - 1;
+                if (previousExperiences>0) cityPublicationGrowth =  ((float) recentExperiences /previousExperiences) - 1;
+                else cityPublicationGrowth = recentRating - 1;
+            }
+            totalExperiences += experiences.size();
+            ratingTrend.put(city, cityRatingTrend);
+            publicationGrowth.put(city, cityPublicationGrowth);
+            nCityExperiences.put(city, experiences.size());
+        }
+
+        for(City city: cities){
+            Double trendingScore = 0.3 * publicationGrowth.get(city) + 0.3 * ((float) nCityExperiences.get(city) /totalExperiences) + 0.4 * ratingTrend.get(city);
+            trendingCities.add(Map.entry(trendingScore, city));
+        }
+        trendingCities.sort(Map.Entry.<Double, City>comparingByKey().reversed());
+
+        return cityMapper.toSimpleDTOs(trendingCities.stream().map(Map.Entry::getValue).toList());
     }
 }
