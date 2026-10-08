@@ -11,4 +11,5 @@ export const ROUTES = {
     CITY_FORM: "/cities/new",
     AVAILABLE_SOON: "/available-soon",
     ERROR_PAGE: "*",
+    CITIES: "/cities",
 };
