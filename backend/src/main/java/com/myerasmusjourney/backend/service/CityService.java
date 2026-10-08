@@ -128,6 +128,10 @@ public class CityService {
         }
         trendingCities.sort(Map.Entry.<Double, City>comparingByKey().reversed());
 
-        return cityMapper.toSimpleDTOs(trendingCities.stream().map(Map.Entry::getValue).toList().subList(0,4));
+        if(trendingCities.size()>7) {
+            return cityMapper.toSimpleDTOs(trendingCities.stream().map(Map.Entry::getValue).toList().subList(0,7));
+        }
+
+        return cityMapper.toSimpleDTOs(trendingCities.stream().map(Map.Entry::getValue).toList());
     }
 }
