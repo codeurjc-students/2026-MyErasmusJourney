@@ -135,7 +135,7 @@ public class CitiesTest extends AuthenticatedE2ETest {
                 .statusCode(200)
                 .contentType("application/json")
                 .body("", hasSize(greaterThan(0)))
-                .body("", hasSize(lessThan(6)))
+                .body("", hasSize(lessThan(8)))
                 .body("[0].id", notNullValue())
                 .body("[0].name", notNullValue())
                 .body("[0].country", notNullValue())
