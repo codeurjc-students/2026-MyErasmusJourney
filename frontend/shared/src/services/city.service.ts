@@ -8,6 +8,7 @@ export function createCityService(api:ApiClient) {
   return {
     addCity: (body:CityFormDTO) => addCity(api, body),
     getAll: () => getAll(api),
+    getTrending: () => getTrending(api)
   };
 }
 
@@ -28,6 +29,16 @@ async function addCity(api: ApiClient, body: CityFormDTO){
 
 async function getAll(api: ApiClient){
     const response = await api.get("/cities/");
+    
+    if (!response.ok){
+      throw new ApiError(response.status, await response.text());
+    }
+
+    return await response.json();
+}
+
+async function getTrending(api: ApiClient){
+    const response = await api.get("/cities/trending");
     
     if (!response.ok){
       throw new ApiError(response.status, await response.text());
