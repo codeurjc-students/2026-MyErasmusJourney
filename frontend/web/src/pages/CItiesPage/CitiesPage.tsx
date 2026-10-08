@@ -22,11 +22,12 @@ export default function CitiesPage({ cityService = createCityService(API) }: cit
                 const citiesData = await cityService.getTrending();
                 setTrendingCities(citiesData);
             } catch (error) {
-                if (error instanceof ApiError && ((error.status >= 500) || (error.status === 404))) {
+                if (error instanceof ApiError && (error.status >= 500)) {
                     console.error(error);
                     navigate("/error");
                     return;
                 }
+                console.error("Error fetching trending cities:", error);
             }
         }
 
