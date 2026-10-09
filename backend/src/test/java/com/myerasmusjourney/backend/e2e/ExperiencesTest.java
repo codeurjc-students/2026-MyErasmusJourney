@@ -4,6 +4,7 @@ package com.myerasmusjourney.backend.e2e;
 import com.myerasmusjourney.backend.dto.ExperienceDTO;
 import com.myerasmusjourney.backend.enumeration.Category;
 import io.restassured.response.Response;
+import org.hamcrest.Matchers;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -295,7 +296,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .body("content", hasSize(greaterThan(0)))
                 .body("page.number", equalTo(0))
                 .body("page.size", equalTo(6))
-                .body("page.totalElements", equalTo(5));
+                .body("page.totalElements", equalTo(7));
 
     }
 }

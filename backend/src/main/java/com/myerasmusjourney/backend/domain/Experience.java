@@ -2,7 +2,6 @@ package com.myerasmusjourney.backend.domain;
 
 import com.myerasmusjourney.backend.enumeration.Category;
 import jakarta.persistence.*;
-import org.springframework.data.repository.cdi.Eager;
 
 import java.time.LocalDate;
 import java.util.HashSet;

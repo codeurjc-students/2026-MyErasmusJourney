@@ -2,15 +2,25 @@ package com.myerasmusjourney.backend.integration;
 
 import com.myerasmusjourney.backend.TestDataBase;
 import com.myerasmusjourney.backend.domain.City;
+import com.myerasmusjourney.backend.domain.Experience;
+import com.myerasmusjourney.backend.domain.User;
 import com.myerasmusjourney.backend.dto.*;
+import com.myerasmusjourney.backend.mapper.CityMapper;
 import com.myerasmusjourney.backend.repository.CityRepository;
+import com.myerasmusjourney.backend.repository.ExperienceRepository;
 import com.myerasmusjourney.backend.service.CityService;
+import com.myerasmusjourney.backend.service.UserService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,7 +34,17 @@ public class CityServiceTest extends TestDataBase {
     private CityRepository cityRepository;
 
     @Autowired
+    private ExperienceRepository experienceRepository;
+
+    @Autowired
     private CityService cityService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CityMapper cityMapper;
+
 
     @BeforeEach
     void setup() {
@@ -125,6 +145,131 @@ public class CityServiceTest extends TestDataBase {
 
         assertEquals("Munich in Germany", germanCity.getDescription());
         assertEquals("Another Munich", americanCity.getDescription());
+    }
+
+    @Test
+    @Transactional
+    void testTrendingCities(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken("test@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User user = userService.getLoggedUser();
+
+        City madrid = cityRepository.findByName("Madrid").getFirst();
+        City berlin = cityRepository.findByName("Berlin").getFirst();
+        City rome = cityRepository.findByName("Rome").getFirst();
+
+        List<Experience> experiences = List.of(
+                // Madrid
+                new Experience(
+                        "Good experience in Madrid.",
+                        "Madrid experience 1",
+                        7.0F,
+                        LocalDate.now().minusDays(13),
+                        List.of("Culture"),
+                        madrid,
+                        user
+                ),
+                new Experience(
+                        "Madrid experience 2",
+                        "Nice city and good atmosphere.",
+                        8.0F,
+                        LocalDate.now().minusDays(10),
+                        List.of("Gastronomy"),
+                        madrid,
+                        user
+                ),
+                new Experience(
+                        "Madrid experience 3",
+                        "Very good experience in Madrid.",
+                        9.0F,
+                        LocalDate.now().minusDays(6),
+                        List.of("Social_Events"),
+                        madrid,
+                        user
+                ),
+                new Experience(
+                        "Madrid experience 4",
+                        "Excellent experience in Madrid.",
+                        10.0F,
+                        LocalDate.now().minusDays(2),
+                        List.of("Culture"),
+                        madrid,
+                        user
+                ),
+
+                // Rome
+                new Experience(
+
+                        "Rome experience 1",
+                        "Nice experience in Rome.",
+                        8.0F,
+                        LocalDate.now().minusDays(12),
+                        List.of("Culture"),
+                        rome,
+                        user
+                ),
+                new Experience(
+                        "Rome experience 2",
+                        "Good experience in Rome.",
+                        7.0F,
+                        LocalDate.now().minusDays(8),
+                        List.of("Gastronomy"),
+                        rome,
+                        user
+                ),
+                new Experience(
+                        "Rome experience 3",
+                        "Average experience in Rome.",
+                        6.0F,
+                        LocalDate.now().minusDays(3),
+                        List.of("Personal_Experience"),
+                        rome,
+                        user
+                ),
+
+                // Berlin
+                new Experience(
+                        "Berlin experience 1",
+                        "Very good experience in Berlin.",
+                        9.0F,
+                        LocalDate.now().minusDays(11),
+                        List.of("Culture"),
+                        berlin,
+                        user
+                ),
+                new Experience(
+                        "Berlin experience 2",
+                        "Good experience in Berlin.",
+                        8.0F,
+                        LocalDate.now().minusDays(4),
+                        List.of("Transportation"),
+                        berlin,
+                        user
+                )
+        );
+
+        experiences = experienceRepository.saveAll(experiences);
+
+        cityService.addExperience(experiences.getFirst(), madrid);
+        cityService.addExperience(experiences.get(1), madrid);
+        cityService.addExperience(experiences.get(2), madrid);
+        cityService.addExperience(experiences.get(3), madrid);
+        cityService.addExperience(experiences.get(4), rome);
+        cityService.addExperience(experiences.get(5), rome);
+        cityService.addExperience(experiences.get(6), rome);
+        cityService.addExperience(experiences.get(7), berlin);
+        cityService.addExperience(experiences.get(8), berlin);
+
+        List<CitySimpleDTO> expectedList = cityMapper.toSimpleDTOs(List.of(madrid, rome, berlin));
+
+        List<CitySimpleDTO> resultList = cityService.getTrendingCities();
+
+        assertEquals(expectedList.size(), resultList.size());
+
+        for(int i = 0; i < resultList.size(); i++){
+            assertEquals(expectedList.get(i), resultList.get(i));
+        }
     }
 
     @Test

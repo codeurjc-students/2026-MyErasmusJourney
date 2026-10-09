@@ -76,36 +76,36 @@ public class CitiesTest extends AuthenticatedE2ETest {
 
     @Test
     void testAddingTwoTimesSameCity() throws JSONException {
-        JSONObject germanCity = new JSONObject();
-        germanCity.put("name", "Berlin");
-        germanCity.put("country", "Germany");
-        germanCity.put("description", "Capital of Germany");
+        JSONObject body = new JSONObject();
+        body.put("name", "Kiev");
+        body.put("country", "Ucraine");
+        body.put("description", "Capital of Germany");
 
         obtainToken("testadmin@email.com");
 
         given()
                 .cookie("AuthToken", this.token)
                 .contentType("application/json")
-                .body(germanCity.toString()).
+                .body(body.toString()).
                 when()
                 .post("/api/v1/cities/")
                 .then()
                 .statusCode(201)
                 .body("id", greaterThan(0))
-                .body("name", equalTo(germanCity.get("name")))
-                .body("country", equalTo(germanCity.get("country")));
+                .body("name", equalTo(body.get("name")))
+                .body("country", equalTo(body.get("country")));
 
         given()
                 .cookie("AuthToken", this.token)
                 .contentType("application/json")
-                .body(germanCity.toString()).
+                .body(body.toString()).
                 when()
                 .post("/api/v1/cities/")
                 .then()
                 .statusCode(200)
                 .body("id", greaterThan(0))
-                .body("name", equalTo(germanCity.get("name")))
-                .body("country", equalTo(germanCity.get("country")));
+                .body("name", equalTo(body.get("name")))
+                .body("country", equalTo(body.get("country")));
     }
 
     @Test
@@ -125,6 +125,21 @@ public class CitiesTest extends AuthenticatedE2ETest {
                 .post("/api/v1/cities/")
                 .then()
                 .statusCode(403);
+    }
+
+    @Test
+    void testGetTrendingCities(){
+        when()
+                .get("/api/v1/cities/trending")
+                .then()
+                .statusCode(200)
+                .contentType("application/json")
+                .body("", hasSize(greaterThan(0)))
+                .body("", hasSize(lessThan(8)))
+                .body("[0].id", notNullValue())
+                .body("[0].name", notNullValue())
+                .body("[0].country", notNullValue())
+                .body("[0].description", notNullValue());
     }
 
     @Test

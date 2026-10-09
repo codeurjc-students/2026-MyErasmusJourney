@@ -11,6 +11,7 @@ import ExperienceFormPage from "../pages/ExperienceFormPage/ExperienceFormPage";
 import DetailedExperiencePage from "../pages/DetailedExperiencePage/DetailedExperiencePage";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import UserFormPage from "../pages/UserFormPage/UserFormPage";
+import CitiesPage from "@/pages/CItiesPage/CitiesPage";
 
 export const routes = [
   {
@@ -60,5 +61,9 @@ export const routes = [
   {
     path: ROUTES.USER_FORM,
     element: <UserFormPage mode="edit"/>
+  },
+  {
+    path: ROUTES.CITIES,
+    element: <CitiesPage />
   }
 ];

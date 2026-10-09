@@ -44,7 +44,7 @@ export default function Experience({ experience }: ExperienceProps) {
     const shortDescription = description.length > 80 ? `${description.substring(0, 80)}...` : description;
 
     return (
-        <div id={`experience-${experience.id}`} className="experience-card w-full rounded-2xl bg-white shadow-md p-4 transition hover:shadow-lg flex flex-col gap-3">
+        <div id={`experience-${experience.id}`} className="experience-card relative w-full rounded-2xl bg-white shadow-md p-4 transition hover:shadow-lg flex flex-col gap-3">
             <div className="flex flex-row items-start gap-4">
                 <div className="flex items-start gap-3 shrink-0">
                     <img src="/images/available_soon.png" alt="User profile" className="w-12 h-12 md:w-24 md:h-24 rounded-full object-cover" />
@@ -59,7 +59,7 @@ export default function Experience({ experience }: ExperienceProps) {
                             <p className="exp-meta mb-0">by <span className="underline exp-meta">{experience.authorName}</span></p>
                         </div>
 
-                        <div className="shrink-0 flex items-center justify-center w-12 h-12 rounded-xl text-white font-bold exp-rating" style={{ backgroundColor: ratingColor }}>
+                        <div className="absolute right-3 top-3 sm:right-4 sm:top-4 flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl text-white font-bold z-10 exp-rating" style={{ backgroundColor: ratingColor }}>
                             <span className="exp-rating-text">{rating.toFixed(1)}</span>
                         </div>
                     </div>

@@ -32,7 +32,9 @@ describe("CityFormPage", () => {
 
     const mockCityService: CityService = {
       addCity: vi.fn(),
-      getAll: vi.fn()
+      getAll: vi.fn(),
+      getTrending: vi.fn()
+
 
     };
 
@@ -63,8 +65,8 @@ describe("CityFormPage", () => {
 
     const mockCityService: CityService = {
       addCity: mockAddCity,
-      getAll: vi.fn()
-
+      getAll: vi.fn(),
+      getTrending: vi.fn()
     };
 
     render(
@@ -106,8 +108,8 @@ describe("CityFormPage", () => {
 
     const mockCityService: CityService = {
       addCity: mockAddCity,
-      getAll: vi.fn()
-
+      getAll: vi.fn(),
+      getTrending: vi.fn()
     };
 
     render(
@@ -145,8 +147,8 @@ describe("CityFormPage", () => {
 
     const mockCityService: CityService = {
       addCity: mockAddCity,
-      getAll: vi.fn()
-
+      getAll: vi.fn(),
+      getTrending: vi.fn()
     };
 
     render(
@@ -176,6 +178,7 @@ describe("CityFormPage", () => {
     const mockCityService: CityService = {
       addCity: mockAddCity,
       getAll: vi.fn(),
+      getTrending: vi.fn()
     };
 
     const warningSpy = vi
@@ -213,7 +216,7 @@ describe("CityFormPage", () => {
 
       expect(warningSpy).toHaveBeenCalledWith(errorMessage);
     });
-    
+
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
@@ -227,7 +230,8 @@ describe("CityFormPage", () => {
 
     const mockCityService: CityService = {
       addCity: mockAddCity,
-      getAll: vi.fn()
+      getAll: vi.fn(),
+      getTrending: vi.fn()
     };
 
     render(
