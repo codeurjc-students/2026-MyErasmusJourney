@@ -26,6 +26,7 @@ services:
 
   db:
     image: mysql:9.2
+    command: --max_allowed_packet=64M
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-password}
       MYSQL_DATABASE: myerasmusjourney

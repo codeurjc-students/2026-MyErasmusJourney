@@ -38,7 +38,7 @@ public class MultimediaService {
 
     @Transactional
     public List<ExperienceMultimediaSimpleDTO> addMultimedia (Long experienceId, List<MultipartFile> multimediaList) {
-            Experience experience = experienceService.getExperience(experienceId);
+        Experience experience = experienceService.getExperience(experienceId);
         User user = userService.getLoggedUser();
 
         if(isActionNotAllowed(user, experience)) return null;
@@ -47,7 +47,7 @@ public class MultimediaService {
         List<ExperienceMultimedia> experienceMultimediaList = new LinkedList<>();
         for(MultipartFile media: multimediaList){
             try {
-                if(!ExperienceMultimedia.contentTypeAccepted(media.getContentType()) || media.getSize()> MAX_FILE_SIZE) return List.of();
+                if(!ExperienceMultimedia.contentTypeAccepted(media.getContentType())) return List.of();
                 ExperienceMultimedia experienceMultimedia = new ExperienceMultimedia(media, experience);
                 experienceMultimedia = experienceMultimediaRepository.save(experienceMultimedia);
                 experienceService.addMultimedia(experienceId, experienceMultimedia);
