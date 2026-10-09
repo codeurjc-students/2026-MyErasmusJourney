@@ -22,4 +22,11 @@ public interface CityRepository extends JpaRepository<City, Long> {
           AND e.date <= :to
     """)
     List<Experience> findRecentExperiencesOfCity(@Param("cityName") String cityName, @Param("country") String country, @Param("from")LocalDate from, @Param("to") LocalDate to);
+
+    @Query("""
+    SELECT AVG(e.rating)
+    FROM Experience e
+    WHERE e.city.id = :cityId
+""")
+    Double findAverageRatingByCityId(@Param("cityId") Long cityId);
 }

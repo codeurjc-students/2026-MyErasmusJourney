@@ -45,13 +45,13 @@ public class CityService {
         List<City> cities = cityRepository.findByName(cityName);
         String countryName = formatName(cityFormDTO.country());
         for(City c: cities){
-            if(c.getCountry().equals(countryName)) return new CityResult(cityMapper.toDTO(c), false);
+            if(c.getCountry().equals(countryName)) return new CityResult(cityMapper.toDTO(c, 0.0), false);
         }
 
         City city = new City(cityName, countryName, cityFormDTO.description());
         City savedCity = cityRepository.save(city);
 
-        return new CityResult(cityMapper.toDTO(savedCity),true);
+        return new CityResult(cityMapper.toDTO(savedCity, 0.0),true);
     }
 
     public Collection<CitySimpleDTO> getCities() {
@@ -61,7 +61,8 @@ public class CityService {
 
     @Transactional
     public CityDTO getCity(Long id) {
-        return cityMapper.toDTO(findById(id));
+        Double averageRating = cityRepository.findAverageRatingByCityId(id);
+        return cityMapper.toDTO(findById(id), averageRating);
     }
 
     public City findById(Long id) {
