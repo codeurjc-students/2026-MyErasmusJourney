@@ -264,7 +264,8 @@ describe("Filter", () => {
 
         const cityService: CityService = {
             getAll: getAllMock,
-            addCity: vi.fn()
+            addCity: vi.fn(),
+            getTrending: vi.fn()
 
         };
 
@@ -308,8 +309,8 @@ describe("Filter", () => {
 
         const cityService: CityService = {
             getAll: getAllMock,
-            addCity: vi.fn()
-
+            addCity: vi.fn(),
+            getTrending: vi.fn()
         };
 
         const experienceService: ExperienceService = {
@@ -352,7 +353,8 @@ describe("Filter", () => {
 
         const cityService: CityService = {
             getAll: getAllMock,
-            addCity: vi.fn()
+            addCity: vi.fn(),
+            getTrending: vi.fn()
 
         };
 
@@ -396,8 +398,8 @@ describe("Filter", () => {
 
         const cityService: CityService = {
             getAll: getAllMock,
-            addCity: vi.fn()
-
+            addCity: vi.fn(),
+            getTrending: vi.fn()
         };
 
         const experienceService: ExperienceService = {
