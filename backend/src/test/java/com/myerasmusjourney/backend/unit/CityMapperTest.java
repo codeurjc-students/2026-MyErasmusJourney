@@ -23,7 +23,7 @@ public class CityMapperTest {
         City city = new City("Madrid", "Spain", "Capital of Spain");
         city.setId(1L);
 
-        CityDTO result = cityMapper.toDTO(city);
+        CityDTO result = cityMapper.toDTO(city, 0.0);
 
         assertNotNull(result);
         assertEquals(1L, result.id());
@@ -34,7 +34,7 @@ public class CityMapperTest {
 
     @Test
     void testToDTONull() {
-        CityDTO result = cityMapper.toDTO(null);
+        CityDTO result = cityMapper.toDTO(null, null);
 
         assertNull(result);
     }

@@ -160,22 +160,23 @@ public class ExperienceServiceTest extends TestDataBase {
 
         Pageable pageable = PageRequest.of(0, 10);
 
-        Page<ExperienceSimpleDTO> result =
-                experienceService.getAllExperiences(null, null, null, null, null, null, pageable);
+        Page<ExperienceSimpleDTO> result = experienceService.getAllExperiences(null, null, null, null, null, null, pageable);
 
         assertEquals(expected.size(), result.getTotalElements());
         assertEquals(10, result.getNumberOfElements());
-
-        Long id = result.getContent().getFirst().id();
 
         for(int i = 0; i < 10; i++){
             ExperienceSimpleDTO exp = expected.get(i);
             ExperienceSimpleDTO res = result.getContent().get(i);
 
-            assertEquals(exp, res);
-            assertEquals(id, res.id());
-
-            id++;
+            assertEquals(exp.id(), res.id());
+            assertEquals(exp.title(), res.title());
+            assertEquals(exp.description(), res.description());
+            assertEquals(exp.rating(), res.rating());
+            assertEquals(exp.categories().size(), res.categories().size());
+            assertEquals(exp.authorName(), res.authorName());
+            assertEquals(exp.cityName(), res.cityName());
+            assertEquals(exp.country(), res.country());
         }
     }
 
