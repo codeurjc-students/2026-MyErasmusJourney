@@ -96,7 +96,7 @@ public class ExperienceMapperTest {
         CitySimpleDTO citySimpleDTO = new CitySimpleDTO(null, "Madrid", "description", "Spain");
         UserSimpleDTO userSimpleDTO = new UserSimpleDTO(null, "test", "test@gmail.com");
         CommentSimpleDTO commentSimpleDTO = new CommentSimpleDTO(null,LocalDate.now(), "test comment", "test", null);
-        ExperienceDTO dto = new ExperienceDTO(null, LocalDate.now(), 6.8F, "Title", "Description",  List.of(Category.Gastronomy, Category.Documentation), citySimpleDTO, userSimpleDTO, List.of(commentSimpleDTO));
+        ExperienceDTO dto = new ExperienceDTO(null, LocalDate.now(), 6.8F, "Title", "Description",  List.of(Category.Gastronomy, Category.Documentation), citySimpleDTO, userSimpleDTO, List.of(commentSimpleDTO), List.of());
 
         ExperienceDTO result = mapper.toDTO(exp);
 

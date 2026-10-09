@@ -22,7 +22,7 @@ public class ExperienceDTOTest {
     @Test
     void testDTOCreation() {
         CitySimpleDTO citySimpleDTO = new CitySimpleDTO(1L, "Madrid", "Description", "Spain");
-        ExperienceDTO exp = new ExperienceDTO(3L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1", List.of(Category.Culture, Category.Transportation), citySimpleDTO, null, List.of());
+        ExperienceDTO exp = new ExperienceDTO(3L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1", List.of(Category.Culture, Category.Transportation), citySimpleDTO, null, List.of(), List.of());
         assertNotNull(exp);
         assertEquals(3L, exp.id());
         assertEquals(LocalDate.of(2024, 3, 26), exp.date());
@@ -37,7 +37,7 @@ public class ExperienceDTOTest {
 
         UserSimpleDTO userSimpleDTO = new UserSimpleDTO(2L, "Test", "test@gamil.com");
 
-        exp = new ExperienceDTO(null, LocalDate.of(2026, 1, 15), 4.7F, "Tittle", "Description", List.of(Category.Accommodation, Category.Transportation), null, userSimpleDTO, List.of(new CommentSimpleDTO(1L, LocalDate.now(), "description", "test", null)));
+        exp = new ExperienceDTO(null, LocalDate.of(2026, 1, 15), 4.7F, "Tittle", "Description", List.of(Category.Accommodation, Category.Transportation), null, userSimpleDTO, List.of(new CommentSimpleDTO(1L, LocalDate.now(), "description", "test", null)), List.of());
 
         assertNull(exp.id());
         assertEquals(LocalDate.of(2026, 1, 15), exp.date());
@@ -54,9 +54,9 @@ public class ExperienceDTOTest {
         UserSimpleDTO userSimpleDTO = new UserSimpleDTO(2L, "Test", "test@gamil.com");
         CitySimpleDTO citySimpleDTO = new CitySimpleDTO(1L, "Madrid", "Description", "Spain");
 
-        ExperienceDTO exp = new ExperienceDTO(3L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1", List.of(Category.Culture, Category.Transportation), citySimpleDTO, userSimpleDTO, List.of());
-        ExperienceDTO exp2 = new ExperienceDTO(3L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1", List.of(Category.Culture, Category.Transportation), citySimpleDTO, userSimpleDTO, List.of());
-        ExperienceDTO exp3 = new ExperienceDTO(4L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1", List.of(Category.Culture, Category.Transportation), citySimpleDTO, userSimpleDTO, List.of());
+        ExperienceDTO exp = new ExperienceDTO(3L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1", List.of(Category.Culture, Category.Transportation), citySimpleDTO, userSimpleDTO, List.of(), List.of());
+        ExperienceDTO exp2 = new ExperienceDTO(3L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1", List.of(Category.Culture, Category.Transportation), citySimpleDTO, userSimpleDTO, List.of(), List.of());
+        ExperienceDTO exp3 = new ExperienceDTO(4L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1", List.of(Category.Culture, Category.Transportation), citySimpleDTO, userSimpleDTO, List.of(), List.of());
 
         assertEquals(exp, exp2);
         assertNotEquals(exp, exp3);
