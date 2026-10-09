@@ -9,7 +9,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 public class ExperiencesFormPageTest extends AuthenticatedSeleniumTest {
 
     @Test
-    void testPostingExperience(){
+    void testPostingExperience() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -47,6 +52,51 @@ public class ExperiencesFormPageTest extends AuthenticatedSeleniumTest {
         rating.sendKeys("5.3");
         select.selectByIndex(1);
         documentation.click();
+
+        submit.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div/div/div/main/div/div[2]/h3")
+        ));
+
+        WebElement experienceTitle = driver.findElement(By.xpath("/html/body/div/div/div/main/div/div[2]/h3"));
+        assertEquals("Selenium test", experienceTitle.getText());
+    }
+
+    @Test
+    void testPostingExperienceWithMultimedia() throws URISyntaxException, IOException {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("profileTitle")
+        ));
+
+        WebElement buttonToAddExperience = driver.findElement(By.xpath("/html/body/div/div/div[1]/div[1]/div[2]/button[3]"));
+
+        buttonToAddExperience.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("experienceFormTitle")
+        ));
+
+        WebElement title = driver.findElement(By.id("title"));
+        WebElement description = driver.findElement(By.id("description"));
+        WebElement rating = driver.findElement(By.id("rating"));
+        WebElement date = driver.findElement(By.id("date"));
+        WebElement location = driver.findElement(By.id("location"));
+        Select select = new Select(location);
+        WebElement documentation = driver.findElement(By.xpath("/html/body/div/div/form/div[1]/div[2]/div/label[3]"));
+        WebElement multimedia = driver.findElement(By.id("multimedia"));
+        WebElement submit = driver.findElement(By.xpath("/html/body/div/div/form/div[1]/div[5]/button"));
+        Path imagePath = Paths.get(Objects.requireNonNull(getClass().getResource("/public/experienceExampleImage.jpg")).toURI());
+
+        title.sendKeys("Selenium test");
+        description.sendKeys("This is an experience created by a Selenium test");
+        date.sendKeys("01/13/2023");
+        rating.sendKeys("5.3");
+        select.selectByIndex(1);
+        documentation.click();
+        multimedia.sendKeys(imagePath.toAbsolutePath().toString());
         submit.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(

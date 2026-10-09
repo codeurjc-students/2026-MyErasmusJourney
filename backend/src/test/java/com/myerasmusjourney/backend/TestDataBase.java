@@ -18,5 +18,6 @@ public class TestDataBase {
             new MySQLContainer<>("mysql:8.4")
                     .withDatabaseName("testdb")
                     .withUsername("test")
-                    .withPassword("test");
+                    .withPassword("test")
+                    .withCommand("--max_allowed_packet=16M");
 }

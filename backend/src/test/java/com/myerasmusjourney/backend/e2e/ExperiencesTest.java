@@ -299,4 +299,58 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .body("page.totalElements", equalTo(7));
 
     }
+
+    @Test
+    void testAddMultimedia() {
+        try {
+            this.obtainToken("exampleuser1@email.com");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .multiPart("multipartFileList", "image.jpg", "fake image content".getBytes(), "image/jpeg")
+                .multiPart("multipartFileList", "image.png", "fake image content".getBytes(), "image/png")
+                .when().post("/api/v1/experiences/1/multimedia")
+                .then().statusCode(201)
+                .body("$", Matchers.hasSize(Matchers.greaterThan(0)))
+                .body("[0].contentType", Matchers.equalTo(".jpg"))
+                .body("[1].contentType", Matchers.equalTo(".png"));
+    }
+
+    @Test
+    void testAddMultimediaWithWrongAuthentication() {
+        try {
+            this.obtainToken("exampleuser2@email.com");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .multiPart("multipartFileList", "image.jpg", "fake image content".getBytes(), "image/jpeg")
+                .multiPart("multipartFileList", "image.png", "fake image content".getBytes(), "image/png")
+                .when().post("/api/v1/experiences/1/multimedia")
+                .then()
+                .statusCode(403);
+    }
+
+    @Test
+    void testAddMultimediaWithWrongContentType() {
+        try {
+            this.obtainToken("exampleuser1@email.com");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .multiPart("multipartFileList", "image.jpg", "fake image content".getBytes(), "image/jpeg")
+                .multiPart("multipartFileList", "image.png", "fake image content".getBytes(), "image/whatever")
+                .when()
+                .post("/api/v1/experiences/1/multimedia")
+                .then()
+                .statusCode(415);
+    }
 }

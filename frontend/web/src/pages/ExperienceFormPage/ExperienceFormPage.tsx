@@ -3,7 +3,6 @@ import type { experienceServiceProps } from "@shared/interfaces/experienceServic
 import type { CitySimpleDTO } from "@shared/models/CitySimpleDTO";
 import type { ExperienceFormDTO } from "@shared/models/ExperienceFormDTO";
 
-
 import { createCityService } from "@shared/services/city.service";
 import { createExperienceService } from "@shared/services/experience.service";
 import { useUserStore } from "@shared/stores/userStore";
@@ -13,9 +12,15 @@ import { API } from "../../api/client";
 import { ApiError } from "@shared/api/apiError";
 import { toast } from "sonner";
 
+/**
+ * Page with the form to publish a new experience, including optional
+ * multimedia (photos and videos).
+ * The services can be injected (used by the integration tests); by default
+ * they use the real API client.
+ */
 export default function ExperienceFormPage({ experienceService = createExperienceService(API), cityService = createCityService(API) }: experienceServiceProps & cityServiceProps) {
 
-    const [categories, setCategories] = useState<String[]>([]);
+    const [categories, setCategories] = useState<string[]>([]);
 
     const [cities, setCities] = useState<CitySimpleDTO[]>([]);
 
@@ -23,6 +28,8 @@ export default function ExperienceFormPage({ experienceService = createExperienc
 
     const navigate = useNavigate();
 
+    // On mount: redirect to login if nobody is authenticated and load the
+    // categories and cities that populate the form.
     useEffect(() => {
         if (user === null) {
             navigate("/log-in");
@@ -51,15 +58,24 @@ export default function ExperienceFormPage({ experienceService = createExperienc
         fetchCities();
     }, [])
 
-    function formatCategory(category: String): String {
+    /** Turns a backend category (e.g. "FOOD_AND_DRINK") into a readable label. */
+    function formatCategory(category: string): string {
         return category.replace(/_/g, " ");
     }
 
+    /**
+     * Submits the form:
+     * 1. Validates that at most 3 categories are selected.
+     * 2. Creates the experience.
+     * 3. Uploads the selected multimedia files, if any.
+     * 4. Navigates to the new experience's detail page.
+     * Errors: 5xx navigates to the error page, 415 warns about the unsupported
+     * file format, anything else shows a toast with the error message.
+     */
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        const form = event.currentTarget;
-        const formData = new FormData(form);
+        const formData = new FormData(event.currentTarget);
 
         const title = formData.get("title") as string;
         const description = formData.get("description") as string;
@@ -67,6 +83,10 @@ export default function ExperienceFormPage({ experienceService = createExperienc
         const cityId = Number(formData.get("location") as string);
         const rating = Number(formData.get("rating") as string)
         const categories = formData.getAll("categories") as string[];
+        const multimediaInput = event.currentTarget.elements.namedItem("multimedia") as HTMLInputElement;
+        const files = multimediaInput.files
+            ? Array.from(multimediaInput.files)
+            : [];
 
         if (categories.length > 3) {
             toast.warning("No more than 3 categories are allowed for an experience");
@@ -82,8 +102,19 @@ export default function ExperienceFormPage({ experienceService = createExperienc
             categories
         }
 
+        for (const file of files) {
+            if(file.size > 16 * 1024 * 1024) { 
+                toast.warning("File size exceeds the 16MB limit. Please upload smaller files.");
+                return;
+            }
+        }
+
         try {
             const newExperience = await experienceService.postExperience(experienceRequest);
+
+            if (files.length > 0) {
+                await experienceService.addMultimedia(files, newExperience.id);
+            }
             navigate(`/experiences/${newExperience.id}`)
         }
         catch (error) {
@@ -91,6 +122,9 @@ export default function ExperienceFormPage({ experienceService = createExperienc
                 console.error(error);
                 navigate("/error");
                 return;
+            }
+            else if (error instanceof ApiError && error.status === 415) {
+                toast.error("Unsupported file format. Please upload images (JPEG, PNG, GIF) or videos (MP4, WebM, QuickTime, AVI, MKV).");
             }
             else if (error instanceof Error) {
                 toast.error(error.message);
@@ -126,8 +160,8 @@ export default function ExperienceFormPage({ experienceService = createExperienc
                         <label>Category</label>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-3">
                             {categories.map(category => (
-                                <label className="flex items-center gap-2">
-                                    <input type="checkbox" name="categories" value={`${category}`} />{formatCategory(category)}
+                                <label key={category} className="flex items-center gap-2">
+                                    <input type="checkbox" name="categories" value={category} />{formatCategory(category)}
                                 </label>
                             ))}
                         </div>
@@ -161,7 +195,7 @@ export default function ExperienceFormPage({ experienceService = createExperienc
 
                 <div className="flex flex-col items-center justify-center gap-6">
                     <div className="flex justify-center items-center w-full flex-1">
-                        <img src="/images/available_soon.png" alt="Add multimedia" className="w-3/4 max-w-sm h-auto object-contain" />
+                        <input type="file" id="multimedia" name="multimedia" accept="image/jpeg, image/png, image/gif, video/mp4, video/webm, video/quicktime, video/x-msvideo, video/x-matroska" multiple />
                     </div>
                     <p>Add Multimedia</p>
                 </div>

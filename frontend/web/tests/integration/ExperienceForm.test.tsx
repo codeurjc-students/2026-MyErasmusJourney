@@ -15,23 +15,27 @@ import DetailedExperiencePage from "src/pages/DetailedExperiencePage/DetailedExp
 import type { ExperienceFormDTO } from "@shared/models/ExperienceFormDTO";
 import { ApiError } from "@shared/api/apiError";
 import { toast } from "sonner";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import userEvent from "@testing-library/user-event";
 
+// Real services pointing to the real backend (integration test, nothing is mocked)
 const testAPI = createApiClient(APIURL);
 const testCityService = createCityService(testAPI);
 const testExperienceService = createExperienceService(testAPI);
 
 describe("ExperienceFormPage integration", () => {
 
+  // Log in as a real test user before each test (also stores it in the user store)
   beforeEach(async () => {
     await authenticateUser("test@email.com");
-    const user = useUserStore.getState().user;
-    useUserStore.getState().setUser(user);
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
+  // Restore the original fetch and clear the user store
   afterAll(() => {
     clearFetchAndUserStore();
   });
@@ -60,9 +64,6 @@ describe("ExperienceFormPage integration", () => {
       expect(screen.getByRole("checkbox", { name: /accommodation/i })).toBeInTheDocument();
       expect(screen.getByRole("option", { name: new RegExp(`${cities[0].name}, ${cities[0].country}`, "i"), })).toBeInTheDocument();
     });
-
-
-
   });
 
   it("redirects to the login page when there is no authenticated user", async () => {
@@ -195,6 +196,7 @@ describe("ExperienceFormPage integration", () => {
   it("should navigate to the error page when publishing an experience fails with an internal server error", async () => {
     const cities = await testCityService.getAll();
 
+    // Same service as the real one, but postExperience hits a test endpoint that always returns 500
     const experienceService: ExperienceService = {
 
       postExperience: async (experienceRequest: ExperienceFormDTO) => {
@@ -214,7 +216,8 @@ describe("ExperienceFormPage integration", () => {
       getCommentsByExperienceId: testExperienceService.getCommentsByExperienceId,
       getExperienceById: testExperienceService.getExperienceById,
       postComment: testExperienceService.postComment,
-      deleteExperience: testExperienceService.deleteExperience
+      deleteExperience: testExperienceService.deleteExperience,
+      addMultimedia: testExperienceService.addMultimedia
     };
 
     render(
@@ -263,4 +266,166 @@ describe("ExperienceFormPage integration", () => {
 
     expect(await screen.findByText("Error page")).toBeInTheDocument();
   })
+
+  it("should create an experience and upload its multimedia successfully", async () => {
+    const user = userEvent.setup();
+
+    // Real image used as the upload; wrapped in a jsdom File so the form input accepts it
+    const imagePath = resolve(
+      import.meta.dirname,
+      "../exampleMultimedia/experienceExampleImage.jpg"
+    );
+
+    const image = new File(
+      [readFileSync(imagePath)],
+      "experienceExampleImage.jpg",
+      {
+        type: "image/jpeg",
+      }
+    );
+
+    const cities = await testCityService.getAll();
+    const title = `Real Experience with Multimedia`;
+
+    render(
+      <MemoryRouter initialEntries={["/experiences/new"]}>
+        <Routes>
+          <Route
+            path="/experiences/new"
+            element={
+              <ExperienceFormPage
+                experienceService={testExperienceService}
+                cityService={testCityService}
+              />
+            }
+          />
+          <Route path="/experiences/:id" element={<DetailedExperiencePage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole("checkbox", { name: /accommodation/i })).toBeInTheDocument();
+    });
+
+    fireEvent.change(screen.getByLabelText(/title/i), {
+      target: { value: title },
+    });
+    fireEvent.change(screen.getByLabelText(/rating/i), {
+      target: { value: "9.4" },
+    });
+    fireEvent.change(screen.getByLabelText(/location/i), {
+      target: { value: String(cities[0].id) },
+    });
+    fireEvent.change(screen.getByLabelText(/date/i), {
+      target: { value: "2026-08-15" },
+    });
+    fireEvent.change(screen.getByLabelText(/experience description/i), {
+      target: { value: "A real experience created in the integration suite." },
+    });
+
+    fireEvent.click(screen.getByRole("checkbox", { name: /accommodation/i }));
+
+    const multimediaInput =
+      document.querySelector<HTMLInputElement>(
+        'input[name="multimedia"]'
+      );
+
+    expect(multimediaInput).not.toBeNull();
+
+    await user.upload(multimediaInput!, [image]);
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /publish/i,
+      })
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(title)).toBeInTheDocument();
+    });
+  });
+
+  it("should warn user when any file exceeds maximum file size", async () => {
+
+    const warningSpy = vi
+      .spyOn(toast, "warning")
+      .mockImplementation(() => "mock-toast-id");
+
+    const user = userEvent.setup();
+
+    // Real image used as the upload; wrapped in a jsdom File so the form input accepts it
+    const imagePath = resolve(
+      import.meta.dirname,
+      "../exampleMultimedia/experienceExampleVideo.mp4"
+    );
+
+    const image = new File(
+      [readFileSync(imagePath)],
+      "experienceExampleVideo.mp4",
+      {
+        type: "video/mp4",
+      }
+    );
+
+    const cities = await testCityService.getAll();
+    const title = `Real Experience with Multimedia`;
+
+    render(
+      <MemoryRouter initialEntries={["/experiences/new"]}>
+        <Routes>
+          <Route
+            path="/experiences/new"
+            element={
+              <ExperienceFormPage
+                experienceService={testExperienceService}
+                cityService={testCityService}
+              />
+            }
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole("checkbox", { name: /accommodation/i })).toBeInTheDocument();
+    });
+
+    fireEvent.change(screen.getByLabelText(/title/i), {
+      target: { value: title },
+    });
+    fireEvent.change(screen.getByLabelText(/rating/i), {
+      target: { value: "9.4" },
+    });
+    fireEvent.change(screen.getByLabelText(/location/i), {
+      target: { value: String(cities[0].id) },
+    });
+    fireEvent.change(screen.getByLabelText(/date/i), {
+      target: { value: "2026-08-15" },
+    });
+    fireEvent.change(screen.getByLabelText(/experience description/i), {
+      target: { value: "A real experience created in the integration suite." },
+    });
+
+    fireEvent.click(screen.getByRole("checkbox", { name: /accommodation/i }));
+
+    const multimediaInput =
+      document.querySelector<HTMLInputElement>(
+        'input[name="multimedia"]'
+      );
+
+    expect(multimediaInput).not.toBeNull();
+
+    await user.upload(multimediaInput!, [image]);
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /publish/i,
+      })
+    );
+
+    expect(warningSpy).toHaveBeenCalledWith("File size exceeds the 16MB limit. Please upload smaller files.");
+    
+  });
+
 })

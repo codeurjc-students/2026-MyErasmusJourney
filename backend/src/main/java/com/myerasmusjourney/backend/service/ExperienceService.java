@@ -1,9 +1,6 @@
 package com.myerasmusjourney.backend.service;
 
-import com.myerasmusjourney.backend.domain.City;
-import com.myerasmusjourney.backend.domain.Comment;
-import com.myerasmusjourney.backend.domain.Experience;
-import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.domain.*;
 import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.enumeration.Category;
 import com.myerasmusjourney.backend.mapper.CommentMapper;
@@ -112,5 +109,11 @@ public class ExperienceService {
 
     public void emptyExperiences() {
         experienceRepository.deleteAll();
+    }
+
+    public void addMultimedia(Long id, ExperienceMultimedia experienceMultimedia) {
+        Experience experience = this.getExperience(id);
+        experience.addMultimedia(experienceMultimedia);
+        this.experienceRepository.save(experience);
     }
 }

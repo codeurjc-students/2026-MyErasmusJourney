@@ -4,12 +4,14 @@ import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.enumeration.Category;
 import com.myerasmusjourney.backend.service.CommentService;
 import com.myerasmusjourney.backend.service.ExperienceService;
+import com.myerasmusjourney.backend.service.MultimediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -25,6 +27,9 @@ public class ExperienceRestController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private MultimediaService multimediaService;
 
     @GetMapping("/")
     public Page<ExperienceSimpleDTO> getExperiences(
@@ -74,5 +79,18 @@ public class ExperienceRestController {
         CommentDTO commentDTO =  commentService.postComment(id, commentFormDTO);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
         return ResponseEntity.created(location).body(commentDTO);
+    }
+
+    @PostMapping(value = {"/{id}/multimedia"}, consumes = {"multipart/form-data"})
+    public ResponseEntity<Collection<ExperienceMultimediaSimpleDTO>> uploadMultimedia(@PathVariable Long id, @RequestParam("multipartFileList") List<MultipartFile> multipartFileList) {
+        Collection<ExperienceMultimediaSimpleDTO> experienceMultimediaSimpleDTOS = this.multimediaService.addMultimedia(id, multipartFileList);
+        if (experienceMultimediaSimpleDTOS == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        } else if (experienceMultimediaSimpleDTOS.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).build();
+        } else {
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
+            return ResponseEntity.created(location).body(experienceMultimediaSimpleDTOS);
+        }
     }
 }

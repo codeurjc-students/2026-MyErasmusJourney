@@ -72,6 +72,7 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.DELETE, "/api/v1/experiences/{id}").hasRole("USER")
                     .requestMatchers(HttpMethod.DELETE, "/api/v1/comments/{id}").hasRole("USER")
                     .requestMatchers(HttpMethod.POST, "/api/v1/experiences/{id}/comments").hasRole("USER")
+                    .requestMatchers(HttpMethod.POST, "/api/v1/experiences/{id}/multimedia").hasRole("USER")
                     .requestMatchers(HttpMethod.POST, "/api/v1/cities/").hasRole("ADMIN")
                     // PUBLIC ENDPOINTS
 					.anyRequest().permitAll()

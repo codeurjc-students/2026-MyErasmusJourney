@@ -39,6 +39,9 @@ public class Experience {
     @OneToMany(mappedBy = "experience", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new LinkedList<>();
 
+    @OneToMany(mappedBy = "experience", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    private List<ExperienceMultimedia> multimedia = new LinkedList<>();
+
     public Experience(){}
 
     public Experience(String title, String description, Float rating, LocalDate date, List<String> categories, City city, User user){
@@ -134,5 +137,17 @@ public class Experience {
 
     public void addComment (Comment comment){
         this.comments.add(comment);
+    }
+
+    public void setMultimedia(List<ExperienceMultimedia> multimedia) {
+        this.multimedia = multimedia;
+    }
+
+    public List<ExperienceMultimedia> getMultimedia() {
+        return this.multimedia;
+    }
+
+    public void addMultimedia(ExperienceMultimedia multimedia) {
+        this.multimedia.add(multimedia);
     }
 }

@@ -69,7 +69,8 @@ describe("Filter", () => {
             getExperienceById: vi.fn(),
             postComment: vi.fn(),
             postExperience: vi.fn(),
-            deleteExperience: vi.fn()
+            deleteExperience: vi.fn(),
+            addMultimedia: vi.fn()
         };
 
         return {
@@ -276,7 +277,8 @@ describe("Filter", () => {
             getExperienceById: vi.fn(),
             postComment: vi.fn(),
             postExperience: vi.fn(),
-            deleteExperience: vi.fn()
+            deleteExperience: vi.fn(),
+            addMultimedia: vi.fn()
         };
 
 
@@ -320,7 +322,8 @@ describe("Filter", () => {
             getExperienceById: vi.fn(),
             postComment: vi.fn(),
             postExperience: vi.fn(),
-            deleteExperience: vi.fn()
+            deleteExperience: vi.fn(),
+            addMultimedia: vi.fn()
         };
 
 
@@ -365,7 +368,8 @@ describe("Filter", () => {
             getExperienceById: vi.fn(),
             postComment: vi.fn(),
             postExperience: vi.fn(),
-            deleteExperience: vi.fn()
+            deleteExperience: vi.fn(),
+            addMultimedia: vi.fn()
         };
 
 
@@ -409,7 +413,8 @@ describe("Filter", () => {
             getExperienceById: vi.fn(),
             postComment: vi.fn(),
             postExperience: vi.fn(),
-            deleteExperience: vi.fn()
+            deleteExperience: vi.fn(),
+            addMultimedia: vi.fn()
         };
 
 
@@ -448,7 +453,8 @@ describe("Filter", () => {
             getExperienceById: vi.fn(),
             postComment: vi.fn(),
             postExperience: vi.fn(),
-            deleteExperience: vi.fn()
+            deleteExperience: vi.fn(),
+            addMultimedia: vi.fn()
         };
 
 

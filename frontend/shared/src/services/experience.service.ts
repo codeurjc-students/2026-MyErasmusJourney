@@ -22,6 +22,7 @@ export function createExperienceService(api: ApiClient) {
     getAll: (filters: ExperienceFilters) => getAllExperiences(api, filters),
     getCategories: () => getCategories(api),
     postExperience: (body: ExperienceFormDTO) => postExperience(api, body),
+    addMultimedia: (multimedia: File[], experienceId: number) => addMultimedia(api, multimedia, experienceId),
     getExperienceById: (id: number) => getExperienceById(api, id),
     postComment: (id: number, body: CommentFormDTO) => postComment(api, id, body),
     getCommentsByExperienceId: (id: number) => getCommentsByExperienceId(api, id),
@@ -121,4 +122,35 @@ async function deleteExperience(api: ApiClient, id: number) {
   }
 
   return response.json();
+}
+
+async function addMultimedia(api: ApiClient, multipartFileList: File[], experienceId: number) {
+
+  const formData = new FormData();
+
+  multipartFileList.forEach(file => {
+    formData.append("multipartFileList", file);
+
+  });
+
+  console.log("FormData entries:");
+
+  for (const [key, value] of formData.entries()) {
+    console.log({
+      key,
+      value,
+      constructor: value.constructor.name,
+      name: value instanceof File ? value.name : undefined,
+      type: value instanceof File ? value.type : undefined,
+      size: value instanceof File ? value.size : undefined,
+    });
+  }
+
+  const reponse = await api.post(`/experiences/${experienceId}/multimedia`, formData)
+
+  if (!reponse.ok) {
+    throw new ApiError(reponse.status, await reponse.text());
+  }
+
+  return reponse.json();
 }

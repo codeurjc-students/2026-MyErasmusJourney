@@ -50,7 +50,8 @@ describe("ExperiencesPage", () => {
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
       postExperience: vi.fn(),
-      deleteExperience: vi.fn()
+      deleteExperience: vi.fn(),
+      addMultimedia: vi.fn(),
     };
 
     //render component (DOM virtual)
@@ -81,12 +82,13 @@ describe("ExperiencesPage", () => {
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
       postExperience: vi.fn(),
-      deleteExperience: vi.fn()
+      deleteExperience: vi.fn(),
+      addMultimedia: vi.fn(),
     };
 
     render(
       <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} cityService={mockCityService}/>
+        <ExperiencesPage experienceService={mockService} cityService={mockCityService} />
       </MemoryRouter>
     );
 
@@ -119,12 +121,13 @@ describe("ExperiencesPage", () => {
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
       postExperience: vi.fn(),
-      deleteExperience: vi.fn()
+      deleteExperience: vi.fn(),
+      addMultimedia: vi.fn(),
     };
 
     render(
       <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} cityService={mockCityService}/>
+        <ExperiencesPage experienceService={mockService} cityService={mockCityService} />
       </MemoryRouter>
     );
 
@@ -158,12 +161,13 @@ describe("ExperiencesPage", () => {
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
       postExperience: vi.fn(),
-      deleteExperience: vi.fn()
+      deleteExperience: vi.fn(),
+      addMultimedia: vi.fn(),
     };
 
     render(
       <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} cityService={mockCityService}/>
+        <ExperiencesPage experienceService={mockService} cityService={mockCityService} />
       </MemoryRouter>
     );
 
@@ -200,12 +204,13 @@ describe("ExperiencesPage", () => {
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
       postExperience: vi.fn(),
-      deleteExperience: vi.fn()
+      deleteExperience: vi.fn(),
+      addMultimedia: vi.fn(),
     };
 
     render(
       <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} cityService={mockCityService}/>
+        <ExperiencesPage experienceService={mockService} cityService={mockCityService} />
       </MemoryRouter>
     );
 
@@ -235,12 +240,13 @@ describe("ExperiencesPage", () => {
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
       postExperience: vi.fn(),
-      deleteExperience: vi.fn()
+      deleteExperience: vi.fn(),
+      addMultimedia: vi.fn(),
     };
 
     render(
       <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} cityService={mockCityService}/>
+        <ExperiencesPage experienceService={mockService} cityService={mockCityService} />
       </MemoryRouter>
     );
 
@@ -267,12 +273,13 @@ describe("ExperiencesPage", () => {
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
       postExperience: vi.fn(),
-      deleteExperience: vi.fn()
+      deleteExperience: vi.fn(),
+      addMultimedia: vi.fn(),
     };
 
     render(
       <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} cityService={mockCityService}/>
+        <ExperiencesPage experienceService={mockService} cityService={mockCityService} />
       </MemoryRouter>
     );
 
@@ -305,12 +312,13 @@ describe("ExperiencesPage", () => {
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
       postExperience: vi.fn(),
-      deleteExperience: vi.fn()
+      deleteExperience: vi.fn(),
+      addMultimedia: vi.fn(),
     };
 
     render(
       <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} cityService={mockCityService}/>
+        <ExperiencesPage experienceService={mockService} cityService={mockCityService} />
       </MemoryRouter>
     );
 

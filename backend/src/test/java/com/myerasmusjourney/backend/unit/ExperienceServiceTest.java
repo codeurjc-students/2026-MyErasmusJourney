@@ -280,6 +280,7 @@ public class ExperienceServiceTest {
                 savedExperience.getCategories(),
                 cityDTO,
                 userDTO,
+                List.of(),
                 List.of()
         );
 
@@ -349,7 +350,7 @@ public class ExperienceServiceTest {
     void testGetExperienceById() {
         Experience experience =  new Experience("Experiencia 1", "Descripcion 1", 9F, null, List.of("Personal_Experience", "Documentation"), null, null);
 
-        ExperienceDTO experienceDTO = new ExperienceDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", List.of(Category.Personal_Experience, Category.Documentation), null, null, List.of());
+        ExperienceDTO experienceDTO = new ExperienceDTO(null, LocalDate.now(), 9F, "Experiencia 1", "Descripcion 1", List.of(Category.Personal_Experience, Category.Documentation), null, null, List.of(), List.of());
         Long id = 1L;
 
         when(experienceRepository.findById(id)).thenReturn(Optional.of(experience));
@@ -402,7 +403,7 @@ public class ExperienceServiceTest {
         experience.setAuthor(user);
         user.addExperience(experience);
 
-        ExperienceDTO experienceDTO = new ExperienceDTO(2L, null, null, "Deleted experience", null, null, null, null, null);
+        ExperienceDTO experienceDTO = new ExperienceDTO(2L, null, null, "Deleted experience", null, null, null, null, null, null);
 
         when(userService.getLoggedUser()).thenReturn(user);
         when(experienceRepository.findById(2L)).thenReturn(Optional.of(experience));
@@ -459,7 +460,7 @@ public class ExperienceServiceTest {
         experience.setTitle("Deleted experience");
         user.addExperience(experience);
 
-        ExperienceDTO experienceDTO = new ExperienceDTO(2L, null, null, "Deleted experience", null, null, null, null, null);
+        ExperienceDTO experienceDTO = new ExperienceDTO(2L, null, null, "Deleted experience", null, null, null, null, null, null);
 
         when(userService.getLoggedUser()).thenReturn(user2);
         when(experienceRepository.findById(2L)).thenReturn(Optional.of(experience));
