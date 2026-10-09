@@ -58,8 +58,8 @@ describe("Filter", () => {
 
         const cityService: CityService = {
             getAll: getAllMock,
-            addCity: vi.fn()
-
+            addCity: vi.fn(),
+            getTrending: vi.fn()
         };
 
         const experienceService: ExperienceService = {
