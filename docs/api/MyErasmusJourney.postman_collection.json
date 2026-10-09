@@ -613,6 +613,24 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Get City",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{APIURL}}/cities/1",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "cities",
+                "1"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
