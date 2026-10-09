@@ -137,6 +137,7 @@ describe("DetailedExperiencePage", () => {
       getAll: testExperienceService.getAll,
       getCategories: testExperienceService.getCategories,
       getCommentsByExperienceId: testExperienceService.getCommentsByExperienceId,
+      addMultimedia: testExperienceService.addMultimedia,
       getExperienceById: async (id: number) => {
         const response = await testAPI.get("/tests/500");
 

@@ -604,7 +604,8 @@ describe("UserPage", () => {
       getCommentsByExperienceId: testExperienceService.getCommentsByExperienceId,
       getExperienceById: testExperienceService.getExperienceById,
       postComment: testExperienceService.postComment,
-      postExperience: testExperienceService.postExperience
+      postExperience: testExperienceService.postExperience,
+      addMultimedia: testExperienceService.addMultimedia
     };
 
     render(

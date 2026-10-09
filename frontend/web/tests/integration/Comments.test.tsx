@@ -136,7 +136,7 @@ describe("Comments integration tests", () => {
   it("should navigate to the error page when fetching comments fails with an internal server error", async () => {
     const testService: ExperienceService = {
       getAll: vi.fn(),
-
+      addMultimedia: vi.fn(),
       getCommentsByExperienceId: async (experienceId: number) => {
         const response = await testAPI.get("/tests/500");
 

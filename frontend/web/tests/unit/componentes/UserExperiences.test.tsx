@@ -332,6 +332,7 @@ describe("UserExperiences", () => {
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
       postExperience: vi.fn(),
+      addMultimedia: vi.fn(),
     };
 
     render(
@@ -414,6 +415,7 @@ describe("UserExperiences", () => {
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
       postExperience: vi.fn(),
+      addMultimedia: vi.fn(),
     };
 
     const alertSpy = vi
@@ -494,6 +496,7 @@ describe("UserExperiences", () => {
       getExperienceById: vi.fn(),
       postComment: vi.fn(),
       postExperience: vi.fn(),
+      addMultimedia: vi.fn(),
     };
 
     render(

@@ -57,7 +57,8 @@ describe("Comments component", () => {
       getExperienceById: vi.fn(),
       deleteExperience: vi.fn(),
       getCategories: vi.fn(),
-      postExperience: vi.fn()
+      postExperience: vi.fn(),
+      addMultimedia: vi.fn()
     };
 
     render(
@@ -92,7 +93,8 @@ describe("Comments component", () => {
       getExperienceById: vi.fn(),
       postExperience: vi.fn(),
       deleteExperience: vi.fn(),
-      getCategories: vi.fn()
+      getCategories: vi.fn(),
+      addMultimedia: vi.fn()
     };
 
     render(
@@ -143,7 +145,8 @@ describe("Comments component", () => {
       getExperienceById: vi.fn(),
       postExperience: vi.fn(),
       deleteExperience: vi.fn(),
-      getCategories: vi.fn()
+      getCategories: vi.fn(),
+      addMultimedia: vi.fn()
     };
 
     useUserStore.setState({
@@ -233,7 +236,8 @@ describe("Comments component", () => {
       getExperienceById: vi.fn(),
       postExperience: vi.fn(),
       deleteExperience: vi.fn(),
-      getCategories: vi.fn()
+      getCategories: vi.fn(),
+      addMultimedia: vi.fn()
     };
 
     useUserStore.setState({
@@ -297,7 +301,8 @@ describe("Comments component", () => {
       getExperienceById: vi.fn(),
       postExperience: vi.fn(),
       deleteExperience: vi.fn(),
-      getCategories: vi.fn()
+      getCategories: vi.fn(),
+      addMultimedia: vi.fn()
     };
 
     useUserStore.setState({ user: { id: 1, displayName: "John", email: "john@example.com" } });
@@ -337,7 +342,8 @@ describe("Comments component", () => {
       getExperienceById: vi.fn(),
       postExperience: vi.fn(),
       deleteExperience: vi.fn(),
-      getCategories: vi.fn()
+      getCategories: vi.fn(),
+      addMultimedia: vi.fn()
     };
 
     useUserStore.setState({ user: { id: 1, displayName: "John", email: "john@example.com" } });

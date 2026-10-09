@@ -61,7 +61,8 @@ describe("DetailedExperiencePage", () => {
       getCommentsByExperienceId: vi.fn(),
       postComment: vi.fn(),
       postExperience: vi.fn(),
-      deleteExperience: vi.fn()
+      deleteExperience: vi.fn(),
+      addMultimedia: vi.fn(),
     };
 
     render(
@@ -95,7 +96,8 @@ describe("DetailedExperiencePage", () => {
       getCategories: vi.fn(),
       postComment: vi.fn(),
       postExperience: vi.fn(),
-      deleteExperience: vi.fn()
+      deleteExperience: vi.fn(),
+      addMultimedia: vi.fn(),
     };
 
     render(
@@ -162,7 +164,8 @@ describe("DetailedExperiencePage", () => {
       getCommentsByExperienceId: vi.fn(),
       postComment: vi.fn(),
       postExperience: vi.fn(),
-      deleteExperience: vi.fn()
+      deleteExperience: vi.fn(),
+      addMultimedia: vi.fn(),
     };
 
     render(
@@ -199,7 +202,8 @@ describe("DetailedExperiencePage", () => {
       getCommentsByExperienceId: vi.fn(),
       postComment: vi.fn(),
       postExperience: vi.fn(),
-      deleteExperience: vi.fn()
+      deleteExperience: vi.fn(),
+      addMultimedia: vi.fn(),
     };
 
     const consoleErrorSpy = vi
@@ -244,7 +248,8 @@ describe("DetailedExperiencePage", () => {
       getCommentsByExperienceId: vi.fn(),
       postComment: vi.fn(),
       postExperience: vi.fn(),
-      deleteExperience: vi.fn()
+      deleteExperience: vi.fn(),
+      addMultimedia: vi.fn(),
     };
 
     const consoleErrorSpy = vi

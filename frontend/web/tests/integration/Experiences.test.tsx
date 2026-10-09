@@ -48,7 +48,8 @@ describe("Experiences", () => {
             getExperienceById: testExperienceService.getExperienceById,
             postComment: testExperienceService.postComment,
             postExperience: testExperienceService.postExperience,
-            deleteExperience: testExperienceService.deleteExperience
+            deleteExperience: testExperienceService.deleteExperience,
+            addMultimedia: testExperienceService.addMultimedia
         };
 
         render(
@@ -119,7 +120,8 @@ describe("Experiences", () => {
             getExperienceById: testExperienceService.getExperienceById,
             postComment: testExperienceService.postComment,
             postExperience: testExperienceService.postExperience,
-            deleteExperience: testExperienceService.deleteExperience
+            deleteExperience: testExperienceService.deleteExperience,
+            addMultimedia: testExperienceService.addMultimedia
         };
 
         render(
@@ -286,7 +288,8 @@ describe("Experiences", () => {
             getExperienceById: testExperienceService.getExperienceById,
             postComment: testExperienceService.postComment,
             postExperience: testExperienceService.postExperience,
-            deleteExperience: testExperienceService.deleteExperience
+            deleteExperience: testExperienceService.deleteExperience,
+            addMultimedia: testExperienceService.addMultimedia
         };
 
         render(
