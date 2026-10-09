@@ -238,6 +238,37 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Add Multimedia",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "multipartFileList",
+                  "type": "file",
+                  "src": [
+                    "/home/jaime/Desktop/TFG/2026-MyErasmusJourney/frontend/web/tests/exampleMultimedia/experienceExampleImage.jpg"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{APIURL}}/experiences/1/multimedia",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "experiences",
+                "1",
+                "multimedia"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -436,7 +467,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\":\"testadmin@email.com\",\n    \"password\": \"password\"\n}",
+              "raw": "{\n    \"username\":\"exampleuser1@email.com\",\n    \"password\": \"password\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
