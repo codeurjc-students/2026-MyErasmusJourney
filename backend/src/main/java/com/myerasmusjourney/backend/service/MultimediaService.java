@@ -30,6 +30,8 @@ public class MultimediaService {
     @Autowired
     private UserService userService;
 
+    private static final long MAX_FILE_SIZE = 16 * 1024 * 1024;
+
     private boolean isActionNotAllowed(User user, Experience experience){
         return !experience.getAuthor().getId().equals(user.getId());
     }
@@ -45,7 +47,7 @@ public class MultimediaService {
         List<ExperienceMultimedia> experienceMultimediaList = new LinkedList<>();
         for(MultipartFile media: multimediaList){
             try {
-                if(!ExperienceMultimedia.contentTypeAccepted(media.getContentType())) return List.of();
+                if(!ExperienceMultimedia.contentTypeAccepted(media.getContentType()) || media.getSize()> MAX_FILE_SIZE) return List.of();
                 ExperienceMultimedia experienceMultimedia = new ExperienceMultimedia(media, experience);
                 experienceMultimedia = experienceMultimediaRepository.save(experienceMultimedia);
                 experienceService.addMultimedia(experienceId, experienceMultimedia);

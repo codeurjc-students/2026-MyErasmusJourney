@@ -13,17 +13,15 @@ import org.springframework.web.multipart.MultipartFile;
 @MappedSuperclass
 public abstract class Multimedia {
     private static final Map<String, String> EXTENSIONS = Map.ofEntries(Map.entry("image/jpeg", ".jpg"), Map.entry("image/jpg", ".jpg"), Map.entry("image/pjpeg", ".jpg"), Map.entry("image/png", ".png"), Map.entry("image/x-png", ".png"), Map.entry("image/gif", ".gif"), Map.entry("video/mp4", ".mp4"), Map.entry("video/webm", ".webm"), Map.entry("video/quicktime", ".mov"), Map.entry("video/x-msvideo", ".avi"), Map.entry("video/x-matroska", ".mkv"));
+
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.AUTO
-    )
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @Lob
-    @Column(
-            nullable = false,
-            columnDefinition = "MEDIUMBLOB"
-    )
+    @Column(nullable = false, columnDefinition = "MEDIUMBLOB")
     private byte[] multimediaFile;
+
     private String contentType;
 
     public Multimedia() {
