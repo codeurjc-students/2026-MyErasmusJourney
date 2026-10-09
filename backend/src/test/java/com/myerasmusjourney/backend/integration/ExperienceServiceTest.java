@@ -355,6 +355,7 @@ public class ExperienceServiceTest extends TestDataBase {
                 savedExperience.getCategories(),
                 cityDTO,
                 userDTO,
+                List.of(),
                 List.of()
         );
 
