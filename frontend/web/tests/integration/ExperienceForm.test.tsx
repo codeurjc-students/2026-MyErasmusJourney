@@ -425,7 +425,7 @@ describe("ExperienceFormPage integration", () => {
     );
 
     expect(warningSpy).toHaveBeenCalledWith("File size exceeds the 16MB limit. Please upload smaller files.");
-    
+
   });
 
 })

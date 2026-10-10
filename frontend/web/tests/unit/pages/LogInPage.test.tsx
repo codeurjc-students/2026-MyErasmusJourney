@@ -134,7 +134,7 @@ describe("Log In page", () => {
 
     const alertSpy = vi
       .spyOn(toast, "warning")
-      .mockImplementation(() => {return "mock-toast-id"});
+      .mockImplementation(() => { return "mock-toast-id" });
 
     render(
       <MemoryRouter>
@@ -170,7 +170,7 @@ describe("Log In page", () => {
 
     const alertSpy = vi
       .spyOn(toast, "warning")
-      .mockImplementation(() => {return "mock-toast-id"});
+      .mockImplementation(() => { return "mock-toast-id" });
 
     render(
       <MemoryRouter>
@@ -210,7 +210,7 @@ describe("Log In page", () => {
 
     const alertSpy = vi
       .spyOn(toast, "error")
-      .mockImplementation(() => {return "mock-toast-id"});
+      .mockImplementation(() => { return "mock-toast-id" });
     console.error = vi.fn();
 
     render(

@@ -33,9 +33,8 @@ describe("CityFormPage", () => {
     const mockCityService: CityService = {
       addCity: vi.fn(),
       getAll: vi.fn(),
-      getTrending: vi.fn()
-
-
+      getTrending: vi.fn(),
+      getCityById: vi.fn()
     };
 
     render(
@@ -66,7 +65,9 @@ describe("CityFormPage", () => {
     const mockCityService: CityService = {
       addCity: mockAddCity,
       getAll: vi.fn(),
-      getTrending: vi.fn()
+      getTrending: vi.fn(),
+      getCityById: vi.fn()
+
     };
 
     render(
@@ -109,7 +110,9 @@ describe("CityFormPage", () => {
     const mockCityService: CityService = {
       addCity: mockAddCity,
       getAll: vi.fn(),
-      getTrending: vi.fn()
+      getTrending: vi.fn(),
+      getCityById: vi.fn()
+
     };
 
     render(
@@ -148,7 +151,9 @@ describe("CityFormPage", () => {
     const mockCityService: CityService = {
       addCity: mockAddCity,
       getAll: vi.fn(),
-      getTrending: vi.fn()
+      getTrending: vi.fn(),
+      getCityById: vi.fn()
+
     };
 
     render(
@@ -178,7 +183,8 @@ describe("CityFormPage", () => {
     const mockCityService: CityService = {
       addCity: mockAddCity,
       getAll: vi.fn(),
-      getTrending: vi.fn()
+      getTrending: vi.fn(),
+      getCityById: vi.fn()
     };
 
     const warningSpy = vi
@@ -231,7 +237,8 @@ describe("CityFormPage", () => {
     const mockCityService: CityService = {
       addCity: mockAddCity,
       getAll: vi.fn(),
-      getTrending: vi.fn()
+      getTrending: vi.fn(),
+      getCityById: vi.fn()
     };
 
     render(
