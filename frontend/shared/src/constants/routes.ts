@@ -12,4 +12,5 @@ export const ROUTES = {
     AVAILABLE_SOON: "/available-soon",
     ERROR_PAGE: "*",
     CITIES: "/cities",
+    DETAILED_CITY: "/cities/:id",
 };
