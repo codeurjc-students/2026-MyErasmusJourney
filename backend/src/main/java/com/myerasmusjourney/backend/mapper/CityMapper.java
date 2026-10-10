@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 import java.util.Collection;
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {ExperienceMapper.class})
 public interface CityMapper {
     @Mapping(source = "averageRating", target = "averageRating")
     CityDTO toDTO(City city, Double averageRating);

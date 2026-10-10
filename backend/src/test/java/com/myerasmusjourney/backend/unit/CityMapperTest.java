@@ -4,9 +4,14 @@ import com.myerasmusjourney.backend.domain.City;
 import com.myerasmusjourney.backend.dto.CityDTO;
 import com.myerasmusjourney.backend.dto.CitySimpleDTO;
 import com.myerasmusjourney.backend.mapper.CityMapper;
+import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,8 +19,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("unit")
+@ExtendWith(MockitoExtension.class)
 public class CityMapperTest {
 
+    @Spy
+    private ExperienceMapper experienceMapper = Mappers.getMapper(ExperienceMapper.class);
+
+    @InjectMocks
     private final CityMapper cityMapper = Mappers.getMapper(CityMapper.class);
 
     @Test
