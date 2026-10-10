@@ -51,6 +51,7 @@ describe("CitiesPage", () => {
             addCity: vi.fn(),
             getAll: vi.fn(),
             getTrending: vi.fn().mockResolvedValue(responseData),
+            getCityById: vi.fn(),
         };
 
         render(
@@ -78,6 +79,7 @@ describe("CitiesPage", () => {
             addCity: vi.fn(),
             getAll: vi.fn(),
             getTrending: vi.fn().mockRejectedValue(error),
+            getCityById: vi.fn(),
         };
 
         render(
