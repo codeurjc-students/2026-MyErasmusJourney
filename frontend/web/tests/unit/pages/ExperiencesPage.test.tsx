@@ -26,6 +26,8 @@ const mockCityService: CityService = {
   addCity: vi.fn().mockResolvedValue([]),
   getAll: vi.fn().mockResolvedValue([]),
   getTrending: vi.fn().mockResolvedValue([]),
+  getCityById: vi.fn()
+
 }
 
 const mockGetCategories = vi.fn().mockResolvedValue([]);

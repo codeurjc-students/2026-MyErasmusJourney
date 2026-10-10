@@ -238,7 +238,8 @@ describe("Experiences", () => {
                 return await response.json();
             },
             addCity: testCityService.addCity,
-            getTrending: testCityService.getTrending
+            getTrending: testCityService.getTrending,
+            getCityById: testCityService.getCityById
         };
 
         render(

@@ -227,7 +227,7 @@ describe("CityFormPage", () => {
     });
 
     expect(alertSpy).toHaveBeenCalledWith(
-       "City already exists",
+      "City already exists",
     );
 
     alertSpy.mockRestore();
@@ -344,6 +344,7 @@ describe("CityFormPage", () => {
       },
       getAll: testCityService.getAll,
       getTrending: testCityService.getTrending,
+      getCityById: testCityService.getCityById
     };
 
     render(

@@ -156,4 +156,29 @@ public class CitiesTest extends AuthenticatedE2ETest {
                 .body("[0].country", notNullValue())
                 .body("[0].description", notNullValue());
     }
+
+    @Test
+    void testGetCity() {
+
+        when()
+                .get("/api/v1/cities/1")
+                .then()
+                .statusCode(200)
+                .contentType("application/json")
+                .body("id", equalTo(1))
+                .body("name", notNullValue())
+                .body("country", notNullValue())
+                .body("description", notNullValue())
+                .body("averageRating", greaterThan(0.0F))
+                .body("experiences", hasSize(greaterThan(0)));
+    }
+
+    @Test
+    void testGetCityNotFound() {
+
+        when()
+                .get("/api/v1/cities/0")
+                .then()
+                .statusCode(404);
+    }
 }

@@ -23,8 +23,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("integration")
@@ -305,5 +307,27 @@ public class CityServiceTest extends TestDataBase {
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
+    }
+
+    @Test
+    @Transactional
+    void testGetCity(){
+        List<City> cities = cityRepository.findAll();
+
+        City city = cities.getFirst();
+        Double rating = cityRepository.findAverageRatingByCityId(city.getId());
+
+        CityDTO expected = cityMapper.toDTO(city, rating);
+
+        CityDTO result = cityService.getCity(city.getId());
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void testGetCityNotFound(){
+        Long id = 0L;
+
+        assertThrows(NoSuchElementException.class, () -> cityService.getCity(id));
     }
 }

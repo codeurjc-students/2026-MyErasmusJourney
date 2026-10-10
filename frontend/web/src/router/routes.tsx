@@ -12,6 +12,7 @@ import DetailedExperiencePage from "../pages/DetailedExperiencePage/DetailedExpe
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import UserFormPage from "../pages/UserFormPage/UserFormPage";
 import CitiesPage from "@/pages/CItiesPage/CitiesPage";
+import CityPage from "@/pages/CityPage/CityPage";
 
 export const routes = [
   {
@@ -65,5 +66,9 @@ export const routes = [
   {
     path: ROUTES.CITIES,
     element: <CitiesPage />
+  },
+  {
+    path: ROUTES.DETAILED_CITY,
+    element: <CityPage />
   }
 ];

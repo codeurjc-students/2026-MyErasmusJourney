@@ -468,7 +468,7 @@ describe("UserComments", () => {
 
     const alertSpy = vi
       .spyOn(toast, "error")
-      .mockImplementation(() => {return "mock-toast-id"});
+      .mockImplementation(() => { return "mock-toast-id" });
 
     render(
       <MemoryRouter>

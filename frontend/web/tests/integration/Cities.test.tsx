@@ -40,6 +40,7 @@ describe("CitiesPage", () => {
         const mockCityService: CityService = {
             addCity: testCityService.addCity,
             getAll: testCityService.getAll,
+            getCityById: testCityService.getCityById,
             getTrending: async () => {
                 const response = await testAPI.get("/tests/500");
 

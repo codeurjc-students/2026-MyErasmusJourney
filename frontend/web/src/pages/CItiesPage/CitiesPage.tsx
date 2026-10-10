@@ -4,7 +4,7 @@ import type { cityServiceProps } from "@shared/interfaces/cityServiceProps";
 import type { CitySimpleDTO } from "@shared/models/CitySimpleDTO";
 import { createCityService } from "@shared/services/city.service";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 
@@ -57,9 +57,9 @@ export default function CitiesPage({ cityService = createCityService(API) }: cit
                                     )}
                                 </div>
 
-                                <p className="flex-1 min-w-0 m-0 font-semibold text-[#1E3A5F] text-base md:text-lg truncate">
+                                <Link to={`/cities/${city.id}`} className="flex-1 min-w-0 m-0 font-semibold text-[#1E3A5F] text-base md:text-lg truncate">
                                     {city.name}
-                                </p>
+                                </Link>
 
                                 <div className="flex items-center justify-center w-10 h-10 shrink-0 rounded-full bg-[#DCEFFD]">
                                     <span className="text-lg">🌍</span>

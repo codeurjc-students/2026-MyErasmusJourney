@@ -7,5 +7,6 @@ public record CityDTO(
         String name,
         String description,
         String country,
+        Double averageRating,
         Collection<ExperienceSimpleDTO> experiences
 ) {}

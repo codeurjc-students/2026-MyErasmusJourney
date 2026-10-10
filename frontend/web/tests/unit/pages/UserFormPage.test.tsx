@@ -118,7 +118,7 @@ describe("SignUpPage", () => {
 
     const alertSpy = vi
       .spyOn(toast, "warning")
-      .mockImplementation(() => {return "mock-toast-id"});
+      .mockImplementation(() => { return "mock-toast-id" });
 
     render(
       <MemoryRouter>
@@ -161,7 +161,7 @@ describe("SignUpPage", () => {
 
     const alertSpy = vi
       .spyOn(toast, "error")
-      .mockImplementation(() => {return "mock-toast-id"});
+      .mockImplementation(() => { return "mock-toast-id" });
     console.log = vi.fn();
 
     render(
@@ -701,7 +701,7 @@ describe("UserFormPage", () => {
 
     const alertSpy = vi
       .spyOn(toast, "error")
-      .mockImplementation(() => {return "mock-toast-id"});
+      .mockImplementation(() => { return "mock-toast-id" });
 
     const editTestService: UserService = {
       getUserById: async (id: number) => {

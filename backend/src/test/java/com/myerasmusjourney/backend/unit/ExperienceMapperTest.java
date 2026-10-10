@@ -30,9 +30,6 @@ public class ExperienceMapperTest {
     @Spy
     private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
-    @Spy
-    private CityMapper cityMapper = Mappers.getMapper(CityMapper.class);
-
     @InjectMocks
     private ExperienceMapper mapper =  Mappers.getMapper(ExperienceMapper.class);;
 

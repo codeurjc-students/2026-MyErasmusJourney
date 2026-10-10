@@ -149,7 +149,7 @@ describe("DetailedExperiencePage", () => {
     expect(mockGetExperienceById).toHaveBeenCalledWith(1);
   });
 
-  it("should navigate to available-soon when the experience does not exist", async () => {
+  it("should navigate to error page when the experience does not exist", async () => {
 
     const error = new ApiError(404, "Error fetching experience");
 
