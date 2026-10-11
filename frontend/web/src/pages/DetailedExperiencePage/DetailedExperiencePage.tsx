@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { API } from "../../api/client";
 import Comments from "../../components/Comments/Comments";
 import { ApiError } from "@shared/api/apiError";
+import ShareDialog from "@/components/ShareDialog/ShareDialog";
 
 const categoryStyles: Record<string, string> = {
     STUDIES: "#4A90D9",
@@ -49,7 +50,7 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
                 const data = await experienceService.getExperienceById(Number(id));
                 setExperience(data);
             } catch (error) {
-                if (error instanceof ApiError && ((error.status >= 500)||(error.status === 404))) {
+                if (error instanceof ApiError && ((error.status >= 500) || (error.status === 404))) {
                     console.error(error);
                     navigate("/error");
                     return;
@@ -111,10 +112,7 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
                                 <div className="flex items-center justify-center w-14 h-14 rounded-xl text-white font-bold text-xl" style={{ backgroundColor: ratingColor }}>
                                     {rating.toFixed(1)}
                                 </div>
-
-                                <button type="button" aria-label="Share experience" className="w-11 h-11 flex items-center justify-center rounded-full p-2">
-                                    ↗
-                                </button>
+                                <ShareDialog />
                             </div>
                         </div>
 
