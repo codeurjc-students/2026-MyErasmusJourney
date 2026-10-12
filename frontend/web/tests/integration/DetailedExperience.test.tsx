@@ -1,5 +1,5 @@
-import { describe, beforeAll, beforeEach, afterAll, expect, it } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { describe, beforeAll, beforeEach, afterAll, expect, it, vi } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import "@testing-library/jest-dom";
 
@@ -27,6 +27,62 @@ const testExperienceService = createExperienceService(testAPI);
 describe("DetailedExperiencePage", () => {
 
   let authenticatedUser: UserSimpleDTO;
+  let writeTextMock: ReturnType<typeof vi.fn>;
+  let windowOpenMock: ReturnType<typeof vi.spyOn>;
+
+  function mockShareFunctionalities() {
+    vi.clearAllMocks();
+
+    writeTextMock = vi.fn().mockResolvedValue(undefined);
+
+    windowOpenMock = vi
+      .spyOn(window, "open")
+      .mockImplementation(() => null);
+
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: {
+        writeText: writeTextMock,
+      },
+    });
+
+    Object.defineProperty(navigator, "share", {
+      configurable: true,
+      writable: true,
+      value: undefined,
+    });
+  }
+
+
+  async function openShareDialog() {
+    render(
+      <MemoryRouter initialEntries={["/experiences/1"]}>
+        <Routes>
+          <Route
+            path="/experiences/:id"
+            element={
+              <DetailedExperiencePage
+                experienceService={testExperienceService}
+              />
+            }
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText("Loading experience...")
+      ).not.toBeInTheDocument();
+    });
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /share experience/i,
+      })
+    );
+  }
+
 
   beforeAll(async () => {
     authenticatedUser = await authenticateUser("test@email.com");
@@ -34,6 +90,7 @@ describe("DetailedExperiencePage", () => {
 
   beforeEach(() => {
     useUserStore.getState().setUser(authenticatedUser);
+
   });
 
   afterAll(() => {
@@ -176,6 +233,76 @@ describe("DetailedExperiencePage", () => {
     expect(
       await screen.findByText("Error page")
     ).toBeInTheDocument();
+  });
+
+  it("should display the current experience URL in the input", async () => {
+    mockShareFunctionalities();
+
+    await openShareDialog();
+
+    const linkInput = screen.getByRole("textbox", {
+      name: /experience link/i,
+    });
+
+    expect(linkInput).toHaveValue(window.location.href);
+    expect(linkInput).toHaveAttribute("readonly");
+  });
+
+  it("should open WhatsApp with the encoded sharing message", async () => {
+    mockShareFunctionalities();
+
+    await openShareDialog();
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /whatsapp/i,
+      })
+    );
+
+    const message = [
+      "Check out this experience on MyErasmusJourney!",
+      "Discover all the details here:",
+      window.location.href,
+      "Ready to experience it yourself?",
+    ].join("\n");
+
+    expect(windowOpenMock).toHaveBeenCalledExactlyOnceWith(
+      `https://wa.me/?text=${encodeURIComponent(message)}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  });
+
+  it("check the link is copied into the clipboard", async () => {
+    mockShareFunctionalities();
+
+    await openShareDialog();
+
+    fireEvent.click(
+      screen.getByRole("button", { name: /copy link/i })
+    );
+
+    await waitFor(() => {
+      expect(writeTextMock).toHaveBeenCalledWith(
+        window.location.href
+      );
+    });
+  });
+
+  it("should close the dialog when clicking Close", async () => {
+    mockShareFunctionalities();
+
+    await openShareDialog();
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    fireEvent.click(
+      document.querySelector<HTMLButtonElement>(".share-close-button")!
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    });
   });
 
 });
