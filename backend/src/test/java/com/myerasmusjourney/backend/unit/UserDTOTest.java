@@ -11,6 +11,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @Tag("unit")
 public class UserDTOTest {
@@ -20,7 +21,7 @@ public class UserDTOTest {
         ExperienceSimpleDTO experienceSimpleDTO = new ExperienceSimpleDTO(1L, LocalDate.now(), 9.3F, "title", "description", List.of(Category.Personal_Experience, Category.Culture), "Berlin", "Germany", "testDTO");
         ExperienceSimpleDTO experienceSimpleDTO2 = new ExperienceSimpleDTO(2L, LocalDate.now(), 9.3F, "title", "description", List.of(Category.Personal_Experience, Category.Culture), "Berlin", "Germany", "testDTO");
 
-        UserDTO dto = new UserDTO(1L, "John Doe", "jdoe", "john@example.com", "Munich, Germany", List.of("USER", "ADMIN"), List.of(experienceSimpleDTO, experienceSimpleDTO2), List.of());
+        UserDTO dto = new UserDTO(1L, "John Doe", "jdoe", "john@example.com", "Munich, Germany", List.of("USER", "ADMIN"), List.of(experienceSimpleDTO, experienceSimpleDTO2), List.of(), null);
         assertEquals(Long.valueOf(1L), dto.id());
         assertEquals("John Doe", dto.fullName());
         assertEquals("jdoe", dto.displayName());
@@ -29,5 +30,6 @@ public class UserDTOTest {
         assertEquals(List.of("USER", "ADMIN"), dto.roles());
         assertEquals(List.of(experienceSimpleDTO, experienceSimpleDTO2), dto.experiences());
         assertTrue(dto.comments().isEmpty());
+        assertNull(dto.profileImage());
     }
 }
