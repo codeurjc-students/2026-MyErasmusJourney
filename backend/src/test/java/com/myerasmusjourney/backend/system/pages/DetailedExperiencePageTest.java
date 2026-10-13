@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @Tag("system")
@@ -90,5 +91,29 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("email")
         ));
+    }
+
+    @Test
+    void testShareButton(){
+        goToExperience();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div/div/div/main/div/div[2]/h3")
+        ));
+
+        WebElement shareButton = driver.findElement(
+                By.xpath("//button[@aria-label='Share experience']")
+        );
+        shareButton.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("share-link")
+        ));
+
+        WebElement linkInput = driver.findElement(By.id("share-link"));
+
+        assertEquals(driver.getCurrentUrl(), linkInput.getDomProperty("value"));
     }
 }
