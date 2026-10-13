@@ -33,6 +33,10 @@ public class User {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new LinkedList<>();
 
+    @OneToOne
+    private UserImage profileImage;
+
+
     public User(){
         this.roles.add("USER");
     }
@@ -91,6 +95,10 @@ public class User {
         this.comments = comments;
     }
 
+    public void setProfileImage (UserImage profileImage){
+        this.profileImage = profileImage;
+    }
+
     public Long getId() {
         return id;
     }
@@ -133,5 +141,9 @@ public class User {
 
     public void addComment (Comment comment){
         this.comments.add(comment);
+    }
+
+    public UserImage getProfileImage(){
+        return this.profileImage;
     }
 }
