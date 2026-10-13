@@ -3,9 +3,13 @@ package com.myerasmusjourney.backend.unit;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.ExperienceMultimedia;
 import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.domain.UserImage;
 import com.myerasmusjourney.backend.dto.ExperienceMultimediaSimpleDTO;
+import com.myerasmusjourney.backend.dto.UserImageDTO;
+import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import com.myerasmusjourney.backend.mapper.MultimediaMapper;
 import com.myerasmusjourney.backend.repository.ExperienceMultimediaRepository;
+import com.myerasmusjourney.backend.repository.UserImageRepository;
 import com.myerasmusjourney.backend.service.ExperienceService;
 import com.myerasmusjourney.backend.service.MultimediaService;
 import com.myerasmusjourney.backend.service.UserService;
@@ -37,6 +41,9 @@ public class MultimediaServiceTest {
 
     @Mock
     private ExperienceMultimediaRepository experienceMultimediaRepository;
+
+    @Mock
+    private UserImageRepository userImageRepository;
 
     @Mock
     private MultimediaMapper multimediaMapper;
@@ -190,6 +197,152 @@ public class MultimediaServiceTest {
             assertTrue(result.isEmpty());
 
             verify(experienceService).getExperience(1L);
+            verify(userService).getLoggedUser();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void testAddProfileImage(){
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+        user.setRoles(List.of("User"));
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/jpeg",
+                "fake image content".getBytes()
+        );
+
+        try {
+            UserImage userImage = new UserImage(file, user);
+            userImage.setId(1L);
+            UserImageDTO expected = new UserImageDTO(1L, userImage.getContentType(), new UserSimpleDTO(1L, null, user.getEmail()));
+
+            when(userService.getLoggedUser()).thenReturn(user);
+            when(userImageRepository.save(any(UserImage.class))).thenReturn(userImage);
+            when(multimediaMapper.toDTO(userImage)).thenReturn(expected);
+
+            UserImageDTO result = multimediaService.addUserImage(1L, file);
+
+            assertEquals(expected, result);
+
+            verify(userService).getLoggedUser();
+            verify(userImageRepository).save(any(UserImage.class));
+            verify(multimediaMapper).toDTO(userImage);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void testAddProfileImageDeletingPrevious(){
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+        user.setRoles(List.of("User"));
+
+        UserImage savedUserImage = new UserImage();
+        user.setProfileImage(savedUserImage);
+
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/jpeg",
+                "fake image content".getBytes()
+        );
+
+        try {
+            UserImage userImage = new UserImage(file, user);
+            userImage.setId(1L);
+            UserImageDTO expected = new UserImageDTO(1L, userImage.getContentType(), new UserSimpleDTO(1L, null, user.getEmail()));
+
+            when(userService.getLoggedUser()).thenReturn(user);
+            when(userImageRepository.save(any(UserImage.class))).thenReturn(userImage);
+            when(multimediaMapper.toDTO(userImage)).thenReturn(expected);
+
+            UserImageDTO result = multimediaService.addUserImage(1L, file);
+
+            assertEquals(expected, result);
+
+            verify(userService).getLoggedUser();
+            verify(userImageRepository).save(any(UserImage.class));
+            verify(multimediaMapper).toDTO(userImage);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void testAddProfileImageOfAnotherUser(){
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+        user.setRoles(List.of("User"));
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/whatever",
+                "fake image content".getBytes()
+        );
+
+        try {
+            UserImage userImage = new UserImage(file, user);
+            userImage.setId(1L);
+
+            when(userService.getLoggedUser()).thenReturn(user);
+
+            UserImageDTO result = multimediaService.addUserImage(2L, file);
+
+            Long id = -1L;
+
+            assertEquals(id, result.id());
+            assertNull(result.contentType());
+            assertNull(result.userSimpleDTO());
+
+            verify(userService).getLoggedUser();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void testAddProfileImageWithWrongContentType(){
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+        user.setRoles(List.of("User"));
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.txt",
+                "plain/text",
+                "fake image content".getBytes()
+        );
+
+        try {
+            UserImage userImage = new UserImage(file, user);
+            userImage.setId(1L);
+
+            when(userService.getLoggedUser()).thenReturn(user);
+
+            UserImageDTO result = multimediaService.addUserImage(1L, file);
+
+            Long id = 0L;
+
+            assertEquals(id, result.id());
+            assertNull(result.contentType());
+            assertNull(result.userSimpleDTO());
+
             verify(userService).getLoggedUser();
 
         } catch (IOException e) {
