@@ -1,15 +1,19 @@
 package com.myerasmusjourney.backend.controller;
 
 import com.myerasmusjourney.backend.dto.*;
+import com.myerasmusjourney.backend.service.MultimediaService;
 import com.myerasmusjourney.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.micrometer.observation.autoconfigure.ObservationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -17,6 +21,9 @@ public class UserRestController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    MultimediaService multimediaService;
 
     @PostMapping("/")
     public ResponseEntity<Object> createUser(@RequestBody UserFormDTO newUser){
@@ -70,4 +77,14 @@ public class UserRestController {
         if (commentSimpleDTOS == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         return ResponseEntity.ok(commentSimpleDTOS);
     }
+
+    @PutMapping(value = {"/{id}/image"}, consumes = {"multipart/form-data"})
+    public ResponseEntity<UserImageDTO> updateProfileImage(@PathVariable Long id, @RequestParam("multipartFileList") MultipartFile multipartFile) {
+        UserImageDTO userImageDTO = multimediaService.addUserImage(id, multipartFile);
+        if (userImageDTO == null) return ResponseEntity.noContent().build();
+        if (userImageDTO.id().equals(-1L)) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        if (userImageDTO.id().equals(0L)) return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).build();
+        return ResponseEntity.ok(userImageDTO);
+    }
+
 }

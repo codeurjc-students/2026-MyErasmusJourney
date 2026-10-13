@@ -3,6 +3,7 @@ package com.myerasmusjourney.backend.service;
 import com.myerasmusjourney.backend.domain.Comment;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.domain.UserImage;
 import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.mapper.CommentMapper;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
@@ -148,5 +149,10 @@ public class UserService {
         for (User u: users){
             if (!u.getRoles().contains("ADMIN")) userRepository.delete(u);
         }
+    }
+
+    public void addUserImage(UserImage userImage, User user) {
+        user.setProfileImage(userImage);
+        userRepository.save(user);
     }
 }
