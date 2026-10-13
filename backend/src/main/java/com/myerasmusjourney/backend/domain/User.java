@@ -33,7 +33,7 @@ public class User {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new LinkedList<>();
 
-    @OneToOne
+    @OneToOne(orphanRemoval = true)
     private UserImage profileImage;
 
 

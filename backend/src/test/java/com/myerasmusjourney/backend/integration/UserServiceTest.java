@@ -549,7 +549,7 @@ public class UserServiceTest extends TestDataBase{
 
         User user = userRepository.findByEmail("user1@gmail.com");
 
-        UserDTO expected = new UserDTO(user.getId(), "changedName", user.getDisplayName(), user.getEmail(), user.getStudyLocation(), user.getRoles(), experienceMapper.toDTOs(user.getExperiences()), (List<CommentSimpleDTO>) commentMapper.toSimpleDTOs(user.getComments()));
+        UserDTO expected = new UserDTO(user.getId(), "changedName", user.getDisplayName(), user.getEmail(), user.getStudyLocation(), user.getRoles(), experienceMapper.toDTOs(user.getExperiences()), (List<CommentSimpleDTO>) commentMapper.toSimpleDTOs(user.getComments()), null);
 
         UserDTO result = userService.updateUser(user.getId(), expected);
 
@@ -571,7 +571,7 @@ public class UserServiceTest extends TestDataBase{
 
         User user = userRepository.findByEmail("user1@gmail.com");
 
-        UserDTO expected = new UserDTO(user.getId(), "changedName", user.getDisplayName(), user.getEmail(), user.getStudyLocation(), user.getRoles(), experienceMapper.toDTOs(user.getExperiences()), (List<CommentSimpleDTO>) commentMapper.toSimpleDTOs(user.getComments()));
+        UserDTO expected = new UserDTO(user.getId(), "changedName", user.getDisplayName(), user.getEmail(), user.getStudyLocation(), user.getRoles(), experienceMapper.toDTOs(user.getExperiences()), (List<CommentSimpleDTO>) commentMapper.toSimpleDTOs(user.getComments()), null);
 
         UserDTO result = userService.updateUser(user.getId(), expected);
 
@@ -590,7 +590,7 @@ public class UserServiceTest extends TestDataBase{
 
         User user = userRepository.findByEmail("user1@gmail.com");
 
-        UserDTO changedUserDTO = new UserDTO(user.getId(), "changedName", user.getDisplayName(), user.getEmail(), user.getStudyLocation(), user.getRoles(), experienceMapper.toDTOs(user.getExperiences()), (List<CommentSimpleDTO>) commentMapper.toSimpleDTOs(user.getComments()));
+        UserDTO changedUserDTO = new UserDTO(user.getId(), "changedName", user.getDisplayName(), user.getEmail(), user.getStudyLocation(), user.getRoles(), experienceMapper.toDTOs(user.getExperiences()), (List<CommentSimpleDTO>) commentMapper.toSimpleDTOs(user.getComments()), null);
 
 
         UserDTO result = userService.updateUser(user.getId(), changedUserDTO);

@@ -12,7 +12,7 @@ public class UserImage extends Multimedia{
     private static final Map<String, String> EXTENSIONS = Map.ofEntries(Map.entry("image/jpeg", ".jpg"), Map.entry("image/jpg", ".jpg"), Map.entry("image/pjpeg", ".jpg"), Map.entry("image/png", ".png"), Map.entry("image/x-png", ".png"));
 
 
-    @OneToOne(orphanRemoval = true)
+    @OneToOne
     private User user;
 
     public UserImage(){}
