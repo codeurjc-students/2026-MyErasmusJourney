@@ -99,15 +99,21 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
-        WebElement shareButton = driver.findElement(By.xpath("//*[@id=\"base-ui-_r_1_\"]"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div/div/div/main/div/div[2]/h3")
+        ));
+
+        WebElement shareButton = driver.findElement(
+                By.xpath("//button[@aria-label='Share experience']")
+        );
         shareButton.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("\"//*[@id=\\\"share-link\\\"]\"")
+                By.id("share-link")
         ));
 
-        WebElement linkInput = driver.findElement(By.xpath("\"//*[@id=\\\"share-link\\\"]\""));
+        WebElement linkInput = driver.findElement(By.id("share-link"));
 
-        assertEquals(driver.getCurrentUrl(), linkInput.getText());
+        assertEquals(driver.getCurrentUrl(), linkInput.getDomProperty("value"));
     }
 }
