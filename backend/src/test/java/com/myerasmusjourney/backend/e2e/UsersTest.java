@@ -4,6 +4,7 @@ import com.myerasmusjourney.backend.dto.UserDTO;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
+import org.hamcrest.Matchers;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Tag;
@@ -531,7 +532,7 @@ public class UsersTest extends AuthenticatedE2ETest {
     }
 
     @Test
-    void testUpdateUserByUser() throws JSONException {
+    void testUpdateUserByUser() {
         try {
             obtainToken("exampleuser1@email.com");
         } catch (Exception e) {
@@ -549,7 +550,8 @@ public class UsersTest extends AuthenticatedE2ETest {
                 userDTO.studyLocation(),
                 userDTO.roles(),
                 userDTO.experiences(),
-                userDTO.comments()
+                userDTO.comments(),
+                null
         );
 
         given()
@@ -566,7 +568,7 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .body("studyLocation", equalTo(userDTO.studyLocation()));
     }
     @Test
-    void testUpdateUserByAdmin() throws JSONException {
+    void testUpdateUserByAdmin(){
         try {
             obtainToken("testadmin@email.com");
         } catch (Exception e) {
@@ -584,7 +586,8 @@ public class UsersTest extends AuthenticatedE2ETest {
                 userDTO.studyLocation(),
                 userDTO.roles(),
                 userDTO.experiences(),
-                userDTO.comments()
+                userDTO.comments(),
+                null
         );
 
         given()
@@ -602,7 +605,7 @@ public class UsersTest extends AuthenticatedE2ETest {
     }
 
     @Test
-    void testUpdateUserFail() throws JSONException {
+    void testUpdateUserFail(){
         try {
             obtainToken("test@email.com");
         } catch (Exception e) {
@@ -620,7 +623,8 @@ public class UsersTest extends AuthenticatedE2ETest {
                 userDTO.studyLocation(),
                 userDTO.roles(),
                 userDTO.experiences(),
-                userDTO.comments()
+                userDTO.comments(),
+                null
         );
 
         given()
@@ -633,7 +637,7 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .statusCode(403);
     }
     @Test
-    void testUpdateWithoutAuthentication() throws JSONException {
+    void testUpdateWithoutAuthentication(){
         try {
             obtainToken("test@email.com");
         } catch (Exception e) {
@@ -651,7 +655,8 @@ public class UsersTest extends AuthenticatedE2ETest {
                 userDTO.studyLocation(),
                 userDTO.roles(),
                 userDTO.experiences(),
-                userDTO.comments()
+                userDTO.comments(),
+                null
         );
 
         given()
@@ -661,5 +666,89 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .put("/api/v1/users/" + userDTO.id())
                 .then()
                 .statusCode(401);
+    }
+
+    @Test
+    void testAddProfileImage() {
+        try {
+            this.obtainToken("exampleuser1@email.com");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .multiPart("multipartFile", "image.jpg", "fake image content".getBytes(), "image/jpeg")
+                .when().put("/api/v1/users/3/image")
+                .then().statusCode(200)
+                .body("id", notNullValue())
+                .body("contentType", Matchers.equalTo(".jpg"))
+                .body("user", notNullValue());
+    }
+
+    @Test
+    void testAddProfileImageWithExisingPreviousImage() {
+        try {
+            this.obtainToken("exampleuser2@email.com");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .multiPart("multipartFile", "image.jpg", "fake image content".getBytes(), "image/jpeg")
+                .when().put("/api/v1/users/4/image")
+                .then().statusCode(200)
+                .body("id", notNullValue())
+                .body("contentType", Matchers.equalTo(".jpg"))
+                .body("user", notNullValue());
+
+        given()
+                .cookie("AuthToken", this.token)
+                .multiPart("multipartFile", "image.png", "fake image content".getBytes(), "image/png")
+                .when().put("/api/v1/users/4/image")
+                .then().statusCode(200)
+                .body("id", notNullValue())
+                .body("contentType", Matchers.equalTo(".png"))
+                .body("user", notNullValue());
+    }
+
+    @Test
+    void testAddProfileImageWithWrongAuthentication() {
+        try {
+            this.obtainToken("exampleuser1@email.com");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .multiPart("multipartFile", "image.jpg", "fake image content".getBytes(), "image/jpeg")
+                .when().put("/api/v1/users/4/image")
+                .then().statusCode(403);
+    }
+
+    @Test
+    void testAddProfileImageWithWrongContentType() {
+        try {
+            this.obtainToken("exampleuser1@email.com");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        given()
+                .cookie("AuthToken", this.token)
+                .multiPart("multipartFile", "image.txt", "fake image content".getBytes(), "plain/text")
+                .when().put("/api/v1/users/3/image")
+                .then().statusCode(415);
+    }
+
+    @Test
+    void testAddProfileImageWithoutAuhtentication() {
+
+        given()
+                .multiPart("multipartFile", "image.txt", "fake image content".getBytes(), "plain/text")
+                .when().put("/api/v1/users/3/image")
+                .then().statusCode(401);
     }
 }
