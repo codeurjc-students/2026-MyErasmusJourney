@@ -52,7 +52,7 @@ export default function ProfileImageDialog({ userService = createUserService(API
         return (<>
             <Dialog>
                 <DialogTrigger render={
-                    <button className="button">Change Picture</button>
+                    <button aria-label="Change picture" className="button">Change Picture</button>
                 } />
                 <DialogContent className="container share-dialog-content">
                     <DialogHeader className="share-dialog-header">
