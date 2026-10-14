@@ -51,7 +51,8 @@ describe("UserPage", () => {
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
       updateUser: vi.fn(),
-      deleteUserById: vi.fn()
+      deleteUserById: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     const mockAuth: AuthService = {
@@ -97,7 +98,8 @@ describe("UserPage", () => {
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
       updateUser: vi.fn(),
-      deleteUserById: vi.fn()
+      deleteUserById: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     (useUserStore as any).mockReturnValue({
@@ -125,7 +127,8 @@ describe("UserPage", () => {
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
       updateUser: vi.fn(),
-      deleteUserById: vi.fn()
+      deleteUserById: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     (useUserStore as any).mockReturnValue({
@@ -155,7 +158,8 @@ describe("UserPage", () => {
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
       updateUser: vi.fn(),
-      deleteUserById: vi.fn()
+      deleteUserById: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     (useUserStore as any).mockReturnValue({
@@ -186,7 +190,8 @@ describe("UserPage", () => {
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
       updateUser: vi.fn(),
-      deleteUserById: vi.fn()
+      deleteUserById: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     (useUserStore as any).mockReturnValue({
@@ -226,7 +231,8 @@ describe("UserPage", () => {
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
       deleteUserById: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     const mockAuth: AuthService = {
@@ -270,7 +276,8 @@ describe("UserPage", () => {
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
       updateUser: vi.fn(),
-      deleteUserById: vi.fn()
+      deleteUserById: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     (useUserStore as any).mockReturnValue({
@@ -306,7 +313,8 @@ describe("UserPage", () => {
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
       updateUser: vi.fn(),
-      deleteUserById: vi.fn()
+      deleteUserById: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     (useUserStore as any).mockReturnValue({
@@ -349,7 +357,8 @@ describe("UserPage", () => {
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
       deleteUserById: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     const mockAuth: AuthService = {
@@ -397,7 +406,8 @@ describe("UserPage", () => {
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
       updateUser: vi.fn(),
-      deleteUserById: vi.fn()
+      deleteUserById: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     const mockAuth: AuthService = {
@@ -459,7 +469,8 @@ describe("UserPage", () => {
       deleteUserById: mockDeleteUserById,
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     const mockAuth: AuthService = {
@@ -529,6 +540,7 @@ describe("UserPage", () => {
       getExperiences: vi.fn().mockResolvedValue([]),
       getComments: vi.fn().mockResolvedValue([]),
       updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     const mockAuth: AuthService = {
