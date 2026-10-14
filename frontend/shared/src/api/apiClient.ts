@@ -34,13 +34,16 @@ export function createApiClient(baseUrl: string) {
     },
 
     /** PUT request to `path` with `body` serialized as JSON. */
-    put: async (path: string, body: any) =>
-      fetch(`${baseUrl}${path}`, {
-        headers: { 'Content-Type': 'application/json' },
-        credentials: "include",
+    put: async (path: string, body: any) =>{
+      const isFormData = body instanceof FormData;
+
+      return fetch(`${baseUrl}${path}`, {
         method: "PUT",
-        body: JSON.stringify(body)
-      }),
+        credentials: "include",
+        headers: isFormData ? {} : { "Content-Type": "application/json" },
+        body: isFormData ? body : JSON.stringify(body),
+      });
+    },
 
     /** DELETE request to `path`. */
     delete: async (path: string) =>
