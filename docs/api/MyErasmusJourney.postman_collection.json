@@ -454,6 +454,37 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Update User Image",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "multipartFile",
+                  "type": "file",
+                  "src": [
+                    "/home/jaime/Desktop/TFG/2026-MyErasmusJourney/frontend/web/tests/exampleMultimedia/experienceExampleImage.jpg"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{APIURL}}/users/3/image",
+              "host": [
+                "{{APIURL}}"
+              ],
+              "path": [
+                "users",
+                "3",
+                "image"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
