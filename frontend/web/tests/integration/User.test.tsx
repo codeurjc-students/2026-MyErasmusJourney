@@ -1,4 +1,4 @@
-import { afterAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 import "@testing-library/jest-dom";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
@@ -8,6 +8,7 @@ import { createAuthService } from "@shared/services/auth.service";
 import { createUserService, type UserService } from "@shared/services/user.service";
 import { useUserStore } from "@shared/stores/userStore";
 import type { UserSimpleDTO } from "@shared/models/UserSimpleDTO";
+
 
 import { APIURL } from "src/config/env";
 import UserPage from "src/pages/UserPage/UserPage";
@@ -21,6 +22,9 @@ import { type CommentService } from "@shared/services/comment.service";
 import type { ExperienceFormDTO } from "@shared/models/ExperienceFormDTO";
 import type { CommentFormDTO } from "@shared/models/CommentFormDTO";
 import type { ExperienceDTO } from "@shared/models/ExperienceDTO";
+import userEvent from "@testing-library/user-event";
+import { toast } from "sonner";
+
 
 const testAPI = createApiClient(APIURL);
 const testAuthService = createAuthService(testAPI);
@@ -33,6 +37,7 @@ describe("UserPage", () => {
     try {
       authenticatedUser = await authenticateUser("test@email.com");
       useUserStore.getState().setUser(authenticatedUser);
+      vi.restoreAllMocks();
     } catch (error) {
       console.error("AUTHENTICATION FAILED:", error);
       throw error;
@@ -43,6 +48,45 @@ describe("UserPage", () => {
     clearFetchAndUserStore();
     cleanup();
   });
+
+  function createImage(name = "profile.png", type = "image/png") {
+    return new File(["image content"], name, { type });
+  }
+
+  async function openDialog() {
+    const user = userEvent.setup();
+
+    fireEvent.click(
+      screen.getByRole("button", { name: /change picture/i })
+    );
+
+    return user;
+  }
+
+  function getFileInput() {
+    return document.getElementById("imageFile") as HTMLInputElement;
+  }
+
+  async function selectImageAndUpload(file?: File) {
+    const user = await openDialog();
+
+    if (file) {
+      await user.upload(getFileInput(), file);
+    }
+
+    await fireEvent.click(
+      screen.getByRole("button", { name: /upload/i })
+    );
+
+    return user;
+  }
+
+  vi.mock("sonner", () => ({
+    toast: {
+      success: vi.fn(),
+      error: vi.fn(),
+    },
+  }));
 
   it("renders the authenticated user's profile with real API data", async () => {
     render(
@@ -84,7 +128,8 @@ describe("UserPage", () => {
       getUserInfo: testUserService.getUserInfo,
       updateUser: testUserService.updateUser,
       signUp: testUserService.signUp,
-      deleteUserById: testUserService.deleteUserById
+      deleteUserById: testUserService.deleteUserById,
+      updateUserImage: testUserService.updateUserImage
     };
 
     render(
@@ -229,7 +274,8 @@ describe("UserPage", () => {
       getComments: testUserService.getComments,
       getUserInfo: testUserService.getUserInfo,
       updateUser: testUserService.updateUser,
-      signUp: testUserService.signUp
+      signUp: testUserService.signUp,
+      updateUserImage: testUserService.updateUserImage
     };
 
 
@@ -548,7 +594,8 @@ describe("UserPage", () => {
       getUserInfo: testUserService.getUserInfo,
       signUp: testUserService.signUp,
       updateUser: testUserService.updateUser,
-      deleteUserById: testUserService.deleteUserById
+      deleteUserById: testUserService.deleteUserById,
+      updateUserImage: testUserService.updateUserImage
     };
 
     render(
@@ -592,7 +639,8 @@ describe("UserPage", () => {
       signUp: testUserService.signUp,
       updateUser: testUserService.updateUser,
       deleteUserById: testUserService.deleteUserById,
-      getComments: testUserService.getComments
+      getComments: testUserService.getComments,
+      updateUserImage: testUserService.updateUserImage
     };
 
     const testExperienceService = createExperienceService(testAPI)
@@ -751,5 +799,152 @@ describe("UserPage", () => {
 
     expect(await screen.findByText("Error page")).toBeInTheDocument();
 
+  });
+
+  it("should render the change picture button with the dialog closed", async () => {
+    authenticatedUser = await authenticateUser("exampleuser1@email.com");
+
+    render(
+      <MemoryRouter initialEntries={["/account"]}>
+        <Routes>
+          <Route path="/account" element={<UserPage userService={testUserService} />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Profile")).toBeInTheDocument();
+    });
+
+    expect(
+      screen.getByRole("button", { name: /change picture/i })
+    ).toBeInTheDocument();
+
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("should open the dialog and display the file input and the upload button", async () => {
+
+    authenticatedUser = await authenticateUser("exampleuser1@email.com");
+
+    render(
+      <MemoryRouter initialEntries={["/account"]}>
+        <Routes>
+          <Route path="/account" element={<UserPage userService={testUserService} />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await openDialog();
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    const fileInput = getFileInput();
+
+    expect(fileInput).toBeInTheDocument();
+    expect(fileInput).toHaveAttribute("type", "file");
+    expect(fileInput).toHaveAttribute("accept", "image/*");
+
+    expect(
+      screen.getByRole("button", { name: /upload/i })
+    ).toBeInTheDocument();
+  });
+
+  it("should show a success notification and mark the image as updated after a successful upload", async () => {
+    authenticatedUser = await authenticateUser("exampleuser1@email.com");
+
+    render(
+      <MemoryRouter initialEntries={["/account"]}>
+        <Routes>
+          <Route path="/account" element={<UserPage userService={testUserService} />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await selectImageAndUpload(createImage());
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledExactlyOnceWith("Profile Image updated");
+    });
+
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+
+  it("should close the dialog after clicking Upload", async () => {
+
+    render(
+      <MemoryRouter initialEntries={["/account"]}>
+        <Routes>
+          <Route path="/account" element={<UserPage userService={testUserService} />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await selectImageAndUpload(createImage());
+
+    await waitFor(() => {
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    });
+  });
+
+  it("should navigate to the error page when the upload fails with an internal server error", async () => {
+    authenticatedUser = await authenticateUser("exampleuser1@email.com");
+
+    const testService: UserService = {
+      updateUserImage: async (userId: number, multimedia: File) => {
+        const response = await testAPI.get("/tests/500");
+
+        if (!response.ok) {
+          console.error("Error deleting user with id " + userId)
+          console.error(multimedia)
+          throw new ApiError(response.status, await response.text());
+        }
+
+        return await response.json();
+      },
+      getUserById: testUserService.getUserById,
+      getExperiences: testUserService.getExperiences,
+      getComments: testUserService.getComments,
+      getUserInfo: testUserService.getUserInfo,
+      updateUser: testUserService.updateUser,
+      signUp: testUserService.signUp,
+      deleteUserById: testUserService.deleteUserById
+    };
+
+    render(
+      <MemoryRouter initialEntries={["/account"]}>
+        <Routes>
+          <Route path="/account" element={<UserPage userService={testService} />} />
+          <Route path="/error" element={<div>Error page</div>} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await selectImageAndUpload(createImage("document.gif", "image/gif"));
+
+    await waitFor(() => {
+      expect(screen.getByText("Error page")).toBeInTheDocument();
+    });
+  });
+
+  it("should show an unsupported format notification when the API responds with 415", async () => {
+    authenticatedUser = await authenticateUser("exampleuser2@email.com");
+
+    render(
+      <MemoryRouter initialEntries={["/account"]}>
+        <Routes>
+          <Route path="/account" element={<UserPage userService={testUserService} />} />
+          <Route path="/error" element={<div>Error page</div>} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await selectImageAndUpload(createImage("document.gif", "image/gif"));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledExactlyOnceWith(
+        "Unsupported file format. Please upload images (JPEG, PNG)"
+      );
+    });
   });
 });

@@ -12,30 +12,18 @@ import UserExperiences from "../../components/UserExperiences/UserExperiences";
 import UserComments from "../../components/UserComments/UserComments";
 import { ApiError } from "@shared/api/apiError";
 import { Trash2Icon } from "lucide-react"
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogMedia,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "../../../@/components/ui/alert-dialog"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, AlertDialogTrigger, } from "../../../@/components/ui/alert-dialog"
+import ProfileImageDialog from "@/components/ProfileImageDialog/ProfileImageDialog";
 
 export default function UserPage({ authService = createAuthService(API), userService = createUserService(API) }: authServiceProps & userServiceProps) {
 
     const [userDTO, setUserDTO] = useState<UserDTO | null>(null);
+    const [imageUpdated, setImageUpdated] = useState<boolean>(false);
+
 
     const { user, setUser } = useUserStore();
 
     const navigate = useNavigate();
-
-    function notAvailable() {
-        navigate("/available-soon");
-    }
 
     function updateUser() {
         navigate("/user/update");
@@ -57,6 +45,7 @@ export default function UserPage({ authService = createAuthService(API), userSer
                     {
                         const data = await userService.getUserById(user.id);
                         setUserDTO(data);
+                        setImageUpdated(false);
                     }
                 }
                 catch (error) {
@@ -74,7 +63,7 @@ export default function UserPage({ authService = createAuthService(API), userSer
             }
         }
         fetchUser();
-    }, [])
+    }, [imageUpdated])
 
     async function logOut() {
         authService.logOut();
@@ -183,7 +172,7 @@ export default function UserPage({ authService = createAuthService(API), userSer
 
                 <div className="flex flex-col justify-center items-center gap-8">
                     <img src="/images/available_soon.png" alt="profile image" className="mainProfileImage rounded-full object-cover" />
-                    <button className="button" onClick={notAvailable}>Change Picture</button>
+                    <ProfileImageDialog id={userDTO?.id ?? 0} userService={userService} setImageUpdated={setImageUpdated} />
                 </div>
 
             </div>

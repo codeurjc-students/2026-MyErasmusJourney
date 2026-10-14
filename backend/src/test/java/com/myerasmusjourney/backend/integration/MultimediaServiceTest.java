@@ -3,11 +3,17 @@ package com.myerasmusjourney.backend.integration;
 import com.myerasmusjourney.backend.TestDataBase;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.ExperienceMultimedia;
+import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.domain.UserImage;
 import com.myerasmusjourney.backend.dto.ExperienceMultimediaSimpleDTO;
+import com.myerasmusjourney.backend.dto.UserImageDTO;
 import com.myerasmusjourney.backend.mapper.MultimediaMapper;
 import com.myerasmusjourney.backend.repository.ExperienceMultimediaRepository;
+import com.myerasmusjourney.backend.repository.UserImageRepository;
+import com.myerasmusjourney.backend.repository.UserRepository;
 import com.myerasmusjourney.backend.service.ExperienceService;
 import com.myerasmusjourney.backend.service.MultimediaService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -31,6 +37,12 @@ public class MultimediaServiceTest extends TestDataBase {
     private ExperienceMultimediaRepository experienceMultimediaRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserImageRepository userImageRepository;
+
+    @Autowired
     private MultimediaMapper multimediaMapper;
 
     @Autowired
@@ -44,9 +56,11 @@ public class MultimediaServiceTest extends TestDataBase {
     void clearAuthenticationContext(){
         SecurityContextHolder.clearContext();
         experienceMultimediaRepository.deleteAll();
+        userImageRepository.deleteAll();
     }
 
     @Test
+    @Transactional
     void testAddMultimedia(){
         Authentication authentication = new UsernamePasswordAuthenticationToken("exampleuser1@email.com",null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -88,6 +102,7 @@ public class MultimediaServiceTest extends TestDataBase {
     }
 
     @Test
+    @Transactional
     void testAddMultimediaWithWrongAuthentication(){
         Authentication authentication = new UsernamePasswordAuthenticationToken("exampleuser2@email.com",null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -112,6 +127,7 @@ public class MultimediaServiceTest extends TestDataBase {
     }
 
     @Test
+    @Transactional
     void testAddMultimediaWithWrongContentType(){
         Authentication authentication = new UsernamePasswordAuthenticationToken("exampleuser1@email.com",null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -133,5 +149,129 @@ public class MultimediaServiceTest extends TestDataBase {
         List<ExperienceMultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
 
         assertTrue(result.isEmpty());
+    }
+
+    @Test
+    @Transactional
+    void testAddProfileImage(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken("exampleuser1@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/jpeg",
+                "fake image content".getBytes()
+        );
+
+        User user = userRepository.findByEmail("exampleuser1@email.com");
+        try {
+            UserImage userImage = new UserImage(file, user);
+
+            UserImageDTO expected = multimediaMapper.toDTO(userImage);
+
+            UserImageDTO result = multimediaService.addUserImage(user.getId(), file);
+
+            assertEquals(expected.user(), result.user());
+            assertEquals(expected.contentType(), result.contentType());
+            assertNotNull(result.id());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Test
+    @Transactional
+    void testAddProfileImageDeletingPrevious(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken("exampleuser1@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/jpeg",
+                "fake image content".getBytes()
+        );
+
+        MockMultipartFile file2 = new MockMultipartFile(
+                "file",
+                "image.png",
+                "image/png",
+                "fake image content".getBytes()
+        );
+
+        User user = userRepository.findByEmail("exampleuser1@email.com");
+        try {
+            UserImage userImage = new UserImage(file, user);
+
+            UserImage previous = new UserImage(file2,user);
+
+            previous = userImageRepository.save(previous);
+
+            user.setProfileImage(previous);
+
+            userRepository.save(user);
+
+            UserImageDTO expected = multimediaMapper.toDTO(userImage);
+
+            UserImageDTO result = multimediaService.addUserImage(user.getId(), file);
+
+            assertEquals(expected.user(), result.user());
+            assertEquals(expected.contentType(), result.contentType());
+            assertNotNull(result.id());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Test
+    @Transactional
+    void testAddProfileImageOfAnotherUser(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken("test@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/jpeg",
+                "fake image content".getBytes()
+        );
+
+        User user = userRepository.findByEmail("exampleuser1@email.com");
+        UserImageDTO result = multimediaService.addUserImage(user.getId(), file);
+
+        Long id = -1L;
+
+        assertEquals(id, result.id());
+        assertNull(result.contentType());
+        assertNull(result.user());
+    }
+
+    @Test
+    @Transactional
+    void testAddProfileImageWithWrongContentType(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken("exampleuser1@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.txt",
+                "plain/text",
+                "fake image content".getBytes()
+        );
+
+        User user = userRepository.findByEmail("exampleuser1@email.com");
+
+        UserImageDTO result = multimediaService.addUserImage(user.getId(), file);
+
+        Long id = 0L;
+
+        assertEquals(id, result.id());
+        assertNull(result.contentType());
+        assertNull(result.user());
     }
 }

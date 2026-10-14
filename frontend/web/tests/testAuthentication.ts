@@ -190,7 +190,7 @@ async function testFetch(
 ): Promise<Response> {
     const url = input.toString();
 
-    if (url.includes("/multimedia")) {
+    if (url.includes("/multimedia") || url.includes("/image")) {
         const cookie = await cookieJar.getCookieString(APIURL);
 
         let body = init?.body as any;

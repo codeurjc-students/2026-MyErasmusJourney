@@ -9,7 +9,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -301,5 +305,37 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
                         ||
                         !driver.findElement(By.xpath("/html/body/div/div/div[2]/div[2]/div/div/div[1]/p")).getText().equals(deletedComment)
         );
+    }
+
+    @Test
+    void testUpdatingUserImage() throws URISyntaxException {
+        authenticateWithSpecificUser("exampleuser1@email.com");
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        WebElement shareButton = driver.findElement(
+                By.xpath("//button[@aria-label='Change picture']")
+        );
+
+        WebElement changePictureButton = driver.findElement(By.xpath("//button[@aria-label='Change picture']"));
+
+        changePictureButton.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("imageFile")
+        ));
+
+        WebElement imageInput = driver.findElement(By.id("imageFile"));
+        Path imagePath = Paths.get(Objects.requireNonNull(getClass().getResource("/public/experienceExampleImage.jpg")).toURI());
+        WebElement submitButton = driver.findElement(By.xpath("/html/body/div[2]/div[3]/div[2]/button"));
+
+        imageInput.sendKeys(imagePath.toAbsolutePath().toString());
+
+        submitButton.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("profileTitle")
+        ));
+
     }
 }

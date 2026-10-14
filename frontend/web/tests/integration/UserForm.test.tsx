@@ -117,7 +117,8 @@ describe("UserFormPage", () => {
             signUp: testUserService.signUp,
             getExperiences: testUserService.getExperiences,
             getUserInfo: testUserService.getUserInfo,
-            deleteUserById: testUserService.deleteUserById
+            deleteUserById: testUserService.deleteUserById,
+            updateUserImage: testUserService.updateUserImage
         }
         render(
             <MemoryRouter initialEntries={["/user/update"]}>

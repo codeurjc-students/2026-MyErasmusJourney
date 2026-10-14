@@ -10,5 +10,6 @@ public record UserDTO(
         String studyLocation,
         List<String> roles,
         List<ExperienceSimpleDTO> experiences,
-        List<CommentSimpleDTO> comments
+        List<CommentSimpleDTO> comments,
+        UserImageSimpleDTO profileImage
 ) {}

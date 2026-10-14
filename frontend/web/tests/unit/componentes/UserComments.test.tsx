@@ -61,7 +61,8 @@ describe("UserComments", () => {
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
       getComments: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
 
     };
 
@@ -117,7 +118,8 @@ describe("UserComments", () => {
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
       getComments: mockGetComments,
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
 
     };
 
@@ -169,7 +171,8 @@ describe("UserComments", () => {
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
 
     };
 
@@ -216,7 +219,8 @@ describe("UserComments", () => {
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
 
     };
 
@@ -257,7 +261,8 @@ describe("UserComments", () => {
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
 
     };
 
@@ -372,7 +377,8 @@ describe("UserComments", () => {
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
 
     };
 
@@ -458,7 +464,8 @@ describe("UserComments", () => {
       deleteUserById: vi.fn(),
       getExperiences: vi.fn(),
       signUp: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
 
     };
 
@@ -543,8 +550,8 @@ describe("UserComments", () => {
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
       getExperiences: vi.fn(),
-      updateUser: vi.fn()
-
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     const mockCommentService: CommentService = {

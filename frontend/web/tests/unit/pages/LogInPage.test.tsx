@@ -50,7 +50,8 @@ describe("Log In page", () => {
       getExperiences: vi.fn(),
       getUserById: vi.fn(),
       updateUser: vi.fn(),
-      deleteUserById: vi.fn()
+      deleteUserById: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     render(
@@ -86,7 +87,8 @@ describe("Log In page", () => {
       getExperiences: vi.fn(),
       getUserById: vi.fn(),
       updateUser: vi.fn(),
-      deleteUserById: vi.fn()
+      deleteUserById: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     render(
@@ -129,7 +131,8 @@ describe("Log In page", () => {
       getExperiences: vi.fn(),
       getUserById: vi.fn(),
       updateUser: vi.fn(),
-      deleteUserById: vi.fn()
+      deleteUserById: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     const alertSpy = vi
@@ -165,7 +168,8 @@ describe("Log In page", () => {
       getExperiences: vi.fn(),
       getUserById: vi.fn(),
       updateUser: vi.fn(),
-      deleteUserById: vi.fn()
+      deleteUserById: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     const alertSpy = vi
@@ -205,7 +209,8 @@ describe("Log In page", () => {
       getExperiences: vi.fn(),
       getUserById: vi.fn(),
       deleteUserById: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     const alertSpy = vi
@@ -246,7 +251,8 @@ describe("Log In page", () => {
       getExperiences: vi.fn(),
       getUserById: vi.fn(),
       updateUser: vi.fn(),
-      deleteUserById: vi.fn()
+      deleteUserById: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     window.alert = vi.fn();
@@ -288,7 +294,8 @@ describe("Log In page", () => {
       getExperiences: vi.fn(),
       getUserById: vi.fn(),
       updateUser: vi.fn(),
-      deleteUserById: vi.fn()
+      deleteUserById: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     render(

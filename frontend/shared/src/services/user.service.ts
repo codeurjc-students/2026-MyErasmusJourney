@@ -13,7 +13,8 @@ export function createUserService(api: ApiClient) {
     deleteUserById: (id: number) => deleteUserById(api, id),
     getExperiences: (id: number) => getExperiences(api, id),
     getComments: (id: number) => getComments(api, id),
-    updateUser: (id: number, body:UserDTO) => updateUser(api, id, body)
+    updateUser: (id: number, body:UserDTO) => updateUser(api, id, body),
+    updateUserImage: (id: number, multimedia:File) => updateUserImage(api, multimedia, id)
   };
 }
 
@@ -93,4 +94,19 @@ async function updateUser(api: ApiClient, id:number,  body: UserDTO) {
   }
 
   return response.json();
+}
+
+async function updateUserImage(api: ApiClient, multipartFile: File, userId: number) {
+
+  const formData = new FormData();
+
+  formData.append("multipartFile", multipartFile);
+
+  const reponse = await api.put(`/users/${userId}/image`, formData)
+
+  if (!reponse.ok) {
+    throw new ApiError(reponse.status, await reponse.text());
+  }
+
+  return reponse.json();
 }

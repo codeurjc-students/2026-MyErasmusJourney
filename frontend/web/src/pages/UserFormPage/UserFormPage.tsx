@@ -190,11 +190,8 @@ export default function UserFormPage({ mode, userService = createUserService(API
                         <input type="text" id="fullName" name="fullName" defaultValue={String(userDTO?.fullName ?? "")} required />
                     </div>
 
-
-                    {/* IMAGE */}
-
                     <div className="md:row-span-5 flex justify-center items-center">
-                        <img className="w-3/4 max-w-sm h-auto profileImg" src="/images/available_soon.png" alt="opened book with a quill inside a compass" />
+                        <img className="w-3/4 max-w-sm h-auto profileImg" src="/images/create_account.png" alt="opened book with a quill inside a compass" />
                     </div>
 
 

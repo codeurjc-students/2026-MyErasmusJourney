@@ -3,9 +3,12 @@ package com.myerasmusjourney.backend.service;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.ExperienceMultimedia;
 import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.domain.UserImage;
 import com.myerasmusjourney.backend.dto.ExperienceMultimediaSimpleDTO;
+import com.myerasmusjourney.backend.dto.UserImageDTO;
 import com.myerasmusjourney.backend.mapper.MultimediaMapper;
 import com.myerasmusjourney.backend.repository.ExperienceMultimediaRepository;
+import com.myerasmusjourney.backend.repository.UserImageRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,9 @@ public class MultimediaService {
     private ExperienceMultimediaRepository experienceMultimediaRepository;
 
     @Autowired
+    private UserImageRepository userImageRepository;
+
+    @Autowired
     private MultimediaMapper multimediaMapper;
 
     @Autowired
@@ -30,10 +36,12 @@ public class MultimediaService {
     @Autowired
     private UserService userService;
 
-    private static final long MAX_FILE_SIZE = 16 * 1024 * 1024;
-
     private boolean isActionNotAllowed(User user, Experience experience){
         return !experience.getAuthor().getId().equals(user.getId());
+    }
+
+    private boolean isActionNotAllowed(User user, Long id){
+        return !user.getId().equals(id);
     }
 
     @Transactional
@@ -58,5 +66,26 @@ public class MultimediaService {
         }
 
         return multimediaMapper.toSimpleDTOs(experienceMultimediaList);
+    }
+
+    @Transactional
+    public UserImageDTO addUserImage(Long id, MultipartFile multipartFile) {
+        User user = userService.getLoggedUser();
+        if(isActionNotAllowed(user, id)) return new UserImageDTO(-1L, null, null);
+        if(multipartFile == null) return null;
+        try{
+            if(!UserImage.contentTypeAccepted(multipartFile.getContentType())) return new UserImageDTO(0L, null, null);
+            UserImage savedImage = user.getProfileImage();
+            if(savedImage != null) user.setProfileImage(null);
+
+            UserImage userImage = new UserImage(multipartFile, user);
+            userImage = userImageRepository.save(userImage);
+            userService.addUserImage(userImage, user);
+            UserImageDTO dto =  multimediaMapper.toDTO(userImage);
+            return dto;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

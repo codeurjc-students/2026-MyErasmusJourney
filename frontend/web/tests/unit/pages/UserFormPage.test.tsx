@@ -36,7 +36,8 @@ describe("SignUpPage", () => {
       getUserById: vi.fn(),
       getUserInfo: vi.fn(),
       updateUser: vi.fn(),
-      deleteUserById: vi.fn()
+      deleteUserById: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     render(
@@ -63,6 +64,7 @@ describe("SignUpPage", () => {
       getUserById: vi.fn(),
       getUserInfo: vi.fn(),
       updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     render(
@@ -114,6 +116,7 @@ describe("SignUpPage", () => {
       getUserById: vi.fn(),
       getUserInfo: vi.fn(),
       updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     const alertSpy = vi
@@ -157,6 +160,7 @@ describe("SignUpPage", () => {
       getUserById: vi.fn(),
       getUserInfo: vi.fn(),
       updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     const alertSpy = vi
@@ -206,6 +210,7 @@ describe("SignUpPage", () => {
       getUserById: vi.fn(),
       getUserInfo: vi.fn(),
       updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     window.alert = vi.fn();
@@ -249,6 +254,7 @@ describe("SignUpPage", () => {
       getUserById: vi.fn(),
       getUserInfo: vi.fn(),
       updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     render(
@@ -295,6 +301,7 @@ describe("SignUpPage", () => {
       getUserById: vi.fn(),
       getUserInfo: vi.fn(),
       updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     render(
@@ -338,6 +345,7 @@ describe("SignUpPage", () => {
       getComments: vi.fn(),
       getExperiences: vi.fn(),
       updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     render(
@@ -400,6 +408,7 @@ describe("SignUpPage", () => {
       getUserById: vi.fn(),
       getUserInfo: vi.fn(),
       updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     render(
@@ -451,6 +460,7 @@ describe("SignUpPage", () => {
       getComments: vi.fn(),
       getExperiences: vi.fn(),
       updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     render(
@@ -534,7 +544,8 @@ describe("UserFormPage", () => {
       getComments: vi.fn(),
       getExperiences: vi.fn(),
       getUserInfo: vi.fn(),
-      signUp: vi.fn()
+      signUp: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     render(
@@ -632,7 +643,8 @@ describe("UserFormPage", () => {
       getComments: vi.fn(),
       getExperiences: vi.fn(),
       getUserInfo: vi.fn(),
-      signUp: vi.fn()
+      signUp: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     render(
@@ -727,7 +739,8 @@ describe("UserFormPage", () => {
       getComments: vi.fn(),
       getExperiences: vi.fn(),
       getUserInfo: vi.fn(),
-      signUp: vi.fn()
+      signUp: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     render(
@@ -801,7 +814,8 @@ describe("UserFormPage", () => {
       getComments: vi.fn(),
       getExperiences: vi.fn(),
       getUserInfo: vi.fn(),
-      signUp: vi.fn()
+      signUp: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     render(
@@ -846,7 +860,8 @@ describe("UserFormPage", () => {
       getComments: vi.fn(),
       getExperiences: vi.fn(),
       getUserInfo: vi.fn(),
-      signUp: vi.fn()
+      signUp: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     render(
