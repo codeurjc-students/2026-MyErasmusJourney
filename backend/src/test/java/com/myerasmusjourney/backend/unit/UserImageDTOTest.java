@@ -17,6 +17,6 @@ public class UserImageDTOTest {
 
         assertEquals(id, userImageDTO.id());
         assertEquals(".png", userImageDTO.contentType());
-        assertEquals(new UserSimpleDTO(null, null, null), userImageDTO.userSimpleDTO());
+        assertEquals(new UserSimpleDTO(null, null, null), userImageDTO.user());
     }
 }

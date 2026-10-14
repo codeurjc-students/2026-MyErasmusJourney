@@ -306,7 +306,7 @@ public class MultimediaServiceTest {
 
             assertEquals(id, result.id());
             assertNull(result.contentType());
-            assertNull(result.userSimpleDTO());
+            assertNull(result.user());
 
             verify(userService).getLoggedUser();
 
@@ -341,7 +341,7 @@ public class MultimediaServiceTest {
 
             assertEquals(id, result.id());
             assertNull(result.contentType());
-            assertNull(result.userSimpleDTO());
+            assertNull(result.user());
 
             verify(userService).getLoggedUser();
 

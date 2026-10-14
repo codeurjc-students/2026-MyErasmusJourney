@@ -172,7 +172,7 @@ public class MultimediaServiceTest extends TestDataBase {
 
             UserImageDTO result = multimediaService.addUserImage(user.getId(), file);
 
-            assertEquals(expected.userSimpleDTO(), result.userSimpleDTO());
+            assertEquals(expected.user(), result.user());
             assertEquals(expected.contentType(), result.contentType());
             assertNotNull(result.id());
 
@@ -218,7 +218,7 @@ public class MultimediaServiceTest extends TestDataBase {
 
             UserImageDTO result = multimediaService.addUserImage(user.getId(), file);
 
-            assertEquals(expected.userSimpleDTO(), result.userSimpleDTO());
+            assertEquals(expected.user(), result.user());
             assertEquals(expected.contentType(), result.contentType());
             assertNotNull(result.id());
 
@@ -248,7 +248,7 @@ public class MultimediaServiceTest extends TestDataBase {
 
         assertEquals(id, result.id());
         assertNull(result.contentType());
-        assertNull(result.userSimpleDTO());
+        assertNull(result.user());
     }
 
     @Test
@@ -272,6 +272,6 @@ public class MultimediaServiceTest extends TestDataBase {
 
         assertEquals(id, result.id());
         assertNull(result.contentType());
-        assertNull(result.userSimpleDTO());
+        assertNull(result.user());
     }
 }
