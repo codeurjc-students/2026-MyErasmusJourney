@@ -138,7 +138,8 @@ describe("SignUpPage", () => {
       getUserById: testUserService.getUserById,
       getUserInfo: testUserService.getUserInfo,
       deleteUserById: testUserService.deleteUserById,
-      updateUser: testUserService.updateUser
+      updateUser: testUserService.updateUser,
+      updateUserImage: testUserService.updateUserImage
     }
 
     render(

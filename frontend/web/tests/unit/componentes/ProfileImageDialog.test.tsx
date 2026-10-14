@@ -30,14 +30,14 @@ describe("ProfileImageDialog", () => {
     const userId = 7;
 
     let updateUserImageMock: ReturnType<typeof vi.fn>;
-    let setImageUpdatedMock: ReturnType<typeof vi.fn>;
+    let setImageUpdatedMock: (newValue: boolean) => void;
     let userService: UserService;
 
     beforeEach(() => {
         vi.clearAllMocks();
 
         updateUserImageMock = vi.fn().mockResolvedValue(undefined);
-        setImageUpdatedMock = vi.fn();
+        setImageUpdatedMock = vi.fn<(newValue: boolean) => void>();
 
         userService = {
             updateUserImage: updateUserImageMock,
