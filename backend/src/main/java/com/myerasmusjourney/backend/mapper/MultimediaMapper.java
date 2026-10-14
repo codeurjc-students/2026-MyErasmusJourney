@@ -10,7 +10,7 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {UserMapper.class})
 public interface MultimediaMapper {
     List<ExperienceMultimediaSimpleDTO> toSimpleDTOs(List<ExperienceMultimedia> multimediaList);
     ExperienceMultimediaDTO toDTO(Multimedia multimedia);

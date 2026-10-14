@@ -76,14 +76,13 @@ public class MultimediaService {
         try{
             if(!UserImage.contentTypeAccepted(multipartFile.getContentType())) return new UserImageDTO(0L, null, null);
             UserImage savedImage = user.getProfileImage();
-            if(savedImage != null){
-                user.setProfileImage(null);
-                userImageRepository.delete(savedImage);
-            }
+            if(savedImage != null) user.setProfileImage(null);
+
             UserImage userImage = new UserImage(multipartFile, user);
             userImage = userImageRepository.save(userImage);
             userService.addUserImage(userImage, user);
-            return multimediaMapper.toDTO(userImage);
+            UserImageDTO dto =  multimediaMapper.toDTO(userImage);
+            return dto;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

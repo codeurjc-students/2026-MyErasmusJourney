@@ -79,7 +79,7 @@ public class UserRestController {
     }
 
     @PutMapping(value = {"/{id}/image"}, consumes = {"multipart/form-data"})
-    public ResponseEntity<UserImageDTO> updateProfileImage(@PathVariable Long id, @RequestParam("multipartFileList") MultipartFile multipartFile) {
+    public ResponseEntity<UserImageDTO> updateProfileImage(@PathVariable Long id, @RequestParam("multipartFile") MultipartFile multipartFile) {
         UserImageDTO userImageDTO = multimediaService.addUserImage(id, multipartFile);
         if (userImageDTO == null) return ResponseEntity.noContent().build();
         if (userImageDTO.id().equals(-1L)) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
