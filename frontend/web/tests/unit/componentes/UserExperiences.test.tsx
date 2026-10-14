@@ -64,7 +64,8 @@ describe("UserExperiences", () => {
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
       getComments: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
 
     };
 
@@ -127,7 +128,8 @@ describe("UserExperiences", () => {
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
       getComments: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
 
     };
 
@@ -182,7 +184,8 @@ describe("UserExperiences", () => {
       getComments: vi.fn(),
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
 
     };
 
@@ -232,7 +235,8 @@ describe("UserExperiences", () => {
       deleteUserById: vi.fn(),
       getComments: vi.fn(),
       signUp: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
 
     };
 
@@ -320,7 +324,8 @@ describe("UserExperiences", () => {
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
       getComments: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
 
     };
 
@@ -404,7 +409,8 @@ describe("UserExperiences", () => {
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
       getComments: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     const mockExperienceService: ExperienceService = {
@@ -485,7 +491,8 @@ describe("UserExperiences", () => {
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
       updateUser: vi.fn(),
-      getComments: vi.fn()
+      getComments: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     const mockExperienceService: ExperienceService = {
@@ -542,7 +549,8 @@ describe("UserExperiences", () => {
       deleteUserById: vi.fn(),
       signUp: vi.fn(),
       getComments: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     const mockExperienceService: ExperienceService = {} as any;

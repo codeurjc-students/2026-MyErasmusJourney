@@ -35,7 +35,8 @@ describe("App", () => {
       signUp: vi.fn(),
       getExperiences: vi.fn(),
       deleteUserById: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     //render component (DOM virtual)
@@ -80,7 +81,8 @@ describe("App", () => {
       signUp: vi.fn(),
       getExperiences: vi.fn(),
       deleteUserById: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     //render component (DOM virtual)
@@ -123,7 +125,8 @@ describe("App", () => {
       signUp: vi.fn(),
       getExperiences: vi.fn(),
       deleteUserById: vi.fn(),
-      updateUser: vi.fn()
+      updateUser: vi.fn(),
+      updateUserImage: vi.fn()
     };
 
     render(
