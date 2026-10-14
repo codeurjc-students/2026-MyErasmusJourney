@@ -1,0 +1,150 @@
+
+.share-dialog-content {
+    width: min(92vw, 34rem);
+    max-width: 34rem;
+    padding: clamp(1.25rem, 4vw, 2rem);
+    background-color: #F7FBFF;
+    border: 0.08rem solid #D5E1EE;
+    border-radius: 1.5rem;
+    box-shadow: 0.35rem 0.35rem 0.75rem rgba(213, 225, 238, 0.9),
+                0.75rem 0.75rem 1rem rgba(213, 225, 238, 0.5);
+    color: #1E3A5F;
+}
+
+.share-dialog-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    text-align: left;
+}
+
+.share-dialog-title {
+    margin: 0;
+    padding: 0;
+    color: #1E3A5F;
+    font-size: clamp(1.25rem, 3vw, 1.6rem);
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+.share-dialog-description {
+    margin: 0;
+    color: #526B86;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.share-dialog-link {
+    display: flex;
+    align-items: stretch;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    min-width: 0;
+}
+
+.share-dialog-input {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0.75rem 1rem;
+    color: #1E3A5F;
+    background-color: #FFFFFF;
+    border: 0.08rem solid #D5E1EE;
+    border-radius: 0.9rem;
+    box-shadow: none;
+    font-size: 0.9rem;
+}
+
+.share-copy-button {
+    flex-shrink: 0;
+    align-self: stretch;
+    padding: 0.65rem 1rem;
+    border: none;
+    border-radius: 0.9rem;
+    background-color: #4A90D9;
+    color: #FFFFFF;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.share-copy-button:hover {
+    background-color: #347CC2;
+}
+
+.share-social-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.65rem;
+    margin-top: 1rem;
+}
+
+.share-social-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-width: 0;
+    padding: 0.75rem 0.5rem;
+    border: 0.08rem solid #D5E1EE;
+    border-radius: 0.9rem;
+    background-color: #FFFFFF;
+    color: #1E3A5F;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.share-social-button svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    flex-shrink: 0;
+}
+
+.share-social-button:hover {
+    background-color: #DCEFFD;
+    transform: translateY(-0.1rem);
+}
+
+.share-dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.25rem;
+}
+
+.share-close-button {
+    padding: 0.65rem 1.25rem;
+    border-radius: 1.25rem;
+    background-color: #4A90D9;
+    color: #FFFFFF;
+}
+
+.share-close-button:hover {
+    background-color: #347CC2;
+}
+
+@media (max-width: 30rem) {
+    .share-dialog-content {
+        width: 92vw;
+        padding: 1.1rem;
+    }
+
+    .share-dialog-link {
+        flex-direction: column;
+    }
+
+    .share-copy-button {
+        width: 100%;
+    }
+
+    .share-social-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .share-social-button {
+        justify-content: center;
+        padding: 0.7rem;
+    }
+}
