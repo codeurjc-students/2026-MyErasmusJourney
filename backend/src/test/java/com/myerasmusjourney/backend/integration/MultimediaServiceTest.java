@@ -1,10 +1,7 @@
 package com.myerasmusjourney.backend.integration;
 
 import com.myerasmusjourney.backend.TestDataBase;
-import com.myerasmusjourney.backend.domain.Experience;
-import com.myerasmusjourney.backend.domain.ExperienceMultimedia;
-import com.myerasmusjourney.backend.domain.User;
-import com.myerasmusjourney.backend.domain.UserImage;
+import com.myerasmusjourney.backend.domain.*;
 import com.myerasmusjourney.backend.dto.ExperienceMultimediaSimpleDTO;
 import com.myerasmusjourney.backend.dto.UserImageDTO;
 import com.myerasmusjourney.backend.mapper.MultimediaMapper;
@@ -296,8 +293,8 @@ public class MultimediaServiceTest extends TestDataBase {
             userRepository.save(user);
 
             Resource expected = new ByteArrayResource(userImage.getMultimediaFile());
-            Resource result = multimediaService.loadProfileImageAsResource(userImage.getId());
-
+            Multimedia multimedia = multimediaService.getUserImageById(userImage.getId());
+            Resource result = multimediaService.loadFileAsResource(multimedia.getMultimediaFile());
             assertEquals(expected, result);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -306,7 +303,34 @@ public class MultimediaServiceTest extends TestDataBase {
     }
 
     @Test
-    void testLoadProfileImageAsResourceFails(){
-        assertThrows(NoSuchElementException.class, () -> multimediaService.loadProfileImageAsResource(0L));
+    void testGetUserProfile(){
+        User user = userRepository.findByEmail("test@email.com");
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/whatever",
+                "fake image content".getBytes()
+        );
+
+        try {
+            UserImage userImage = new UserImage(file, user);
+            userImage = userImageRepository.save(userImage);
+            user.setProfileImage(userImage);
+            userRepository.save(user);
+
+            Multimedia expected = userImage;
+            Multimedia result = multimediaService.getUserImageById(userImage.getId());
+            assertEquals(expected.getId(), result.getId());
+            assertEquals(expected.getMultimediaFile().length, result.getMultimediaFile().length);
+            assertEquals(expected.getContentType(), result.getContentType());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void testGetUserProfileNotFound(){
+        assertThrows(NoSuchElementException.class, () -> multimediaService.getUserImageById(0L));
     }
 }

@@ -4,28 +4,24 @@ import com.myerasmusjourney.backend.TestDataBase;
 import com.myerasmusjourney.backend.domain.Comment;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
-import com.myerasmusjourney.backend.domain.UserImage;
 import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.mapper.CommentMapper;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import com.myerasmusjourney.backend.mapper.UserMapper;
 import com.myerasmusjourney.backend.repository.CommentRepository;
 import com.myerasmusjourney.backend.repository.ExperienceRepository;
-import com.myerasmusjourney.backend.repository.UserImageRepository;
 import com.myerasmusjourney.backend.repository.UserRepository;
 import com.myerasmusjourney.backend.service.UserService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -47,9 +43,6 @@ public class UserServiceTest extends TestDataBase{
 
     @Autowired
     private CommentRepository commentRepository;
-
-    @Autowired
-    private UserImageRepository userImageRepository;
 
     @Autowired
     private ExperienceMapper experienceMapper;
@@ -607,103 +600,5 @@ public class UserServiceTest extends TestDataBase{
         User changedUser = userRepository.findByEmail("user1@gmail.com");
 
         assertNotEquals(changedUserDTO.fullName(), changedUser.getFullName());
-    }
-
-    @Test
-    @Transactional
-    void testGetProfileImage(){
-        Authentication authentication = new UsernamePasswordAuthenticationToken("test@email.com",null, List.of());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        User user = userService.getLoggedUser();
-
-        MockMultipartFile file = new MockMultipartFile(
-                "file",
-                "image.jpg",
-                "image/jpeg",
-                "fake image content".getBytes()
-        );
-
-        try {
-            UserImage userImage = new UserImage(file, user);
-            userImage = userImageRepository.save(userImage);
-            user.setProfileImage(userImage);
-            userRepository.save(user);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
-        UserDTO userDTO = userMapper.toDTO(user);
-        UserImageSimpleDTO result = userService.getProfileImage(user.getId());
-
-        assertEquals(userDTO.profileImage(), result);
-    }
-
-    @Test
-    @Transactional
-    void testGetProfileImageByAdmin(){
-        User newAdmin = new User("admin", "TestAdmin", "integrationAdmin@email.com", passwordEncoder.encode("password"), "", "", List.of("USER", "ADMIN"));
-        userRepository.save(newAdmin);
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken("integrationAdmin@email.com",null, List.of());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        User user = userRepository.findByEmail("user1@gmail.com");
-
-        MockMultipartFile file = new MockMultipartFile(
-                "file",
-                "image.jpg",
-                "image/jpeg",
-                "fake image content".getBytes()
-        );
-
-        try {
-            UserImage userImage = new UserImage(file, user);
-            userImage = userImageRepository.save(userImage);
-            user.setProfileImage(userImage);
-            userRepository.save(user);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        UserDTO userDTO = userMapper.toDTO(user);
-        UserImageSimpleDTO result = userService.getProfileImage(user.getId());
-
-        assertEquals(userDTO.profileImage(), result);
-    }
-
-    @Test
-    @Transactional
-    void testGetProfileImageWithWrongAuthentication(){
-        Authentication authentication = new UsernamePasswordAuthenticationToken("user2@gmail.com",null, List.of());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        User user = userRepository.findByEmail("user1@gmail.com");
-
-        MockMultipartFile file = new MockMultipartFile(
-                "file",
-                "image.jpg",
-                "image/jpeg",
-                "fake image content".getBytes()
-        );
-
-        try {
-            UserImage userImage = new UserImage(file, user);
-            userImage = userImageRepository.save(userImage);
-            user.setProfileImage(userImage);
-            userRepository.save(user);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        UserImageSimpleDTO result = userService.getProfileImage(user.getId());
-
-        Long id = -1L;
-
-        assertEquals(id, result.id());
     }
 }
