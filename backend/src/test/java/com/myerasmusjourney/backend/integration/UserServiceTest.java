@@ -702,6 +702,8 @@ public class UserServiceTest extends TestDataBase{
 
         UserImageSimpleDTO result = userService.getProfileImage(user.getId());
 
-        assertNull(result);
+        Long id = -1L;
+
+        assertEquals(id, result.id());
     }
 }

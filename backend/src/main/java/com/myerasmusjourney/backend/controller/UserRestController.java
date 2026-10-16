@@ -92,7 +92,7 @@ public class UserRestController {
     @GetMapping("/{id}/image")
     public ResponseEntity<Resource> getMedia(@PathVariable Long id) {
         UserImageSimpleDTO dto = userService.getProfileImage(id);
-        if (dto == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        if (dto.id() == -1L) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         Resource file = multimediaService.loadProfileImageAsResource(dto.id());   // FileSystemResource
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(dto.contentType()))

@@ -41,8 +41,8 @@ public class DataInitializer {
         UserFormDTO userFormDTO4 = new UserFormDTO("exampleuser4@email.com", "Sofia", "Sofia Martin", "Madrid", "Spain", "password", "password");
         UserFormDTO userFormDTO5 = new UserFormDTO("exampleuser5@email.com", "Lukas", "Lukas Schneider", "Munich", "Germany", "password", "password");
         UserFormDTO userFormDTO6 = new UserFormDTO("exampleuser6@email.com", "Emma", "Emma Wilson", "London", "United Kingdom", "password", "password");
-        UserFormDTO userFormDTO7 = new UserFormDTO("exampleuser7@email.com", "Joao", "Joao Silva", "Porto", "Portugal", "password", "password");
-        UserFormDTO userFormDTO8 = new UserFormDTO("exampleuser8@email.com", "Anna", "Anna Novak", "Prague", "Czech Republic", "password", "password");
+        UserFormDTO userFormDTO7 = new UserFormDTO("exampleuser7@email.com", "Joao", "Joao Silva", "Prague", "Czech Republic", "password", "password");
+        UserFormDTO userFormDTO8 = new UserFormDTO("exampleuser8@email.com", "Anna", "Anna Novak", "Lisbon", "Portugal", "password", "password");
         UserFormDTO userFormDTO9 = new UserFormDTO("exampleuser9@email.com", "Clara", "Clara Rossi", "Milan", "Italy", "password", "password");
         UserFormDTO userFormDTO10 = new UserFormDTO("exampleuser10@email.com", "Thomas", "Thomas Müller", "Frankfurt", "Germany", "password", "password");
         UserFormDTO userFormDTO11 = new UserFormDTO("exampleuser11@email.com", "Elena", "Elena García", "Valencia", "Spain", "password", "password");
@@ -192,14 +192,19 @@ public class DataInitializer {
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser7@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        experienceService.createExperience(experienceFormDTO33);
+        experienceService.createExperience(experienceFormDTO34);
         experienceService.createExperience(experienceFormDTO35);
         experienceService.createExperience(experienceFormDTO36);
 
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser8@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        experienceService.createExperience(experienceFormDTO29);
+        experienceService.createExperience(experienceFormDTO30);
         experienceService.createExperience(experienceFormDTO31);
         experienceService.createExperience(experienceFormDTO32);
+
 
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser9@email.com", null, List.of());

@@ -1003,7 +1003,9 @@ public class UserServiceTest {
 
         UserImageSimpleDTO result = userService.getProfileImage(1L);
 
-        assertNull(result);
+        Long id = -1L;
+
+        assertEquals(id, result.id());
 
         verify(userRepository).findByEmail("admin@email.com");
     }
