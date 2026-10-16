@@ -7,12 +7,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.MappedSuperclass;
 import java.io.IOException;
-import java.util.Map;
+import java.util.Set;
+
 import org.springframework.web.multipart.MultipartFile;
 
 @MappedSuperclass
 public abstract class Multimedia {
-    private static final Map<String, String> EXTENSIONS = Map.ofEntries(Map.entry("image/jpeg", ".jpg"), Map.entry("image/jpg", ".jpg"), Map.entry("image/pjpeg", ".jpg"), Map.entry("image/png", ".png"), Map.entry("image/x-png", ".png"), Map.entry("image/gif", ".gif"), Map.entry("video/mp4", ".mp4"), Map.entry("video/webm", ".webm"), Map.entry("video/quicktime", ".mov"), Map.entry("video/x-msvideo", ".avi"), Map.entry("video/x-matroska", ".mkv"));
+    private static final Set<String> EXTENSIONS = Set.of("image/jpeg", "image/jpg", "image/pjpeg", "image/png", "image/x-png", "image/gif", "video/mp4", "video/webm", "video/quicktime", "video/x-msvideo", "video/x-matroska");
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,7 +29,7 @@ public abstract class Multimedia {
     }
 
     public Multimedia(MultipartFile rawImage) throws IOException {
-        this.contentType = (String)EXTENSIONS.getOrDefault(rawImage.getContentType(), ".jpg");
+        this.contentType = rawImage.getContentType();
         this.multimediaFile = rawImage.getBytes();
     }
 
@@ -53,10 +54,10 @@ public abstract class Multimedia {
     }
 
     public void setContentType(String contentType) {
-        this.contentType = (String)EXTENSIONS.get(contentType);
+        this.contentType = contentType;
     }
 
     public static boolean contentTypeAccepted(String contentType) {
-        return EXTENSIONS.containsKey(contentType);
+        return EXTENSIONS.contains(contentType);
     }
 }
