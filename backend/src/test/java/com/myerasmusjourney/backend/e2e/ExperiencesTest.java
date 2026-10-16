@@ -315,8 +315,8 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .when().post("/api/v1/experiences/1/multimedia")
                 .then().statusCode(201)
                 .body("$", Matchers.hasSize(Matchers.greaterThan(0)))
-                .body("[0].contentType", Matchers.equalTo(".jpg"))
-                .body("[1].contentType", Matchers.equalTo(".png"));
+                .body("[0].contentType", Matchers.equalTo("image/jpg"))
+                .body("[1].contentType", Matchers.equalTo("image/png"));
     }
 
     @Test
