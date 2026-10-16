@@ -155,4 +155,13 @@ public class UserService {
         user.setProfileImage(userImage);
         userRepository.save(user);
     }
+
+    @Transactional
+    public UserImageSimpleDTO getProfileImage(Long id) {
+        User loggedUser = getLoggedUser();
+        if (isActionNotAllowed(loggedUser, id)) return null;
+        User user = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
+        UserDTO userDTO = userMapper.toDTO(user);
+        return userDTO.profileImage();
+    }
 }

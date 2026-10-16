@@ -4,16 +4,18 @@ import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.service.MultimediaService;
 import com.myerasmusjourney.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.micrometer.observation.autoconfigure.ObservationProperties;
+import org.springframework.core.io.Resource;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.Duration;
 import java.util.Collection;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -85,6 +87,18 @@ public class UserRestController {
         if (userImageDTO.id().equals(-1L)) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         if (userImageDTO.id().equals(0L)) return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).build();
         return ResponseEntity.ok(userImageDTO);
+    }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<Resource> getMedia(@PathVariable Long id) {
+        UserImageSimpleDTO dto = userService.getProfileImage(id);
+        if (dto == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        Resource file = multimediaService.loadProfileImageAsResource(dto.id());   // FileSystemResource
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(dto.contentType()))
+                .cacheControl(CacheControl.maxAge(Duration.ofDays(7)).cachePublic())
+                .eTag(String.valueOf(dto.id()))
+                .body(file);
     }
 
 }

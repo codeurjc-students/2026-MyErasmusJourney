@@ -11,12 +11,15 @@ import com.myerasmusjourney.backend.repository.ExperienceMultimediaRepository;
 import com.myerasmusjourney.backend.repository.UserImageRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class MultimediaService {
@@ -81,11 +84,16 @@ public class MultimediaService {
             UserImage userImage = new UserImage(multipartFile, user);
             userImage = userImageRepository.save(userImage);
             userService.addUserImage(userImage, user);
-            UserImageDTO dto =  multimediaMapper.toDTO(userImage);
-            return dto;
+            return multimediaMapper.toDTO(userImage);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
+    }
+
+    @Transactional
+    public Resource loadProfileImageAsResource(Long id) {
+        UserImage userImage = userImageRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User profile image not found"));
+        return new ByteArrayResource(userImage.getMultimediaFile());
     }
 }
