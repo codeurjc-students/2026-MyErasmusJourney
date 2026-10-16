@@ -89,16 +89,4 @@ public class UserRestController {
         return ResponseEntity.ok(userImageDTO);
     }
 
-    @GetMapping("/{id}/image")
-    public ResponseEntity<Resource> getMedia(@PathVariable Long id) {
-        UserImageSimpleDTO dto = userService.getProfileImage(id);
-        if (dto.id() == -1L) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        Resource file = multimediaService.loadProfileImageAsResource(dto.id());   // FileSystemResource
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(dto.contentType()))
-                .cacheControl(CacheControl.maxAge(Duration.ofDays(7)).cachePublic())
-                .eTag(String.valueOf(dto.id()))
-                .body(file);
-    }
-
 }

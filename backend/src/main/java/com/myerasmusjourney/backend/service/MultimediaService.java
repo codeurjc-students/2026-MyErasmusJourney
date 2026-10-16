@@ -1,9 +1,6 @@
 package com.myerasmusjourney.backend.service;
 
-import com.myerasmusjourney.backend.domain.Experience;
-import com.myerasmusjourney.backend.domain.ExperienceMultimedia;
-import com.myerasmusjourney.backend.domain.User;
-import com.myerasmusjourney.backend.domain.UserImage;
+import com.myerasmusjourney.backend.domain.*;
 import com.myerasmusjourney.backend.dto.ExperienceMultimediaSimpleDTO;
 import com.myerasmusjourney.backend.dto.UserImageDTO;
 import com.myerasmusjourney.backend.mapper.MultimediaMapper;
@@ -92,8 +89,11 @@ public class MultimediaService {
     }
 
     @Transactional
-    public Resource loadProfileImageAsResource(Long id) {
-        UserImage userImage = userImageRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User profile image not found"));
-        return new ByteArrayResource(userImage.getMultimediaFile());
+    public Resource loadFileAsResource(byte[] file) {
+        return new ByteArrayResource(file);
+    }
+
+    public Multimedia getUserImageById(Long id) {
+        return userImageRepository.findById(id).orElseThrow(()-> new NoSuchElementException("Profile image doesn't exist"));
     }
 }
