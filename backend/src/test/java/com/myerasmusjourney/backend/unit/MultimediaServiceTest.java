@@ -1,9 +1,6 @@
 package com.myerasmusjourney.backend.unit;
 
-import com.myerasmusjourney.backend.domain.Experience;
-import com.myerasmusjourney.backend.domain.ExperienceMultimedia;
-import com.myerasmusjourney.backend.domain.User;
-import com.myerasmusjourney.backend.domain.UserImage;
+import com.myerasmusjourney.backend.domain.*;
 import com.myerasmusjourney.backend.dto.ExperienceMultimediaSimpleDTO;
 import com.myerasmusjourney.backend.dto.UserImageDTO;
 import com.myerasmusjourney.backend.dto.UserSimpleDTO;
@@ -372,14 +369,12 @@ public class MultimediaServiceTest {
             UserImage userImage = new UserImage(file, user);
             userImage.setId(1L);
 
-            when(userImageRepository.findById(1L)).thenReturn(Optional.of(userImage));
 
             Resource expected = new ByteArrayResource(userImage.getMultimediaFile());
-            Resource result = multimediaService.loadProfileImageAsResource(1L);
+            Resource result = multimediaService.loadFileAsResource(userImage.getMultimediaFile());
 
             assertEquals(expected, result);
 
-            verify(userImageRepository).findById(1L);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -387,14 +382,45 @@ public class MultimediaServiceTest {
     }
 
     @Test
-    void testLoadProfileImageAsResourceFails(){
-
+    void testGetProfileImageByIdFails(){
 
         when(userImageRepository.findById(0L)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> multimediaService.loadProfileImageAsResource(0L));
+        assertThrows(NoSuchElementException.class, () -> multimediaService.getUserImageById(0L));
 
         verify(userImageRepository).findById(0L);
+
+    }
+
+    @Test
+    void testGetProfileImageById(){
+
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+        user.setRoles(List.of("User"));
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/whatever",
+                "fake image content".getBytes()
+        );
+
+        try {
+            UserImage userImage = new UserImage(file, user);
+            userImage.setId(1L);
+
+            when(userImageRepository.findById(1L)).thenReturn(Optional.of(userImage));
+
+            Multimedia result = multimediaService.getUserImageById(userImage.getId());
+
+            assertEquals(userImage, result);
+
+            verify(userImageRepository).findById(1L);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
