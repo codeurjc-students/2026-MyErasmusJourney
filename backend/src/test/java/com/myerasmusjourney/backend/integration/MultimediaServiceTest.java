@@ -19,6 +19,8 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +28,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
 
@@ -273,5 +276,37 @@ public class MultimediaServiceTest extends TestDataBase {
         assertEquals(id, result.id());
         assertNull(result.contentType());
         assertNull(result.user());
+    }
+
+    @Test
+    void testLoadProfileImageAsResource(){
+        User user = userRepository.findByEmail("test@email.com");
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/whatever",
+                "fake image content".getBytes()
+        );
+
+        try {
+            UserImage userImage = new UserImage(file, user);
+            userImage = userImageRepository.save(userImage);
+            user.setProfileImage(userImage);
+            userRepository.save(user);
+
+            Resource expected = new ByteArrayResource(userImage.getMultimediaFile());
+            Resource result = multimediaService.loadProfileImageAsResource(userImage.getId());
+
+            assertEquals(expected, result);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Test
+    void testLoadProfileImageAsResourceFails(){
+        assertThrows(NoSuchElementException.class, () -> multimediaService.loadProfileImageAsResource(0L));
     }
 }
