@@ -80,7 +80,7 @@ public class MultimediaMapperTest {
 
             UserImage userImage = new UserImage(file, user);
 
-            UserImageDTO expected = new UserImageDTO(null, ".jpg", new UserSimpleDTO(null, null, null));
+            UserImageDTO expected = new UserImageDTO(null, file.getContentType(), new UserSimpleDTO(null, null, null));
             UserImageDTO result = mapper.toDTO(userImage);
 
             assertEquals(expected, result);

@@ -19,10 +19,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -348,6 +352,50 @@ public class MultimediaServiceTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    void testLoadProfileImageAsResource(){
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+        user.setRoles(List.of("User"));
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/whatever",
+                "fake image content".getBytes()
+        );
+
+        try {
+            UserImage userImage = new UserImage(file, user);
+            userImage.setId(1L);
+
+            when(userImageRepository.findById(1L)).thenReturn(Optional.of(userImage));
+
+            Resource expected = new ByteArrayResource(userImage.getMultimediaFile());
+            Resource result = multimediaService.loadProfileImageAsResource(1L);
+
+            assertEquals(expected, result);
+
+            verify(userImageRepository).findById(1L);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Test
+    void testLoadProfileImageAsResourceFails(){
+
+
+        when(userImageRepository.findById(0L)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> multimediaService.loadProfileImageAsResource(0L));
+
+        verify(userImageRepository).findById(0L);
+
     }
 
 }

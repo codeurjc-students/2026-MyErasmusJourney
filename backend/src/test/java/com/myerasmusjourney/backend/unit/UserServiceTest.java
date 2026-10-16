@@ -3,12 +3,14 @@ package com.myerasmusjourney.backend.unit;
 import com.myerasmusjourney.backend.domain.Comment;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.domain.UserImage;
 import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.mapper.CommentMapper;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
 import com.myerasmusjourney.backend.mapper.UserMapper;
 import com.myerasmusjourney.backend.repository.UserRepository;
 import com.myerasmusjourney.backend.service.UserService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -16,11 +18,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -881,5 +885,126 @@ public class UserServiceTest {
         assertNull(result);
 
         verify(userRepository).findByEmail("user2@email.com");
+    }
+
+    @Test
+    @Transactional
+    void testGetProfileImage(){
+        User loggedUser = new User("Test", "user", "test@email.com", "password", "Munich", "Germany");
+        loggedUser.setId(1L);
+
+        UserDTO userDTO;
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/jpeg",
+                "fake image content".getBytes()
+        );
+
+        try {
+            UserImage userImage = new UserImage(file, loggedUser);
+            loggedUser.setProfileImage(userImage);
+            userDTO = new UserDTO(loggedUser.getId(), loggedUser.getFullName(), loggedUser.getDisplayName(), loggedUser.getEmail(), loggedUser.getStudyLocation(), loggedUser.getRoles(), List.of(), List.of(), new UserImageSimpleDTO(loggedUser.getProfileImage().getId(), loggedUser.getProfileImage().getContentType()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("test@email.com");
+
+        when(userRepository.findByEmail("test@email.com")).thenReturn(loggedUser);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(loggedUser));
+        when(userMapper.toDTO(loggedUser)).thenReturn(userDTO);
+
+        UserImageSimpleDTO result = userService.getProfileImage(1L);
+
+        assertEquals(userDTO.profileImage(), result);
+
+        verify(userRepository).findByEmail("test@email.com");
+        verify(userRepository).findById(1L);
+        verify(userMapper).toDTO(loggedUser);
+    }
+
+    @Test
+    @Transactional
+    void testGetProfileImageByAdmin(){
+        User admin = new User();
+        admin.setEmail("admin@email.com");
+        admin.setId(2L);
+        admin.setRoles(List.of("USER", "ADMIN"));
+
+        User targetUser = new User("Test", "user", "test@email.com", "password", "Munich", "Germany");
+        targetUser.setId(1L);
+
+        UserDTO userDTO;
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/jpeg",
+                "fake image content".getBytes()
+        );
+
+        try {
+            UserImage userImage = new UserImage(file, targetUser);
+            targetUser.setProfileImage(userImage);
+            userDTO = new UserDTO(targetUser.getId(), targetUser.getFullName(), targetUser.getDisplayName(), targetUser.getEmail(), targetUser.getStudyLocation(), targetUser.getRoles(), List.of(), List.of(), new UserImageSimpleDTO(targetUser.getProfileImage().getId(), targetUser.getProfileImage().getContentType()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("admin@email.com");
+
+        when(userRepository.findByEmail("admin@email.com")).thenReturn(admin);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(targetUser));
+        when(userMapper.toDTO(targetUser)).thenReturn(userDTO);
+
+        UserImageSimpleDTO result = userService.getProfileImage(1L);
+
+        assertEquals(userDTO.profileImage(), result);
+
+        verify(userRepository).findByEmail("admin@email.com");
+        verify(userRepository).findById(1L);
+        verify(userMapper).toDTO(targetUser);
+    }
+
+    @Test
+    @Transactional
+    void testGetProfileImageWithWrongAuthentication(){
+        User admin = new User();
+        admin.setEmail("admin@email.com");
+        admin.setId(2L);
+        admin.setRoles(List.of("USER"));
+
+        User targetUser = new User("Test", "user", "test@email.com", "password", "Munich", "Germany");
+        targetUser.setId(1L);
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("admin@email.com");
+
+        when(userRepository.findByEmail("admin@email.com")).thenReturn(admin);
+
+        UserImageSimpleDTO result = userService.getProfileImage(1L);
+
+        assertNull(result);
+
+        verify(userRepository).findByEmail("admin@email.com");
     }
 }
