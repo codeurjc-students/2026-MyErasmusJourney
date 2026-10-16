@@ -682,7 +682,7 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .when().put("/api/v1/users/3/image")
                 .then().statusCode(200)
                 .body("id", notNullValue())
-                .body("contentType", Matchers.equalTo("image/jpg"))
+                .body("contentType", Matchers.equalTo("image/jpeg"))
                 .body("user", notNullValue());
     }
 
@@ -700,7 +700,7 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .when().put("/api/v1/users/4/image")
                 .then().statusCode(200)
                 .body("id", notNullValue())
-                .body("contentType", Matchers.equalTo("image/jpg"))
+                .body("contentType", Matchers.equalTo("image/jpeg"))
                 .body("user", notNullValue());
 
         given()
@@ -751,4 +751,6 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .when().put("/api/v1/users/3/image")
                 .then().statusCode(401);
     }
+
+
 }
