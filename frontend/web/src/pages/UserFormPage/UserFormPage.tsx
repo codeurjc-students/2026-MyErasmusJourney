@@ -80,7 +80,8 @@ export default function UserFormPage({ mode, userService = createUserService(API
             studyLocation,
             experiences: userDTO.experiences,
             comments: userDTO.comments,
-            roles: userDTO.roles
+            roles: userDTO.roles,
+            profileImage: userDTO.profileImage
         };
 
         try {
