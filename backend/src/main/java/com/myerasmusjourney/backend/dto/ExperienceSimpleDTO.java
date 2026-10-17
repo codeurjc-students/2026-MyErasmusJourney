@@ -15,5 +15,6 @@ public record ExperienceSimpleDTO (
         Collection<Category> categories,
         String cityName,
         String country,
-        String authorName
+        String authorName,
+        Long authorImageId
 ){}

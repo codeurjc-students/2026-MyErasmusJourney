@@ -13,6 +13,7 @@ public interface ExperienceMapper {
     @Mapping(source = "city.name", target = "cityName")
     @Mapping(source = "city.country", target = "country")
     @Mapping(source = "author.displayName", target = "authorName")
+    @Mapping(source = "author.profileImage.id", target = "authorImageId")
     ExperienceSimpleDTO toSimpleDTO(Experience experience);
     List<ExperienceSimpleDTO> toDTOs(List<Experience> experiences);
 
