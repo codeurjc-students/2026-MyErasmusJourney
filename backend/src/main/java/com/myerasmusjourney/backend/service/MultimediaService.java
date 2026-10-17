@@ -1,7 +1,7 @@
 package com.myerasmusjourney.backend.service;
 
 import com.myerasmusjourney.backend.domain.*;
-import com.myerasmusjourney.backend.dto.ExperienceMultimediaSimpleDTO;
+import com.myerasmusjourney.backend.dto.MultimediaSimpleDTO;
 import com.myerasmusjourney.backend.dto.UserImageDTO;
 import com.myerasmusjourney.backend.mapper.MultimediaMapper;
 import com.myerasmusjourney.backend.repository.ExperienceMultimediaRepository;
@@ -45,7 +45,7 @@ public class MultimediaService {
     }
 
     @Transactional
-    public List<ExperienceMultimediaSimpleDTO> addMultimedia (Long experienceId, List<MultipartFile> multimediaList) {
+    public List<MultimediaSimpleDTO> addMultimedia (Long experienceId, List<MultipartFile> multimediaList) {
         Experience experience = experienceService.getExperience(experienceId);
         User user = userService.getLoggedUser();
 

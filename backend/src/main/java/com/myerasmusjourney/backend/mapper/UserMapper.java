@@ -4,9 +4,11 @@ import com.myerasmusjourney.backend.domain.User;
 import com.myerasmusjourney.backend.dto.UserDTO;
 import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {CommentMapper.class, ExperienceMapper.class})
 public interface UserMapper {
+    @Mapping(source = "profileImage.id", target = "userImageId")
     UserSimpleDTO toSimpleDTO(User user);
     UserDTO toDTO(User user);
 }
