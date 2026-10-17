@@ -62,6 +62,7 @@ describe("App", () => {
       id: 1,
       displayName: "testuser",
       email: "test@example.com",
+      userImageId: 1
     };
 
     useUserStore.setState({
@@ -107,6 +108,7 @@ describe("App", () => {
       id: 1,
       displayName: "testuser",
       email: "test@example.com",
+      userImageId: 1
     };
 
     useUserStore.setState({

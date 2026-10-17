@@ -7,6 +7,7 @@ import Comments from "../../../src/components/Comments/Comments";
 import type { ExperienceService } from "@shared/services/experience.service";
 import { useUserStore } from "@shared/stores/userStore";
 import { ApiError } from "@shared/api/apiError";
+import type { CommentSimpleDTO } from "@shared/models/CommentSimpleDTO";
 
 const mockNavigate = vi.fn();
 
@@ -33,18 +34,22 @@ describe("Comments component", () => {
 
   it("should load and display comments", async () => {
 
-    const fakeComments = [
+    const fakeComments: CommentSimpleDTO[] = [
       {
         id: 1,
         authorName: "John",
         date: "2026-08-20",
         description: "Great experience!",
+        experienceId: 2,
+        authorImageId: 5
       },
       {
         id: 2,
         authorName: "Jane",
         date: "2026-08-21",
         description: "I really enjoyed it!",
+        experienceId: 2,
+        authorImageId: 13
       },
     ];
 
@@ -128,6 +133,7 @@ describe("Comments component", () => {
       id: 1,
       displayName: "John",
       email: "john@example.com",
+      userImageId: 1
     };
 
     const mockGetComments = vi
@@ -199,6 +205,7 @@ describe("Comments component", () => {
       id: 1,
       displayName: "John",
       email: "john@example.com",
+      userImageId: 1
     };
 
     const initialComments = [
@@ -305,7 +312,7 @@ describe("Comments component", () => {
       addMultimedia: vi.fn()
     };
 
-    useUserStore.setState({ user: { id: 1, displayName: "John", email: "john@example.com" } });
+    useUserStore.setState({ user: { id: 1, displayName: "John", email: "john@example.com", userImageId: 1 } });
 
     render(
       <MemoryRouter>
@@ -346,7 +353,7 @@ describe("Comments component", () => {
       addMultimedia: vi.fn()
     };
 
-    useUserStore.setState({ user: { id: 1, displayName: "John", email: "john@example.com" } });
+    useUserStore.setState({ user: { id: 1, displayName: "John", email: "john@example.com", userImageId: 2 } });
 
     render(
       <MemoryRouter>

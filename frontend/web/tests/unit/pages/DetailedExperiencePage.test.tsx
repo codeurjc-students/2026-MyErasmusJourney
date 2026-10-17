@@ -6,6 +6,7 @@ import { ApiError } from "@shared/api/apiError";
 
 import DetailedExperiencePage from "../../../src/pages/DetailedExperiencePage/DetailedExperiencePage";
 import type { ExperienceService } from "@shared/services/experience.service";
+import type { ExperienceDTO } from "@shared/models/ExperienceDTO";
 
 const mockNavigate = vi.fn();
 
@@ -26,7 +27,7 @@ describe("DetailedExperiencePage", () => {
     mockNavigate.mockClear();
   });
 
-  const fakeExperience = {
+  const fakeExperience: ExperienceDTO = {
     id: 1,
     title: "My Erasmus Experience",
     date: "2026-06-25",
@@ -45,6 +46,7 @@ describe("DetailedExperiencePage", () => {
       id: 1,
       displayName: "John",
       email: "john@example.com",
+      userImageId: null
     },
   };
 

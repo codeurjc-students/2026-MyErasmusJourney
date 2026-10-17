@@ -8,7 +8,7 @@ import type { ExperienceSimpleDTO } from "@shared/models/ExperienceSimpleDTO";
 
 describe("Experience Component", () => {
   it("renders component", async () => {
-    const experience: ExperienceSimpleDTO = { id: 1, title: "Title 1", date: "2026-06-25", rating: 7.32, description: "Description 1", categories: ["Studies", "Accomodation"], cityName: "London", country: "United Kingdom", authorName: "test" }
+    const experience: ExperienceSimpleDTO = { id: 1, title: "Title 1", date: "2026-06-25", rating: 7.32, description: "Description 1", categories: ["Studies", "Accomodation"], cityName: "London", country: "United Kingdom", authorName: "test", authorImageId: null }
 
     render(
       <MemoryRouter>
@@ -25,7 +25,7 @@ describe("Experience Component", () => {
   });
 
   it("renders experience with empty fields", async () => {
-    const experience: ExperienceSimpleDTO = { id: 1, title: "Title 1", date: "", rating: 7.32, description: "Description 1", categories: ["Studies", "Accomodation"], cityName: "London", country: "United Kingdom", authorName: "test" } //missing date
+    const experience: ExperienceSimpleDTO = { id: 1, title: "Title 1", date: "", rating: 7.32, description: "Description 1", categories: ["Studies", "Accomodation"], cityName: "London", country: "United Kingdom", authorName: "test", authorImageId: 1 } //missing date
 
     render(
       <MemoryRouter>
@@ -40,7 +40,7 @@ describe("Experience Component", () => {
   });
 
   it("renders experience with an empty description", async () => {
-    const experience: ExperienceSimpleDTO = { id: 1, title: "Title 1", date: "2026-06-25", rating: 7.32, description: "", categories: ["Studies", "Accomodation"], cityName: "London", country: "United Kingdom", authorName: "test" } //missing date
+    const experience: ExperienceSimpleDTO = { id: 1, title: "Title 1", date: "2026-06-25", rating: 7.32, description: "", categories: ["Studies", "Accomodation"], cityName: "London", country: "United Kingdom", authorName: "test", authorImageId: 4 }
 
     render(
       <MemoryRouter>
@@ -55,7 +55,7 @@ describe("Experience Component", () => {
   });
 
   it("renders experience with a rating of 0", async () => {
-    const experience: ExperienceSimpleDTO = { id: 1, title: "Title 1", date: "2026-06-25", rating: 0, description: "Description 1", categories: ["Studies", "Accomodation"], cityName: "London", country: "United Kingdom", authorName: "test" }
+    const experience: ExperienceSimpleDTO = { id: 1, title: "Title 1", date: "2026-06-25", rating: 0, description: "Description 1", categories: ["Studies", "Accomodation"], cityName: "London", country: "United Kingdom", authorName: "test", authorImageId: 8 }
 
     render(
       <MemoryRouter>

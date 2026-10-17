@@ -9,6 +9,7 @@ import type { UserService } from "@shared/services/user.service";
 import type { ExperienceService } from "@shared/services/experience.service";
 import { ApiError } from "@shared/api/apiError";
 import { toast } from "sonner";
+import type { ExperienceSimpleDTO } from "@shared/models/ExperienceSimpleDTO";
 const mockNavigate = vi.fn();
 
 vi.mock("react-router-dom", async () => {
@@ -32,7 +33,7 @@ describe("UserExperiences", () => {
 
   it("should render the experiences received as props", async () => {
 
-    const fakeExperiences = [
+    const fakeExperiences: ExperienceSimpleDTO[] = [
       {
         id: 1,
         title: "My experience in Munich",
@@ -42,7 +43,8 @@ describe("UserExperiences", () => {
         categories: ["Studies"],
         rating: 8.5,
         description: "Great experience",
-        authorName: "Jeremy"
+        authorName: "Jeremy",
+        authorImageId: 18
       },
       {
         id: 2,
@@ -53,7 +55,8 @@ describe("UserExperiences", () => {
         categories: ["Culture", "Social_events"],
         rating: 9,
         description: "Amazing city",
-        authorName: "Sam"
+        authorName: "Sam",
+        authorImageId: null
       },
     ];
 
@@ -245,6 +248,7 @@ describe("UserExperiences", () => {
         id: 10,
         displayName: "John",
         email: "john@test.com",
+        userImageId: null
       },
     });
 

@@ -56,9 +56,20 @@ describe("UserPage", () => {
   async function openDialog() {
     const user = userEvent.setup();
 
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: /change picture/i })
+      ).toBeInTheDocument();
+    });
+
+
     fireEvent.click(
       screen.getByRole("button", { name: /change picture/i })
     );
+
+    await waitFor(() => {
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+    });
 
     return user;
   }
@@ -816,9 +827,11 @@ describe("UserPage", () => {
       expect(screen.getByText("Profile")).toBeInTheDocument();
     });
 
-    expect(
-      screen.getByRole("button", { name: /change picture/i })
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: /change picture/i })
+      ).toBeInTheDocument();
+    });
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
@@ -836,8 +849,6 @@ describe("UserPage", () => {
     );
 
     await openDialog();
-
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
 
     const fileInput = getFileInput();
 
@@ -934,12 +945,11 @@ describe("UserPage", () => {
       <MemoryRouter initialEntries={["/account"]}>
         <Routes>
           <Route path="/account" element={<UserPage userService={testUserService} />} />
-          <Route path="/error" element={<div>Error page</div>} />
         </Routes>
       </MemoryRouter>
     );
 
-    await selectImageAndUpload(createImage("document.gif", "image/gif"));
+    await selectImageAndUpload(createImage("document.txt", "plain/text"));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledExactlyOnceWith(

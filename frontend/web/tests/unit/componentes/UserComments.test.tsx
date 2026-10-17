@@ -13,6 +13,7 @@ import { useUserStore } from "@shared/stores/userStore";
 import { ApiError } from "@shared/api/apiError";
 import type { CommentService } from "@shared/services/comment.service";
 import { toast } from "sonner";
+import type { CommentSimpleDTO } from "@shared/models/CommentSimpleDTO";
 
 const mockNavigate = vi.fn();
 
@@ -37,20 +38,22 @@ describe("UserComments", () => {
 
   it("should render the comments received as props", async () => {
 
-    const fakeComments = [
+    const fakeComments: CommentSimpleDTO[] = [
       {
         id: 1,
         description: "Great experience!",
         date: "2026-06-25",
         authorName: "Jeremy",
         experienceId: 1,
+        authorImageId: null
       },
       {
         id: 2,
         description: "I really enjoyed reading this.",
         date: "2026-06-26",
         authorName: "Sam",
-        experienceId: 2
+        experienceId: 2,
+        authorImageId: 4
       },
     ];
 
@@ -229,6 +232,7 @@ describe("UserComments", () => {
         id: 10,
         displayName: "John",
         email: "john@test.com",
+        userImageId: null
       },
     });
 
@@ -271,6 +275,7 @@ describe("UserComments", () => {
         id: 10,
         displayName: "John",
         email: "john@test.com",
+        userImageId: 15
       },
     });
 
@@ -300,7 +305,8 @@ describe("UserComments", () => {
         author: {
           id: 1,
           displayName: "Jeremy",
-          email: ""
+          email: "",
+          userImageId: 15
         },
         experience: {
           id: 1,
@@ -312,6 +318,7 @@ describe("UserComments", () => {
           rating: 8.5,
           description: "Experience",
           authorName: "Jeremy",
+          authorImageId: 15
         }
       },
       {
@@ -321,7 +328,8 @@ describe("UserComments", () => {
         author: {
           id: 1,
           displayName: "Jeremy",
-          email: ""
+          email: "",
+          userImageId: 15
         },
         experience: {
           id: 1,
@@ -333,6 +341,7 @@ describe("UserComments", () => {
           rating: 8.5,
           description: "Experience",
           authorName: "Jeremy",
+          authorImageId: 15
         }
       },
     ];
@@ -433,7 +442,8 @@ describe("UserComments", () => {
         author: {
           id: 1,
           displayName: "Jeremy",
-          email: ""
+          email: "",
+          userImageId: 15
         },
         experience: {
           id: 1,
@@ -445,6 +455,7 @@ describe("UserComments", () => {
           rating: 8.5,
           description: "Experience",
           authorName: "Jeremy",
+          authorImageId: 15
         }
       },
     ]
@@ -519,7 +530,8 @@ describe("UserComments", () => {
         author: {
           id: 1,
           displayName: "Jeremy",
-          email: ""
+          email: "",
+          userImageId: 15
         },
         experience: {
           id: 1,
@@ -531,6 +543,7 @@ describe("UserComments", () => {
           rating: 8.5,
           description: "Experience",
           authorName: "Jeremy",
+          authorImageId: 15
         }
       },
     ]
