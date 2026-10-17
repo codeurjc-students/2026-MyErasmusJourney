@@ -279,6 +279,7 @@ describe("Log In page", () => {
         id: 1,
         displayName: "johndoe",
         email: "john@example.com",
+        userImageId: null
       },
     });
 

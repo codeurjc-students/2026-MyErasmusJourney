@@ -1,10 +1,7 @@
 package com.myerasmusjourney.backend.unit;
 
-import com.myerasmusjourney.backend.domain.Experience;
-import com.myerasmusjourney.backend.domain.ExperienceMultimedia;
-import com.myerasmusjourney.backend.domain.User;
-import com.myerasmusjourney.backend.domain.UserImage;
-import com.myerasmusjourney.backend.dto.ExperienceMultimediaSimpleDTO;
+import com.myerasmusjourney.backend.domain.*;
+import com.myerasmusjourney.backend.dto.MultimediaSimpleDTO;
 import com.myerasmusjourney.backend.dto.UserImageDTO;
 import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import com.myerasmusjourney.backend.mapper.MultimediaMapper;
@@ -19,10 +16,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -75,9 +76,9 @@ public class MultimediaServiceTest {
                 "fake image content".getBytes()
         );
 
-        List<ExperienceMultimediaSimpleDTO> expected = List.of(
-                new ExperienceMultimediaSimpleDTO(1L, ".jpg"),
-                new ExperienceMultimediaSimpleDTO(2L, ".png")
+        List<MultimediaSimpleDTO> expected = List.of(
+                new MultimediaSimpleDTO(1L, ".jpg"),
+                new MultimediaSimpleDTO(2L, ".png")
         );
 
         try {
@@ -92,7 +93,7 @@ public class MultimediaServiceTest {
             when(experienceMultimediaRepository.save(any(ExperienceMultimedia.class))).thenReturn(experienceMultimedia, experienceMultimedia2);
             when(multimediaMapper.toSimpleDTOs(argThat(multimedia -> multimedia.size() == 2))).thenReturn(expected);
 
-            List<ExperienceMultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
+            List<MultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
 
             assertEquals(expected, result);
 
@@ -145,7 +146,7 @@ public class MultimediaServiceTest {
             when(experienceService.getExperience(1L)).thenReturn(experience);
             when(userService.getLoggedUser()).thenReturn(user2);
 
-            List<ExperienceMultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
+            List<MultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
 
             assertNull(result);
 
@@ -192,7 +193,7 @@ public class MultimediaServiceTest {
             when(userService.getLoggedUser()).thenReturn(user);
 
 
-            List<ExperienceMultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
+            List<MultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
 
             assertTrue(result.isEmpty());
 
@@ -221,7 +222,7 @@ public class MultimediaServiceTest {
         try {
             UserImage userImage = new UserImage(file, user);
             userImage.setId(1L);
-            UserImageDTO expected = new UserImageDTO(1L, userImage.getContentType(), new UserSimpleDTO(1L, null, user.getEmail()));
+            UserImageDTO expected = new UserImageDTO(1L, userImage.getContentType(), new UserSimpleDTO(1L, null, user.getEmail(), 1L));
 
             when(userService.getLoggedUser()).thenReturn(user);
             when(userImageRepository.save(any(UserImage.class))).thenReturn(userImage);
@@ -261,7 +262,7 @@ public class MultimediaServiceTest {
         try {
             UserImage userImage = new UserImage(file, user);
             userImage.setId(1L);
-            UserImageDTO expected = new UserImageDTO(1L, userImage.getContentType(), new UserSimpleDTO(1L, null, user.getEmail()));
+            UserImageDTO expected = new UserImageDTO(1L, userImage.getContentType(), new UserSimpleDTO(1L, null, user.getEmail(), 1L));
 
             when(userService.getLoggedUser()).thenReturn(user);
             when(userImageRepository.save(any(UserImage.class))).thenReturn(userImage);
@@ -348,6 +349,79 @@ public class MultimediaServiceTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    void testLoadProfileImageAsResource(){
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+        user.setRoles(List.of("User"));
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/whatever",
+                "fake image content".getBytes()
+        );
+
+        try {
+            UserImage userImage = new UserImage(file, user);
+            userImage.setId(1L);
+
+
+            Resource expected = new ByteArrayResource(userImage.getMultimediaFile());
+            Resource result = multimediaService.loadFileAsResource(userImage.getMultimediaFile());
+
+            assertEquals(expected, result);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Test
+    void testGetProfileImageByIdFails(){
+
+        when(userImageRepository.findById(0L)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> multimediaService.getUserImageById(0L));
+
+        verify(userImageRepository).findById(0L);
+
+    }
+
+    @Test
+    void testGetProfileImageById(){
+
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("user@email.com");
+        user.setRoles(List.of("User"));
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/whatever",
+                "fake image content".getBytes()
+        );
+
+        try {
+            UserImage userImage = new UserImage(file, user);
+            userImage.setId(1L);
+
+            when(userImageRepository.findById(1L)).thenReturn(Optional.of(userImage));
+
+            Multimedia result = multimediaService.getUserImageById(userImage.getId());
+
+            assertEquals(userImage, result);
+
+            verify(userImageRepository).findById(1L);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 }

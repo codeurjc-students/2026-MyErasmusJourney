@@ -59,7 +59,9 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .body("content[0].rating", notNullValue())
                 .body("content[0].title", notNullValue())
                 .body("content[0].categories", notNullValue())
-                .body("content[0].description", notNullValue());
+                .body("content[0].description", notNullValue())
+                .body("content[0].authorName", notNullValue())
+                .body("content[0].authorImageId", notNullValue());
     }
 
     @Test
@@ -296,7 +298,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .body("content", hasSize(greaterThan(0)))
                 .body("page.number", equalTo(0))
                 .body("page.size", equalTo(6))
-                .body("page.totalElements", equalTo(7));
+                .body("page.totalElements", equalTo(8));
 
     }
 
@@ -315,8 +317,8 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .when().post("/api/v1/experiences/1/multimedia")
                 .then().statusCode(201)
                 .body("$", Matchers.hasSize(Matchers.greaterThan(0)))
-                .body("[0].contentType", Matchers.equalTo(".jpg"))
-                .body("[1].contentType", Matchers.equalTo(".png"));
+                .body("[0].contentType", Matchers.equalTo("image/jpeg"))
+                .body("[1].contentType", Matchers.equalTo("image/png"));
     }
 
     @Test

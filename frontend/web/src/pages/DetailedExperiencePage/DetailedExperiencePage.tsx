@@ -7,6 +7,7 @@ import { API } from "../../api/client";
 import Comments from "../../components/Comments/Comments";
 import { ApiError } from "@shared/api/apiError";
 import ShareDialog from "@/components/ShareDialog/ShareDialog";
+import { APIURL } from "@/config/env";
 
 const categoryStyles: Record<string, string> = {
     STUDIES: "#4A90D9",
@@ -75,14 +76,20 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
     const ratingColor = `rgb(${red}, ${green}, 0)`;
 
     return (
-        <div className="container mx-auto max-w-7xl p-4 md:p-6">
+        <div className="mx-auto max-w-7xl p-4 md:p-6">
             <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,7fr)_minmax(18rem,3fr)] gap-6 items-start">
 
                 <main className="w-full rounded-2xl bg-white shadow-xl p-6 md:p-8">
                     <div className="flex flex-col gap-6">
 
                         <div className="flex flex-col sm:flex-row items-start gap-4">
-                            <img src="/images/available_soon.png" alt="User profile" className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover shrink-0" />
+                            {experience.author.userImageId != null
+                                ? (
+                                    <img src={`${APIURL}/multimedia/users/${experience.author.userImageId}`} alt="User profile" className="w-16 h-16 md:w-24 md:h-24 aspect-square rounded-full object-cover shrink-0" />
+
+                                ) : (
+                                    <img src="/images/create_account.png" alt="User profile" className="w-16 h-16 md:w-24 md:h-24 aspect-square rounded-full object-cover shrink-0" />
+                                )}
 
                             <div className="flex-1 min-w-0">
                                 <div className="flex flex-wrap items-center gap-3">

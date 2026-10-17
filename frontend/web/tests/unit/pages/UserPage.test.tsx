@@ -450,7 +450,8 @@ describe("UserPage", () => {
       studyLocation: "To be filled",
       roles: ["USER"],
       experiences: [],
-      comments: []
+      comments: [],
+      profileImage: null
     }
 
     const mockGetUser = vi.fn().mockResolvedValue(fakeUser);
@@ -521,7 +522,8 @@ describe("UserPage", () => {
       studyLocation: "To be filled",
       roles: ["USER"],
       experiences: [],
-      comments: []
+      comments: [],
+      profileImage: { id: 1, contentType: "image/png" }
     }
 
     const mockGetUser = vi.fn().mockResolvedValue(fakeUser);

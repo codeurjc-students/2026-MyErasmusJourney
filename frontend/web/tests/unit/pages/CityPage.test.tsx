@@ -44,6 +44,7 @@ describe("CityPage", () => {
                 cityName: "City 1",
                 country: "Country 1",
                 authorName: "user1",
+                authorImageId: null
             }],
         }
 

@@ -158,7 +158,8 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .body("id", notNullValue())
                 .body("id", greaterThan(0))
                 .body("displayName", notNullValue())
-                .body("email", notNullValue());
+                .body("email", notNullValue())
+                .body("userImageId", nullValue());
     }
 
     @Test
@@ -682,7 +683,7 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .when().put("/api/v1/users/3/image")
                 .then().statusCode(200)
                 .body("id", notNullValue())
-                .body("contentType", Matchers.equalTo(".jpg"))
+                .body("contentType", Matchers.equalTo("image/jpeg"))
                 .body("user", notNullValue());
     }
 
@@ -700,7 +701,7 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .when().put("/api/v1/users/4/image")
                 .then().statusCode(200)
                 .body("id", notNullValue())
-                .body("contentType", Matchers.equalTo(".jpg"))
+                .body("contentType", Matchers.equalTo("image/jpeg"))
                 .body("user", notNullValue());
 
         given()
@@ -709,7 +710,7 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .when().put("/api/v1/users/4/image")
                 .then().statusCode(200)
                 .body("id", notNullValue())
-                .body("contentType", Matchers.equalTo(".png"))
+                .body("contentType", Matchers.equalTo("image/png"))
                 .body("user", notNullValue());
     }
 
@@ -751,4 +752,6 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .when().put("/api/v1/users/3/image")
                 .then().statusCode(401);
     }
+
+
 }

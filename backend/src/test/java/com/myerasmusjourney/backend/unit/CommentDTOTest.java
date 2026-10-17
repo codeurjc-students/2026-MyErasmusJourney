@@ -17,8 +17,8 @@ public class CommentDTOTest {
 
     @Test
     void testCommentDTO(){
-        UserSimpleDTO userSimpleDTO = new UserSimpleDTO(2L, "test", "test@email.com");
-        ExperienceSimpleDTO experienceSimpleDTO = new ExperienceSimpleDTO(3L, LocalDate.now(), 1.3F, "title", "description", List.of(Category.Personal_Experience), "Athens", "Greece", "test");
+        UserSimpleDTO userSimpleDTO = new UserSimpleDTO(2L, "test", "test@email.com", null);
+        ExperienceSimpleDTO experienceSimpleDTO = new ExperienceSimpleDTO(3L, LocalDate.now(), 1.3F, "title", "description", List.of(Category.Personal_Experience), "Athens", "Greece", "test", null);
         CommentDTO commentDTO = new CommentDTO(1L, LocalDate.now(), "test", userSimpleDTO, experienceSimpleDTO);
 
         assertEquals(1, commentDTO.id().intValue());

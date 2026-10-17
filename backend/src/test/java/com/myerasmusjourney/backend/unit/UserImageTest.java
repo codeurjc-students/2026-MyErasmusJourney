@@ -26,7 +26,7 @@ public class UserImageTest {
 
         try {
             UserImage userImage = new UserImage(file, user);
-            assertEquals(".jpg", userImage.getContentType());
+            assertEquals(file.getContentType(), userImage.getContentType());
             assertEquals(user, userImage.getUser());
             assertNull(userImage.getId());
         } catch (IOException e) {
@@ -53,7 +53,7 @@ public class UserImageTest {
             userImage.setMultimediaFile(file);
             userImage.setContentType(file.getContentType());
 
-            assertEquals(".jpg", userImage.getContentType());
+            assertEquals(file.getContentType(), userImage.getContentType());
             assertEquals(user, userImage.getUser());
             assertEquals(id, userImage.getId());
         } catch (IOException e) {

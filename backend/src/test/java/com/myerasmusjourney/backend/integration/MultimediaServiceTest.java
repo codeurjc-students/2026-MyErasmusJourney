@@ -1,11 +1,8 @@
 package com.myerasmusjourney.backend.integration;
 
 import com.myerasmusjourney.backend.TestDataBase;
-import com.myerasmusjourney.backend.domain.Experience;
-import com.myerasmusjourney.backend.domain.ExperienceMultimedia;
-import com.myerasmusjourney.backend.domain.User;
-import com.myerasmusjourney.backend.domain.UserImage;
-import com.myerasmusjourney.backend.dto.ExperienceMultimediaSimpleDTO;
+import com.myerasmusjourney.backend.domain.*;
+import com.myerasmusjourney.backend.dto.MultimediaSimpleDTO;
 import com.myerasmusjourney.backend.dto.UserImageDTO;
 import com.myerasmusjourney.backend.mapper.MultimediaMapper;
 import com.myerasmusjourney.backend.repository.ExperienceMultimediaRepository;
@@ -19,6 +16,8 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
 
@@ -85,13 +85,13 @@ public class MultimediaServiceTest extends TestDataBase {
             ExperienceMultimedia experienceMultimedia1 = new ExperienceMultimedia(file, experience);
             ExperienceMultimedia experienceMultimedia2 = new ExperienceMultimedia(file2, experience);
 
-            List<ExperienceMultimediaSimpleDTO> expected = multimediaMapper.toSimpleDTOs(List.of(experienceMultimedia1, experienceMultimedia2));
+            List<MultimediaSimpleDTO> expected = multimediaMapper.toSimpleDTOs(List.of(experienceMultimedia1, experienceMultimedia2));
 
-            List<ExperienceMultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
+            List<MultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
 
             int i = 0;
-            for (ExperienceMultimediaSimpleDTO dto: result){
-                ExperienceMultimediaSimpleDTO expectedDTO = expected.get(i);
+            for (MultimediaSimpleDTO dto: result){
+                MultimediaSimpleDTO expectedDTO = expected.get(i);
                 assertNotNull(dto.id());
                 assertEquals(expectedDTO.contentType(), dto.contentType());
                 i++;
@@ -121,7 +121,7 @@ public class MultimediaServiceTest extends TestDataBase {
                 "fake image content".getBytes()
         );
 
-        List<ExperienceMultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
+        List<MultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
 
         assertNull(result);
     }
@@ -146,7 +146,7 @@ public class MultimediaServiceTest extends TestDataBase {
                 "fake image content".getBytes()
         );
 
-        List<ExperienceMultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
+        List<MultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
 
         assertTrue(result.isEmpty());
     }
@@ -166,11 +166,13 @@ public class MultimediaServiceTest extends TestDataBase {
 
         User user = userRepository.findByEmail("exampleuser1@email.com");
         try {
+            UserImageDTO result = multimediaService.addUserImage(user.getId(), file);
+
+            user = userRepository.findByEmail("exampleuser1@email.com");
             UserImage userImage = new UserImage(file, user);
 
             UserImageDTO expected = multimediaMapper.toDTO(userImage);
 
-            UserImageDTO result = multimediaService.addUserImage(user.getId(), file);
 
             assertEquals(expected.user(), result.user());
             assertEquals(expected.contentType(), result.contentType());
@@ -204,8 +206,6 @@ public class MultimediaServiceTest extends TestDataBase {
 
         User user = userRepository.findByEmail("exampleuser1@email.com");
         try {
-            UserImage userImage = new UserImage(file, user);
-
             UserImage previous = new UserImage(file2,user);
 
             previous = userImageRepository.save(previous);
@@ -214,9 +214,11 @@ public class MultimediaServiceTest extends TestDataBase {
 
             userRepository.save(user);
 
-            UserImageDTO expected = multimediaMapper.toDTO(userImage);
-
             UserImageDTO result = multimediaService.addUserImage(user.getId(), file);
+
+            user = userRepository.findByEmail("exampleuser1@email.com");
+            UserImage userImage = new UserImage(file, user);
+            UserImageDTO expected = multimediaMapper.toDTO(userImage);
 
             assertEquals(expected.user(), result.user());
             assertEquals(expected.contentType(), result.contentType());
@@ -273,5 +275,64 @@ public class MultimediaServiceTest extends TestDataBase {
         assertEquals(id, result.id());
         assertNull(result.contentType());
         assertNull(result.user());
+    }
+
+    @Test
+    void testLoadProfileImageAsResource(){
+        User user = userRepository.findByEmail("test@email.com");
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/whatever",
+                "fake image content".getBytes()
+        );
+
+        try {
+            UserImage userImage = new UserImage(file, user);
+            userImage = userImageRepository.save(userImage);
+            user.setProfileImage(userImage);
+            userRepository.save(user);
+
+            Resource expected = new ByteArrayResource(userImage.getMultimediaFile());
+            Multimedia multimedia = multimediaService.getUserImageById(userImage.getId());
+            Resource result = multimediaService.loadFileAsResource(multimedia.getMultimediaFile());
+            assertEquals(expected, result);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Test
+    void testGetUserProfile(){
+        User user = userRepository.findByEmail("test@email.com");
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/whatever",
+                "fake image content".getBytes()
+        );
+
+        try {
+            UserImage userImage = new UserImage(file, user);
+            userImage = userImageRepository.save(userImage);
+            user.setProfileImage(userImage);
+            userRepository.save(user);
+
+            Multimedia expected = userImage;
+            Multimedia result = multimediaService.getUserImageById(userImage.getId());
+            assertEquals(expected.getId(), result.getId());
+            assertEquals(expected.getMultimediaFile().length, result.getMultimediaFile().length);
+            assertEquals(expected.getContentType(), result.getContentType());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void testGetUserProfileNotFound(){
+        assertThrows(NoSuchElementException.class, () -> multimediaService.getUserImageById(0L));
     }
 }

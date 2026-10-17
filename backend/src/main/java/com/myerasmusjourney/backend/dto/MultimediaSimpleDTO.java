@@ -1,6 +1,6 @@
 package com.myerasmusjourney.backend.dto;
 
-public record ExperienceMultimediaSimpleDTO(
+public record MultimediaSimpleDTO(
         Long id,
         String contentType
 ) {}

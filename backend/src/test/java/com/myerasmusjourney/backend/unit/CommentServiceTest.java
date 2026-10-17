@@ -50,8 +50,8 @@ public class CommentServiceTest {
 
     @Test
     void testPostComment(){
-        UserSimpleDTO userSimpleDTO = new UserSimpleDTO(2L, "test", "test@email.com");
-        ExperienceSimpleDTO experienceSimpleDTO = new ExperienceSimpleDTO(3L, LocalDate.now(), 1.3F, "title", "description", List.of(Category.Personal_Experience), "Athens", "Greece", "test");
+        UserSimpleDTO userSimpleDTO = new UserSimpleDTO(2L, "test", "test@email.com", null);
+        ExperienceSimpleDTO experienceSimpleDTO = new ExperienceSimpleDTO(3L, LocalDate.now(), 1.3F, "title", "description", List.of(Category.Personal_Experience), "Athens", "Greece", "test", null);
         CommentDTO expectedCommentDTO = new CommentDTO(1L, LocalDate.now(), "test", userSimpleDTO, experienceSimpleDTO);
 
         City city = new City();
@@ -102,7 +102,7 @@ public class CommentServiceTest {
         comment.setAuthor(user);
         user.addComment(comment);
 
-        UserSimpleDTO author = new UserSimpleDTO(1L, null, null);
+        UserSimpleDTO author = new UserSimpleDTO(1L, null, null, null);
 
         CommentDTO commentDTO = new CommentDTO(2L, null,  "Deleted experience", author, null);
 
@@ -162,7 +162,7 @@ public class CommentServiceTest {
         comment.setAuthor(user);
         user.addComment(comment);
 
-        UserSimpleDTO author = new UserSimpleDTO(1L, null, null);
+        UserSimpleDTO author = new UserSimpleDTO(1L, null, null, null);
 
         CommentDTO commentDTO = new CommentDTO(2L, null,  "Deleted experience", author, null);
 

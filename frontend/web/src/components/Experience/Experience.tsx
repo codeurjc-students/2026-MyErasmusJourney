@@ -1,6 +1,7 @@
 import type { ExperienceSimpleDTO } from "@shared/models/ExperienceSimpleDTO.ts";
 import { Link } from "react-router-dom";
 import "./Experience.css";
+import { APIURL } from "@/config/env";
 
 interface ExperienceProps {
     experience: ExperienceSimpleDTO;
@@ -47,7 +48,13 @@ export default function Experience({ experience }: ExperienceProps) {
         <div id={`experience-${experience.id}`} className="experience-card relative w-full rounded-2xl bg-white shadow-md p-4 transition hover:shadow-lg flex flex-col gap-3">
             <div className="flex flex-row items-start gap-4">
                 <div className="flex items-start gap-3 shrink-0">
-                    <img src="/images/available_soon.png" alt="User profile" className="w-12 h-12 md:w-24 md:h-24 rounded-full object-cover" />
+                    {experience.authorImageId !== null
+                        ? (
+                            <img src={`${APIURL}/multimedia/users/${experience.authorImageId}`} alt="User profile" className="w-10 h-10 md:w-14 md:h-14 aspect-square rounded-full object-cover shrink-0" />
+                        ) : (
+                            <img src="/images/create_account.png" alt="User profile" className="w-10 h-10 md:w-14 md:h-14 aspect-square rounded-full object-cover shrink-0" />
+                        )
+                    }
                 </div>
 
                 <div className="flex-1 min-w-0">

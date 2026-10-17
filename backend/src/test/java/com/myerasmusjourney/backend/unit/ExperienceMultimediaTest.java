@@ -33,7 +33,7 @@ public class ExperienceMultimediaTest {
         try {
             ExperienceMultimedia experienceMultimedia = new ExperienceMultimedia( file, experience);
 
-            assertEquals(".jpg", experienceMultimedia.getContentType());
+            assertEquals("image/jpeg", experienceMultimedia.getContentType());
             assertEquals(experience, experienceMultimedia.getExperience());
             assertNotNull(experienceMultimedia.getMultimediaFile());
         } catch (IOException e) {
@@ -62,7 +62,7 @@ public class ExperienceMultimediaTest {
             experienceMultimedia.setId(1L);
             experienceMultimedia.setContentType(file.getContentType());
 
-            assertEquals(".jpg", experienceMultimedia.getContentType());
+            assertEquals("image/jpeg", experienceMultimedia.getContentType());
             assertEquals(experience, experienceMultimedia.getExperience());
             assertNotNull(experienceMultimedia.getMultimediaFile());
         } catch (IOException e) {

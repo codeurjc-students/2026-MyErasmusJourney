@@ -37,8 +37,8 @@ describe("ExperiencesPage", () => {
 
     //mocked data
     const fakeData: ExperienceSimpleDTO[] = [
-      { id: 1, title: "Title 1", date: "2026-06-25", rating: 7.32, description: "description 1", authorName: "test", cityName: "", country: "", categories: ["Studies"] },
-      { id: 2, title: "Title 2", date: "2026-06-25", rating: 2.95, description: "description 2", authorName: "test", cityName: "", country: "", categories: ["Studies"] },
+      { id: 1, title: "Title 1", date: "2026-06-25", rating: 7.32, description: "description 1", authorName: "test", cityName: "", country: "", categories: ["Studies"], authorImageId: 29 },
+      { id: 2, title: "Title 2", date: "2026-06-25", rating: 2.95, description: "description 2", authorName: "test", cityName: "", country: "", categories: ["Studies"], authorImageId: 4 },
     ];
 
     const page: Page = { size: 2, number: 0, totalElements: 2, totalPages: 0 }
@@ -107,9 +107,9 @@ describe("ExperiencesPage", () => {
   it("renders data in the right order", async () => {
 
     const fakeData: ExperienceSimpleDTO[] = [
-      { id: 1, title: "Title 1", date: "2026-06-25", rating: 7.32, description: "description 1", authorName: "test", cityName: "", country: "", categories: ["Studies"] },
-      { id: 2, title: "Title 2", date: "2026-06-25", rating: 2.95, description: "description 2", authorName: "test", cityName: "", country: "", categories: ["Studies"] },
-      { id: 3, title: "Title 3", date: "2026-06-25", rating: 4.81, description: "description 3", authorName: "test", cityName: "", country: "", categories: ["Studies"] },
+      { id: 1, title: "Title 1", date: "2026-06-25", rating: 7.32, description: "description 1", authorName: "test", cityName: "", country: "", categories: ["Studies"], authorImageId: 14 },
+      { id: 2, title: "Title 2", date: "2026-06-25", rating: 2.95, description: "description 2", authorName: "test", cityName: "", country: "", categories: ["Studies"], authorImageId: 14 },
+      { id: 3, title: "Title 3", date: "2026-06-25", rating: 4.81, description: "description 3", authorName: "test", cityName: "", country: "", categories: ["Studies"], authorImageId: 14 },
     ];
 
     const page: Page = { size: 3, number: 0, totalElements: 3, totalPages: 0 }
@@ -148,7 +148,7 @@ describe("ExperiencesPage", () => {
 
   it("renders a single experience", async () => {
     const fakeData: ExperienceSimpleDTO[] = [
-      { id: 1, title: "Title 1", date: "2026-06-25", rating: 7.32, description: "description 1", authorName: "test", cityName: "", country: "", categories: ["Studies"] }
+      { id: 1, title: "Title 1", date: "2026-06-25", rating: 7.32, description: "description 1", authorName: "test", cityName: "", country: "", categories: ["Studies"], authorImageId: 14 }
     ];
 
     const page: Page = { size: 1, number: 0, totalElements: 1, totalPages: 0 }
@@ -191,8 +191,8 @@ describe("ExperiencesPage", () => {
 
   it("renders duplicated experiences", async () => {
     const fakeData: ExperienceSimpleDTO[] = [
-      { id: 1, title: "Title 1", date: "2026-06-25", rating: 7.32, description: "description 1", authorName: "test", cityName: "", country: "", categories: ["Studies"] },
-      { id: 1, title: "Title 1", date: "2026-06-25", rating: 7.32, description: "description 1", authorName: "test", cityName: "", country: "", categories: ["Studies"] }
+      { id: 1, title: "Title 1", date: "2026-06-25", rating: 7.32, description: "description 1", authorName: "test", cityName: "", country: "", categories: ["Studies"], authorImageId: 14 },
+      { id: 1, title: "Title 1", date: "2026-06-25", rating: 7.32, description: "description 1", authorName: "test", cityName: "", country: "", categories: ["Studies"], authorImageId: 14 }
     ];
 
     const page: Page = { size: 2, number: 0, totalElements: 2, totalPages: 0 }
@@ -295,12 +295,12 @@ describe("ExperiencesPage", () => {
 
   it("renders experiences when service returns many items", async () => {
     const fakeData: ExperienceSimpleDTO[] = [
-      { id: 1, title: "Title 1", date: "2026-06-01", rating: 8.4, description: "Description 1", authorName: "test", cityName: "", country: "", categories: ["Studies"] },
-      { id: 2, title: "Title 2", date: "2026-06-02", rating: 7.1, description: "Description 2", authorName: "test", cityName: "", country: "", categories: ["Studies"] },
-      { id: 3, title: "Title 3", date: "2026-06-03", rating: 9.8, description: "Description 3", authorName: "test", cityName: "", country: "", categories: ["Studies"] },
-      { id: 4, title: "Title 4", date: "2026-06-04", rating: 6.5, description: "Description 4", authorName: "test", cityName: "", country: "", categories: ["Studies"] },
-      { id: 5, title: "Title 5", date: "2026-06-05", rating: 5.3, description: "Description 5", authorName: "test", cityName: "", country: "", categories: ["Studies"] },
-      { id: 6, title: "Title 6", date: "2026-06-06", rating: 4.7, description: "Description 6", authorName: "test", cityName: "", country: "", categories: ["Studies"] },
+      { id: 1, title: "Title 1", date: "2026-06-01", rating: 8.4, description: "Description 1", authorName: "test", cityName: "", country: "", categories: ["Studies"], authorImageId: 14 },
+      { id: 2, title: "Title 2", date: "2026-06-02", rating: 7.1, description: "Description 2", authorName: "test", cityName: "", country: "", categories: ["Studies"], authorImageId: 14 },
+      { id: 3, title: "Title 3", date: "2026-06-03", rating: 9.8, description: "Description 3", authorName: "test", cityName: "", country: "", categories: ["Studies"], authorImageId: 14 },
+      { id: 4, title: "Title 4", date: "2026-06-04", rating: 6.5, description: "Description 4", authorName: "test", cityName: "", country: "", categories: ["Studies"], authorImageId: 14 },
+      { id: 5, title: "Title 5", date: "2026-06-05", rating: 5.3, description: "Description 5", authorName: "test", cityName: "", country: "", categories: ["Studies"], authorImageId: 14 },
+      { id: 6, title: "Title 6", date: "2026-06-06", rating: 4.7, description: "Description 6", authorName: "test", cityName: "", country: "", categories: ["Studies"], authorImageId: 14 },
     ];
 
     const page: Page = { size: 6, number: 0, totalElements: 10, totalPages: 2 }

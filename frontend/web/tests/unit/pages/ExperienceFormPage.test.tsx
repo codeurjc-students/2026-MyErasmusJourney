@@ -23,7 +23,7 @@ vi.mock("react-router-dom", async () => {
 describe("ExperienceFormPage", () => {
   beforeEach(() => {
     useUserStore.setState({
-      user: { id: 1, displayName: "Test User", email: "test@example.com" },
+      user: { id: 1, displayName: "Test User", email: "test@example.com", userImageId: null },
     });
     mockNavigate.mockClear();
     vi.restoreAllMocks();

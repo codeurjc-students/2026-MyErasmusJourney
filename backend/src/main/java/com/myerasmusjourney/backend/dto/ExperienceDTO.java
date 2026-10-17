@@ -15,5 +15,5 @@ public record ExperienceDTO (
         CitySimpleDTO city,
         UserSimpleDTO author,
         Collection<CommentSimpleDTO> comments,
-        Collection<ExperienceMultimediaSimpleDTO> multimediaList
+        Collection<MultimediaSimpleDTO> multimediaList
 ){}

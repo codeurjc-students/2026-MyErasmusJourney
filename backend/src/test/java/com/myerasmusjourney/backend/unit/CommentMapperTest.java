@@ -10,9 +10,14 @@ import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
 import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import com.myerasmusjourney.backend.enumeration.Category;
 import com.myerasmusjourney.backend.mapper.CommentMapper;
+import com.myerasmusjourney.backend.mapper.UserMapper;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,14 +25,19 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Tag("unit")
+@ExtendWith(MockitoExtension.class)
 class CommentMapperTest {
 
+    @Spy
+    private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+
+    @InjectMocks
     private final CommentMapper mapper = Mappers.getMapper(CommentMapper.class);
 
     @Test
     void toDTO() {
         UserSimpleDTO userSimpleDTO =
-                new UserSimpleDTO(2L, "test", "test@email.com");
+                new UserSimpleDTO(2L, "test", "test@email.com", null);
 
         ExperienceSimpleDTO experienceSimpleDTO =
                 new ExperienceSimpleDTO(
@@ -39,7 +49,8 @@ class CommentMapperTest {
                         List.of(Category.Personal_Experience),
                         "Athens",
                         "Greece",
-                        "test"
+                        "test",
+                        null
                 );
 
         CommentDTO expectedCommentDTO =
@@ -101,6 +112,7 @@ class CommentMapperTest {
                         LocalDate.now(),
                         "testing",
                         "testAuthor",
+                        null,
                         5L
                 );
 

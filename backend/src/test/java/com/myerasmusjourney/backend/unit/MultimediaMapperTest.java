@@ -4,7 +4,7 @@ import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.ExperienceMultimedia;
 import com.myerasmusjourney.backend.domain.User;
 import com.myerasmusjourney.backend.domain.UserImage;
-import com.myerasmusjourney.backend.dto.ExperienceMultimediaSimpleDTO;
+import com.myerasmusjourney.backend.dto.MultimediaSimpleDTO;
 import com.myerasmusjourney.backend.dto.UserImageDTO;
 import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import com.myerasmusjourney.backend.mapper.MultimediaMapper;
@@ -57,13 +57,13 @@ public class MultimediaMapperTest {
             ExperienceMultimedia experienceMultimedia = new ExperienceMultimedia( file, experience);
             ExperienceMultimedia experienceMultimedia2 = new ExperienceMultimedia( file2, experience);
 
-            List<ExperienceMultimediaSimpleDTO> experienceMultimediaSimpleDTOList = mapper.toSimpleDTOs(List.of(experienceMultimedia, experienceMultimedia2));
+            List<MultimediaSimpleDTO> multimediaSimpleDTOList = mapper.toSimpleDTOs(List.of(experienceMultimedia, experienceMultimedia2));
 
-            assertEquals(2, experienceMultimediaSimpleDTOList.size());
-            assertEquals(experienceMultimedia.getContentType(), experienceMultimediaSimpleDTOList.get(0).contentType());
-            assertEquals(experienceMultimedia2.getContentType(), experienceMultimediaSimpleDTOList.get(1).contentType());
+            assertEquals(2, multimediaSimpleDTOList.size());
+            assertEquals(experienceMultimedia.getContentType(), multimediaSimpleDTOList.get(0).contentType());
+            assertEquals(experienceMultimedia2.getContentType(), multimediaSimpleDTOList.get(1).contentType());
         } catch (IOException e) {
-            assertFalse(true);
+            fail();
         }
     }
 
@@ -80,13 +80,13 @@ public class MultimediaMapperTest {
 
             UserImage userImage = new UserImage(file, user);
 
-            UserImageDTO expected = new UserImageDTO(null, ".jpg", new UserSimpleDTO(null, null, null));
+            UserImageDTO expected = new UserImageDTO(null, file.getContentType(), new UserSimpleDTO(null, null, null, null));
             UserImageDTO result = mapper.toDTO(userImage);
 
             assertEquals(expected, result);
 
         } catch (IOException e) {
-            assertFalse(true);
+            fail();
         }
     }
 }

@@ -5,11 +5,11 @@ import jakarta.persistence.OneToOne;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Map;
+import java.util.Set;
 
 @Entity
 public class UserImage extends Multimedia{
-    private static final Map<String, String> EXTENSIONS = Map.ofEntries(Map.entry("image/jpeg", ".jpg"), Map.entry("image/jpg", ".jpg"), Map.entry("image/pjpeg", ".jpg"), Map.entry("image/png", ".png"), Map.entry("image/x-png", ".png"));
+    private static final Set<String> EXTENSIONS = Set.of("image/jpeg", "image/jpg", "image/pjpeg", "image/png", "image/x-png", "image/gif");
 
     @OneToOne(mappedBy = "profileImage")
     private User user;
@@ -31,6 +31,6 @@ public class UserImage extends Multimedia{
     }
 
     public static boolean contentTypeAccepted( String contentType){
-        return EXTENSIONS.containsKey(contentType);
+        return EXTENSIONS.contains(contentType);
     }
 }

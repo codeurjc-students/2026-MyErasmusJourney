@@ -4,4 +4,5 @@ export interface CommentSimpleDTO{
     date: String;
     authorName: String;
     experienceId: number;
+    authorImageId: number | null;
 }

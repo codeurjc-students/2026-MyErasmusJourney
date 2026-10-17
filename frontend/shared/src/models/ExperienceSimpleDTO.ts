@@ -10,6 +10,7 @@ export interface ExperienceSimpleDTO{
     cityName: string;
     country: string;
     authorName: string;
+    authorImageId: number | null;
 }
 
 export interface ExperiencePageDTO {

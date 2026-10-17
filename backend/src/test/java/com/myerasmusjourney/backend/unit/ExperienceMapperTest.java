@@ -51,10 +51,10 @@ public class ExperienceMapperTest {
         );
 
         List<ExperienceSimpleDTO> expected = List.of(
-                new ExperienceSimpleDTO(null, LocalDate.now(),9F, "Experiencia 1", "Descripcion 1", List.of(Category.Gastronomy, Category.Documentation), "Madrid", "Spain", "author1"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", List.of(Category.Transportation, Category.Documentation), "Toledo", "Spain", "author2"),
-                new ExperienceSimpleDTO(null, LocalDate.now(),5.4F, "Experiencia 3", "Descripcion 3",  List.of(Category.Gastronomy, Category.Social_Events), "Madrid", "Spain", "author1"),
-                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4",  List.of(Category.Culture, Category.Transportation), "Toledo", "Spain", "author2")
+                new ExperienceSimpleDTO(null, LocalDate.now(),9F, "Experiencia 1", "Descripcion 1", List.of(Category.Gastronomy, Category.Documentation), "Madrid", "Spain", "author1", null),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 8.67F, "Experiencia 2", "Descripcion 2", List.of(Category.Transportation, Category.Documentation), "Toledo", "Spain", "author2", null),
+                new ExperienceSimpleDTO(null, LocalDate.now(),5.4F, "Experiencia 3", "Descripcion 3",  List.of(Category.Gastronomy, Category.Social_Events), "Madrid", "Spain", "author1", null),
+                new ExperienceSimpleDTO(null, LocalDate.now(), 0.9F, "Experiencia 4", "Descripcion 4",  List.of(Category.Culture, Category.Transportation), "Toledo", "Spain", "author2", null)
         );
 
 
@@ -91,8 +91,8 @@ public class ExperienceMapperTest {
         exp.addComment(comment);
 
         CitySimpleDTO citySimpleDTO = new CitySimpleDTO(null, "Madrid", "description", "Spain");
-        UserSimpleDTO userSimpleDTO = new UserSimpleDTO(null, "test", "test@gmail.com");
-        CommentSimpleDTO commentSimpleDTO = new CommentSimpleDTO(null,LocalDate.now(), "test comment", "test", null);
+        UserSimpleDTO userSimpleDTO = new UserSimpleDTO(null, "test", "test@gmail.com", null);
+        CommentSimpleDTO commentSimpleDTO = new CommentSimpleDTO(null,LocalDate.now(), "test comment", "test", null,null);
         ExperienceDTO dto = new ExperienceDTO(null, LocalDate.now(), 6.8F, "Title", "Description",  List.of(Category.Gastronomy, Category.Documentation), citySimpleDTO, userSimpleDTO, List.of(commentSimpleDTO), List.of());
 
         ExperienceDTO result = mapper.toDTO(exp);

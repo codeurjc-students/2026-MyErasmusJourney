@@ -11,5 +11,5 @@ public record UserDTO(
         List<String> roles,
         List<ExperienceSimpleDTO> experiences,
         List<CommentSimpleDTO> comments,
-        UserImageSimpleDTO profileImage
+        MultimediaSimpleDTO profileImage
 ) {}
