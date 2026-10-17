@@ -198,7 +198,7 @@ public class ExperienceServiceTest extends TestDataBase {
 
         SecurityContextHolder.clearContext();
 
-        ExperienceSimpleDTO savedSimpleDTO = new ExperienceSimpleDTO(savedDTO.id(), savedDTO.date(), savedDTO.rating(), savedDTO.title(), savedDTO.description(), savedDTO.categories(), savedDTO.city().name(), savedDTO.city().country(), savedDTO.author().displayName());
+        ExperienceSimpleDTO savedSimpleDTO = new ExperienceSimpleDTO(savedDTO.id(), savedDTO.date(), savedDTO.rating(), savedDTO.title(), savedDTO.description(), savedDTO.categories(), savedDTO.city().name(), savedDTO.city().country(), savedDTO.author().displayName(), savedDTO.author().userImageId());
 
         expected.add(savedSimpleDTO);
 
@@ -342,7 +342,8 @@ public class ExperienceServiceTest extends TestDataBase {
         UserSimpleDTO userDTO = new UserSimpleDTO(
                 user.getId(),
                 user.getDisplayName(),
-                user.getEmail()
+                user.getEmail(),
+                null
         );
 
         ExperienceDTO result = experienceService.createExperience(formDTO);

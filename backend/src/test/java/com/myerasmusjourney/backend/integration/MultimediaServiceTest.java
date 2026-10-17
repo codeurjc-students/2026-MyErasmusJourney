@@ -166,11 +166,13 @@ public class MultimediaServiceTest extends TestDataBase {
 
         User user = userRepository.findByEmail("exampleuser1@email.com");
         try {
+            UserImageDTO result = multimediaService.addUserImage(user.getId(), file);
+
+            user = userRepository.findByEmail("exampleuser1@email.com");
             UserImage userImage = new UserImage(file, user);
 
             UserImageDTO expected = multimediaMapper.toDTO(userImage);
 
-            UserImageDTO result = multimediaService.addUserImage(user.getId(), file);
 
             assertEquals(expected.user(), result.user());
             assertEquals(expected.contentType(), result.contentType());
@@ -204,8 +206,6 @@ public class MultimediaServiceTest extends TestDataBase {
 
         User user = userRepository.findByEmail("exampleuser1@email.com");
         try {
-            UserImage userImage = new UserImage(file, user);
-
             UserImage previous = new UserImage(file2,user);
 
             previous = userImageRepository.save(previous);
@@ -214,9 +214,11 @@ public class MultimediaServiceTest extends TestDataBase {
 
             userRepository.save(user);
 
-            UserImageDTO expected = multimediaMapper.toDTO(userImage);
-
             UserImageDTO result = multimediaService.addUserImage(user.getId(), file);
+
+            user = userRepository.findByEmail("exampleuser1@email.com");
+            UserImage userImage = new UserImage(file, user);
+            UserImageDTO expected = multimediaMapper.toDTO(userImage);
 
             assertEquals(expected.user(), result.user());
             assertEquals(expected.contentType(), result.contentType());
