@@ -14,6 +14,7 @@ import { ApiError } from "@shared/api/apiError";
 import { Trash2Icon } from "lucide-react"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, AlertDialogTrigger, } from "../../../@/components/ui/alert-dialog"
 import ProfileImageDialog from "@/components/ProfileImageDialog/ProfileImageDialog";
+import { APIURL } from "@/config/env";
 
 export default function UserPage({ authService = createAuthService(API), userService = createUserService(API) }: authServiceProps & userServiceProps) {
 
@@ -171,8 +172,15 @@ export default function UserPage({ authService = createAuthService(API), userSer
                 </div>
 
                 <div className="flex flex-col justify-center items-center gap-8">
-                    <img src="/images/available_soon.png" alt="profile image" className="mainProfileImage rounded-full object-cover" />
-                    <ProfileImageDialog id={userDTO?.id ?? 0} userService={userService} setImageUpdated={setImageUpdated} />
+                    {userDTO?.profileImage != null
+                        ? (
+                            <img src={`${APIURL}/multimedia/users/${userDTO?.profileImage.id}`} alt="profile image" className="mainProfileImage aspect-square rounded-full object-cover" />
+                        )
+                        : (
+                            <img src="/images/create_account.png" alt="profile image" className="mainProfileImage aspect-square rounded-full object-cover" />
+                        )
+                    }
+                    {userDTO && (<ProfileImageDialog id={userDTO.id} userService={userService} setImageUpdated={setImageUpdated}/>)}
                 </div>
 
             </div>

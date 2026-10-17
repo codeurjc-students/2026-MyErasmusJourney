@@ -27,11 +27,13 @@ export default function ProfileImageDialog({ userService = createUserService(API
         const file = input.files?.[0] ?? new File([], "");
 
         try {
+            console.log(id);
             await userService.updateUserImage(id, file);
             toast.success("Profile Image updated");
             setImageUpdated(true);
         }
         catch (error) {
+            console.log(error)
             if (error instanceof ApiError && error.status >= 500) {
                 console.error(error);
                 navigate("/error");

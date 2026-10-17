@@ -8,6 +8,7 @@ import type { CommentSimpleDTO } from "@shared/models/CommentSimpleDTO";
 import { useUserStore } from "@shared/stores/userStore";
 import { Link, useNavigate } from "react-router-dom";
 import { ApiError } from "@shared/api/apiError";
+import { APIURL } from "@/config/env";
 
 interface ExperienceIdProps {
     experienceId: number;
@@ -31,14 +32,14 @@ export default function Comments({ experienceService = createExperienceService(A
     async function getComments() {
         try {
             const data =
-            await experienceService.getCommentsByExperienceId(experienceId);
+                await experienceService.getCommentsByExperienceId(experienceId);
 
             setComments(data);
         } catch (error) {
             if (error instanceof ApiError && error.status >= 500) {
-            console.error(error);
-            navigate("/error");
-            return;
+                console.error(error);
+                navigate("/error");
+                return;
             }
         }
     }
@@ -82,7 +83,13 @@ export default function Comments({ experienceService = createExperienceService(A
                     <div className="rounded-2xl bg-white shadow-md p-4">
                         <div className="flex items-center justify-between gap-3">
                             <div className="flex items-center gap-3">
-                                <img src="/images/available_soon.png" alt="Comment author profile" className="w-10 h-10 rounded-full object-cover" />
+                                {comment.authorImageId !== null
+                                    ? (
+                                        <img src={`${APIURL}/multimedia/users/${comment.authorImageId}`} alt="User profile" className="w-10 h-10 md:w-14 md:h-14 aspect-square rounded-full object-cover shrink-0" />
+                                    ) : (
+                                        <img src="/images/create_account.png" alt="Comment author profile" className="w-10 h-10 md:w-14 md:h-14 aspect-square rounded-full object-cover shrink-0" />
+                                    )
+                                }
                                 <p className="font-bold">{comment.authorName}</p>
                             </div>
                             <p className="text-sm opacity-70">{comment.date}</p>
