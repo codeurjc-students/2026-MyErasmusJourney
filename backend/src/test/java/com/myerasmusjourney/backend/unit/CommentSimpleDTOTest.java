@@ -13,7 +13,7 @@ public class CommentSimpleDTOTest {
 
     @Test
     void testCommentSimpleDTO(){
-        CommentSimpleDTO commentSimpleDTO = new CommentSimpleDTO(1L, LocalDate.now(), "comment simple dto", "testing", 3L);
+        CommentSimpleDTO commentSimpleDTO = new CommentSimpleDTO(1L, LocalDate.now(), "comment simple dto", "testing", null,3L);
         assertEquals(1, commentSimpleDTO.id().intValue());
         assertEquals(LocalDate.now(), commentSimpleDTO.date());
         assertEquals("comment simple dto", commentSimpleDTO.description());

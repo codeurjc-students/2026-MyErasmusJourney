@@ -387,7 +387,7 @@ public class ExperienceServiceTest {
         experience.addComment(new Comment());
 
         when(experienceRepository.findById(1L)).thenReturn(Optional.of(experience));
-        when(commentMapper.toSimpleDTOs(argThat(comments -> comments.size() == 2))).thenReturn(List.of(new CommentSimpleDTO(null, null, null, null, 2L), new CommentSimpleDTO(null, null, null, null, 3L)));
+        when(commentMapper.toSimpleDTOs(argThat(comments -> comments.size() == 2))).thenReturn(List.of(new CommentSimpleDTO(null, null, null, null, null,1L), new CommentSimpleDTO(null, null, null, null, null,1L)));
         Collection<CommentSimpleDTO> result = experienceService.getComments(1L);
 
         assertEquals(2, result.size());
