@@ -1,5 +1,6 @@
 import type { CommentSimpleDTO } from "./CommentSimpleDTO";
 import type { ExperienceSimpleDTO } from "./ExperienceSimpleDTO";
+import type {MultimediaSimpleDTO} from "./MultimediaSimpleDTO";
 
 export interface UserDTO{
     id: number;
@@ -10,4 +11,5 @@ export interface UserDTO{
     roles: Array<String>;
     experiences: ExperienceSimpleDTO[];
     comments: CommentSimpleDTO[];
+    profileImage: MultimediaSimpleDTO | null;
 }
