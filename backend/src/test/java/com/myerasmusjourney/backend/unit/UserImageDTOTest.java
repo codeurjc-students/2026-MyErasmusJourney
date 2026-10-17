@@ -12,11 +12,11 @@ public class UserImageDTOTest {
 
     @Test
     void testUserImageDTO(){
-        UserImageDTO userImageDTO = new UserImageDTO(1L, ".png", new UserSimpleDTO(null, null, null));
+        UserImageDTO userImageDTO = new UserImageDTO(1L, ".png", new UserSimpleDTO(null, null, null, 1L));
         Long id = 1L;
 
         assertEquals(id, userImageDTO.id());
         assertEquals(".png", userImageDTO.contentType());
-        assertEquals(new UserSimpleDTO(null, null, null), userImageDTO.user());
+        assertEquals(new UserSimpleDTO(null, null, null, 1L), userImageDTO.user());
     }
 }

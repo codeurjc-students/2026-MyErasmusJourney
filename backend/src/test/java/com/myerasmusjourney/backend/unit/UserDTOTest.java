@@ -18,8 +18,8 @@ public class UserDTOTest {
 
     @Test
     void testUserDTO() {
-        ExperienceSimpleDTO experienceSimpleDTO = new ExperienceSimpleDTO(1L, LocalDate.now(), 9.3F, "title", "description", List.of(Category.Personal_Experience, Category.Culture), "Berlin", "Germany", "testDTO");
-        ExperienceSimpleDTO experienceSimpleDTO2 = new ExperienceSimpleDTO(2L, LocalDate.now(), 9.3F, "title", "description", List.of(Category.Personal_Experience, Category.Culture), "Berlin", "Germany", "testDTO");
+        ExperienceSimpleDTO experienceSimpleDTO = new ExperienceSimpleDTO(1L, LocalDate.now(), 9.3F, "title", "description", List.of(Category.Personal_Experience, Category.Culture), "Berlin", "Germany", "testDTO", null);
+        ExperienceSimpleDTO experienceSimpleDTO2 = new ExperienceSimpleDTO(2L, LocalDate.now(), 9.3F, "title", "description", List.of(Category.Personal_Experience, Category.Culture), "Berlin", "Germany", "testDTO", null);
 
         UserDTO dto = new UserDTO(1L, "John Doe", "jdoe", "john@example.com", "Munich, Germany", List.of("USER", "ADMIN"), List.of(experienceSimpleDTO, experienceSimpleDTO2), List.of(), null);
         assertEquals(Long.valueOf(1L), dto.id());

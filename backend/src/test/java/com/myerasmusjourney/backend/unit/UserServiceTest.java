@@ -108,7 +108,7 @@ public class UserServiceTest {
 
     @Test
     void testGetUserInfo(){
-        UserSimpleDTO userSimpleDTO = new UserSimpleDTO(1L, "test", "test@email.com");
+        UserSimpleDTO userSimpleDTO = new UserSimpleDTO(1L, "test", "test@email.com", null);
         User user = new User("test", "testUser", "test@email.com", "password", "Munich", "Germany");
 
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -506,8 +506,8 @@ public class UserServiceTest {
         user.addExperience(experience2);
 
         List<ExperienceSimpleDTO> expected = List.of(
-                new ExperienceSimpleDTO(1L, null, null, "Experience 1", null, null, null, null, null),
-                new ExperienceSimpleDTO(2L, null, null, "Experience 2", null, null, null, null, null)
+                new ExperienceSimpleDTO(1L, null, null, "Experience 1", null, null, null, null, null, null),
+                new ExperienceSimpleDTO(2L, null, null, "Experience 2", null, null, null, null, null, null)
 
         );
 
@@ -558,8 +558,8 @@ public class UserServiceTest {
         admin.setRoles(List.of("USER", "ADMIN"));
 
         List<ExperienceSimpleDTO> expected = List.of(
-                new ExperienceSimpleDTO(1L, null, null, "Experience 1", null, null, null, null, null),
-                new ExperienceSimpleDTO(2L, null, null, "Experience 2", null, null, null, null, null)
+                new ExperienceSimpleDTO(1L, null, null, "Experience 1", null, null, null, null, null, null),
+                new ExperienceSimpleDTO(2L, null, null, "Experience 2", null, null, null, null, null, null)
 
         );
 

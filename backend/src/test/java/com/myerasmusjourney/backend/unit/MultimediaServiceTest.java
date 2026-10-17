@@ -222,7 +222,7 @@ public class MultimediaServiceTest {
         try {
             UserImage userImage = new UserImage(file, user);
             userImage.setId(1L);
-            UserImageDTO expected = new UserImageDTO(1L, userImage.getContentType(), new UserSimpleDTO(1L, null, user.getEmail()));
+            UserImageDTO expected = new UserImageDTO(1L, userImage.getContentType(), new UserSimpleDTO(1L, null, user.getEmail(), 1L));
 
             when(userService.getLoggedUser()).thenReturn(user);
             when(userImageRepository.save(any(UserImage.class))).thenReturn(userImage);
@@ -262,7 +262,7 @@ public class MultimediaServiceTest {
         try {
             UserImage userImage = new UserImage(file, user);
             userImage.setId(1L);
-            UserImageDTO expected = new UserImageDTO(1L, userImage.getContentType(), new UserSimpleDTO(1L, null, user.getEmail()));
+            UserImageDTO expected = new UserImageDTO(1L, userImage.getContentType(), new UserSimpleDTO(1L, null, user.getEmail(), 1L));
 
             when(userService.getLoggedUser()).thenReturn(user);
             when(userImageRepository.save(any(UserImage.class))).thenReturn(userImage);

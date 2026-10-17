@@ -3,6 +3,7 @@ package com.myerasmusjourney.backend.unit;
 import com.myerasmusjourney.backend.domain.Comment;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
+import com.myerasmusjourney.backend.domain.UserImage;
 import com.myerasmusjourney.backend.dto.CommentSimpleDTO;
 import com.myerasmusjourney.backend.dto.ExperienceSimpleDTO;
 import com.myerasmusjourney.backend.dto.UserDTO;
@@ -39,8 +40,11 @@ public class UserMapperTest {
     @Test
     void testToSimpleDTO() {
         User u = new User("John Doe", "jdoe", "john@example.com", "secret", "Munich", "Germany");
+        UserImage userImage = new UserImage();
+        userImage.setId(3L);
+        u.setProfileImage(userImage);
 
-        UserSimpleDTO expected = new UserSimpleDTO(null, "jdoe", "john@example.com");
+        UserSimpleDTO expected = new UserSimpleDTO(null, "jdoe", "john@example.com", 3L);
 
         UserSimpleDTO result = mapper.toSimpleDTO(u);
 
@@ -60,7 +64,7 @@ public class UserMapperTest {
 
         u.addComment(new Comment());
 
-        UserDTO expected = new UserDTO(null, "John Doe", "jdoe", "john@example.com", "Munich, Germany", List.of("USER"), List.of(new ExperienceSimpleDTO(null, null, null, null, null, List.of(), null, null, null)), List.of(new CommentSimpleDTO(null, null, null, null, null)), null);
+        UserDTO expected = new UserDTO(null, "John Doe", "jdoe", "john@example.com", "Munich, Germany", List.of("USER"), List.of(new ExperienceSimpleDTO(null, null, null, null, null, List.of(), null, null, null, null)), List.of(new CommentSimpleDTO(null, null, null, null, null)), null);
 
         UserDTO result = mapper.toDTO(u);
 

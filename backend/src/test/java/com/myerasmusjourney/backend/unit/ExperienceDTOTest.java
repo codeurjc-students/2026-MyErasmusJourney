@@ -35,7 +35,7 @@ public class ExperienceDTOTest {
         assertEquals(citySimpleDTO, exp.city());
         assertEquals(List.of(), exp.comments());
 
-        UserSimpleDTO userSimpleDTO = new UserSimpleDTO(2L, "Test", "test@gamil.com");
+        UserSimpleDTO userSimpleDTO = new UserSimpleDTO(2L, "Test", "test@gamil.com", null);
 
         exp = new ExperienceDTO(null, LocalDate.of(2026, 1, 15), 4.7F, "Tittle", "Description", List.of(Category.Accommodation, Category.Transportation), null, userSimpleDTO, List.of(new CommentSimpleDTO(1L, LocalDate.now(), "description", "test", null)), List.of());
 
@@ -51,7 +51,7 @@ public class ExperienceDTOTest {
 
     @Test
     void testComparingDTOs() {
-        UserSimpleDTO userSimpleDTO = new UserSimpleDTO(2L, "Test", "test@gamil.com");
+        UserSimpleDTO userSimpleDTO = new UserSimpleDTO(2L, "Test", "test@gamil.com", null);
         CitySimpleDTO citySimpleDTO = new CitySimpleDTO(1L, "Madrid", "Description", "Spain");
 
         ExperienceDTO exp = new ExperienceDTO(3L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1", List.of(Category.Culture, Category.Transportation), citySimpleDTO, userSimpleDTO, List.of(), List.of());

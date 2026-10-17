@@ -63,7 +63,7 @@ public class MultimediaMapperTest {
             assertEquals(experienceMultimedia.getContentType(), multimediaSimpleDTOList.get(0).contentType());
             assertEquals(experienceMultimedia2.getContentType(), multimediaSimpleDTOList.get(1).contentType());
         } catch (IOException e) {
-            assertFalse(true);
+            fail();
         }
     }
 
@@ -80,13 +80,13 @@ public class MultimediaMapperTest {
 
             UserImage userImage = new UserImage(file, user);
 
-            UserImageDTO expected = new UserImageDTO(null, file.getContentType(), new UserSimpleDTO(null, null, null));
+            UserImageDTO expected = new UserImageDTO(null, file.getContentType(), new UserSimpleDTO(null, null, null, null));
             UserImageDTO result = mapper.toDTO(userImage);
 
             assertEquals(expected, result);
 
         } catch (IOException e) {
-            assertFalse(true);
+            fail();
         }
     }
 }

@@ -27,7 +27,7 @@ class CommentMapperTest {
     @Test
     void toDTO() {
         UserSimpleDTO userSimpleDTO =
-                new UserSimpleDTO(2L, "test", "test@email.com");
+                new UserSimpleDTO(2L, "test", "test@email.com", null);
 
         ExperienceSimpleDTO experienceSimpleDTO =
                 new ExperienceSimpleDTO(
@@ -39,7 +39,8 @@ class CommentMapperTest {
                         List.of(Category.Personal_Experience),
                         "Athens",
                         "Greece",
-                        "test"
+                        "test",
+                        null
                 );
 
         CommentDTO expectedCommentDTO =

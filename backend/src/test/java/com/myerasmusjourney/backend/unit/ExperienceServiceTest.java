@@ -137,7 +137,8 @@ public class ExperienceServiceTest {
                         List.of(Category.Personal_Experience, Category.Documentation),
                         "London",
                         "United Kingdom",
-                        "user"
+                        "user",
+                        null
                 ),
                 new ExperienceSimpleDTO(
                         null,
@@ -148,7 +149,8 @@ public class ExperienceServiceTest {
                         List.of(Category.Social_Events, Category.Culture),
                         "Berlin",
                         "Germany",
-                        "user2"
+                        "user2",
+                        null
                 ),
                 new ExperienceSimpleDTO(
                         null,
@@ -159,7 +161,8 @@ public class ExperienceServiceTest {
                         List.of(Category.Culture, Category.Gastronomy),
                         "London",
                         "United Kingdom",
-                        "user"
+                        "user",
+                        null
                 ),
                 new ExperienceSimpleDTO(
                         null,
@@ -170,7 +173,8 @@ public class ExperienceServiceTest {
                         List.of(Category.Transportation),
                         "Berlin",
                         "Germany",
-                        "user2"
+                        "user2",
+                        null
                 )
         );
 
@@ -268,7 +272,8 @@ public class ExperienceServiceTest {
         UserSimpleDTO userDTO = new UserSimpleDTO(
                 user.getId(),
                 user.getDisplayName(),
-                user.getEmail()
+                user.getEmail(),
+                null
         );
 
         ExperienceDTO expectedDTO = new ExperienceDTO(
@@ -534,7 +539,8 @@ public class ExperienceServiceTest {
                         List.of(Category.Personal_Experience, Category.Documentation),
                         "London",
                         "United Kingdom",
-                        "user"
+                        "user",
+                        null
                 ),
                 new ExperienceSimpleDTO(
                         null,
@@ -545,7 +551,8 @@ public class ExperienceServiceTest {
                         List.of(Category.Social_Events, Category.Culture),
                         "Berlin",
                         "Germany",
-                        "user2"
+                        "user2",
+                        null
                 ),
                 new ExperienceSimpleDTO(
                         null,
@@ -556,7 +563,8 @@ public class ExperienceServiceTest {
                         List.of(Category.Culture, Category.Gastronomy),
                         "London",
                         "United Kingdom",
-                        "user"
+                        "user",
+                        null
                 ),
                 new ExperienceSimpleDTO(
                         null,
@@ -567,7 +575,8 @@ public class ExperienceServiceTest {
                         List.of(Category.Transportation),
                         "Berlin",
                         "Germany",
-                        "user2"
+                        "user2",
+                        null
                 )
         );
 
