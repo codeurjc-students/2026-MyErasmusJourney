@@ -82,15 +82,15 @@ public class ExperienceRestController {
     }
 
     @PostMapping(value = {"/{id}/multimedia"}, consumes = {"multipart/form-data"})
-    public ResponseEntity<Collection<ExperienceMultimediaSimpleDTO>> uploadMultimedia(@PathVariable Long id, @RequestParam("multipartFileList") List<MultipartFile> multipartFileList) {
-        Collection<ExperienceMultimediaSimpleDTO> experienceMultimediaSimpleDTOS = this.multimediaService.addMultimedia(id, multipartFileList);
-        if (experienceMultimediaSimpleDTOS == null) {
+    public ResponseEntity<Collection<MultimediaSimpleDTO>> uploadMultimedia(@PathVariable Long id, @RequestParam("multipartFileList") List<MultipartFile> multipartFileList) {
+        Collection<MultimediaSimpleDTO> multimediaSimpleDTOS = this.multimediaService.addMultimedia(id, multipartFileList);
+        if (multimediaSimpleDTOS == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        } else if (experienceMultimediaSimpleDTOS.isEmpty()) {
+        } else if (multimediaSimpleDTOS.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).build();
         } else {
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-            return ResponseEntity.created(location).body(experienceMultimediaSimpleDTOS);
+            URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/multimedia/experiences/{id}").buildAndExpand(id).toUri();
+            return ResponseEntity.created(location).body(multimediaSimpleDTOS);
         }
     }
 }
