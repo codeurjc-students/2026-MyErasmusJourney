@@ -158,7 +158,8 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .body("id", notNullValue())
                 .body("id", greaterThan(0))
                 .body("displayName", notNullValue())
-                .body("email", notNullValue());
+                .body("email", notNullValue())
+                .body("userImageId", nullValue());
     }
 
     @Test

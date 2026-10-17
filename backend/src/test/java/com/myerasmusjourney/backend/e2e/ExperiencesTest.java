@@ -59,7 +59,9 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .body("content[0].rating", notNullValue())
                 .body("content[0].title", notNullValue())
                 .body("content[0].categories", notNullValue())
-                .body("content[0].description", notNullValue());
+                .body("content[0].description", notNullValue())
+                .body("content[0].authorName", notNullValue())
+                .body("content[0].authorImageId", notNullValue());
     }
 
     @Test
