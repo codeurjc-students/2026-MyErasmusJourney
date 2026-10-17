@@ -12,11 +12,13 @@ import java.util.Collection;
 public interface CommentMapper {
     @Mapping(source = "author.displayName", target = "authorName")
     @Mapping(source = "experience.id", target = "experienceId")
+    @Mapping(source = "author.profileImage.id", target = "authorImageId")
     CommentSimpleDTO toSimpleDTO(Comment comment);
     Collection<CommentSimpleDTO> toSimpleDTOs(Collection<Comment> comments);
 
     @Mapping(source = "experience.city.name", target = "experience.cityName")
     @Mapping(source = "experience.city.country", target = "experience.country")
     @Mapping(source = "experience.author.displayName", target = "experience.authorName")
+    @Mapping(source = "author.profileImage.id", target = "author.userImageId")
     CommentDTO toDTO(Comment comment);
 }
