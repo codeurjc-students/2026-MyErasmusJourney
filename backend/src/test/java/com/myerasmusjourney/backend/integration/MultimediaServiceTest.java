@@ -2,7 +2,7 @@ package com.myerasmusjourney.backend.integration;
 
 import com.myerasmusjourney.backend.TestDataBase;
 import com.myerasmusjourney.backend.domain.*;
-import com.myerasmusjourney.backend.dto.ExperienceMultimediaSimpleDTO;
+import com.myerasmusjourney.backend.dto.MultimediaSimpleDTO;
 import com.myerasmusjourney.backend.dto.UserImageDTO;
 import com.myerasmusjourney.backend.mapper.MultimediaMapper;
 import com.myerasmusjourney.backend.repository.ExperienceMultimediaRepository;
@@ -85,13 +85,13 @@ public class MultimediaServiceTest extends TestDataBase {
             ExperienceMultimedia experienceMultimedia1 = new ExperienceMultimedia(file, experience);
             ExperienceMultimedia experienceMultimedia2 = new ExperienceMultimedia(file2, experience);
 
-            List<ExperienceMultimediaSimpleDTO> expected = multimediaMapper.toSimpleDTOs(List.of(experienceMultimedia1, experienceMultimedia2));
+            List<MultimediaSimpleDTO> expected = multimediaMapper.toSimpleDTOs(List.of(experienceMultimedia1, experienceMultimedia2));
 
-            List<ExperienceMultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
+            List<MultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
 
             int i = 0;
-            for (ExperienceMultimediaSimpleDTO dto: result){
-                ExperienceMultimediaSimpleDTO expectedDTO = expected.get(i);
+            for (MultimediaSimpleDTO dto: result){
+                MultimediaSimpleDTO expectedDTO = expected.get(i);
                 assertNotNull(dto.id());
                 assertEquals(expectedDTO.contentType(), dto.contentType());
                 i++;
@@ -121,7 +121,7 @@ public class MultimediaServiceTest extends TestDataBase {
                 "fake image content".getBytes()
         );
 
-        List<ExperienceMultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
+        List<MultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
 
         assertNull(result);
     }
@@ -146,7 +146,7 @@ public class MultimediaServiceTest extends TestDataBase {
                 "fake image content".getBytes()
         );
 
-        List<ExperienceMultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
+        List<MultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
 
         assertTrue(result.isEmpty());
     }

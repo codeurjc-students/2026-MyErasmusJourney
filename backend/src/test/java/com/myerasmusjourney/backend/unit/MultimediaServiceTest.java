@@ -1,7 +1,7 @@
 package com.myerasmusjourney.backend.unit;
 
 import com.myerasmusjourney.backend.domain.*;
-import com.myerasmusjourney.backend.dto.ExperienceMultimediaSimpleDTO;
+import com.myerasmusjourney.backend.dto.MultimediaSimpleDTO;
 import com.myerasmusjourney.backend.dto.UserImageDTO;
 import com.myerasmusjourney.backend.dto.UserSimpleDTO;
 import com.myerasmusjourney.backend.mapper.MultimediaMapper;
@@ -76,9 +76,9 @@ public class MultimediaServiceTest {
                 "fake image content".getBytes()
         );
 
-        List<ExperienceMultimediaSimpleDTO> expected = List.of(
-                new ExperienceMultimediaSimpleDTO(1L, ".jpg"),
-                new ExperienceMultimediaSimpleDTO(2L, ".png")
+        List<MultimediaSimpleDTO> expected = List.of(
+                new MultimediaSimpleDTO(1L, ".jpg"),
+                new MultimediaSimpleDTO(2L, ".png")
         );
 
         try {
@@ -93,7 +93,7 @@ public class MultimediaServiceTest {
             when(experienceMultimediaRepository.save(any(ExperienceMultimedia.class))).thenReturn(experienceMultimedia, experienceMultimedia2);
             when(multimediaMapper.toSimpleDTOs(argThat(multimedia -> multimedia.size() == 2))).thenReturn(expected);
 
-            List<ExperienceMultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
+            List<MultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
 
             assertEquals(expected, result);
 
@@ -146,7 +146,7 @@ public class MultimediaServiceTest {
             when(experienceService.getExperience(1L)).thenReturn(experience);
             when(userService.getLoggedUser()).thenReturn(user2);
 
-            List<ExperienceMultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
+            List<MultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
 
             assertNull(result);
 
@@ -193,7 +193,7 @@ public class MultimediaServiceTest {
             when(userService.getLoggedUser()).thenReturn(user);
 
 
-            List<ExperienceMultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
+            List<MultimediaSimpleDTO> result = multimediaService.addMultimedia(1L, List.of(file, file2));
 
             assertTrue(result.isEmpty());
 
