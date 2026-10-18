@@ -22,8 +22,19 @@ public class MultimediaRestController {
     private MultimediaService multimediaService;
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<Resource> getMedia(@PathVariable Long id) {
+    public ResponseEntity<Resource> getUserMedia(@PathVariable Long id) {
         Multimedia multimedia = multimediaService.getUserImageById(id);
+        Resource file = multimediaService.loadFileAsResource(multimedia.getMultimediaFile());
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(multimedia.getContentType()))
+                .cacheControl(CacheControl.maxAge(Duration.ofDays(7)).cachePublic())
+                .eTag(String.valueOf(id))
+                .body(file);
+    }
+
+    @GetMapping("/experiences/{id}")
+    public ResponseEntity<Resource> getExperienceMedia(@PathVariable Long id) {
+        Multimedia multimedia = multimediaService.getExperienceMultimediaById(id);
         Resource file = multimediaService.loadFileAsResource(multimedia.getMultimediaFile());
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(multimedia.getContentType()))

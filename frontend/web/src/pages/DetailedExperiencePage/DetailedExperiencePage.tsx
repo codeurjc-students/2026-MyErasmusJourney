@@ -131,14 +131,25 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
                             <p className="text-base md:text-lg leading-relaxed">{experience.description}</p>
                         </div>
 
-                        <div className="flex flex-wrap justify-center items-center gap-6 mt-6">
-                            <div className="w-full sm:w-[45%] flex justify-center">
-                                <img src="/images/available_soon.png" alt="Multimedia" className="w-full max-w-2xl max-h-[35vh] h-auto object-contain rounded-2xl" />
-                            </div>
-                            <div className="w-full sm:w-[45%] flex justify-center">
-                                <img src="/images/available_soon.png" alt="Multimedia" className="w-full max-w-2xl max-h-[35vh] h-auto object-contain rounded-2xl" />
-                            </div>
-                        </div>
+                        {experience.multimedia != null
+                            ? (
+                                <div className="flex flex-wrap justify-center items-center gap-6 mt-6">
+                                    {experience.multimedia.map((multimedia) => (
+                                        <div className="w-full sm:w-[45%] flex justify-center">
+                                            {multimedia.contentType.includes("image")
+                                                ? (
+                                                    <img src={`${APIURL}/multimedia/experiences/${multimedia.id}`} alt="Multimedia" className="w-full max-w-2xl max-h-[35vh] h-auto object-contain rounded-2xl" />
+                                                ) : (
+                                                    <video src={`${APIURL}/multimedia/experiences/${multimedia.id}`} controls preload="metadata" className="w-full max-w-2xl max-h-[35vh] h-auto object-contain rounded-2xl" data-testid="experience-video"/>
+                                                )
+                                            }
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                null
+                            )
+                        }
 
                     </div>
                 </main>

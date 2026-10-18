@@ -96,4 +96,9 @@ public class MultimediaService {
     public Multimedia getUserImageById(Long id) {
         return userImageRepository.findById(id).orElseThrow(()-> new NoSuchElementException("Profile image doesn't exist"));
     }
+
+    @Transactional
+    public Multimedia getExperienceMultimediaById(Long id) {
+        return experienceMultimediaRepository.findById(id).orElseThrow(()-> new NoSuchElementException("Multimedia file doesn't exist"));
+    }
 }

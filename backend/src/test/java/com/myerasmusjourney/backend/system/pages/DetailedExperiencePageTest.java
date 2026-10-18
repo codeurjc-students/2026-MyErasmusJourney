@@ -1,6 +1,7 @@
 package com.myerasmusjourney.backend.system.pages;
 
 import com.myerasmusjourney.backend.system.AuthenticatedSeleniumTest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -47,6 +48,12 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div/div/div/main/div/div[2]/h3")
         ));
+
+        Assertions.assertTrue(
+                driver.findElement(By.xpath("/html/body/div/div/div/main/div/div[4]/div[1]/img")).isDisplayed()
+                &&
+                driver.findElement(By.xpath("/html/body/div/div/div/main/div/div[4]/div[2]/video")).isDisplayed()
+        );
     }
 
     @Test
