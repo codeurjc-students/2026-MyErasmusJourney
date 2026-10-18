@@ -1,4 +1,5 @@
 import type { CitySimpleDTO } from "./CitySimpleDTO";
+import type { MultimediaSimpleDTO } from "./MultimediaSimpleDTO";
 import type { UserSimpleDTO } from "./UserSimpleDTO";
 
 export interface ExperienceDTO{
@@ -10,4 +11,5 @@ export interface ExperienceDTO{
     categories: string[];
     city: CitySimpleDTO;
     author: UserSimpleDTO;
+    multimedia: MultimediaSimpleDTO[] | null;
 }
