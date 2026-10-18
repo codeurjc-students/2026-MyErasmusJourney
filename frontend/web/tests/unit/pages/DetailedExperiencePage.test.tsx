@@ -48,6 +48,11 @@ describe("DetailedExperiencePage", () => {
       email: "john@example.com",
       userImageId: null
     },
+    multimedia: [
+      { id: 1, contentType: "video/mp4" },
+      { id: 2, contentType: "image/jpeg" },
+      { id: 3, contentType: "video/quicktime"}
+    ]
   };
 
   it("should show loading message while fetching the experience", () => {
@@ -146,6 +151,10 @@ describe("DetailedExperiencePage", () => {
     expect(
       screen.getByText("Gastronomy")
     ).toBeInTheDocument();
+
+    expect(screen.queryAllByRole("img", { name: "Multimedia" })).toHaveLength(1);
+
+    expect(screen.queryAllByTestId("experience-video")).toHaveLength(2);
 
     expect(mockGetExperienceById).toHaveBeenCalledTimes(1);
     expect(mockGetExperienceById).toHaveBeenCalledWith(1);

@@ -140,7 +140,7 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
                                                 ? (
                                                     <img src={`${APIURL}/multimedia/experiences/${multimedia.id}`} alt="Multimedia" className="w-full max-w-2xl max-h-[35vh] h-auto object-contain rounded-2xl" />
                                                 ) : (
-                                                    <video src={`${APIURL}/multimedia/experiences/${multimedia.id}`} controls preload="metadata" className="w-full max-w-2xl max-h-[35vh] h-auto object-contain rounded-2xl" />
+                                                    <video src={`${APIURL}/multimedia/experiences/${multimedia.id}`} controls preload="metadata" className="w-full max-w-2xl max-h-[35vh] h-auto object-contain rounded-2xl" data-testid="experience-video"/>
                                                 )
                                             }
                                         </div>

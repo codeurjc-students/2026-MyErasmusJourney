@@ -18,6 +18,7 @@ import {
 
 import { APIURL } from "src/config/env";
 import { ApiError } from "@shared/api/apiError";
+import type { ExperienceDTO } from "@shared/models/ExperienceDTO";
 
 
 const testAPI = createApiClient(APIURL);
@@ -129,6 +130,8 @@ describe("DetailedExperiencePage", () => {
 
   it("should display the real experience information", async () => {
 
+    const experience: ExperienceDTO = await testExperienceService.getExperienceById(1);
+
     render(
       <MemoryRouter initialEntries={["/experiences/1"]}>
         <Routes>
@@ -152,9 +155,21 @@ describe("DetailedExperiencePage", () => {
 
     expect(screen.getByRole("heading", { level: 3 })).toBeInTheDocument();
 
-    expect(
-      screen.getByRole("button", { name: "Share experience" })
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Share experience" })).toBeInTheDocument();
+
+    if (experience.multimedia != null) {
+      const expectedVideo: number = experience.multimedia?.filter(
+        (multimedia) => multimedia.contentType.startsWith("video/")
+      ).length;
+
+      const expectedImage: number = experience.multimedia?.filter(
+        (multimedia) => multimedia.contentType.startsWith("image/")
+      ).length;
+
+      expect(screen.queryAllByRole("img", { name: "Multimedia" })).toHaveLength(expectedVideo);
+
+      expect(screen.queryAllByTestId("experience-video")).toHaveLength(expectedImage);
+    }
 
     expect(await screen.findByRole("heading", { level: 4 })).toBeInTheDocument();
   });
