@@ -18,5 +18,6 @@ public interface ExperienceMapper {
     List<ExperienceSimpleDTO> toDTOs(List<Experience> experiences);
 
     @Mapping(source = "author.profileImage.id", target = "author.userImageId")
+    @Mapping(source = "multimedia", target = "multimedia")
     ExperienceDTO toDTO(Experience experience);
 }
