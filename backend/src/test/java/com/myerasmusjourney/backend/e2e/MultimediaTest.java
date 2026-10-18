@@ -41,4 +41,24 @@ public class MultimediaTest extends TestDataBase {
                 .then()
                 .statusCode(404);
     }
+
+    @Test
+    void testGetExperienceMultimedia(){
+
+        given()
+                .when()
+                .get("/api/v1/multimedia/experiences/1")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    void testGetExperienceMultimediaNotFound(){
+
+        given()
+                .when()
+                .get("/api/v1/multimedia/experiences/0")
+                .then()
+                .statusCode(404);
+    }
 }

@@ -6,6 +6,7 @@ import com.myerasmusjourney.backend.dto.MultimediaSimpleDTO;
 import com.myerasmusjourney.backend.dto.UserImageDTO;
 import com.myerasmusjourney.backend.mapper.MultimediaMapper;
 import com.myerasmusjourney.backend.repository.ExperienceMultimediaRepository;
+import com.myerasmusjourney.backend.repository.ExperienceRepository;
 import com.myerasmusjourney.backend.repository.UserImageRepository;
 import com.myerasmusjourney.backend.repository.UserRepository;
 import com.myerasmusjourney.backend.service.ExperienceService;
@@ -41,6 +42,9 @@ public class MultimediaServiceTest extends TestDataBase {
 
     @Autowired
     private UserImageRepository userImageRepository;
+
+    @Autowired
+    private ExperienceRepository experienceRepository;
 
     @Autowired
     private MultimediaMapper multimediaMapper;
@@ -334,5 +338,38 @@ public class MultimediaServiceTest extends TestDataBase {
     @Test
     void testGetUserProfileNotFound(){
         assertThrows(NoSuchElementException.class, () -> multimediaService.getUserImageById(0L));
+    }
+
+    @Test
+    @Transactional
+    void testGetExperienceMultimedia(){
+        Experience experience = experienceRepository.findById(1L).orElseThrow(()-> new NoSuchElementException("Not found"));
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/whatever",
+                "fake image content".getBytes()
+        );
+
+        try {
+            ExperienceMultimedia experienceMultimedia = new ExperienceMultimedia(file, experience);
+            experienceMultimedia = experienceMultimediaRepository.save(experienceMultimedia);
+            experience.addMultimedia(experienceMultimedia);
+            experienceRepository.save(experience);
+
+            Multimedia expected = experienceMultimedia;
+            Multimedia result = multimediaService.getExperienceMultimediaById(experienceMultimedia.getId());
+            assertEquals(expected.getId(), result.getId());
+            assertEquals(expected.getMultimediaFile().length, result.getMultimediaFile().length);
+            assertEquals(expected.getContentType(), result.getContentType());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void testGetExperienceMultimediaNotFound(){
+        assertThrows(NoSuchElementException.class, () -> multimediaService.getExperienceMultimediaById(0L));
     }
 }

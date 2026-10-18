@@ -424,4 +424,44 @@ public class MultimediaServiceTest {
 
     }
 
+    @Test
+    void testGetExperienceMultimediaByIdFails(){
+
+        when(experienceMultimediaRepository.findById(0L)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> multimediaService.getExperienceMultimediaById(0L));
+
+        verify(experienceMultimediaRepository).findById(0L);
+    }
+
+    @Test
+    void testGetExperienceMultimediaById(){
+
+        Experience experience = new Experience();
+        experience.setId(1L);
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "image.jpg",
+                "image/whatever",
+                "fake image content".getBytes()
+        );
+
+        try {
+            ExperienceMultimedia experienceMultimedia = new ExperienceMultimedia(file, experience);
+            experienceMultimedia.setId(1L);
+
+            when(experienceMultimediaRepository.findById(1L)).thenReturn(Optional.of(experienceMultimedia));
+
+            Multimedia result = multimediaService.getExperienceMultimediaById(experienceMultimedia.getId());
+
+            assertEquals(experienceMultimedia, result);
+
+            verify(experienceMultimediaRepository).findById(1L);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }
