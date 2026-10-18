@@ -4,6 +4,8 @@ import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.service.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +22,7 @@ import java.util.List;
 @Component
 public class DataInitializer {
 
+    private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
     @Autowired
     private UserService userService;
 
@@ -274,85 +277,129 @@ public class DataInitializer {
     }
 
     private void initiateProfileImages() throws IOException {
+        MultipartFile image = new ResourceMultipartFile("profile_image1.png", "image/png");
+        MultipartFile image2 = new ResourceMultipartFile("profile_image2.png", "image/png");
+
         Authentication authentication = new UsernamePasswordAuthenticationToken("exampleuser1@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        MultipartFile image = new ResourceMultipartFile("profile_image1.png", "image/png");
         multimediaService.addUserImage(3L, image);
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser2@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        image = new ResourceMultipartFile("profile_image2.png", "image/png");
-        multimediaService.addUserImage(4L, image);
+        multimediaService.addUserImage(4L, image2);
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser3@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        image = new ResourceMultipartFile("profile_image1.png", "image/png");
         multimediaService.addUserImage(5L, image);
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser4@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        image = new ResourceMultipartFile("profile_image2.png", "image/png");
-        multimediaService.addUserImage(6L, image);
+        multimediaService.addUserImage(6L, image2);
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser5@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        image = new ResourceMultipartFile("profile_image1.png", "image/png");
         multimediaService.addUserImage(7L, image);
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser6@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        image = new ResourceMultipartFile("profile_image2.png", "image/png");
-        multimediaService.addUserImage(8L, image);
+        multimediaService.addUserImage(8L, image2);
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser7@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        image = new ResourceMultipartFile("profile_image1.png", "image/png");
         multimediaService.addUserImage(9L, image);
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser8@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        image = new ResourceMultipartFile("profile_image2.png", "image/png");
-        multimediaService.addUserImage(10L, image);
+        multimediaService.addUserImage(10L, image2);
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser9@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        image = new ResourceMultipartFile("profile_image2.png", "image/png");
-        multimediaService.addUserImage(11L, image);
+        multimediaService.addUserImage(11L, image2);
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser10@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        image = new ResourceMultipartFile("profile_image1.png", "image/png");
         multimediaService.addUserImage(12L, image);
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser11@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        image = new ResourceMultipartFile("profile_image2.png", "image/png");
-        multimediaService.addUserImage(13L, image);
+        multimediaService.addUserImage(13L, image2);
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser12@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        image = new ResourceMultipartFile("profile_image1.png", "image/png");
         multimediaService.addUserImage(14L, image);
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser13@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        image = new ResourceMultipartFile("profile_image2.png", "image/png");
-        multimediaService.addUserImage(15L, image);
+        multimediaService.addUserImage(15L, image2);
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser14@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        image = new ResourceMultipartFile("profile_image1.png", "image/png");
         multimediaService.addUserImage(16L, image);
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser15@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        image = new ResourceMultipartFile("profile_image2.png", "image/png");
-        multimediaService.addUserImage(17L, image);
+        multimediaService.addUserImage(17L, image2);
 
         authentication = new UsernamePasswordAuthenticationToken("exampleuser16@email.com", null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        image = new ResourceMultipartFile("profile_image1.png", "image/png");
         multimediaService.addUserImage(18L, image);
+    }
+
+    private void initiateExperienceMultimedia() throws IOException {
+        MultipartFile image = new ResourceMultipartFile("example_image.jpg", "image/jpeg");
+        MultipartFile video = new ResourceMultipartFile("example_video1.mp4", "video/mp4");
+        MultipartFile video2 = new ResourceMultipartFile("example_video2.mp4", "video/mp4");
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken("exampleuser1@email.com", null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        multimediaService.addMultimedia(1L, List.of(image, video2));
+        multimediaService.addMultimedia(2L, List.of(video, video2));
+
+
+        authentication = new UsernamePasswordAuthenticationToken("exampleuser2@email.com", null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        multimediaService.addMultimedia(5L, List.of(image, video));
+        multimediaService.addMultimedia(6L, List.of(image));
+
+
+        authentication = new UsernamePasswordAuthenticationToken("exampleuser3@email.com", null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        multimediaService.addMultimedia(9L, List.of(image, image));
+        multimediaService.addMultimedia(10L, List.of(video));
+
+
+        authentication = new UsernamePasswordAuthenticationToken("exampleuser4@email.com", null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        multimediaService.addMultimedia(19L, List.of(video, image));
+        multimediaService.addMultimedia(20L,  List.of(image, video2));
+
+
+        authentication = new UsernamePasswordAuthenticationToken("exampleuser5@email.com", null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        multimediaService.addMultimedia(13L, List.of(image, video));
+        multimediaService.addMultimedia(14L, List.of(image, image));
+
+
+        authentication = new UsernamePasswordAuthenticationToken("exampleuser6@email.com", null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        multimediaService.addMultimedia(25L, List.of(video2));
+        multimediaService.addMultimedia(26L, List.of(video2, image));
+
+
+        authentication = new UsernamePasswordAuthenticationToken("exampleuser7@email.com", null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        multimediaService.addMultimedia(33L, List.of(video));
+        multimediaService.addMultimedia(36L, List.of(video, video2));
+        multimediaService.addMultimedia(34L, List.of(image, video));
+        multimediaService.addMultimedia(35L, List.of(video2, video));
+
+
+        authentication = new UsernamePasswordAuthenticationToken("exampleuser8@email.com", null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        multimediaService.addMultimedia(29L, List.of(image));
+        multimediaService.addMultimedia(30L, List.of(image, video2));
+        multimediaService.addMultimedia(31L, List.of(video, video2));
+        multimediaService.addMultimedia(32L, List.of(image, video));
     }
 
     @PostConstruct
@@ -370,8 +417,9 @@ public class DataInitializer {
         initiateComments();
         try {
             initiateProfileImages();
+            initiateExperienceMultimedia();
         } catch (IOException e) {
-            System.out.println(e.toString());
+            log.error("e: ", e);
         }
     }
 }
