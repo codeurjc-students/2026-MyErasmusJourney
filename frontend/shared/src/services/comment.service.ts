@@ -1,11 +1,14 @@
 import type { ApiClient } from "../api/apiClient";
+import type {CommentDTO} from "../models/CommentDTO";
 import { ApiError } from "../api/apiError";
+import { createBasicService } from "./basicService";
 
 export type CommentService = ReturnType<typeof createCommentService>;
 
 export function createCommentService(api: ApiClient) {
+    const basicService = createBasicService(api)
     return {
-        deleteComment: (id: number) => deleteComment(api, id),
+        deleteComment: (id: number) => basicService.deleteMethod<CommentDTO>(`/comments/${id}`),
     };
 }
 
