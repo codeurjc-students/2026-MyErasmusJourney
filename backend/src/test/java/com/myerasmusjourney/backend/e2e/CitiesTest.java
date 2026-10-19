@@ -27,7 +27,7 @@ public class CitiesTest extends AuthenticatedE2ETest {
                 .contentType("application/json")
                 .body(body.toString()).
                 when()
-                .post("/api/v1/cities/")
+                .post("/api/v2/cities/")
                 .then()
                 .statusCode(201)
                 .body("id", greaterThan(0))
@@ -49,7 +49,7 @@ public class CitiesTest extends AuthenticatedE2ETest {
                 .contentType("application/json")
                 .body(germanCity.toString()).
                 when()
-                .post("/api/v1/cities/")
+                .post("/api/v2/cities/")
                 .then()
                 .statusCode(201)
                 .body("id", greaterThan(0))
@@ -66,7 +66,7 @@ public class CitiesTest extends AuthenticatedE2ETest {
                 .contentType("application/json")
                 .body(otherCity.toString()).
                 when()
-                .post("/api/v1/cities/")
+                .post("/api/v2/cities/")
                 .then()
                 .statusCode(201)
                 .body("id", greaterThan(0))
@@ -88,7 +88,7 @@ public class CitiesTest extends AuthenticatedE2ETest {
                 .contentType("application/json")
                 .body(body.toString()).
                 when()
-                .post("/api/v1/cities/")
+                .post("/api/v2/cities/")
                 .then()
                 .statusCode(201)
                 .body("id", greaterThan(0))
@@ -100,7 +100,7 @@ public class CitiesTest extends AuthenticatedE2ETest {
                 .contentType("application/json")
                 .body(body.toString()).
                 when()
-                .post("/api/v1/cities/")
+                .post("/api/v2/cities/")
                 .then()
                 .statusCode(200)
                 .body("id", greaterThan(0))
@@ -122,7 +122,7 @@ public class CitiesTest extends AuthenticatedE2ETest {
                 .contentType("application/json")
                 .body(body.toString()).
                 when()
-                .post("/api/v1/cities/")
+                .post("/api/v2/cities/")
                 .then()
                 .statusCode(403);
     }
@@ -130,7 +130,7 @@ public class CitiesTest extends AuthenticatedE2ETest {
     @Test
     void testGetTrendingCities(){
         when()
-                .get("/api/v1/cities/trending")
+                .get("/api/v2/cities/trending")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -146,7 +146,7 @@ public class CitiesTest extends AuthenticatedE2ETest {
     void testGetCities() {
 
         when()
-                .get("/api/v1/cities/")
+                .get("/api/v2/cities/")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -161,7 +161,7 @@ public class CitiesTest extends AuthenticatedE2ETest {
     void testGetCity() {
 
         when()
-                .get("/api/v1/cities/1")
+                .get("/api/v2/cities/1")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -177,7 +177,7 @@ public class CitiesTest extends AuthenticatedE2ETest {
     void testGetCityNotFound() {
 
         when()
-                .get("/api/v1/cities/0")
+                .get("/api/v2/cities/0")
                 .then()
                 .statusCode(404);
     }

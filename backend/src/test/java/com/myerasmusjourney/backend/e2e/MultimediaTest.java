@@ -27,7 +27,7 @@ public class MultimediaTest extends TestDataBase {
 
         given()
                 .when()
-                .get("/api/v1/multimedia/users/1")
+                .get("/api/v2/multimedia/users/1")
                 .then()
                 .statusCode(200);
     }
@@ -37,7 +37,7 @@ public class MultimediaTest extends TestDataBase {
 
         given()
                 .when()
-                .get("/api/v1/multimedia/users/0")
+                .get("/api/v2/multimedia/users/0")
                 .then()
                 .statusCode(404);
     }
@@ -47,7 +47,7 @@ public class MultimediaTest extends TestDataBase {
 
         given()
                 .when()
-                .get("/api/v1/multimedia/experiences/1")
+                .get("/api/v2/multimedia/experiences/1")
                 .then()
                 .statusCode(200);
     }
@@ -57,7 +57,7 @@ public class MultimediaTest extends TestDataBase {
 
         given()
                 .when()
-                .get("/api/v1/multimedia/experiences/0")
+                .get("/api/v2/multimedia/experiences/0")
                 .then()
                 .statusCode(404);
     }

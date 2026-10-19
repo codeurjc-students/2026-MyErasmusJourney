@@ -35,7 +35,7 @@ public class AuthTest extends TestDataBase {
                 .contentType("application/json")
                 .body(body.toString()).
                 when()
-                .post("/api/v1/auth/login")
+                .post("/api/v2/auth/login")
                 .then()
                 .statusCode(200)
                 .body("status", equalTo("SUCCESS"));
@@ -51,7 +51,7 @@ public class AuthTest extends TestDataBase {
                 .contentType("application/json")
                 .body(body.toString()).
                 when()
-                .post("/api/v1/auth/login")
+                .post("/api/v2/auth/login")
                 .then()
                 .statusCode(401)
                 .body("status", equalTo(401));

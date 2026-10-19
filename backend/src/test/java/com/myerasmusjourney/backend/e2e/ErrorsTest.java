@@ -25,7 +25,7 @@ public class ErrorsTest extends TestDataBase {
     @Test
     void testInternalError(){
         when()
-                .get("/api/v1/tests/500")
+                .get("/api/v2/tests/500")
                 .then()
                 .statusCode(500);
     }

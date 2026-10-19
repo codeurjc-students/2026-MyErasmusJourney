@@ -39,7 +39,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .contentType("application/json")
                 .body(body.toString()).
                 when()
-                .post("/api/v1/experiences/");
+                .post("/api/v2/experiences/");
 
         return response.getBody().as(ExperienceDTO.class);
     }
@@ -48,7 +48,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
     void testGetExperiences() {
 
         when()
-                .get("/api/v1/experiences/?page=0&size=3")
+                .get("/api/v2/experiences/?page=0&size=3")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -68,7 +68,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
     void testGetCategories() {
 
         when()
-                .get("/api/v1/experiences/categories")
+                .get("/api/v2/experiences/categories")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -101,7 +101,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .contentType("application/json")
                 .body(body.toString()).
                 when()
-                .post("/api/v1/experiences/")
+                .post("/api/v2/experiences/")
                 .then()
                 .statusCode(201)
                 .body("id", greaterThan(0))
@@ -133,7 +133,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .contentType("application/json")
                 .body(body.toString()).
                 when()
-                .post("/api/v1/experiences/")
+                .post("/api/v2/experiences/")
                 .then()
                 .statusCode(401);
     }
@@ -159,7 +159,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .contentType("application/json")
                 .body(body.toString()).
                 when()
-                .post("/api/v1/experiences/")
+                .post("/api/v2/experiences/")
                 .then()
                 .statusCode(404);
     }
@@ -168,7 +168,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
     void testGetExperienceById() {
 
         when()
-                .get("/api/v1/experiences/1")
+                .get("/api/v2/experiences/1")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -188,7 +188,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
     void testGetExperienceByIdNotFound() {
 
         when()
-                .get("/api/v1/experiences/0")
+                .get("/api/v2/experiences/0")
                 .then()
                 .statusCode(404);
     }
@@ -208,7 +208,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .delete("/api/v1/experiences/"+experienceDTO.id())
+                .delete("/api/v2/experiences/"+experienceDTO.id())
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -233,7 +233,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .delete("/api/v1/experiences/"+experienceDTO.id())
+                .delete("/api/v2/experiences/"+experienceDTO.id())
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -254,7 +254,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .delete("/api/v1/experiences/1")
+                .delete("/api/v2/experiences/1")
                 .then()
                 .statusCode(403);
     }
@@ -264,7 +264,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
 
         given()
                 .when()
-                .delete("/api/v1/experiences/1")
+                .delete("/api/v2/experiences/1")
                 .then()
                 .statusCode(401);
     }
@@ -276,7 +276,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
             .param("maxRating", 9)
             .param("size", 6)
         .when()
-            .get("/api/v1/experiences/")
+            .get("/api/v2/experiences/")
             .then()
                 .statusCode(200)
                 .body("content", hasSize(greaterThan(0)))
@@ -292,7 +292,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .param("categories", List.of("Studies"))
                 .param("size", 6)
                 .when()
-                .get("/api/v1/experiences/")
+                .get("/api/v2/experiences/")
                 .then()
                 .statusCode(200)
                 .body("content", hasSize(greaterThan(0)))
@@ -314,7 +314,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .cookie("AuthToken", this.token)
                 .multiPart("multipartFileList", "image.jpg", "fake image content".getBytes(), "image/jpeg")
                 .multiPart("multipartFileList", "image.png", "fake image content".getBytes(), "image/png")
-                .when().post("/api/v1/experiences/1/multimedia")
+                .when().post("/api/v2/experiences/1/multimedia")
                 .then().statusCode(201)
                 .body("$", Matchers.hasSize(Matchers.greaterThan(0)))
                 .body("[0].contentType", Matchers.equalTo("image/jpeg"))
@@ -333,7 +333,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .cookie("AuthToken", this.token)
                 .multiPart("multipartFileList", "image.jpg", "fake image content".getBytes(), "image/jpeg")
                 .multiPart("multipartFileList", "image.png", "fake image content".getBytes(), "image/png")
-                .when().post("/api/v1/experiences/1/multimedia")
+                .when().post("/api/v2/experiences/1/multimedia")
                 .then()
                 .statusCode(403);
     }
@@ -351,7 +351,7 @@ class ExperiencesTest extends AuthenticatedE2ETest {
                 .multiPart("multipartFileList", "image.jpg", "fake image content".getBytes(), "image/jpeg")
                 .multiPart("multipartFileList", "image.png", "fake image content".getBytes(), "image/whatever")
                 .when()
-                .post("/api/v1/experiences/1/multimedia")
+                .post("/api/v2/experiences/1/multimedia")
                 .then()
                 .statusCode(415);
     }
