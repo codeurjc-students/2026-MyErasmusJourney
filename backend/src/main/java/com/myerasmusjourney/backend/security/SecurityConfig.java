@@ -62,19 +62,19 @@ public class SecurityConfig {
 		http
 			.authorizeHttpRequests(authorize -> authorize
                     // PRIVATE ENDPOINTS
-                    .requestMatchers(HttpMethod.GET, "/api/v1/users/me").hasRole("USER")
-                    .requestMatchers(HttpMethod.GET, "/api/v1/users/{id}").hasRole("USER")
-                    .requestMatchers(HttpMethod.PUT, "/api/v1/users/{id}").hasRole("USER")
-                    .requestMatchers(HttpMethod.DELETE, "/api/v1/users/{id}").hasRole("USER")
-                    .requestMatchers(HttpMethod.GET, "/api/v1/users/{id}/experiences").hasRole("USER")
-                    .requestMatchers(HttpMethod.GET, "/api/v1/users/{id}/comments").hasRole("USER")
-                    .requestMatchers(HttpMethod.PUT, "/api/v1/users/{id}/image").hasRole("USER")
-                    .requestMatchers(HttpMethod.POST, "/api/v1/experiences/").hasRole("USER")
-                    .requestMatchers(HttpMethod.DELETE, "/api/v1/experiences/{id}").hasRole("USER")
-                    .requestMatchers(HttpMethod.DELETE, "/api/v1/comments/{id}").hasRole("USER")
-                    .requestMatchers(HttpMethod.POST, "/api/v1/experiences/{id}/comments").hasRole("USER")
-                    .requestMatchers(HttpMethod.POST, "/api/v1/experiences/{id}/multimedia").hasRole("USER")
-                    .requestMatchers(HttpMethod.POST, "/api/v1/cities/").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/api/v2/users/me").hasRole("USER")
+                    .requestMatchers(HttpMethod.GET, "/api/v2/users/{id}").hasRole("USER")
+                    .requestMatchers(HttpMethod.PUT, "/api/v2/users/{id}").hasRole("USER")
+                    .requestMatchers(HttpMethod.DELETE, "/api/v2/users/{id}").hasRole("USER")
+                    .requestMatchers(HttpMethod.GET, "/api/v2/users/{id}/experiences").hasRole("USER")
+                    .requestMatchers(HttpMethod.GET, "/api/v2/users/{id}/comments").hasRole("USER")
+                    .requestMatchers(HttpMethod.PUT, "/api/v2/users/{id}/image").hasRole("USER")
+                    .requestMatchers(HttpMethod.POST, "/api/v2/experiences/").hasRole("USER")
+                    .requestMatchers(HttpMethod.DELETE, "/api/v2/experiences/{id}").hasRole("USER")
+                    .requestMatchers(HttpMethod.DELETE, "/api/v2/comments/{id}").hasRole("USER")
+                    .requestMatchers(HttpMethod.POST, "/api/v2/experiences/{id}/comments").hasRole("USER")
+                    .requestMatchers(HttpMethod.POST, "/api/v2/experiences/{id}/multimedia").hasRole("USER")
+                    .requestMatchers(HttpMethod.POST, "/api/v2/cities/").hasRole("ADMIN")
                     // PUBLIC ENDPOINTS
 					.anyRequest().permitAll()
 			);

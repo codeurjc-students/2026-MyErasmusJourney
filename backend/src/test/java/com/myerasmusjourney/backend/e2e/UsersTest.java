@@ -39,7 +39,7 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .contentType("application/json")
                 .body(body.toString()).
                 when()
-                .post("/api/v1/users/");
+                .post("/api/v2/users/");
 
         ResponseBody responseBody = response.body();
         if(response.statusCode() == 201){
@@ -58,7 +58,7 @@ public class UsersTest extends AuthenticatedE2ETest {
                         .contentType("application/json")
                         .body(body.toString()).
                         when()
-                        .post("/api/v1/auth/login");
+                        .post("/api/v2/auth/login");
 
         this.token = response.getCookie("AuthToken");
     }
@@ -67,7 +67,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         Response response = given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .get("/api/v1/users/" + id);
+                .get("/api/v2/users/" + id);
 
         return response.getBody().as(UserDTO.class);
     }
@@ -87,7 +87,7 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .contentType("application/json")
                 .body(body.toString()).
         when()
-            .post("/api/v1/users/")
+            .post("/api/v2/users/")
         .then()
             .statusCode(201)
             .body("id", greaterThan(0))
@@ -108,7 +108,7 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .contentType("application/json")
                 .body(body.toString()).
                 when()
-                .post("/api/v1/users/")
+                .post("/api/v2/users/")
                 .then()
                 .statusCode(201);
 
@@ -116,7 +116,7 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .contentType("application/json")
                 .body(body.toString()).
                 when()
-                .post("/api/v1/users/")
+                .post("/api/v2/users/")
                 .then()
                 .statusCode(400);
     }
@@ -134,7 +134,7 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .contentType("application/json")
                 .body(body.toString()).
                 when()
-                .post("/api/v1/users/")
+                .post("/api/v2/users/")
                 .then()
                 .statusCode(400);
     }
@@ -151,7 +151,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
             .when()
-                .get("/api/v1/users/me")
+                .get("/api/v2/users/me")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -174,7 +174,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .get("/api/v1/users/2")
+                .get("/api/v2/users/2")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -198,7 +198,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .get("/api/v1/users/1")
+                .get("/api/v2/users/1")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -223,7 +223,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .get("/api/v1/users/2")
+                .get("/api/v2/users/2")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -248,7 +248,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .get("/api/v1/users/0")
+                .get("/api/v2/users/0")
                 .then()
                 .statusCode(404);
     }
@@ -265,7 +265,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .get("/api/v1/users/1")
+                .get("/api/v2/users/1")
                 .then()
                 .statusCode(403);
     }
@@ -278,7 +278,7 @@ public class UsersTest extends AuthenticatedE2ETest {
             given()
                     .cookie("AuthToken", this.token)
                     .when()
-                    .delete("/api/v1/users/"+deletedUserId)
+                    .delete("/api/v2/users/"+deletedUserId)
                     .then()
                     .statusCode(200)
                     .contentType("application/json")
@@ -300,7 +300,7 @@ public class UsersTest extends AuthenticatedE2ETest {
             given()
                     .cookie("AuthToken", this.token)
                     .when()
-                    .delete("/api/v1/users/0")
+                    .delete("/api/v2/users/0")
                     .then()
                     .statusCode(404);
         } catch (JSONException e){
@@ -316,7 +316,7 @@ public class UsersTest extends AuthenticatedE2ETest {
             given()
                     .cookie("AuthToken", this.token)
                     .when()
-                    .delete("/api/v1/users/"+deletedUserId)
+                    .delete("/api/v2/users/"+deletedUserId)
                     .then()
                     .statusCode(403);
         } catch (JSONException e){
@@ -332,7 +332,7 @@ public class UsersTest extends AuthenticatedE2ETest {
             given()
                     .cookie("AuthToken", this.token)
                     .when()
-                    .delete("/api/v1/users/"+deletedUserId)
+                    .delete("/api/v2/users/"+deletedUserId)
                     .then()
                     .statusCode(200)
                     .contentType("application/json")
@@ -353,7 +353,7 @@ public class UsersTest extends AuthenticatedE2ETest {
             createUserToDelete();
             given()
                     .when()
-                    .delete("/api/v1/users/"+deletedUserId)
+                    .delete("/api/v2/users/"+deletedUserId)
                     .then()
                     .statusCode(401);
         } catch (JSONException e){
@@ -373,7 +373,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .get("/api/v1/users/3/experiences")
+                .get("/api/v2/users/3/experiences")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -398,7 +398,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .get("/api/v1/users/2/experiences")
+                .get("/api/v2/users/2/experiences")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -417,7 +417,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .get("/api/v1/users/3/experiences")
+                .get("/api/v2/users/3/experiences")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -442,7 +442,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .get("/api/v1/users/3/experiences")
+                .get("/api/v2/users/3/experiences")
                 .then()
                 .statusCode(403);
     }
@@ -452,7 +452,7 @@ public class UsersTest extends AuthenticatedE2ETest {
 
         given()
                 .when()
-                .get("/api/v1/users/3/experiences")
+                .get("/api/v2/users/3/experiences")
                 .then()
                 .statusCode(401);
     }
@@ -469,7 +469,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .get("/api/v1/users/3/comments")
+                .get("/api/v2/users/3/comments")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -493,7 +493,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .get("/api/v1/users/3/comments")
+                .get("/api/v2/users/3/comments")
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -517,7 +517,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .get("/api/v1/users/3/comments")
+                .get("/api/v2/users/3/comments")
                 .then()
                 .statusCode(403);
     }
@@ -527,7 +527,7 @@ public class UsersTest extends AuthenticatedE2ETest {
 
         given()
                 .when()
-                .get("/api/v1/users/3/comments")
+                .get("/api/v2/users/3/comments")
                 .then()
                 .statusCode(401);
     }
@@ -560,7 +560,7 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .contentType(ContentType.JSON)
                 .body(updatedUser).
                 when()
-                .put("/api/v1/users/" + userDTO.id())
+                .put("/api/v2/users/" + userDTO.id())
                 .then()
                 .statusCode(200)
                 .body("email", equalTo(userDTO.email()))
@@ -596,7 +596,7 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .contentType(ContentType.JSON)
                 .body(updatedUser).
                 when()
-                .put("/api/v1/users/" + userDTO.id())
+                .put("/api/v2/users/" + userDTO.id())
                 .then()
                 .statusCode(200)
                 .body("email", equalTo(userDTO.email()))
@@ -633,7 +633,7 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .contentType(ContentType.JSON)
                 .body(updatedUser).
                 when()
-                .put("/api/v1/users/" + 3)
+                .put("/api/v2/users/" + 3)
                 .then()
                 .statusCode(403);
     }
@@ -664,7 +664,7 @@ public class UsersTest extends AuthenticatedE2ETest {
                 .contentType(ContentType.JSON)
                 .body(updatedUser).
                 when()
-                .put("/api/v1/users/" + userDTO.id())
+                .put("/api/v2/users/" + userDTO.id())
                 .then()
                 .statusCode(401);
     }
@@ -680,7 +680,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .multiPart("multipartFile", "image.jpg", "fake image content".getBytes(), "image/jpeg")
-                .when().put("/api/v1/users/3/image")
+                .when().put("/api/v2/users/3/image")
                 .then().statusCode(200)
                 .body("id", notNullValue())
                 .body("contentType", Matchers.equalTo("image/jpeg"))
@@ -698,7 +698,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .multiPart("multipartFile", "image.jpg", "fake image content".getBytes(), "image/jpeg")
-                .when().put("/api/v1/users/4/image")
+                .when().put("/api/v2/users/4/image")
                 .then().statusCode(200)
                 .body("id", notNullValue())
                 .body("contentType", Matchers.equalTo("image/jpeg"))
@@ -707,7 +707,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .multiPart("multipartFile", "image.png", "fake image content".getBytes(), "image/png")
-                .when().put("/api/v1/users/4/image")
+                .when().put("/api/v2/users/4/image")
                 .then().statusCode(200)
                 .body("id", notNullValue())
                 .body("contentType", Matchers.equalTo("image/png"))
@@ -725,7 +725,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .multiPart("multipartFile", "image.jpg", "fake image content".getBytes(), "image/jpeg")
-                .when().put("/api/v1/users/4/image")
+                .when().put("/api/v2/users/4/image")
                 .then().statusCode(403);
     }
 
@@ -740,7 +740,7 @@ public class UsersTest extends AuthenticatedE2ETest {
         given()
                 .cookie("AuthToken", this.token)
                 .multiPart("multipartFile", "image.txt", "fake image content".getBytes(), "plain/text")
-                .when().put("/api/v1/users/3/image")
+                .when().put("/api/v2/users/3/image")
                 .then().statusCode(415);
     }
 
@@ -749,7 +749,7 @@ public class UsersTest extends AuthenticatedE2ETest {
 
         given()
                 .multiPart("multipartFile", "image.txt", "fake image content".getBytes(), "plain/text")
-                .when().put("/api/v1/users/3/image")
+                .when().put("/api/v2/users/3/image")
                 .then().statusCode(401);
     }
 

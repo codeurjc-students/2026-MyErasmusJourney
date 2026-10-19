@@ -19,7 +19,7 @@ public class CommentsTest extends AuthenticatedE2ETest{
     private CommentDTO postComment() throws JSONException {
 
         when()
-                .get("/api/v1/experiences/1")
+                .get("/api/v2/experiences/1")
                 .then()
                 .statusCode(200);
 
@@ -31,7 +31,7 @@ public class CommentsTest extends AuthenticatedE2ETest{
                 .contentType("application/json")
                 .body(body.toString()).
                 when()
-                .post("/api/v1/experiences/1/comments");
+                .post("/api/v2/experiences/1/comments");
 
         return response.getBody().as(CommentDTO.class);
     }
@@ -48,7 +48,7 @@ public class CommentsTest extends AuthenticatedE2ETest{
                 .contentType("application/json")
                 .body(body.toString()).
                 when()
-                .post("/api/v1/experiences/1/comments")
+                .post("/api/v2/experiences/1/comments")
                 .then()
                 .statusCode(201)
                 .body("id", greaterThan(0))
@@ -69,12 +69,12 @@ public class CommentsTest extends AuthenticatedE2ETest{
                 .contentType("application/json")
                 .body(body.toString()).
                 when()
-                .post("/api/v1/experiences/2/comments")
+                .post("/api/v2/experiences/2/comments")
                 .then()
                 .statusCode(201);
 
         when()
-                .get("/api/v1/experiences/2/comments")
+                .get("/api/v2/experiences/2/comments")
                 .then()
                 .statusCode(200)
                 .body("", hasSize(greaterThan(0)))
@@ -96,7 +96,7 @@ public class CommentsTest extends AuthenticatedE2ETest{
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .delete("/api/v1/comments/"+commentDTO.id())
+                .delete("/api/v2/comments/"+commentDTO.id())
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -121,7 +121,7 @@ public class CommentsTest extends AuthenticatedE2ETest{
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .delete("/api/v1/comments/"+commentDTO.id())
+                .delete("/api/v2/comments/"+commentDTO.id())
                 .then()
                 .statusCode(200)
                 .contentType("application/json")
@@ -141,7 +141,7 @@ public class CommentsTest extends AuthenticatedE2ETest{
         given()
                 .cookie("AuthToken", this.token)
                 .when()
-                .delete("/api/v1/comments/1")
+                .delete("/api/v2/comments/1")
                 .then()
                 .statusCode(403);
     }
@@ -151,7 +151,7 @@ public class CommentsTest extends AuthenticatedE2ETest{
 
         given()
                 .when()
-                .delete("/api/v1/comments/1")
+                .delete("/api/v2/comments/1")
                 .then()
                 .statusCode(401);
     }

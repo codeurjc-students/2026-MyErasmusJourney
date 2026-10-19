@@ -18,7 +18,7 @@ import java.time.Duration;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v2/users")
 public class UserRestController {
 
     @Autowired

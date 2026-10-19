@@ -41,7 +41,7 @@ public class AuthenticatedE2ETest extends TestDataBase {
                         .contentType("application/json")
                         .body(body.toString()).
                         when()
-                        .post("/api/v1/auth/login");
+                        .post("/api/v2/auth/login");
 
         this.token = response.getCookie("AuthToken");
     }
