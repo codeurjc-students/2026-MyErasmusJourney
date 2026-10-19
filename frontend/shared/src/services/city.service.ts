@@ -1,59 +1,19 @@
 import { ApiError } from "../api/apiError";
 import type { ApiClient } from "../api/apiClient";
+import type { CityDTO } from "../models/CityDTO";
 import type { CityFormDTO } from "../models/CityFormDTO";
+import type { CitySimpleDTO } from "../models/CitySimpleDTO";
+import { createBasicService } from "./basicService";
 
 export type CityService = ReturnType<typeof createCityService>;
 
 export function createCityService(api:ApiClient) {
+  const basicService = createBasicService(api)
+  
   return {
-    addCity: (body:CityFormDTO) => addCity(api, body),
-    getAll: () => getAll(api),
-    getTrending: () => getTrending(api),
-    getCityById: (id: number) => getCityById(api, id)
+    addCity: (body:CityFormDTO) => basicService.postMethod<CityDTO,CityFormDTO>("/cities/", body),
+    getAll: () => basicService.getMethod<CitySimpleDTO[]>("/cities/"),
+    getTrending: () => basicService.getMethod<CitySimpleDTO[]>("/cities/trending"),
+    getCityById: (id: number) => basicService.getMethod<CityDTO>(`/cities/${id}`),
   };
-}
-
-async function addCity(api: ApiClient, body: CityFormDTO){
-    const response = await api.post("/cities/", body);
-
-    
-    if (!response.ok){
-      throw new ApiError(response.status, await response.text());
-    }
-
-    if (response.status === 200){
-      throw new ApiError(response.status, "City already exists");
-    }
-
-    return await response.json();
-}
-
-async function getAll(api: ApiClient){
-    const response = await api.get("/cities/");
-    
-    if (!response.ok){
-      throw new ApiError(response.status, await response.text());
-    }
-
-    return await response.json();
-}
-
-async function getTrending(api: ApiClient){
-    const response = await api.get("/cities/trending");
-    
-    if (!response.ok){
-      throw new ApiError(response.status, await response.text());
-    }
-
-    return await response.json();
-}
-
-async function getCityById(api: ApiClient, id: number){
-    const response = await api.get(`/cities/${id}`);
-    
-    if (!response.ok){
-      throw new ApiError(response.status, await response.text());
-    }
-
-    return await response.json();
 } 
