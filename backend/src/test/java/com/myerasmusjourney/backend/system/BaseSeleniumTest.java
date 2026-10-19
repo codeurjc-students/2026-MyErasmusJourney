@@ -70,7 +70,7 @@ public abstract class BaseSeleniumTest extends TestDataBase {
 
     private void waitForApi() {
 
-        String url = "http://localhost:" + port + "/api/v1/experiences/";
+        String url = "http://localhost:" + port + "/api/v2/experiences/";
 
         long timeout = System.currentTimeMillis() + 5_000; // 5 seconds
 
@@ -118,7 +118,7 @@ public abstract class BaseSeleniumTest extends TestDataBase {
         processBuilder.directory(new File("../frontend"));
         processBuilder.environment().put(
                 "VITE_API_URL",
-                "http://127.0.0.1:" + port + "/api/v1"
+                "http://127.0.0.1:" + port + "/api/v2"
         );
         processBuilder.redirectErrorStream(true);
 
