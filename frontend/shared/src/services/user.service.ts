@@ -1,112 +1,33 @@
 import { ApiError } from "../api/apiError";
 import type { ApiClient } from "../api/apiClient";
 import type { UserFormDTO } from "../models/UserFormDTO";
-import type { UserDTO } from "@shared/models/UserDTO";
+import type { UserDTO } from "../models/UserDTO";
+import type { UserSimpleDTO } from "../models/UserSimpleDTO";
+import { BasicService, createBasicService } from "./basicService";
+import { UserImageDTO } from "../models/UserImageDTO";
 
 export type UserService = ReturnType<typeof createUserService>;
 
 export function createUserService(api: ApiClient) {
+  const basicService = createBasicService(api);
+
   return {
-    signUp: (body: UserFormDTO) => signUp(api, body),
-    getUserInfo: () => getUserInfo(api),
-    getUserById: (id: number) => getUserById(api, id),
-    deleteUserById: (id: number) => deleteUserById(api, id),
-    getExperiences: (id: number) => getExperiences(api, id),
-    getComments: (id: number) => getComments(api, id),
-    updateUser: (id: number, body:UserDTO) => updateUser(api, id, body),
-    updateUserImage: (id: number, multimedia:File) => updateUserImage(api, multimedia, id)
+    signUp: (body: UserFormDTO) => basicService.postMethod<UserDTO, UserFormDTO>("/users", body),
+    getUserInfo: () => basicService.getMethod<UserSimpleDTO>("/users/me"),
+    getUserById: (id: number) => basicService.getMethod<UserDTO>(`/users/${id}`),
+    deleteUserById: (id: number) => basicService.deleteMethod<UserDTO>(`/users/${id}`),
+    getExperiences: (id: number) => basicService.getMethod<UserDTO>(`/users/${id}/experiences`),
+    getComments: (id: number) => basicService.getMethod<UserDTO>(`/users/${id}/comments`),
+    updateUser: (id: number, body:UserDTO) => basicService.putMethod<UserDTO,UserDTO>(`/users/${id}`, body),
+    updateUserImage: (id: number, multimedia:File) => updateUserImage(basicService, multimedia, id)
   };
 }
 
-async function signUp(api: ApiClient, body: UserFormDTO) {
-  const response = await api.post("/users/", body)
-
-  if (!response.ok) {
-    throw new ApiError(response.status, await response.text());
-
-  }
-
-  return response.json();
-}
-
-async function getUserInfo(api: ApiClient) {
-  const response = await api.get("/users/me")
-
-  if (!response.ok) {
-    throw new ApiError(response.status, await response.text());
-
-  }
-
-  return response.json();
-}
-
-async function getUserById(api: ApiClient, id: number) {
-
-  const response = await api.get(`/users/${id}`)
-
-  if (!response.ok) {
-    throw new ApiError(response.status, await response.text());
-
-  }
-
-  return response.json();
-}
-
-async function deleteUserById(api: ApiClient, id: number) {
-
-  const response = await api.delete(`/users/${id}`);
-
-  if (!response.ok) {
-    throw new ApiError(response.status, await response.text());
-
-  }
-
-  return response.json();
-}
-
-async function getExperiences(api: ApiClient, id: number) {
-  const response = await api.get(`/users/${id}/experiences`);
-
-  if (!response.ok) {
-    throw new ApiError(response.status, await response.text());
-
-  }
-
-  return response.json();
-}
-
-async function getComments(api: ApiClient, id: number) {
-  const response = await api.get(`/users/${id}/comments`);
-
-  if (!response.ok) {
-    throw new ApiError(response.status, await response.text());
-  }
-
-  return response.json();
-}
-
-async function updateUser(api: ApiClient, id:number,  body: UserDTO) {
-  const response = await api.put(`/users/${id}`, body);
-
-  if (!response.ok) {
-    throw new ApiError(response.status, await response.text());
-
-  }
-
-  return response.json();
-}
-
-async function updateUserImage(api: ApiClient, multipartFile: File, userId: number) {
+async function updateUserImage(basicService: BasicService, multipartFile: File, userId: number) {
 
   const formData = new FormData();
 
   formData.append("multipartFile", multipartFile);
 
-  const reponse = await api.put(`/users/${userId}/image`, formData)
-
-  if (!reponse.ok) {
-    throw new ApiError(reponse.status, await reponse.text());
-  }
-
-  return reponse.json();
+  return basicService.putMethod<UserImageDTO,FormData>(`/users/${userId}/image`, formData)
 }
