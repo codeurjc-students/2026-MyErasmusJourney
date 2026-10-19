@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.Duration;
 
 @RestController
-@RequestMapping("/api/v1/multimedia")
+@RequestMapping("/api/v2/multimedia")
 public class MultimediaRestController {
 
     @Autowired

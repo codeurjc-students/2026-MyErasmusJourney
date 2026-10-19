@@ -11,7 +11,7 @@ import java.net.URI;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/api/v1/cities")
+@RequestMapping("/api/v2/cities")
 public class CityRestController {
 
     @Autowired
