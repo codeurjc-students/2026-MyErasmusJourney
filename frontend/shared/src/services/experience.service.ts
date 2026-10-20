@@ -16,6 +16,7 @@ import type { ExperienceFormDTO } from "../models/ExperienceFormDTO";
 import type { ExperiencePageDTO } from "../models/ExperienceSimpleDTO";
 import { type BasicService, createBasicService } from "./basicService";
 import type { MultimediaSimpleDTO } from "../models/MultimediaSimpleDTO";
+import type { CommentSimpleDTO } from "@shared/models/CommentSimpleDTO";
 
 
 export type ExperienceService = ReturnType<typeof createExperienceService>;
@@ -30,7 +31,7 @@ export function createExperienceService(api: ApiClient) {
     addMultimedia: (multimedia: File[], experienceId: number) => addMultimedia(basicService, multimedia, experienceId),
     getExperienceById: (id: number) => basicService.getMethod<ExperienceDTO>(`/experiences/${id}`),
     postComment: (id: number, body: CommentFormDTO) => basicService.postMethod<CommentDTO, CommentFormDTO>(`/experiences/${id}/comments`, body),
-    getCommentsByExperienceId: (id: number) => basicService.getMethod(`/experiences/${id}/comments`),
+    getCommentsByExperienceId: (id: number) => basicService.getMethod<CommentSimpleDTO[]>(`/experiences/${id}/comments`),
     deleteExperience: (id: number) => basicService.deleteMethod(`/experiences/${id}`)
   };
 }
