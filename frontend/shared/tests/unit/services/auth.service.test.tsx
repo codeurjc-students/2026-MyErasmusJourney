@@ -23,6 +23,9 @@ describe("AuthService", () => {
         ok: true,
         json: vi.fn().mockResolvedValue(responseData),
       }),
+      put: vi.fn(),
+      get: vi.fn(),
+      delete: vi.fn()
     };
 
     const service = createAuthService(mockApi);
@@ -52,6 +55,9 @@ describe("AuthService", () => {
         text: textMock,
         json: vi.fn(),
       }),
+      put: vi.fn(),
+      get: vi.fn(),
+      delete: vi.fn()
     };
 
     const service = createAuthService(mockApi);
@@ -85,6 +91,9 @@ describe("AuthService", () => {
         ok: true,
         json: vi.fn().mockResolvedValue(responseData),
       }),
+      put: vi.fn(),
+      get: vi.fn(),
+      delete: vi.fn()
     };
 
     const service = createAuthService(mockApi);
@@ -116,6 +125,9 @@ describe("AuthService", () => {
         ok: true,
         json: vi.fn().mockResolvedValue(responseData),
       }),
+      put: vi.fn(),
+      get: vi.fn(),
+      delete: vi.fn()
     };
 
     const service = createAuthService(mockApi);
@@ -140,6 +152,9 @@ describe("AuthService", () => {
         ok: true,
         json: vi.fn().mockResolvedValue(responseData),
       }),
+      put: vi.fn(),
+      get: vi.fn(),
+      delete: vi.fn()
     };
 
     const service = createAuthService(mockApi);
@@ -163,6 +178,9 @@ describe("AuthService", () => {
         status: 401,
         text: textMock,
       }),
+      put: vi.fn(),
+      get: vi.fn(),
+      delete: vi.fn()
     };
 
     const service = createAuthService(mockApi);
