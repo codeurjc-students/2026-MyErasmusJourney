@@ -6,6 +6,7 @@ import UserFormPage from "../../../src/pages/UserFormPage/UserFormPage";
 import type { UserService } from "@shared/services/user.service";
 import { ApiError } from "@shared/api/apiError";
 import { toast } from "sonner";
+import type { UserDTO } from "@shared/models/UserDTO";
 
 const mockNavigate = vi.fn();
 
@@ -516,7 +517,7 @@ describe("UserFormPage", () => {
 
     const editTestService: UserService = {
       getUserById: async (id: number) => {
-        return {
+        const result: UserDTO = {
           id,
           fullName: "John Doe",
           displayName: "johndoe",
@@ -525,11 +526,13 @@ describe("UserFormPage", () => {
           experiences: [],
           comments: [],
           roles: ["USER"],
+          profileImage: {id: 5, contentType:"image/jpeg"}
         };
+        return result;
       },
 
       updateUser: async () => {
-        return {
+        const result: UserDTO = {
           id: 1,
           fullName: "John Doe",
           displayName: "johndoe",
@@ -538,7 +541,9 @@ describe("UserFormPage", () => {
           experiences: [],
           comments: [],
           roles: ["USER"],
-        };
+          profileImage: null
+        }
+        return result;
       },
       deleteUserById: vi.fn(),
       getComments: vi.fn(),
@@ -626,7 +631,7 @@ describe("UserFormPage", () => {
 
     const editTestService: UserService = {
       getUserById: async (id: number) => {
-        return {
+        const result: UserDTO = {
           id,
           fullName: "John Doe",
           displayName: "johndoe",
@@ -635,7 +640,9 @@ describe("UserFormPage", () => {
           experiences: [],
           comments: [],
           roles: ["USER"],
+          profileImage: {id: 5, contentType:"image/jpeg"}
         };
+        return result;
       },
 
       updateUser,
@@ -717,7 +724,7 @@ describe("UserFormPage", () => {
 
     const editTestService: UserService = {
       getUserById: async (id: number) => {
-        return {
+        const result: UserDTO = {
           id,
           fullName: "John Doe",
           displayName: "johndoe",
@@ -726,7 +733,9 @@ describe("UserFormPage", () => {
           experiences: [],
           comments: [],
           roles: ["USER"],
+          profileImage: {id: 5, contentType:"image/jpeg"}
         };
+        return result;
       },
 
       updateUser: async () => {
@@ -792,7 +801,7 @@ describe("UserFormPage", () => {
 
     const editTestService: UserService = {
       getUserById: async (id: number) => {
-        return {
+        const result: UserDTO = {
           id,
           fullName: "John Doe",
           displayName: "johndoe",
@@ -801,7 +810,9 @@ describe("UserFormPage", () => {
           experiences: [],
           comments: [],
           roles: ["USER"],
+          profileImage: {id: 5, contentType:"image/jpeg"}
         };
+        return result;
       },
 
       updateUser: async () => {
