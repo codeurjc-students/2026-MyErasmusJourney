@@ -24,6 +24,8 @@ import type { CommentFormDTO } from "@shared/models/CommentFormDTO";
 import type { ExperienceDTO } from "@shared/models/ExperienceDTO";
 import userEvent from "@testing-library/user-event";
 import { toast } from "sonner";
+import type { ExperienceSimpleDTO } from "@shared/models/ExperienceSimpleDTO";
+import type { CommentSimpleDTO } from "@shared/models/CommentSimpleDTO";
 
 
 const testAPI = createApiClient(APIURL);
@@ -442,7 +444,7 @@ describe("UserPage", () => {
     for (const comment of comments) {
 
       expect(
-        await screen.findByText(comment.description)
+        await screen.findByText(String(comment.description))
       ).toBeInTheDocument();
     }
   });
@@ -486,7 +488,7 @@ describe("UserPage", () => {
     for (const comment of comments) {
 
       expect(
-        await screen.findByText(comment.description)
+        await screen.findByText(String(comment.description))
       ).toBeInTheDocument();
     }
   });
@@ -544,7 +546,7 @@ describe("UserPage", () => {
       ).not.toBeInTheDocument();
     });
 
-    const experiencesAfter: ExperienceDTO[] = await testUserService.getExperiences(
+    const experiencesAfter: ExperienceSimpleDTO[] = await testUserService.getExperiences(
       authenticatedUser.id
     );
 
@@ -743,7 +745,7 @@ describe("UserPage", () => {
       ).not.toBeInTheDocument();
     });
 
-    const commentsAfter: CommentDTO[] = await testUserService.getComments(
+    const commentsAfter: CommentSimpleDTO[] = await testUserService.getComments(
       authenticatedUser.id
     );
 
@@ -753,7 +755,7 @@ describe("UserPage", () => {
   it("redirects to error page when deleting a comment fails because of internal error", async () => {
     authenticatedUser = await authenticateUser("exampleuser3@email.com");
 
-    const commentsBefore: CommentDTO[] = await testUserService.getComments(
+    const commentsBefore: CommentSimpleDTO[] = await testUserService.getComments(
       authenticatedUser.id
     );
 
@@ -798,7 +800,7 @@ describe("UserPage", () => {
     );
 
     expect(
-      await screen.findByText(commentToDelete.description)
+      await screen.findByText(String(commentToDelete.description))
     ).toBeInTheDocument();
 
     const deleteButton = screen.getByRole("button", {
