@@ -13,7 +13,7 @@ export function createUserService(api: ApiClient) {
   const basicService = createBasicService(api);
 
   return {
-    signUp: (body: UserFormDTO) => basicService.postMethod<UserDTO, UserFormDTO>("/users", body),
+    signUp: (body: UserFormDTO) => basicService.postMethod<UserDTO, UserFormDTO>("/users/", body),
     getUserInfo: () => basicService.getMethod<UserSimpleDTO>("/users/me"),
     getUserById: (id: number) => basicService.getMethod<UserDTO>(`/users/${id}`),
     deleteUserById: (id: number) => basicService.deleteMethod<UserDTO>(`/users/${id}`),

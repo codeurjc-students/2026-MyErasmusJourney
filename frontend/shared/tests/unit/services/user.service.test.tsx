@@ -60,7 +60,7 @@ describe("UserService", () => {
 
       await userService.signUp(userForm);
       expect(basicServiceMock.postMethod).toHaveBeenCalledWith(
-        "/users",
+        "/users/",
         userForm
       );
 
