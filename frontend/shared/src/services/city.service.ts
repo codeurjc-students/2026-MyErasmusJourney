@@ -1,4 +1,3 @@
-import { ApiError } from "../api/apiError";
 import type { ApiClient } from "../api/apiClient";
 import type { CityDTO } from "../models/CityDTO";
 import type { CityFormDTO } from "../models/CityFormDTO";

@@ -2,8 +2,8 @@ import type { ApiClient } from "../api/apiClient";
 import type { UserFormDTO } from "../models/UserFormDTO";
 import type { UserDTO } from "../models/UserDTO";
 import type { UserSimpleDTO } from "../models/UserSimpleDTO";
-import { BasicService, createBasicService } from "./basicService";
-import { UserImageDTO } from "../models/UserImageDTO";
+import { type BasicService, createBasicService } from "./basicService";
+import type { UserImageDTO } from "../models/UserImageDTO";
 
 export type UserService = ReturnType<typeof createUserService>;
 

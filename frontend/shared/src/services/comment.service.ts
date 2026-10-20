@@ -1,6 +1,5 @@
 import type { ApiClient } from "../api/apiClient";
 import type {CommentDTO} from "../models/CommentDTO";
-import { ApiError } from "../api/apiError";
 import { createBasicService } from "./basicService";
 
 export type CommentService = ReturnType<typeof createCommentService>;

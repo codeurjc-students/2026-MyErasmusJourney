@@ -14,8 +14,8 @@ import type { ExperienceDTO } from "../models/ExperienceDTO";
 import type { ExperienceFilters } from "../models/ExperienceFilters";
 import type { ExperienceFormDTO } from "../models/ExperienceFormDTO";
 import type { ExperiencePageDTO } from "../models/ExperienceSimpleDTO";
-import { BasicService, createBasicService } from "./basicService";
-import { MultimediaSimpleDTO } from "../models/MultimediaSimpleDTO";
+import { type BasicService, createBasicService } from "./basicService";
+import type { MultimediaSimpleDTO } from "../models/MultimediaSimpleDTO";
 
 
 export type ExperienceService = ReturnType<typeof createExperienceService>;
