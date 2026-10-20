@@ -234,7 +234,7 @@ async function obtainAuthenticatedUser(
             id: user.id,
             displayName: user.displayName,
             email: user.email,
-            userImageId: user.useImageId
+            userImageId: user.userImageId
         };
     } catch (error) {
         console.error(error);
