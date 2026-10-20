@@ -11,14 +11,3 @@ export function createCommentService(api: ApiClient) {
         deleteComment: (id: number) => basicService.deleteMethod<CommentDTO>(`/comments/${id}`),
     };
 }
-
-async function deleteComment(api: ApiClient, id: number) {
-    const response = await api.delete(`/comments/${id}`)
-
-    if (!response.ok) {
-        throw new ApiError(response.status, await response.text());
-    }
-
-    return response.json();
-
-}

@@ -14,7 +14,6 @@ import type { ExperienceDTO } from "../models/ExperienceDTO";
 import type { ExperienceFilters } from "../models/ExperienceFilters";
 import type { ExperienceFormDTO } from "../models/ExperienceFormDTO";
 import type { ExperiencePageDTO } from "../models/ExperienceSimpleDTO";
-import { ApiError } from "../api/apiError";
 import { BasicService, createBasicService } from "./basicService";
 import { MultimediaSimpleDTO } from "../models/MultimediaSimpleDTO";
 
