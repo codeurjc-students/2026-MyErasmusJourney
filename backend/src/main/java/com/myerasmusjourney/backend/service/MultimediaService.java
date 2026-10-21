@@ -79,6 +79,7 @@ public class MultimediaService {
 
             UserImage userImage = new UserImage(multipartFile, user);
             userImage = userImageRepository.save(userImage);
+            userService.addMultimedia(user, userImage);
             return multimediaMapper.toDTO(userImage);
         } catch (IOException e) {
             throw new RuntimeException(e);
