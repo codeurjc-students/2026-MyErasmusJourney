@@ -4,7 +4,6 @@ import "@testing-library/jest-dom";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 import CityFormPage from "src/pages/CityFormPage/CityFormPage";
-import AvailableSoonPage from "src/pages/AvailableSoonPage/AvailableSoonPage";
 
 import { createApiClient } from "@shared/api/apiClient";
 import { createCityService, type CityService } from "@shared/services/city.service";
@@ -16,6 +15,7 @@ import { toast } from "sonner";
 import type { CityFormDTO } from "@shared/models/CityFormDTO";
 import { ApiError } from "@shared/api/apiError";
 import type { CityDTO } from "@shared/models/CityDTO";
+import CityPage from "@/pages/CityPage/CityPage";
 
 const testAPI = createApiClient(APIURL);
 const testCityService = createCityService(testAPI);
@@ -67,22 +67,15 @@ describe("CityFormPage", () => {
     ).toBeInTheDocument();
   });
 
-  it("should successfully submit the form with valid data and navigate to available-soon", async () => {
+  it("should successfully submit the form with valid data and navigate to detailed city page", async () => {
 
     const cityName = `VitestCity-${Date.now()}`;
 
     render(
       <MemoryRouter initialEntries={["/city-form"]}>
         <Routes>
-          <Route
-            path="/city-form"
-            element={<CityFormPage cityService={testCityService} />}
-          />
-
-          <Route
-            path="/available-soon"
-            element={<AvailableSoonPage />}
-          />
+          <Route path="/city-form" element={<CityFormPage cityService={testCityService} />} />
+          <Route path="/cities/:id" element={<CityPage cityService={testCityService} />} />
         </Routes>
       </MemoryRouter>
     );
@@ -113,10 +106,9 @@ describe("CityFormPage", () => {
     );
 
     await waitFor(() => {
-      expect(
-        screen.getByText(/not available yet/i)
-      ).toBeInTheDocument();
+      expect(screen.getByText(/vitestcity/i)).toBeInTheDocument();
     });
+
   });
 
   it("should not submit the form when required fields are empty", async () => {
@@ -206,10 +198,7 @@ describe("CityFormPage", () => {
             path="/city-form"
             element={<CityFormPage cityService={testCityService} />}
           />
-          <Route
-            path="/available-soon"
-            element={<div>Available Soon</div>}
-          />
+          <Route path="/cities/:id" element={<CityPage cityService={testCityService} />} />
         </Routes>
       </MemoryRouter>
     );
@@ -239,8 +228,9 @@ describe("CityFormPage", () => {
       screen.getByRole("button", { name: /save city/i })
     );
 
+
     await waitFor(() => {
-      expect(screen.getByText("Available Soon")).toBeInTheDocument();
+      expect(screen.getByText(/vitestcity/i)).toBeInTheDocument();
     });
 
     firstRender.unmount();
@@ -253,10 +243,7 @@ describe("CityFormPage", () => {
             path="/city-form"
             element={<CityFormPage cityService={testCityService} />}
           />
-          <Route
-            path="/available-soon"
-            element={<div>Available Soon</div>}
-          />
+          <Route path="/cities/:id" element={<CityPage cityService={testCityService} />} />
         </Routes>
       </MemoryRouter>
     );
@@ -287,7 +274,7 @@ describe("CityFormPage", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Available Soon")).toBeInTheDocument();
+      expect(screen.getByText(/vitestcity/i)).toBeInTheDocument();
     });
   });
 
