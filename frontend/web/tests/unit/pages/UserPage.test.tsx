@@ -22,24 +22,34 @@ vi.mock("react-router-dom", async () => {
 });
 
 vi.mock("@shared/stores/userStore", () => ({
-  useUserStore: vi.fn(),
+    useUserStore: vi.fn(),
 }));
+
+const mockSetUser = vi.fn();
 
 describe("UserPage", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+
+    vi.mocked(useUserStore).mockReturnValue({
+        user: { id: 1 },
+        setUser: mockSetUser,
+    } as ReturnType<typeof useUserStore>);
   });
 
   it("renders user information", async () => {
 
-    const fakeUser = {
+    const fakeUser: UserDTO = {
       id: 1,
       displayName: "john",
       fullName: "John Doe",
       email: "john@test.com",
       studyLocation: "Madrid, Spain",
-      roles: ["USER"]
+      roles: ["USER"],
+      experiences: [],
+      comments: [],
+      profileImage: null,
     };
 
     const mockGetUser = vi.fn().mockResolvedValue(fakeUser);
@@ -60,9 +70,10 @@ describe("UserPage", () => {
       logOut: vi.fn()
     };
 
+
     (useUserStore as any).mockReturnValue({
       user: { id: 1 },
-      setUser: vi.fn()
+      setUser: mockSetUser
     });
 
     render(<UserPage authService={mockAuth} userService={mockService} />);
@@ -76,17 +87,26 @@ describe("UserPage", () => {
 
     expect(mockGetUser).toHaveBeenCalledTimes(1);
     expect(mockGetUser).toHaveBeenCalledWith(1);
+    expect(mockSetUser).toHaveBeenCalledWith({
+      id: 1,
+      displayName: "john",
+      email: "john@test.com",
+      userImageId: null,
+    });
   });
 
   it("renders placeholder when study location is empty", async () => {
 
-    const fakeUser = {
+    const fakeUser: UserDTO = {
       id: 1,
       displayName: "john",
       fullName: "John Doe",
       email: "john@test.com",
       studyLocation: "",
-      roles: ["USER"]
+      roles: ["USER"],
+      comments: [],
+      experiences: [],
+      profileImage: { id: 1, contentType: "image/png" },
     };
 
     const mockGetUser = vi.fn().mockResolvedValue(fakeUser);
@@ -104,7 +124,7 @@ describe("UserPage", () => {
 
     (useUserStore as any).mockReturnValue({
       user: { id: 1 },
-      setUser: vi.fn()
+      setUser: mockSetUser
     });
 
     render(<UserPage userService={mockService} />);
@@ -116,6 +136,12 @@ describe("UserPage", () => {
     });
 
     expect(mockGetUser).toHaveBeenCalledTimes(1);
+    expect(mockSetUser).toHaveBeenCalledWith({
+      id: 1,
+      displayName: "john",
+      email: "john@test.com",
+      userImageId: 1,
+    });
   });
 
   it("redirects to login when there is no logged user", async () => {
