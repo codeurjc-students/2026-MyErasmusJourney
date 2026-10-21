@@ -127,10 +127,14 @@ describe("UserPage", () => {
     const user = useUserStore.getState().user;
     const expectedUser = await testUserService.getUserById(authenticatedUser.id)
 
+    let expectedImageId = null;
+
+    if (expectedUser.profileImage != undefined) expectedImageId = expectedUser.profileImage.id;
+
     expect(user?.displayName).toBe(expectedUser.displayName)
     expect(user?.email).toBe(expectedUser.email)
     expect(user?.id).toBe(expectedUser.id)
-    expect(user?.userImageId).toBe(expectedUser.profileImage?.id)
+    expect(user?.userImageId).toBe(expectedImageId)
   });
 
   it("renders the error page when an internal error ocurres while fetching user data", async () => {

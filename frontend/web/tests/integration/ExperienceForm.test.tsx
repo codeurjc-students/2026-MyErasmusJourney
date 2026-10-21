@@ -143,6 +143,58 @@ describe("ExperienceFormPage integration", () => {
     });
   });
 
+  it("shows an alert and blocks submission when date is not valid", async () => {
+    const alertSpy = vi
+      .spyOn(toast, "warning")
+      .mockImplementation(() => { return "mock-toast-id" });
+    const cities = await testCityService.getAll();
+
+    render(
+      <MemoryRouter initialEntries={["/experiences/new"]}>
+        <Routes>
+          <Route
+            path="/experiences/new"
+            element={
+              <ExperienceFormPage experienceService={testExperienceService} cityService={testCityService} />
+            }
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole("checkbox", { name: /accommodation/i })).toBeInTheDocument();
+    });
+
+    fireEvent.change(screen.getByLabelText(/title/i), {
+      target: { value: "Weekend in Porto" },
+    });
+    fireEvent.change(screen.getByLabelText(/rating/i), {
+      target: { value: 8.7 },
+    });
+    fireEvent.change(screen.getByLabelText(/location/i), {
+      target: { value: String(cities[0].id) },
+    });
+    fireEvent.change(screen.getByLabelText(/date/i), {
+      target: { value: "2027-09-10" },
+    });
+    fireEvent.change(screen.getByLabelText(/experience description/i), {
+      target: { value: "A short trip with many activity categories." },
+    });
+
+    const checkboxList = screen.getAllByRole("checkbox");
+    fireEvent.click(checkboxList[0]);
+    fireEvent.click(checkboxList[1]);
+
+    fireEvent.click(screen.getByRole("button", { name: /publish/i }));
+
+    const errorMessage = "The experience cannot have a date after today";
+
+    await waitFor(() => {
+      expect(alertSpy).toHaveBeenCalledWith(errorMessage);
+    });
+  });
+
   it("publishes a valid experience and navigates to experience detailed page", async () => {
     const cities = await testCityService.getAll();
     const title = `Real Experience`;
