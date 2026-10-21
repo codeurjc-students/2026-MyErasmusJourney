@@ -44,8 +44,11 @@ export default function UserPage({ authService = createAuthService(API), userSer
             if (user != null) {
                 try {
                     {
-                        const data = await userService.getUserById(user.id);
+                        const data: UserDTO = await userService.getUserById(user.id);
                         setUserDTO(data);
+                        
+                        if (data.profileImage != null) setUser({id: data.id, displayName: data.displayName, email: data.email, userImageId: data.profileImage.id})
+                        else setUser({id: data.id, displayName: data.displayName, email: data.email, userImageId: null})
                         setImageUpdated(false);
                     }
                 }

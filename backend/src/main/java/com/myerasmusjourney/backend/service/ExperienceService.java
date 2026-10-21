@@ -62,7 +62,8 @@ public class ExperienceService {
     @Transactional
     public ExperienceDTO createExperience(ExperienceFormDTO experienceFormDTO) {
         if (experienceFormDTO.categories().isEmpty() || experienceFormDTO.categories().size() > 3
-                || experienceFormDTO.rating() < 0 || experienceFormDTO.rating() > 10) {
+                || experienceFormDTO.rating() < 0 || experienceFormDTO.rating() > 10
+                || (experienceFormDTO.date() != null && experienceFormDTO.date().isAfter(LocalDate.now()))) {
             return null;
         }
         City city = cityService.findById(experienceFormDTO.cityId());
@@ -70,8 +71,6 @@ public class ExperienceService {
         Experience experience = new Experience(experienceFormDTO.title(), experienceFormDTO.description(),
                 experienceFormDTO.rating(), experienceFormDTO.date(), experienceFormDTO.categories(), city, user);
         Experience savedExperience = experienceRepository.save(experience);
-        cityService.addExperience(savedExperience, city);
-        userService.addExperience(savedExperience, user);
         return experienceMapper.toDTO(savedExperience);
     }
 
@@ -96,6 +95,7 @@ public class ExperienceService {
         return commentMapper.toSimpleDTOs(experience.getComments());
     }
 
+    @Transactional
     public ExperienceDTO deleteExperienceById(Long id) {
         User user = userService.getLoggedUser();
         Experience experience = experienceRepository.findById(id)
@@ -109,11 +109,5 @@ public class ExperienceService {
 
     public void emptyExperiences() {
         experienceRepository.deleteAll();
-    }
-
-    public void addMultimedia(Long id, ExperienceMultimedia experienceMultimedia) {
-        Experience experience = this.getExperience(id);
-        experience.addMultimedia(experienceMultimedia);
-        this.experienceRepository.save(experience);
     }
 }

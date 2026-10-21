@@ -58,7 +58,6 @@ public class MultimediaService {
                 if(!ExperienceMultimedia.contentTypeAccepted(media.getContentType())) return List.of();
                 ExperienceMultimedia experienceMultimedia = new ExperienceMultimedia(media, experience);
                 experienceMultimedia = experienceMultimediaRepository.save(experienceMultimedia);
-                experienceService.addMultimedia(experienceId, experienceMultimedia);
                 experienceMultimediaList.add(experienceMultimedia);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -80,7 +79,7 @@ public class MultimediaService {
 
             UserImage userImage = new UserImage(multipartFile, user);
             userImage = userImageRepository.save(userImage);
-            userService.addUserImage(userImage, user);
+            userService.addMultimedia(user, userImage);
             return multimediaMapper.toDTO(userImage);
         } catch (IOException e) {
             throw new RuntimeException(e);

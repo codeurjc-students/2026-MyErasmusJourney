@@ -41,7 +41,7 @@ export default function CityPage({ cityService = createCityService(API) }: cityS
             <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)] gap-6 items-stretch">
                 <main className="w-full min-w-0 rounded-2xl bg-white shadow-xl p-4 md:p-6 flex flex-col">
                     <h3 className="text-center mb-4 md:mb-6 break-words">
-                        {city?.name ?? "City"}
+                        {city?.name}
                     </h3>
 
                     <div className="w-full flex items-center justify-center">

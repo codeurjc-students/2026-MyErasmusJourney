@@ -316,8 +316,6 @@ public class ExperienceServiceTest {
         verify(cityService).findById(formDTO.cityId());
         verify(userService).getLoggedUser();
         verify(experienceRepository).save(any(Experience.class));
-        verify(cityService).addExperience(savedExperience, city);
-        verify(userService).addExperience(savedExperience, user);
         verify(experienceMapper).toDTO(any(Experience.class));
     }
 
@@ -343,6 +341,21 @@ public class ExperienceServiceTest {
                 "Erasmus party",
                 "Great Erasmus party",
                 null,
+                List.of("Culture", "Gastronomy", "Social_Events", "Transportation"),
+                1L
+        );
+
+        ExperienceDTO result = experienceService.createExperience(formDTO);
+        assertNull(result);
+    }
+
+    @Test
+    void testCreateExperienceWithNotValidDate(){
+        ExperienceFormDTO formDTO = new ExperienceFormDTO(
+                5.0f,
+                "Erasmus party",
+                "Great Erasmus party",
+                LocalDate.now().plusDays(1),
                 List.of("Culture", "Gastronomy", "Social_Events", "Transportation"),
                 1L
         );

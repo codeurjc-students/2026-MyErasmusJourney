@@ -169,6 +169,52 @@ describe("ExperienceFormPage", () => {
     });
   });
 
+  it("shows an alert and blocks submission when date is not valid", async () => {
+     const alertSpy = vi
+      .spyOn(toast, "warning")
+      .mockImplementation(() => { return "mock-toast-id" });
+    const mockExperienceService = {
+      getCategories: vi.fn().mockResolvedValue(["ART", "SPORT", "TRAVEL", "FOOD"]),
+      postExperience: vi.fn(),
+    };
+
+    const mockCityService = {
+      getAll: vi.fn().mockResolvedValue([{ id: 1, name: "Madrid", country: "Spain" }]),
+    };
+
+    render(
+      <MemoryRouter>
+        <ExperienceFormPage
+          experienceService={mockExperienceService as any}
+          cityService={mockCityService as any}
+        />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getAllByRole("checkbox")).toHaveLength(4);
+    });
+
+    fireEvent.change(screen.getByLabelText(/title/i), { target: { value: "Trip to Lisbon" } });
+    fireEvent.change(screen.getByLabelText(/rating/i), { target: { value: "8" } });
+    fireEvent.change(screen.getByLabelText(/location/i), { target: { value: "1" } });
+    fireEvent.change(screen.getByLabelText(/date/i), { target: { value: "2027-08-15" } });
+    fireEvent.change(screen.getByLabelText(/experience description/i), {
+      target: { value: "A short but memorable trip." },
+    });
+
+    const checkboxes = screen.getAllByRole("checkbox");
+    fireEvent.click(checkboxes[0]);
+    fireEvent.click(checkboxes[1]);
+    fireEvent.click(checkboxes[2]);
+    fireEvent.click(screen.getByRole("button", { name: /publish/i }));
+
+    await waitFor(() => {
+      expect(alertSpy).toHaveBeenCalledWith("The experience cannot have a date after today");
+      expect(mockExperienceService.postExperience).not.toHaveBeenCalled();
+    });
+  });
+
   it("submits valid data and navigates to the detailed Experience Page", async () => {
     const mockExperienceService = {
       getCategories: vi.fn().mockResolvedValue(["ART", "SPORT"]),

@@ -7,6 +7,7 @@ import CityFormPage from "../../../src/pages/CityFormPage/CityFormPage";
 import type { CityService } from "@shared/services/city.service";
 import { ApiError } from "@shared/api/apiError";
 import { toast } from "sonner";
+import type { CityDTO } from "@shared/models/CityDTO";
 
 const mockNavigate = vi.fn();
 
@@ -103,9 +104,10 @@ describe("CityFormPage", () => {
     });
   });
 
-  it("should navigate to available-soon after successfully adding the city", async () => {
+  it("should navigate to detailed city page after successfully adding the city", async () => {
+    const newCity: CityDTO = {id: 1, name: "Madrid", country: "Spain", description: "A beautiful city", averageRating: 0, experiences:[]}
 
-    const mockAddCity = vi.fn().mockResolvedValue({});
+    const mockAddCity = vi.fn().mockResolvedValue(newCity);
 
     const mockCityService: CityService = {
       addCity: mockAddCity,
@@ -138,7 +140,7 @@ describe("CityFormPage", () => {
     );
 
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith("/available-soon");
+      expect(mockNavigate).toHaveBeenCalledWith(`/cities/${newCity.id}`);
     });
 
     expect(mockNavigate).toHaveBeenCalledTimes(1);

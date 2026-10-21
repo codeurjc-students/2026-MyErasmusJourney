@@ -69,12 +69,6 @@ public class CityService {
         return cityRepository.findById(id).orElseThrow(() -> new NoSuchElementException("City not found"));
     }
 
-    @Transactional
-    public void addExperience(Experience savedExperience, City city) {
-        city.addExperience(savedExperience);
-        cityRepository.save(city);
-    }
-
     public void emptyCities(){
         cityRepository.deleteAll();
     }

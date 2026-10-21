@@ -28,6 +28,9 @@ export default function ExperienceFormPage({ experienceService = createExperienc
 
     const navigate = useNavigate();
 
+    const today = new Date();
+
+
     // On mount: redirect to login if nobody is authenticated and load the
     // categories and cities that populate the form.
     useEffect(() => {
@@ -79,7 +82,7 @@ export default function ExperienceFormPage({ experienceService = createExperienc
 
         const title = formData.get("title") as string;
         const description = formData.get("description") as string;
-        const date = formData.get("date") as string;
+        const dateValue = formData.get("date") as string;
         const cityId = Number(formData.get("location") as string);
         const rating = Number(formData.get("rating") as string)
         const categories = formData.getAll("categories") as string[];
@@ -93,10 +96,20 @@ export default function ExperienceFormPage({ experienceService = createExperienc
             return;
         }
 
+        const date = new Date(dateValue);
+
+
+        date.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+        if (date > new Date()){
+            toast.warning("The experience cannot have a date after today");
+            return;
+        }
+
         const experienceRequest: ExperienceFormDTO = {
             title,
             description,
-            date,
+            date: dateValue,
             rating,
             cityId,
             categories
@@ -178,7 +191,7 @@ export default function ExperienceFormPage({ experienceService = createExperienc
                         </div>
                         <div className="flex flex-col gap-3">
                             <label htmlFor="date">Date</label>
-                            <input type="date" id="date" name="date" />
+                            <input type="date" id="date" name="date"/>
                         </div>
                     </div>
 
