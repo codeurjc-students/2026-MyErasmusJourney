@@ -3,7 +3,6 @@ package com.myerasmusjourney.backend.service;
 import com.myerasmusjourney.backend.domain.Comment;
 import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.domain.User;
-import com.myerasmusjourney.backend.domain.UserImage;
 import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.mapper.CommentMapper;
 import com.myerasmusjourney.backend.mapper.ExperienceMapper;
@@ -93,11 +92,6 @@ public class UserService {
         return userMapper.toDTO(savedUser);
     }
 
-    public void addExperience(Experience savedExperience, User user) {
-        user.addExperience(savedExperience);
-        userRepository.save(user);
-    }
-
     @Transactional
     public UserDTO deleteUser(long id){
         User user = getLoggedUser();
@@ -106,11 +100,6 @@ public class UserService {
         UserDTO deletedUser = userMapper.toDTO(userToDelete);
         userRepository.delete(userToDelete);
         return deletedUser;
-    }
-
-    public void addComment(Comment comment, User user) {
-        user.addComment(comment);
-        userRepository.save(user);
     }
 
     @Transactional
@@ -149,10 +138,5 @@ public class UserService {
         for (User u: users){
             if (!u.getRoles().contains("ADMIN")) userRepository.delete(u);
         }
-    }
-
-    public void addUserImage(UserImage userImage, User user) {
-        user.setProfileImage(userImage);
-        userRepository.save(user);
     }
 }

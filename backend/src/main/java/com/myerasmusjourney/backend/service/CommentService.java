@@ -39,7 +39,6 @@ public class CommentService {
         Comment comment = new Comment(commentFormDTO.description(), user, experience);
         Comment savedComment = commentRepository.save(comment);
         experienceService.addComment(savedComment, experience);
-        userService.addComment(savedComment, user);
         return commentMapper.toDTO(savedComment);
     }
 

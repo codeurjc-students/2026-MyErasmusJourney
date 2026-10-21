@@ -70,8 +70,6 @@ public class ExperienceService {
         Experience experience = new Experience(experienceFormDTO.title(), experienceFormDTO.description(),
                 experienceFormDTO.rating(), experienceFormDTO.date(), experienceFormDTO.categories(), city, user);
         Experience savedExperience = experienceRepository.save(experience);
-        cityService.addExperience(savedExperience, city);
-        userService.addExperience(savedExperience, user);
         return experienceMapper.toDTO(savedExperience);
     }
 
@@ -96,6 +94,7 @@ public class ExperienceService {
         return commentMapper.toSimpleDTOs(experience.getComments());
     }
 
+    @Transactional
     public ExperienceDTO deleteExperienceById(Long id) {
         User user = userService.getLoggedUser();
         Experience experience = experienceRepository.findById(id)
@@ -109,11 +108,5 @@ public class ExperienceService {
 
     public void emptyExperiences() {
         experienceRepository.deleteAll();
-    }
-
-    public void addMultimedia(Long id, ExperienceMultimedia experienceMultimedia) {
-        Experience experience = this.getExperience(id);
-        experience.addMultimedia(experienceMultimedia);
-        this.experienceRepository.save(experience);
     }
 }
