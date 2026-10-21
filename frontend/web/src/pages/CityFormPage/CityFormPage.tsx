@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import type { FormEvent } from "react";
 import { ApiError } from "@shared/api/apiError";
 import { toast } from "sonner";
+import type { CityDTO } from "@shared/models/CityDTO";
 
 export default function CityFormPage({ cityService = createCityService(API) }: cityServiceProps) {
 
@@ -31,8 +32,8 @@ export default function CityFormPage({ cityService = createCityService(API) }: c
         };
 
         try {
-            await cityService.addCity(cityFormDTO);
-            navigate("/available-soon");
+            const result: CityDTO = await cityService.addCity(cityFormDTO);
+            navigate(`/cities/${result.id}`);
         }
         catch (error) {
             if (error instanceof ApiError && error.status >= 500) {
