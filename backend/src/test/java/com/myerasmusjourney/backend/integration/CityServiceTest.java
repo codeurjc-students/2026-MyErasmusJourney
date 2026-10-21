@@ -251,17 +251,7 @@ public class CityServiceTest extends TestDataBase {
                 )
         );
 
-        experiences = experienceRepository.saveAll(experiences);
-
-        cityService.addExperience(experiences.getFirst(), madrid);
-        cityService.addExperience(experiences.get(1), madrid);
-        cityService.addExperience(experiences.get(2), madrid);
-        cityService.addExperience(experiences.get(3), madrid);
-        cityService.addExperience(experiences.get(4), rome);
-        cityService.addExperience(experiences.get(5), rome);
-        cityService.addExperience(experiences.get(6), rome);
-        cityService.addExperience(experiences.get(7), berlin);
-        cityService.addExperience(experiences.get(8), berlin);
+        experienceRepository.saveAll(experiences);
 
         List<CitySimpleDTO> expectedList = cityMapper.toSimpleDTOs(List.of(madrid, rome, berlin));
 
