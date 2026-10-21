@@ -10,6 +10,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
+import static org.junit.Assert.assertTrue;
+
 @Tag("system")
 public class CityFormPageTest extends AuthenticatedSeleniumTest {
 
@@ -44,7 +46,10 @@ public class CityFormPageTest extends AuthenticatedSeleniumTest {
         submit.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("/html/body/div/div/p")
+                By.xpath("/html/body/div/div/div/main/h3")
         ));
+
+        WebElement cityName = driver.findElement(By.xpath("/html/body/div/div/div/main/h3"));
+        assertTrue(cityName.getText().contains("Munich"));
     }
 }
