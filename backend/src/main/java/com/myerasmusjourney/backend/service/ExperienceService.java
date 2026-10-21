@@ -62,7 +62,8 @@ public class ExperienceService {
     @Transactional
     public ExperienceDTO createExperience(ExperienceFormDTO experienceFormDTO) {
         if (experienceFormDTO.categories().isEmpty() || experienceFormDTO.categories().size() > 3
-                || experienceFormDTO.rating() < 0 || experienceFormDTO.rating() > 10) {
+                || experienceFormDTO.rating() < 0 || experienceFormDTO.rating() > 10
+                || (experienceFormDTO.date() != null && experienceFormDTO.date().isAfter(LocalDate.now()))) {
             return null;
         }
         City city = cityService.findById(experienceFormDTO.cityId());

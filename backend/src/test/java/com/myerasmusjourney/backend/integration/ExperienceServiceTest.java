@@ -65,6 +65,7 @@ public class ExperienceServiceTest extends TestDataBase {
     private List<ExperienceSimpleDTO> expected;
 
     @BeforeEach
+    @Transactional
     void setup(){
 
         if (experienceRepository.count() > 0){
@@ -144,12 +145,13 @@ public class ExperienceServiceTest extends TestDataBase {
                 )
         );
 
-        experienceRepository.saveAll(experiences);
+        experiences = experienceRepository.saveAll(experiences);
 
         this.expected = experienceMapper.toDTOs(experiences);
     }
 
     @AfterEach
+    @Transactional
     void resetDatabase(){
         experienceRepository.deleteAll();
         SecurityContextHolder.clearContext();
@@ -381,6 +383,24 @@ public class ExperienceServiceTest extends TestDataBase {
     }
 
     @Test
+    void testCreateExperienceWithNotValidDate(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken("test@email.com",null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        ExperienceFormDTO formDTO = new ExperienceFormDTO(
+                5.0f,
+                "Erasmus party",
+                "Great Erasmus party",
+                LocalDate.now().plusDays(1),
+                List.of("Culture", "Gastronomy", "Social_Events", "Transportation"),
+                1L
+        );
+
+        ExperienceDTO result = experienceService.createExperience(formDTO);
+        assertNull(result);
+    }
+
+    @Test
     void testCreateExperienceCityDoesntExist(){
         Authentication authentication = new UsernamePasswordAuthenticationToken("test@email.com",null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -444,12 +464,21 @@ public class ExperienceServiceTest extends TestDataBase {
     @Transactional
     void testDeleteExperienceByIdSuccess(){
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken("exampleuser1@email.com",null, List.of());
+        Authentication authentication = new UsernamePasswordAuthenticationToken("test@email.com",null, List.of());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        User user = userService.getLoggedUser();
+        List<City> cities = cityRepository.findAll();
 
-        ExperienceDTO expected = experienceMapper.toDTO(user.getExperiences().getFirst());
+        ExperienceFormDTO formDTO = new ExperienceFormDTO(
+                5.0f,
+                "Erasmus party",
+                "Great Erasmus party",
+                LocalDate.of(2022, 1, 13),
+                List.of("Social_Events", "Gastronomy"),
+                cities.getFirst().getId()
+        );
+
+        ExperienceDTO expected = experienceService.createExperience(formDTO);
 
         ExperienceDTO result = experienceService.deleteExperienceById(expected.id());
 
