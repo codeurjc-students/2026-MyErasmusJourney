@@ -1,224 +1,120 @@
-import { describe, it, expect, vi } from "vitest";
 
-import { createCityService } from "../../../src/services/city.service";
-
+import { vi, describe, beforeEach, it, expect } from "vitest";
 import { ApiClient } from "../../../src/api/apiClient";
+import { ApiError } from "../../../src/api/apiError";
+import { createCityService } from "../../../src/services/city.service";
+import type { CityService } from "../../../src/services/city.service";
+import type { CityDTO } from "../../../src/models/CityDTO";
+import type { CityFormDTO } from "../../../src/models/CityFormDTO";
 
-import { CityFormDTO } from "../../../src/models/CityFormDTO";
+const { basicServiceMock, apiMock } = vi.hoisted(() => ({
+  basicServiceMock: {
+    getMethod: vi.fn(),
+    postMethod: vi.fn(),
+    putMethod: vi.fn(),
+    deleteMethod: vi.fn(),
+  },
+  apiMock: {
+    post: vi.fn(),
+  },
+}));
+
+vi.mock("../../../src/services/basicService", () => ({
+  createBasicService: vi.fn(() => basicServiceMock),
+}));
 
 describe("CityService", () => {
+  let cityService: CityService;
 
-  it("should successfully add a city", async () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
 
-    const cityFormDTO: CityFormDTO = {
-      name: "Madrid",
-      country: "Spain",
-      description: "A beautiful city",
-    };
-
-    const fakeResponse = {
+    basicServiceMock.getMethod.mockResolvedValue([]);
+    apiMock.post.mockResolvedValue({
       ok: true,
       status: 201,
-      json: vi.fn().mockResolvedValue({
+      json: vi.fn().mockResolvedValue({ id: 1 }),
+      text: vi.fn().mockResolvedValue(""),
+    });
+
+    cityService = createCityService(apiMock as unknown as ApiClient);
+  });
+
+  describe("addCity", () => {
+    const cityForm = {
+      name: "Madrid",
+      country: "Spain",
+      description: "Capital of Spain"
+    } as CityFormDTO;
+
+    it("should create a city and return the response body when status is 201", async () => {
+      const city = {
         id: 1,
         name: "Madrid",
         country: "Spain",
-        description: "A beautiful city",
-      }),
-    };
+      } as CityDTO;
 
-    const mockPost = vi.fn().mockResolvedValue(fakeResponse);
+      apiMock.post.mockResolvedValue({
+        ok: true,
+        status: 201,
+        json: vi.fn().mockResolvedValue(city),
+        text: vi.fn(),
+      });
 
-    const mockAPI: ApiClient = {
-      get: vi.fn(),
-      post: mockPost,
-    };
+      await expect(cityService.addCity(cityForm)).resolves.toEqual(city);
 
-    const cityService = createCityService(mockAPI);
-
-    const result = await cityService.addCity(cityFormDTO);
-
-    expect(mockPost).toHaveBeenCalledWith(
-      "/cities/",
-      cityFormDTO
-    );
-
-    expect(mockPost).toHaveBeenCalledTimes(1);
-
-    expect(result).toEqual({
-      id: 1,
-      name: "Madrid",
-      country: "Spain",
-      description: "A beautiful city",
+      expect(apiMock.post).toHaveBeenCalledExactlyOnceWith(
+        "/cities/",
+        cityForm
+      );
     });
 
-    expect(fakeResponse.json).toHaveBeenCalledTimes(1);
-  });
-
-
-  it("should throw an error when the city already exists", async () => {
-
-    const cityFormDTO: CityFormDTO = {
-      name: "Madrid",
-      country: "Spain",
-      description: "A beautiful city",
-    };
-
-    const fakeResponse = {
-      ok: true,
-      status: 200,
-      json: vi.fn(),
-    };
-
-    const mockPost = vi.fn().mockResolvedValue(fakeResponse);
-
-    const mockAPI: ApiClient = {
-      get: vi.fn(),
-      post: mockPost,
-    };
-
-    const cityService = createCityService(mockAPI);
-
-    await expect(
-      cityService.addCity(cityFormDTO)
-    ).rejects.toThrow("City already exists");
-
-    expect(mockPost).toHaveBeenCalledWith(
-      "/cities/",
-      cityFormDTO
-    );
-
-    expect(fakeResponse.json).not.toHaveBeenCalled();
-  });
-
-
-  it("should throw an error when the API request fails", async () => {
-
-    const cityFormDTO: CityFormDTO = {
-      name: "Madrid",
-      country: "Spain",
-      description: "A beautiful city",
-    };
-
-    const errorMessage = "Internal server error";
-
-    const textMock = vi.fn().mockResolvedValue(errorMessage);
-
-    const fakeResponse = {
-      ok: false,
-      status: 500,
-      text: textMock,
-      json: vi.fn(),
-    };
-
-    const mockPost = vi.fn().mockResolvedValue(fakeResponse);
-
-    const mockAPI: ApiClient = {
-      get: vi.fn(),
-      post: mockPost,
-    };
-
-    const cityService = createCityService(mockAPI);
-
-    await expect(
-      cityService.addCity(cityFormDTO)
-    ).rejects.toThrow(errorMessage);
-
-    expect(mockPost).toHaveBeenCalledWith(
-      "/cities/",
-      cityFormDTO
-    );
-
-    expect(textMock).toHaveBeenCalledTimes(1);
-
-    expect(fakeResponse.json).not.toHaveBeenCalled();
-  });
-
-
-  it("should return the response JSON when the city is created", async () => {
-
-    const cityFormDTO: CityFormDTO = {
-      name: "Madrid",
-      country: "Spain",
-      description: "A beautiful city",
-    };
-
-    const responseData = {
-      id: 1,
-      name: "Madrid",
-      country: "Spain",
-      description: "A beautiful city",
-    };
-
-    const fakeResponse = {
-      ok: true,
-      status: 201,
-      json: vi.fn().mockResolvedValue(responseData),
-    };
-
-    const mockPost = vi.fn().mockResolvedValue(fakeResponse);
-
-    const mockAPI: ApiClient = {
-      get: vi.fn(),
-      post: mockPost,
-    };
-
-    const cityService = createCityService(mockAPI);
-
-    const result = await cityService.addCity(cityFormDTO);
-
-    expect(result).toEqual(responseData);
-
-    expect(fakeResponse.json).toHaveBeenCalledTimes(1);
-  });
-
-
-  it("should return all cities from API", async () => {
-
-    const cities = [
-      { name: "Madrid", country: "Spain" },
-      { name: "London", country: "United Kingdom" }
-    ];
-
-    const mockApi = {
-      get: vi.fn().mockResolvedValue({
-        ok: true,
-        json: vi.fn().mockResolvedValue(cities),
-      }),
-    };
-
-    const service = createCityService(mockApi);
-
-    const result = await service.getAll();
-
-    expect(mockApi.get).toHaveBeenCalledTimes(1);
-    expect(mockApi.get).toHaveBeenCalledWith("/cities/");
-    expect(result).toEqual(cities);
-  });
-
-
-  it("should throw an error when obtaining cities request fails", async () => {
-
-    const errorMessage = "Internal server error";
-
-    const textMock = vi.fn().mockResolvedValue(errorMessage);
-
-    const mockApi = {
-      get: vi.fn().mockResolvedValue({
+    it("should throw ApiError with the response text when the response is not ok", async () => {
+      apiMock.post.mockResolvedValue({
         ok: false,
         status: 500,
-        text: textMock,
-      }),
-    };
+        text: vi.fn().mockResolvedValue("Internal server error"),
+        json: vi.fn(),
+      });
 
-    const service = createCityService(mockApi);
+      await expect(cityService.addCity(cityForm)).rejects.toMatchObject({
+        status: 500,
+        message: "Internal server error",
+      });
 
-    await expect(
-      service.getAll()
-    ).rejects.toThrow(errorMessage);
+      expect(apiMock.post).toHaveBeenCalledExactlyOnceWith(
+        "/cities/",
+        cityForm
+      );
+    });
 
-    expect(mockApi.get).toHaveBeenCalledWith("/cities/");
-    expect(textMock).toHaveBeenCalledTimes(1);
+    it("should throw ApiError when the status is not 201", async () => {
+      apiMock.post.mockResolvedValue({
+        ok: true,
+        status: 200,
+        text: vi.fn(),
+        json: vi.fn(),
+      });
+
+      await expect(cityService.addCity(cityForm)).rejects.toMatchObject({
+        status: 200,
+        message: "City is already registered",
+      });
+    });
   });
 
+  describe("delegated methods", () => {
+    it("should call the correct endpoint for each method", async () => {
+      await cityService.getAll();
+      expect(basicServiceMock.getMethod).toHaveBeenCalledWith("/cities/");
+
+      await cityService.getTrending();
+      expect(basicServiceMock.getMethod).toHaveBeenCalledWith(
+        "/cities/trending"
+      );
+
+      await cityService.getCityById(7);
+      expect(basicServiceMock.getMethod).toHaveBeenCalledWith("/cities/7");
+    });
+  });
 });

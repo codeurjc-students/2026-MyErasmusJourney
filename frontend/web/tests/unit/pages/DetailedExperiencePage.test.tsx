@@ -58,7 +58,7 @@ describe("DetailedExperiencePage", () => {
   it("should show loading message while fetching the experience", () => {
 
     const mockGetExperienceById = vi.fn(
-      () => new Promise(() => { })
+      () => new Promise<ExperienceDTO>(() => { })
     );
 
     const mockService: ExperienceService = {

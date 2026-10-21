@@ -1,481 +1,154 @@
-import { describe, expect, it, vi } from "vitest";
-import { createExperienceService } from "../../../src/services/experience.service";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { createExperienceService, ExperienceService } from "../../../src/services/experience.service";
 import { ApiClient } from "../../../src/api/apiClient";
+import { ExperienceFilters } from "../../../src/models/ExperienceFilters";
+import { ExperienceFormDTO } from "../../../src/models/ExperienceFormDTO";
+import { CommentFormDTO } from "../../../src/models/CommentFormDTO";
 
-import type { ExperienceFormDTO } from "../../../src/models/ExperienceFormDTO"
-import type { ExperienceSimpleDTO } from "../../../src/models/ExperienceSimpleDTO"
-import type { ExperienceDTO } from "../../../src/models/ExperienceDTO"
-import type{ CommentFormDTO } from "../../../src/models/CommentFormDTO";
-import type{ CommentSimpleDTO } from "../../../src/models/CommentSimpleDTO";
+const { basicServiceMock } = vi.hoisted(() => ({
+  basicServiceMock: {
+    getMethod: vi.fn(),
+    postMethod: vi.fn(),
+    putMethod: vi.fn(),
+    deleteMethod: vi.fn(),
+  },
+}));
 
-
+vi.mock("../../../src/services/basicService", () => ({
+  createBasicService: vi.fn(() => basicServiceMock),
+}));
 
 describe("ExperienceService", () => {
+  let experienceService: ExperienceService;
 
-  it("should return all experiences when the request succeeds", async () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
 
-    const experiences: ExperienceSimpleDTO[] = [
-      { id: 1, title: "Experience 1", description: "description 1", date: "2022-02-12", rating: 9.1, cityName: "Paris", country: "France", authorName: "author1", categories: ["Studies"] },
-      { id: 2, title: "Experience 2", description: "description 2", date: "2025-03-01", rating: 1.5, cityName: "Rome", country: "Italy", authorName: "author2",  categories: ["Accomodation", "Transportation"]}
-    ];
+    basicServiceMock.getMethod.mockResolvedValue([]);
+    basicServiceMock.postMethod.mockResolvedValue([]);
 
-    const mockApi = {
-      get: vi.fn().mockResolvedValue({
-        ok: true,
-        json: vi.fn().mockResolvedValue({ content: experiences }),
-      }),
-      post: vi.fn(),
-      put: vi.fn(),
-      delete: vi.fn()
-    };
-
-    const service = createExperienceService(mockApi);
-
-    const result = await service.getAll({});
-
-    expect(mockApi.get).toHaveBeenCalledTimes(1);
-    expect(mockApi.get).toHaveBeenCalledWith("/experiences/?page=0&size=6");
-    expect(result.content).toEqual(experiences);
-  });
-
-  it("should throw an error when the request fails", async () => {
-    const errorMessage = "Error fetching experiences";
-    const textMock = vi.fn().mockResolvedValue(errorMessage);
-
-    const mockApi = {
-      get: vi.fn().mockResolvedValue({
-        ok: false,
-        text: textMock,
-        json: vi.fn(),
-      }),
-
-      post: vi.fn(),
-      put: vi.fn(),
-      delete: vi.fn()
-    };
-
-    const service = createExperienceService(mockApi);
-
-    await expect(service.getAll({page:1, size:5})).rejects.toThrow(
-      "Error fetching experiences"
-    );
-
-    expect(mockApi.get).toHaveBeenCalledWith("/experiences/?page=1&size=5");
-  });
-
-  it("should return all categories", async () => {
-
-    const experiences = [
-      "Acommodation", "Transportation"
-    ];
-
-    const mockApi = {
-      get: vi.fn().mockResolvedValue({
-        ok: true,
-        json: vi.fn().mockResolvedValue(experiences),
-      }),
-      post: vi.fn(),
-      put: vi.fn(),
-      delete: vi.fn()
-    };
-
-    const service = createExperienceService(mockApi);
-
-    const result = await service.getCategories();
-
-    expect(mockApi.get).toHaveBeenCalledTimes(1);
-    expect(mockApi.get).toHaveBeenCalledWith("/experiences/categories");
-    expect(result).toEqual(experiences);
-  });
-
-  it("should throw an error when the category request fails", async () => {
-    const errorMessage = "Error fetching categories";
-    const textMock = vi.fn().mockResolvedValue(errorMessage);
-
-    const mockApi = {
-      get: vi.fn().mockResolvedValue({
-        ok: false,
-        text: textMock,
-        json: vi.fn(),
-      }),
-      post: vi.fn(),
-      put: vi.fn(),
-      delete: vi.fn()
-    };
-
-    const service = createExperienceService(mockApi);
-
-    await expect(service.getCategories()).rejects.toThrow(
-      "Error fetching categories"
-    );
-
-    expect(mockApi.get).toHaveBeenCalledWith("/experiences/categories");
-  });
-
-  it("should return the response JSON when the experience is posted", async () => {
-
-    const experienceFormDTO: ExperienceFormDTO = {
-      title: "test",
-      date: "2020-03-22",
-      description: "test description",
-      categories: ["Studies", "Personal_Experience"],
-      rating: 4.3,
-      cityId: 1
-    }
-
-    const responseData = {
-      id: 1,
-      title: "test",
-      date: "2020-03-22",
-      description: "test description",
-      categories: ["Studies", "Personal_Experience"],
-      rating: 4.3
-    };
-
-    const fakeResponse = {
-      ok: true,
-      status: 201,
-      json: vi.fn().mockResolvedValue(responseData),
-    };
-
-    const mockPost = vi.fn().mockResolvedValue(fakeResponse);
-
-    const mockAPI: ApiClient = {
-      get: vi.fn(),
-      post: mockPost,
-      put: vi.fn(),
-      delete: vi.fn()
-    };
-
-    const experienceService = createExperienceService(mockAPI);
-
-    const result = await experienceService.postExperience(experienceFormDTO);
-
-    expect(result).toEqual(responseData);
-    expect(fakeResponse.json).toHaveBeenCalledTimes(1);
-  });
-
-  it("should throw error when posting experience fails", async () => {
-
-    const experienceFormDTO: ExperienceFormDTO = {
-      title: "test",
-      date: "2020-03-22",
-      description: "test description",
-      categories: ["Studies", "Personal_Experience",],
-      rating: 4.3,
-      cityId: 1
-    }
-
-    const fakeResponse = {
-      ok: false,
-      json: vi.fn(),
-      text: vi.fn().mockReturnValue("Error posting new experience"),
-    };
-
-    const mockPost = vi.fn().mockResolvedValue(fakeResponse);
-
-    const mockAPI: ApiClient = {
-      get: vi.fn(),
-      post: mockPost,
-      put: vi.fn(),
-      delete: vi.fn()
-    };
-
-    const experienceService = createExperienceService(mockAPI);
-
-    await expect(experienceService.postExperience(experienceFormDTO)).rejects.toThrow(
-      "Error posting new experience"
+    experienceService = createExperienceService(
+      {} as ApiClient
     );
   });
 
-  it("should return the experience when the request succeeds", async () => {
-    const experience: ExperienceDTO = {
-      id: 1,
-      title: "Erasmus in Paris",
-      date: "2025-03-01",
-      rating: 9.1,
-      description: "Amazing Erasmus experience",
-      categories: ["Culture", "Social_Events"],
-      city: {
-        id: 1,
-        name: "Paris",
-        country: "France"
-      },
-      author: {
-        id: 1,
-        displayName: "author1",
-        email: "author1@email.com"
-      }
-    };
+  describe("getAll", () => {
+    it("should use default pagination when no filters are provided", async () => {
+      await experienceService.getAll({} as ExperienceFilters);
 
-    const mockApi = {
-      get: vi.fn().mockResolvedValue({
-        ok: true,
-        status: 200,
-        json: vi.fn().mockResolvedValue(experience)
-      }),
-      post: vi.fn(),
-      put: vi.fn(),
-      delete: vi.fn()
-    };
-
-    const service = createExperienceService(mockApi);
-
-    const result = await service.getExperienceById(1);
-
-    expect(mockApi.get).toHaveBeenCalledTimes(1);
-    expect(mockApi.get).toHaveBeenCalledWith("/experiences/1");
-    expect(result).toEqual(experience);
-  });
-      put: vi.fn(),
-
-  it("should throw an error when fetching an experience fails", async () => {
-    const errorMessage = "Error fetching experience";
-    const textMock = vi.fn().mockResolvedValue(errorMessage);
-
-    const mockApi = {
-      get: vi.fn().mockResolvedValue({
-        ok: false,
-        status: 500,
-        text: textMock,
-      }),
-      post: vi.fn(),
-      put: vi.fn(),
-      delete: vi.fn()
-    };
-
-    const service = createExperienceService(mockApi);
-
-    await expect(
-      service.getExperienceById(1)
-    ).rejects.toThrow("Error fetching experience");
-
-    expect(mockApi.get).toHaveBeenCalledTimes(1);
-    expect(mockApi.get).toHaveBeenCalledWith("/experiences/1");
-  });
-
-  it("should post a new comment successfully", async () => {
-
-    const fakeComment: CommentSimpleDTO = {
-      id: 1,
-      description: "Great experience!",
-      date: "2026-08-28",
-      authorName: "John",
-      experienceId: 1
-    };
-
-    const mockPost = vi.fn().mockResolvedValue({
-      status: 201,
-      json: vi.fn().mockResolvedValue(fakeComment)
+      expect(basicServiceMock.getMethod).toHaveBeenCalledExactlyOnceWith(
+        "/experiences/?page=0&size=6"
+      );
     });
 
-    const mockApi: ApiClient = {
-      post: mockPost,
-      get: vi.fn(),
-      put: vi.fn(),
-      delete: vi.fn()
-    };
+    it("should include all supplied filters in the URL", async () => {
+      const filters: ExperienceFilters = {
+        page: 2,
+        size: 12,
+        minRating: 6,
+        maxRating: 9,
+        from: "2026-01-01",
+        to: "2026-06-30",
+        cityName: "Madrid",
+        categories: ["CULTURE", "GASTRONOMY"],
+      };
 
-    const experienceService = createExperienceService(mockApi);
+      await experienceService.getAll(filters);
 
-    const comment: CommentFormDTO = {
-      description: "Great experience!"
-    };
-
-    const result = await experienceService.postComment(1, comment);
-
-    expect(mockPost).toHaveBeenCalledTimes(1);
-    expect(mockPost).toHaveBeenCalledWith(
-      "/experiences/1/comments",
-      comment
-    );
-
-    expect(result).toEqual(fakeComment);
-  });
-
-  it("should throw an error when posting a comment fails", async () => {
-    const errorMessage = "Error posting new comment";
-    const textMock = vi.fn().mockResolvedValue(errorMessage);
-
-    const mockPost = vi.fn().mockResolvedValue({
-      status: 400,
-      json: vi.fn(),
-      text: textMock
+      expect(basicServiceMock.getMethod).toHaveBeenCalledExactlyOnceWith(
+        "/experiences/?page=2&size=12&minimumRate=6&maximumRate=9&from=2026-01-01&to=2026-06-30&cityName=Madrid&categories=CULTURE&categories=GASTRONOMY"
+      );
     });
 
-    const mockApi: ApiClient = {
-      post: mockPost,
-      get: vi.fn(),
-      put: vi.fn(),
-      delete: vi.fn()
-    };
+    it("should preserve pagination when other filters are omitted", async () => {
+      await experienceService.getAll({
+        page: 1,
+        size: 3,
+      } as ExperienceFilters);
 
-    const experienceService = createExperienceService(mockApi);
-
-    const comment: CommentFormDTO = {
-      description: "Great experience!"
-    };
-
-    await expect(
-      experienceService.postComment(1, comment)
-    ).rejects.toThrow("Error posting new comment");
-
-    expect(mockPost).toHaveBeenCalledWith(
-      "/experiences/1/comments",
-      comment
-    );
-  });
-
-  it("should get comments successfully", async () => {
-
-    const fakeComments: CommentSimpleDTO[] = [
-      {
-        id: 1,
-        description: "Great experience!",
-        date: "2026-08-28",
-        authorName: "John",
-        experienceId: 1
-      },
-      {
-        id: 2,
-        description: "I really enjoyed it.",
-        date: "2026-08-27",
-        authorName: "Jane",
-        experienceId: 1
-      }
-    ];
-
-    const mockGet = vi.fn().mockResolvedValue({
-      ok: true,
-      json: vi.fn().mockResolvedValue(fakeComments)
+      expect(basicServiceMock.getMethod).toHaveBeenCalledExactlyOnceWith(
+        "/experiences/?page=1&size=3"
+      );
     });
 
-    const mockApi: ApiClient = {
-      post: vi.fn(),
-      get: mockGet,
-      put: vi.fn(),
-      delete: vi.fn()
-    };
+    it("should include zero as a valid minimum rating", async () => {
+      await experienceService.getAll({
+        minRating: 0,
+      } as ExperienceFilters);
 
-    const experienceService = createExperienceService(mockApi);
-
-    const result = await experienceService.getCommentsByExperienceId(1);
-
-    expect(mockGet).toHaveBeenCalledTimes(1);
-    expect(mockGet).toHaveBeenCalledWith(
-      "/experiences/1/comments"
-    );
-
-    expect(result).toEqual(fakeComments);
+      expect(basicServiceMock.getMethod).toHaveBeenCalledExactlyOnceWith(
+        "/experiences/?page=0&size=6&minimumRate=0"
+      );
+    });
   });
 
-  it("should throw an error when getting comments fails", async () => {
+  describe("addMultimedia", () => {
+    it("should send all files in FormData to the experience multimedia endpoint", async () => {
+      const firstFile = new File(["image content"], "photo.png", {
+        type: "image/png",
+      });
 
-    const errorMessage = "Error fetching comments";
-    const textMock = vi.fn().mockResolvedValue(errorMessage);
+      const secondFile = new File(["video content"], "video.mp4", {
+        type: "video/mp4",
+      });
 
-    const mockGet = vi.fn().mockResolvedValue({
-      ok: false,
-      json: vi.fn(),
-      text: textMock
+      await experienceService.addMultimedia(
+        [firstFile, secondFile],
+        42
+      );
+
+      expect(basicServiceMock.postMethod).toHaveBeenCalledExactlyOnceWith(
+        "/experiences/42/multimedia",
+        expect.any(FormData)
+      );
+
+      const formData = basicServiceMock.postMethod.mock.calls[0][1] as FormData;
+
+      expect(formData.getAll("multipartFileList")).toHaveLength(2);
+      expect(formData.getAll("multipartFileList")).toEqual([
+        firstFile,
+        secondFile,
+      ]);
     });
 
-    const mockApi: ApiClient = {
-      post: vi.fn(),
-      get: mockGet,
-      put: vi.fn(),
-      delete: vi.fn()
-    };
+    it("should send an empty FormData when no files are provided", async () => {
+      await experienceService.addMultimedia([], 42);
 
-    const experienceService = createExperienceService(mockApi);
+      expect(basicServiceMock.postMethod).toHaveBeenCalledExactlyOnceWith(
+        "/experiences/42/multimedia",
+        expect.any(FormData)
+      );
 
-    await expect(
-      experienceService.getCommentsByExperienceId(1)
-    ).rejects.toThrow("Error fetching comments");
+      const formData = basicServiceMock.postMethod.mock.calls[0][1] as FormData;
 
-    expect(mockGet).toHaveBeenCalledWith(
-      "/experiences/1/comments"
-    );
-  });
-
-  it("should successfully delete an experience", async () => {
-    const responseData = {
-      id: 1,
-    };
-
-    const mockDelete = vi.fn().mockResolvedValue({
-      ok: true,
-      json: vi.fn().mockResolvedValue(responseData),
-      text: vi.fn(),
+      expect(formData.getAll("multipartFileList")).toHaveLength(0);
     });
-
-    const mockApi: ApiClient = {
-      get: vi.fn(),
-      post: vi.fn(),
-      delete: mockDelete,
-      put: vi.fn()
-    };
-
-    const service = createExperienceService(mockApi);
-
-    const result = await service.deleteExperience(1);
-
-    expect(mockDelete).toHaveBeenCalledTimes(1);
-    expect(mockDelete).toHaveBeenCalledWith("/experiences/1");
-    expect(result).toEqual(responseData);
   });
 
-  it("should throw an error when deleting an experience fails", async () => {
-    const errorMessage = "Unauthorized";
+  describe("delegated methods", () => {
+      it("should call the correct endpoint for each method", async () => {
+        const experienceForm: ExperienceFormDTO = {title: "test", description: "description", categories: ["studies"], date: "2025-11-05", rating:1.4, cityId:1}
+        const commentForm: CommentFormDTO = {description: "test"}
 
-    const textMock = vi.fn().mockResolvedValue(errorMessage);
-
-    const mockDelete = vi.fn().mockResolvedValue({
-      ok: false,
-      text: textMock,
-      json: vi.fn(),
+        await experienceService.getCategories();
+        expect(basicServiceMock.getMethod).toHaveBeenCalledWith(
+          "/experiences/categories"
+        );
+  
+        await experienceService.postExperience(experienceForm);
+        expect(basicServiceMock.postMethod).toHaveBeenCalledWith("/experiences/", experienceForm);
+  
+        await experienceService.getExperienceById(7);
+        expect(basicServiceMock.getMethod).toHaveBeenCalledWith("/experiences/7");
+  
+        await experienceService.postComment(1, commentForm);
+        expect(basicServiceMock.postMethod).toHaveBeenCalledWith("/experiences/1/comments", commentForm);
+  
+        await experienceService.getCommentsByExperienceId(1);
+        expect(basicServiceMock.getMethod).toHaveBeenCalledWith("/experiences/1/comments");
+  
+        await experienceService.deleteExperience(10);
+        expect(basicServiceMock.deleteMethod).toHaveBeenCalledWith("/experiences/10");
+      });
     });
-
-    const mockApi: ApiClient = {
-      get: vi.fn(),
-      post: vi.fn(),
-      delete: mockDelete,
-      put: vi.fn()
-    };
-
-    const service = createExperienceService(mockApi);
-
-    await expect(
-      service.deleteExperience(1)
-    ).rejects.toThrow(errorMessage);
-
-    expect(mockDelete).toHaveBeenCalledTimes(1);
-    expect(mockDelete).toHaveBeenCalledWith("/experiences/1");
-    expect(textMock).toHaveBeenCalledTimes(1);
-  });
-
-  it("should return all experiences when the request succeeds", async () => {
-
-    const experiences: ExperienceSimpleDTO[] = [
-      { id: 1, title: "Experience 1", description: "description 1", date: "2022-02-12", rating: 9, cityName: "Paris", country: "France", authorName: "author1", categories: ["Studies"] }
-    ];
-
-    const mockApi = {
-      get: vi.fn().mockResolvedValue({
-        ok: true,
-        json: vi.fn().mockResolvedValue({ content: experiences }),
-      }),
-      post: vi.fn(),
-      put: vi.fn(),
-      delete: vi.fn()
-    };
-
-    const service = createExperienceService(mockApi);
-
-    const result = await service.getAll({minRating: 5.6, maxRating:9});
-
-    expect(mockApi.get).toHaveBeenCalledTimes(1);
-    expect(mockApi.get).toHaveBeenCalledWith("/experiences/?page=0&size=6&minimumRate=5.6&maximumRate=9");
-    expect(result.content).toEqual(experiences);
-  });
 });

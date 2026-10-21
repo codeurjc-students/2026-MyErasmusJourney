@@ -7,30 +7,36 @@
  *  data = expService.getAll();
 **/
 
-import type { ExperienceFormDTO } from "../models/ExperienceFormDTO";
 import type { ApiClient } from "../api/apiClient";
-import type { ExperiencePageDTO } from "../models/ExperienceSimpleDTO";
+import type { CommentDTO } from "../models/CommentDTO";
 import type { CommentFormDTO } from "../models/CommentFormDTO";
+import type { ExperienceDTO } from "../models/ExperienceDTO";
 import type { ExperienceFilters } from "../models/ExperienceFilters";
-import { ApiError } from "../api/apiError";
+import type { ExperienceFormDTO } from "../models/ExperienceFormDTO";
+import type { ExperiencePageDTO } from "../models/ExperienceSimpleDTO";
+import { type BasicService, createBasicService } from "./basicService";
+import type { MultimediaSimpleDTO } from "../models/MultimediaSimpleDTO";
+import type { CommentSimpleDTO } from "@shared/models/CommentSimpleDTO";
 
 
 export type ExperienceService = ReturnType<typeof createExperienceService>;
 
 export function createExperienceService(api: ApiClient) {
+  const basicService = createBasicService(api);
+
   return {
-    getAll: (filters: ExperienceFilters) => getAllExperiences(api, filters),
-    getCategories: () => getCategories(api),
-    postExperience: (body: ExperienceFormDTO) => postExperience(api, body),
-    addMultimedia: (multimedia: File[], experienceId: number) => addMultimedia(api, multimedia, experienceId),
-    getExperienceById: (id: number) => getExperienceById(api, id),
-    postComment: (id: number, body: CommentFormDTO) => postComment(api, id, body),
-    getCommentsByExperienceId: (id: number) => getCommentsByExperienceId(api, id),
-    deleteExperience: (id: number) => deleteExperience(api, id)
+    getAll: (filters: ExperienceFilters) => getAllExperiences(basicService, filters),
+    getCategories: () => basicService.getMethod<string[]>("/experiences/categories"),
+    postExperience: (body: ExperienceFormDTO) => basicService.postMethod<ExperienceDTO, ExperienceFormDTO>("/experiences/", body),
+    addMultimedia: (multimedia: File[], experienceId: number) => addMultimedia(basicService, multimedia, experienceId),
+    getExperienceById: (id: number) => basicService.getMethod<ExperienceDTO>(`/experiences/${id}`),
+    postComment: (id: number, body: CommentFormDTO) => basicService.postMethod<CommentDTO, CommentFormDTO>(`/experiences/${id}/comments`, body),
+    getCommentsByExperienceId: (id: number) => basicService.getMethod<CommentSimpleDTO[]>(`/experiences/${id}/comments`),
+    deleteExperience: (id: number) => basicService.deleteMethod(`/experiences/${id}`)
   };
 }
 
-async function getAllExperiences(api: ApiClient, filters?: ExperienceFilters) {
+async function getAllExperiences(basicService: BasicService, filters?: ExperienceFilters) {
   let url = "/experiences/";
   const params = new URLSearchParams();
 
@@ -52,79 +58,11 @@ async function getAllExperiences(api: ApiClient, filters?: ExperienceFilters) {
     url = `${url}?${params.toString()}`;
   }
 
-  console.log(params)
-
-  const response = await api.get(url);
-
-  if (!response.ok) {
-    throw new ApiError(response.status, await response.text());
-  }
-
-  return response.json() as Promise<ExperiencePageDTO>;
+  return basicService.getMethod<ExperiencePageDTO>(url);
 }
 
-async function getCategories(api: ApiClient) {
-  const response = await api.get("/experiences/categories");
 
-  if (!response.ok) {
-    throw new ApiError(response.status, await response.text());
-  }
-
-  return response.json();
-}
-
-async function postExperience(api: ApiClient, body: ExperienceFormDTO) {
-  const response = await api.post("/experiences/", body);
-
-  if (!response.ok) {
-    throw new ApiError(response.status, await response.text());
-  }
-
-  return response.json();
-}
-
-async function getExperienceById(api: ApiClient, id: number) {
-  const response = await api.get(`/experiences/${id}`)
-
-  if (!response.ok) {
-    throw new ApiError(response.status, await response.text());
-  }
-
-  return response.json();
-}
-
-async function postComment(api: ApiClient, id: number, body: CommentFormDTO) {
-  const response = await api.post(`/experiences/${id}/comments`, body)
-
-  if (response.status !== 201) {
-    throw new ApiError(response.status, await response.text());
-  }
-
-  return response.json();
-}
-
-async function getCommentsByExperienceId(api: ApiClient, id: number) {
-  const response = await api.get(`/experiences/${id}/comments`)
-
-  if (!response.ok) {
-    throw new ApiError(response.status, await response.text());
-  }
-
-  return response.json();
-}
-
-async function deleteExperience(api: ApiClient, id: number) {
-  const response = await api.delete(`/experiences/${id}`)
-
-  if (!response.ok) {
-    throw new ApiError(response.status, await response.text());
-
-  }
-
-  return response.json();
-}
-
-async function addMultimedia(api: ApiClient, multipartFileList: File[], experienceId: number) {
+async function addMultimedia(basicService: BasicService, multipartFileList: File[], experienceId: number) {
 
   const formData = new FormData();
 
@@ -133,24 +71,5 @@ async function addMultimedia(api: ApiClient, multipartFileList: File[], experien
 
   });
 
-  console.log("FormData entries:");
-
-  for (const [key, value] of formData.entries()) {
-    console.log({
-      key,
-      value,
-      constructor: value.constructor.name,
-      name: value instanceof File ? value.name : undefined,
-      type: value instanceof File ? value.type : undefined,
-      size: value instanceof File ? value.size : undefined,
-    });
-  }
-
-  const reponse = await api.post(`/experiences/${experienceId}/multimedia`, formData)
-
-  if (!reponse.ok) {
-    throw new ApiError(reponse.status, await reponse.text());
-  }
-
-  return reponse.json();
+  return basicService.postMethod<MultimediaSimpleDTO[], FormData>(`/experiences/${experienceId}/multimedia`, formData)
 }

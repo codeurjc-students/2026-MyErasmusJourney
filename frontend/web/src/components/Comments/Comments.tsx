@@ -31,8 +31,7 @@ export default function Comments({ experienceService = createExperienceService(A
 
     async function getComments() {
         try {
-            const data =
-                await experienceService.getCommentsByExperienceId(experienceId);
+            const data = await experienceService.getCommentsByExperienceId(experienceId);
 
             setComments(data);
         } catch (error) {

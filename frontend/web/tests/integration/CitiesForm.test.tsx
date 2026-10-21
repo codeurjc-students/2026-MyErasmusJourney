@@ -15,6 +15,7 @@ import { authenticateUser, clearFetchAndUserStore, } from "tests/testAuthenticat
 import { toast } from "sonner";
 import type { CityFormDTO } from "@shared/models/CityFormDTO";
 import { ApiError } from "@shared/api/apiError";
+import type { CityDTO } from "@shared/models/CityDTO";
 
 const testAPI = createApiClient(APIURL);
 const testCityService = createCityService(testAPI);
@@ -149,7 +150,7 @@ describe("CityFormPage", () => {
       .spyOn(toast, "warning")
       .mockImplementation(() => { return "mock-toast-id" });
 
-    const cityName = `VitestCity-${Date.now()}`;
+    const city = await testCityService.getCityById(1);
 
     render(
       <MemoryRouter initialEntries={["/city-form"]}>
@@ -168,49 +169,11 @@ describe("CityFormPage", () => {
 
     // Primera creación
     fireEvent.change(screen.getByLabelText(/city name/i), {
-      target: { value: cityName },
+      target: { value: city.name },
     });
 
     fireEvent.change(screen.getByLabelText(/country/i), {
-      target: { value: "Spain" },
-    });
-
-    fireEvent.change(screen.getByLabelText(/city description/i), {
-      target: { value: "A city created by the integration test." },
-    });
-
-    fireEvent.click(
-      screen.getByRole("button", { name: /save city/i })
-    );
-
-    // La primera creación debe ser correcta
-    await waitFor(() => {
-      expect(screen.getByText("Available Soon")).toBeInTheDocument();
-    });
-
-    // Volvemos al formulario para realizar la segunda creación
-    render(
-      <MemoryRouter initialEntries={["/city-form"]}>
-        <Routes>
-          <Route
-            path="/city-form"
-            element={<CityFormPage cityService={testCityService} />}
-          />
-          <Route
-            path="/available-soon"
-            element={<div>Available Soon</div>}
-          />
-        </Routes>
-      </MemoryRouter>
-    );
-
-    // Segunda creación de exactamente la misma ciudad
-    fireEvent.change(screen.getByLabelText(/city name/i), {
-      target: { value: cityName },
-    });
-
-    fireEvent.change(screen.getByLabelText(/country/i), {
-      target: { value: "Spain" },
+      target: { value: city.country },
     });
 
     fireEvent.change(screen.getByLabelText(/city description/i), {
@@ -221,13 +184,12 @@ describe("CityFormPage", () => {
       screen.getByRole("button", { name: /save city/i })
     );
 
-    // La API debe rechazar el duplicado y el componente mostrar el error
     await waitFor(() => {
       expect(alertSpy).toHaveBeenCalled();
     });
 
     expect(alertSpy).toHaveBeenCalledWith(
-      "City already exists",
+      "City is already registered",
     );
 
     alertSpy.mockRestore();
@@ -340,7 +302,7 @@ describe("CityFormPage", () => {
           throw new ApiError(response.status, await response.text());
         }
 
-        return await response.json();
+        return await response.json() as CityDTO;
       },
       getAll: testCityService.getAll,
       getTrending: testCityService.getTrending,
