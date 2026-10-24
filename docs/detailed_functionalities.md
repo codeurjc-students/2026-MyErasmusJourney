@@ -26,13 +26,13 @@ This document describes all the different functionalities which are going to be 
 
 |     | Funcionalidad              | Estado | Usuarios con acceso  | Descripción                                                                                                     |
 | :-- | :------------------------- | :----: | :------------------- | :-------------------------------------------------------------------------------------------------------------- |
-| 1   | Filter posts               |   🏗️   | Unauthenticated user | Any user has the option to filter the posts/experiences by date, city, rating, type...                          |
-| 2   | Add user's profile image   |   🔜   | Authenticated user   | Every user with an account will have the opportunity upload a profile image.                                    |
-| 3   | Add multimedia to post     |   🔜   | Authenticated user   | Posts will have the possibility to attach multimedia files such as videos or images.                            |
-| 4   | Show city related posts    |   🔜   | Unauthenticated user | City page will show the posts related to the city, allowing any user to access this page.                       |
-| 5   | Show city average rating   |   🔜   | Unauthenticated user | In the city page the average rating of the posts related to the city will be displayed.                         |
-| 6   | Share post                 |   🔜   | Unauthenticated user | Users will be able to share the link to access a post through other social media applications such as WhatsApp. |
-| 7   | Show trending Destinations |   🔜   | Unauthenticated user | Cities pages will show a list sorted by the recent activity.                                                    |
+| 1   | Filter posts               |   ✅   | Unauthenticated user | Any user has the option to filter the posts/experiences by date, city, rating, type...                          |
+| 2   | Add user's profile image   |   ✅   | Authenticated user   | Every user with an account will have the opportunity upload a profile image.                                    |
+| 3   | Add multimedia to post     |   ✅   | Authenticated user   | Posts will have the possibility to attach multimedia files such as videos or images.                            |
+| 4   | Show city related posts    |   ✅   | Unauthenticated user | City page will show the posts related to the city, allowing any user to access this page.                       |
+| 5   | Show city average rating   |   ✅   | Unauthenticated user | In the city page the average rating of the posts related to the city will be displayed.                         |
+| 6   | Share post                 |   ✅   | Unauthenticated user | Users will be able to share the link to access a post through other social media applications such as WhatsApp. |
+| 7   | Show trending Destinations |   ✅   | Unauthenticated user | Cities pages will show a list sorted by the recent activity.                                                    |
 
 ### Advances Functionalities 🚀
 |     | Funcionalidad             | Estado | Usuarios con acceso  | Descripción                                                                                                                                                                                                |
