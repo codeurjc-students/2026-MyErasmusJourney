@@ -100,4 +100,9 @@ public class MultimediaService {
     public Multimedia getExperienceMultimediaById(Long id) {
         return experienceMultimediaRepository.findById(id).orElseThrow(()-> new NoSuchElementException("Multimedia file doesn't exist"));
     }
+
+    public void emptyMultimedia(){
+        if (experienceMultimediaRepository.count()>0) experienceMultimediaRepository.deleteAll();
+        if (userImageRepository.count()> 0) userImageRepository.deleteAll();
+    }
 }

@@ -55,13 +55,17 @@ export default function CityPage({ cityService = createCityService(API) }: cityS
 
                 <aside className="w-full min-w-0 rounded-2xl bg-white shadow-xl p-4 md:p-6">
                     <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-                        <h4 className="m-0 text-xl md:text-2xl font-bold text-[#1E3A5F]">Students Ratings</h4>
+                        <h4 className="m-0 text-xl md:text-2xl font-bold text-[#1E3A5F]">
+                            Students Ratings
+                        </h4>
                         <div className="flex items-center justify-center shrink-0 w-12 h-12 rounded-xl text-white font-bold text-lg" style={{ backgroundColor: ratingColor }}>
                             {rating.toFixed(1)}
                         </div>
-                            {city?.experiences.map(experience => (
-                                <Experience key={experience.id} experience={experience} />
-                            ))}
+                    </div>
+                    <div className="max-h-96 md:max-h-[32rem] overflow-y-auto space-y-4 pr-2">
+                        {city?.experiences.map((experience) => (
+                            <Experience key={experience.id} experience={experience} />
+                        ))}
                     </div>
                 </aside>
             </div>

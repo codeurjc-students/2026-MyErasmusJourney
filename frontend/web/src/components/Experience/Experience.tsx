@@ -60,10 +60,12 @@ export default function Experience({ experience }: ExperienceProps) {
                 <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0 flex-1">
-                            <Link to={`/experiences/${experience.id}`} className="block font-bold text-base underline">
+                            <Link to={`/experiences/${experience.id}`} className="block max-w-full pr-12 sm:pr-14 font-bold text-base underline whitespace-normal break-words">
                                 {experience.title}
                             </Link>
-                            <p className="exp-meta mb-0">by <span className="underline exp-meta">{experience.authorName}</span></p>
+                            <p className="exp-meta mb-0">
+                                by <span className="underline exp-meta">{experience.authorName}</span>
+                            </p>
                         </div>
 
                         <div className="absolute right-3 top-3 sm:right-4 sm:top-4 flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl text-white font-bold z-10 exp-rating" style={{ backgroundColor: ratingColor }}>

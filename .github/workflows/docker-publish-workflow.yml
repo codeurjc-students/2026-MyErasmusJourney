@@ -46,6 +46,8 @@ jobs:
 
       - name: Create build 
         run: pnpm --filter web build 
+        env:
+            VITE_API_URL: "http://localhost:8080/api/v2"
 
       - name: Ensure static directory exists
         run: mkdir -p ../backend/src/main/resources/static

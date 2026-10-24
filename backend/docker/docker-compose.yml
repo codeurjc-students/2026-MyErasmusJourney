@@ -3,16 +3,16 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    image: granlobo2004/myerasmusjourney:${TAG:-0.1.0}
+    image: granlobo2004/myerasmusjourney:${TAG:-0.2.0}
     platform: linux/amd64
     ports:
-      - "8443:8443"
+      - "8080:8080"
     environment:
       DB_URL: ${DB_URL:-jdbc:mysql://db:3306/myerasmusjourney}
       DB_USERNAME: ${DB_USERNAME:-root}
       DB_PASSWORD: ${DB_PASSWORD:-password}
       DB_MODE: ${DB_MODE:-update}
-      PORT: ${PORT:-8443}
+      PORT: 8080
       SSL_ENABLED: ${SSL_ENABLED:-true}
       KEY_STORE: ${KEY_STORE:-example.jks}
       KEY_PASSWORD: ${KEY_PASSWORD:-password}
