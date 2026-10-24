@@ -58,9 +58,9 @@ export default function ProfileImageDialog({ userService = createUserService(API
                 } />
                 <DialogContent className="container share-dialog-content">
                     <DialogHeader className="share-dialog-header">
-                        <DialogTitle className="share-dialog-title">Share experience</DialogTitle>
+                        <DialogTitle className="share-dialog-title">Change your profile image</DialogTitle>
                         <DialogDescription className="share-dialog-description">
-                            Share this experience with your friends and inspire other Erasmus students.
+                            Upload a jpg or png file to use it as your profile image.
                         </DialogDescription>
                     </DialogHeader>
 
