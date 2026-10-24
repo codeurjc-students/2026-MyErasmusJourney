@@ -108,6 +108,6 @@ public class ExperienceService {
     }
 
     public void emptyExperiences() {
-        experienceRepository.deleteAll();
+        if (experienceRepository.count()>0) experienceRepository.deleteAll();
     }
 }

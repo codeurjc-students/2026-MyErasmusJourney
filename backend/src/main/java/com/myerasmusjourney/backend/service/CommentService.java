@@ -53,7 +53,6 @@ public class CommentService {
     }
 
     public void emptyComments(){
-        commentRepository.deleteAll();
+        if (commentRepository.count()>0) commentRepository.deleteAll();
     }
-
 }

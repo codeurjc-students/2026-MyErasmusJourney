@@ -70,7 +70,7 @@ public class CityService {
     }
 
     public void emptyCities(){
-        cityRepository.deleteAll();
+        if (cityRepository.count()>0) cityRepository.deleteAll();
     }
 
     @Transactional
