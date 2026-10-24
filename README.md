@@ -108,7 +108,7 @@ Administrators have the additional permissions required to manage application co
 
 *Insert representative screenshots illustrating the main functionalities described above.*
 
-For the complete and detailed list of functionalities, including their implementation status, see the [Functionalities](detailed_functionalities.md) documentation.
+For the complete and detailed list of functionalities, including their implementation status, see the [Functionalities](./docs/detailed_functionalities.md) documentation.
 
 ---
 
