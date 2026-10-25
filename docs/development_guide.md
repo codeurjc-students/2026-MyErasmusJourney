@@ -220,7 +220,7 @@ This separation of responsibilities improves maintainability, scalability and al
 
 ![image](./diagrams/database_diagram.png)
 
-The database is formed by four entities City, Comment, Experience and User. As can be seen in the diagram all relationships between the entities are bidirectional. All relationships are 0:N, a city can be related to numerous experiences, just like the experiences can have N comments. Lastly an user can post as many experiences and comments as wanted.
+The database is formed by six entities City, Comment, Experience, User, UserImage and ExperienceMultimedia.. As can be seen in the diagram all relationships between the entities are bidirectional. All relationships are 0:N, a city can be related to numerous experiences, just like the experiences can have N comments. Furthermore, an user can post as many experiences and comments as wanted. As for the different multimedia entites an user can have a maximum of 1 profile image and the experiences can have none or any number of multimedia files.
 
 ---
 
