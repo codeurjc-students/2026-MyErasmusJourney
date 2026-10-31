@@ -57,6 +57,7 @@ At the current stage of the project, the technical foundations have already been
 - ✅ Automated testing infrastructure.
 - ✅ Code coverage reports for both frontend and backend.
 - ✅ Continuous Integration workflows with GitHub Actions.
+-  ✅ Continuous Deployment workflows with GitHub Actions.
 
 These elements provide a solid foundation for implementing the remaining functionalities during the following development phases.
 
@@ -234,7 +235,7 @@ The **Web** module contains the React components responsible for rendering the u
 
 The **Shared** module contains reusable components that are independent of the user interface, including DTOs, service interfaces, stores, API communication utilities and configuration constants. This architecture reduces coupling between the presentation layer and the communication layer while allowing the same business logic to be reused by future client applications, such as the planned mobile application.
 
-Whenever a page needs to communicate with the backend, it does so through the corresponding service, which internally uses the `ApiClient` abstraction to perform the HTTP requests.
+Whenever a page needs to communicate with the backend, it does so through the corresponding service, which internally uses the `ApiClient` abstraction,  through the basic service, to perform the HTTP requests.
 
 ---
 
@@ -690,12 +691,15 @@ The combination of automated testing, code coverage analysis and continuous inte
 
 
 ## 🌐 Deployment
+The application is currently deployed and publicly accessible at:
+
+**Live application:** [MyErasmusJourney](https://myerasmusjourney-app.livelycoast-08d4ed6b.germanywestcentral.azurecontainerapps.io)
 
 The application is packaged and distributed using Docker and Docker Compose. The backend and frontend are packaged together into a single Docker image, while Docker Compose is used to coordinate the application container and its MySQL database.
 
 The Docker Compose configuration defines the services required to run the application, including:
 
-- **Application:** contains both the React frontend and Spring Boot backend and exposes the application through port `8443`.
+- **Application:** contains both the React frontend and Spring Boot backend and exposes the application through port `8080`.
 - **MySQL database:** provides the persistent database required by the backend.
 - **Persistent volume:** stores the MySQL data so that the database contents are preserved when the application containers are restarted.
 
