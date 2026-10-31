@@ -2,53 +2,60 @@
 
 ![image](/logo.png)
 
-## What is *MyErasmusJourney*?
+## What is **MyErasmusJourney**?
 
-*MyErasmusJourney* is a web application where students can share their Erasmus experiences, describing problems they faced, useful documentation, and memorable social events during their stay abroad.
+**MyErasmusJourney** is a web application where students can share their Erasmus experiences, describing problems they faced, useful documentation, and memorable social events during their stay abroad.
 
 It also serves as a discovery platform for future Erasmus students, allowing them to explore destinations, read real experiences, and make informed decisions about their future mobility program.
 
-In **Version 0.1**, the application provides the basic functionality required for the main user roles. Unauthenticated users can create an account and log in, authenticated users can manage their own account, publish experiences and interact with posts through comments, and administrators can manage users, experiences, comments and cities. The application is also packaged and published using Docker and Docker Compose.
+In **Version 0.2.0**, the application builds upon the basic functionality introduced in Version 0.1 by adding new features to improve the discovery, sharing and exploration of Erasmus experiences. Users can filter experiences by city, category, rating range and date, attach multimedia content to their experiences, update their profile pictures, and share experiences through external social networks such as WhatsApp and X. The application also provides dedicated city information, including related experiences and their average rating, as well as a trending cities algorithm to help users discover popular destinations.
+
+Authenticated users can manage their accounts, publish experiences and interact with posts through comments, while administrators can manage users, experiences, comments and cities. The application is also packaged and published using Docker and Docker Compose.
 
 ---
 
-## 📸 Version 0.1
+## 📸 Version 0.2
 
-The following screenshots show some of the main functionalities available in Version 0.1.
+The following screenshots show some of the main functionalities available in Version 0.2.
 
-![image](/docs/images/basic_functionalities/experiences.png)
+![image](/docs/images/intermediate_functionalities/city_page.png)
 
-![image](/docs/images/basic_functionalities/signUp.png)
+![image](/docs/images/intermediate_functionalities/experience_multimedia.png)
 
-![image](/docs/images/basic_functionalities/logIn.png)
+![image](/docs/images/intermediate_functionalities/experience_multimedia_upload.png)
 
-![image](/docs/images/basic_functionalities/user.png)
+![image](/docs/images/intermediate_functionalities/filter.png)
 
-![image](/docs/images/basic_functionalities/addExperience.png)
+![image](/docs/images/intermediate_functionalities/profile_image_upload.png)
 
-![image](/docs/images/basic_functionalities/comment.png)
+![image](/docs/images/intermediate_functionalities/share_experience.png)
+
+![image](/docs/images/intermediate_functionalities/trending_cities.png)
+
 
 This project is still in development, more functionalities will be added and existing ones may be subjected to changes in order to improve the application.
 
 ---
 
-## 🎥 Version 0.1 Demo
+## 🎥 Version 0.2.0 Demo
 
-The following video presents the main functionalities implemented in Version 0.1. The demonstration is divided according to the different types of users and includes a voice-over explaining the functionality shown.
+The following video presents the main functionalities implemented in Version 0.2.0. The demonstration is divided according to the different types of users and includes a voice-over explaining the functionality shown.
 
-![video](./docs/videos/functionalities.mp4)
+![video](./docs/videos/functionalities2.mp4)
 
-Future versions of *MyErasmusJourney* will extend the current basic functionality with new features focused on improving the discovery, interaction and sharing of Erasmus experiences. Users will be able to filter experiences by criteria such as date, city, rating and category, add profile images and multimedia content to their posts, and share experiences through external applications. City pages will also provide related experiences, average ratings and information about trending destinations. More advanced functionality will include comment replies, email verification, interactive maps for cities and experiences, and a destination ranking based on the rating and reliability of the available experiences. These additions will progressively turn the application into a more complete platform for discovering and comparing Erasmus destinations.
+Future versions of **MyErasmusJourney** will continue to expand the application's functionality, focusing on improving user interaction and destination discovery. Planned features include comment replies, email verification, interactive maps for cities and experiences, and a destination ranking based on the ratings and reliability of available experiences. These additions will progressively turn the application into a more complete platform for discovering, comparing and evaluating Erasmus destinations.
 
 ---
 
 ## 🚧 Current Status
 
-The application is currently in **Version 0.1 – Basic Functionality and Docker**.
+The application is currently in **Version 0.2.0 — Intermediate Functionality and Deployment**.
 
-The basic functionality defined for the project has been implemented, together with its corresponding automated tests. The application has also been packaged using Docker and Docker Compose, and a continuous delivery process has been implemented for building and publishing application versions.
+Building upon the basic functionality introduced in Version 0.1, the application now includes additional features to improve experience discovery and sharing. These include a trending cities algorithm, dedicated city information pages with related experiences and average ratings, advanced experience filtering, multimedia uploads, profile picture updates, and social media sharing.
 
-Development of *MyErasmusJourney* is still ongoing. The application will continue to evolve in the following phases with additional functionality, improvements and the deployment of new versions.
+The application also includes automated tests and is packaged using Docker and Docker Compose, with a continuous delivery process for building and publishing application versions.
+
+Development of **MyErasmusJourney** is still ongoing. Future development phases will focus on expanding the application's functionality, improving the user experience, and preparing new versions for deployment.
 
 The current progress and task tracking of the project can be consulted in the following GitHub Projects board:
 
@@ -58,20 +65,29 @@ This board is used to manage tasks, track development progress, and monitor the 
 
 ---
 
-## 🛠️ Version 0.1 Functionalities
+## 🛠️ Version 0.2.0 Functionalities
 
-Version 0.1 implements the basic functionality of the application for unauthenticated users, authenticated users and administrators.
+Version 0.2.0 builds upon the basic functionality introduced in Version 0.1, adding new features to improve the discovery, exploration and sharing of Erasmus experiences.
 
 ### 👤 Unauthenticated Users
 
 - **Create an account:** Users can create an account using their email, nickname and password.
 - **Log in:** Users can authenticate using their email and password. Authentication is managed through a token stored in cookies.
+- **Explore experiences:** Users can browse published experiences and filter them by city, category, minimum and maximum rating, and date.
+- **Explore trending cities:** Users can discover popular destinations identified by the application's trending cities algorithm.
+- **View city information:** Users can access information about a specific city, including related experiences and their average rating.
+- **Share experiences:** Users can share experiences through external social networks and applications, such as WhatsApp and X.
+- **Filter experiences:** Users can filter experiences by city, category, minimum and maximum rating, and date.
 
 ### 🧑‍💻 Authenticated Users
 
+Authenticated users have access to the features available to unauthenticated users, as well as the following account and content management capabilities:
+
 - **Update user:** Users can update their own account information.
+- **Update profile picture:** Users can upload or update their profile picture.
 - **Delete user:** Users can delete their own account.
 - **Post experience:** Users can create and publish experiences containing the information provided through the experience form.
+- **Upload multimedia:** Users can attach multimedia files to their experiences.
 - **Delete experience:** Users can delete experiences they have created.
 - **Comment post:** Users can comment on any experience.
 - **Delete comment:** Users can delete comments they have created.
@@ -92,17 +108,25 @@ Administrators have the additional permissions required to manage application co
 
 *Insert representative screenshots illustrating the main functionalities described above.*
 
-For the complete and detailed list of functionalities, including their implementation status, see the [Functionalities](detailed_functionalities.md) documentation.
+For the complete and detailed list of functionalities, including their implementation status, see the [Functionalities](./docs/detailed_functionalities.md) documentation.
 
 ---
 
 ## 🔮 Future Versions
 
-The development of *MyErasmusJourney* will continue after Version 0.1.
+The development of **MyErasmusJourney** will continue beyond Version 0.2.0, focusing on implementing the advanced functionalities planned during the design phase.
 
-The following versions will extend the application with the **intermediate and advanced functionalities** defined during the design phase. These versions will introduce additional ways of discovering and interacting with Erasmus destinations and experiences, together with the advanced functionality planned for the final version of the application.
+The next versions will introduce new features to improve user interaction and provide more comprehensive tools for discovering and comparing Erasmus destinations:
 
-The documentation will be updated as each new functionality is implemented and new versions are released.
+- **Comment replies:** Authenticated users will be able to reply to comments on experiences, enabling more detailed discussions and interactions between users.
+- **Email verification:** New users will receive a verification code by email after completing the registration form. They will need to verify their email address to activate their account.
+- **Interactive city maps:** City pages will include a map displaying the locations associated with experiences. Each marker will provide access to the related experience.
+- **European cities map:** The cities page will feature a map of Europe highlighting the cities available in the application, making it easier to explore destinations geographically.
+- **Destination ranking:** A dedicated destinations page will rank cities according to their average experience ratings and reliability. Reliability will take into account the number of experiences available for each city.
+
+These improvements will progressively transform **MyErasmusJourney** into a more comprehensive platform for discovering, exploring and comparing Erasmus destinations through shared experiences and community feedback.
+
+The documentation will be updated as these features are implemented and new versions are released.
 
 ---
 

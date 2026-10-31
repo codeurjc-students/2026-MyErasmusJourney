@@ -57,6 +57,7 @@ At the current stage of the project, the technical foundations have already been
 - ✅ Automated testing infrastructure.
 - ✅ Code coverage reports for both frontend and backend.
 - ✅ Continuous Integration workflows with GitHub Actions.
+-  ✅ Continuous Deployment workflows with GitHub Actions.
 
 These elements provide a solid foundation for implementing the remaining functionalities during the following development phases.
 
@@ -220,7 +221,7 @@ This separation of responsibilities improves maintainability, scalability and al
 
 ![image](./diagrams/database_diagram.png)
 
-The database is formed by four entities City, Comment, Experience and User. As can be seen in the diagram all relationships between the entities are bidirectional. All relationships are 0:N, a city can be related to numerous experiences, just like the experiences can have N comments. Lastly an user can post as many experiences and comments as wanted.
+The database is formed by six entities City, Comment, Experience, User, UserImage and ExperienceMultimedia.. As can be seen in the diagram all relationships between the entities are bidirectional. All relationships are 0:N, a city can be related to numerous experiences, just like the experiences can have N comments. Furthermore, an user can post as many experiences and comments as wanted. As for the different multimedia entites an user can have a maximum of 1 profile image and the experiences can have none or any number of multimedia files.
 
 ---
 
@@ -234,7 +235,7 @@ The **Web** module contains the React components responsible for rendering the u
 
 The **Shared** module contains reusable components that are independent of the user interface, including DTOs, service interfaces, stores, API communication utilities and configuration constants. This architecture reduces coupling between the presentation layer and the communication layer while allowing the same business logic to be reused by future client applications, such as the planned mobile application.
 
-Whenever a page needs to communicate with the backend, it does so through the corresponding service, which internally uses the `ApiClient` abstraction to perform the HTTP requests.
+Whenever a page needs to communicate with the backend, it does so through the corresponding service, which internally uses the `ApiClient` abstraction,  through the basic service, to perform the HTTP requests.
 
 ---
 
@@ -396,149 +397,216 @@ These tests verify complete user workflows such as:
 
 The following table shows the relationship between the implemented automated tests and the functional requirements defined during the analysis phase.
 
-| Functional Requirement   | Tested | Test Type   | Test Class                   | Layer  |
-| ------------------------ | :----: | ----------- | ---------------------------- | ------ |
-| Showing Experiences      |   ✅    | Unit        | ExperienceMapperTest         | Server |
-| Showing Experiences      |   ✅    | Unit        | ExperienceRestControllerTest | Server |
-| Showing Experiences      |   ✅    | Unit        | ExperienceServiceTest        | Server |
-| Showing Experiences      |   ✅    | Unit        | ExperienceSimpleDTOTest      | Server |
-| Showing Experiences      |   ✅    | Unit        | ExperienceTest               | Server |
-| Showing Experiences      |   ✅    | Integration | ExperienceServiceTest        | Server |
-| Showing Experiences      |   ✅    | E2E         | ExperiencesTest              | Server |
-| Showing Experiences      |   ✅    | System      | ExperiencesPageTest          | Server |
-| Showing Experiences      |   ✅    | Unit        | Experience.service.test      | Client |
-| Showing Experiences      |   ✅    | Unit        | Experience.test              | Client |
-| Showing Experiences      |   ✅    | Unit        | ExperiencesPage.test         | Client |
-| Showing Experiences      |   ✅    | Integration | Experiences.test             | Client |
-| Post Experience          |   ✅    | Unit        | ExperienceMapperTest         | Server |
-| Post Experience          |   ✅    | Unit        | ExperienceServiceTest        | Server |
-| Post Experience          |   ✅    | Unit        | ExperienceDTOTest            | Server |
-| Post Experience          |   ✅    | Unit        | ExperienceTest               | Server |
-| Post Experience          |   ✅    | Integration | ExperienceServiceTest        | Server |
-| Post Experience          |   ✅    | E2E         | ExperiencesTest              | Server |
-| Post Experience          |   ✅    | System      | ExperienceFormPageTest       | Server |
-| Post Experience          |   ✅    | Unit        | Experience.service.test      | Client |
-| Post Experience          |   ✅    | Unit        | ExperienceFormPage.test      | Client |
-| Post Experience          |   ✅    | Integration | ExperiencesForm.test         | Client |
-| Post Comment             |   ✅    | Unit        | CommentMapperTest            | Server |
-| Post Comment             |   ✅    | Unit        | ExperienceServiceTest        | Server |
-| Post Comment             |   ✅    | Unit        | CommentDTOTest               | Server |
-| Post Comment             |   ✅    | Unit        | CommentTest                  | Server |
-| Post Comment             |   ✅    | Unit        | ExperienceTest               | Server |
-| Post Comment             |   ✅    | Integration | ExperienceServiceTest        | Server |
-| Post Comment             |   ✅    | E2E         | ExperiencesTest              | Server |
-| Post Comment             |   ✅    | System      | ExperiencesTest              | Server |
-| Post Comment             |   ✅    | Unit        | Comment.service.test         | Client |
-| Post Comment             |   ✅    | Unit        | Comments.test                | Client |
-| Post Comment             |   ✅    | Integration | Comments.test                | Client |
-| View detailed Experience |   ✅    | Unit        | ExperienceMapperTest         | Server |
-| View detailed Experience |   ✅    | Unit        | ExperienceServiceTest        | Server |
-| View detailed Experience |   ✅    | Unit        | ExperienceDTOTest            | Server |
-| View detailed Experience |   ✅    | Unit        | ExperienceTest               | Server |
-| View detailed Experience |   ✅    | Integration | ExperienceServiceTest        | Server |
-| View detailed Experience |   ✅    | E2E         | ExperiencesTest              | Server |
-| View detailed Experience |   ✅    | System      | ExperiencesTest              | Server |
-| View detailed Experience |   ✅    | Unit        | Experience.service.test      | Client |
-| View detailed Experience |   ✅    | Unit        | DetailedExperiencePage.test  | Client |
-| View detailed Experience |   ✅    | Integration | DetailedExperience.test      | Client |
-| SignUp                   |   ✅    | Unit        | UserMapperTest               | Server |
-| SignUp                   |   ✅    | Unit        | UserServiceTest              | Server |
-| SignUp                   |   ✅    | Unit        | UserDTOTest                  | Server |
-| SignUp                   |   ✅    | Unit        | UserTest                     | Server |
-| SignUp                   |   ✅    | Integration | UserServiceTest              | Server |
-| SignUp                   |   ✅    | E2E         | UsersTest                    | Server |
-| SignUp                   |   ✅    | System      | UsersTest                    | Server |
-| SignUp                   |   ✅    | Unit        | User.service.test            | Client |
-| SignUp                   |   ✅    | Unit        | UserFormPage.test            | Client |
-| SignUp                   |   ✅    | Integration | SignUp.test                  | Client |
-| Edit User                |   ✅    | Unit        | UserMapperTest               | Server |
-| Edit User                |   ✅    | Unit        | UserServiceTest              | Server |
-| Edit User                |   ✅    | Unit        | UserDTOTest                  | Server |
-| Edit User                |   ✅    | Unit        | UserTest                     | Server |
-| Edit User                |   ✅    | Integration | UserServiceTest              | Server |
-| Edit User                |   ✅    | E2E         | UsersTest                    | Server |
-| Edit User                |   ✅    | System      | UsersTest                    | Server |
-| Edit User                |   ✅    | Unit        | User.service.test            | Client |
-| Edit User                |   ✅    | Unit        | UserFormPage.test            | Client |
-| Edit User                |   ✅    | Integration | UserForm.test                | Client |
-| Log In                   |   ✅    | Unit        | Auth.service.test            | Client |
-| Log In                   |   ✅    | Unit        | LogInPage.test               | Client |
-| Log In                   |   ✅    | Integration | LogIn.test                   | Client |
-| Log Out                  |   ✅    | Unit        | Auth.service.test            | Client |
-| Log Out                  |   ✅    | Unit        | UserPage.test                | Client |
-| Log Out                  |   ✅    | Integration | Users.test                   | Client |
-| Add City                 |   ✅    | Unit        | CityMapperTest               | Server |
-| Add City                 |   ✅    | Unit        | CityServiceTest              | Server |
-| Add City                 |   ✅    | Unit        | CityDTOTest                  | Server |
-| Add City                 |   ✅    | Unit        | CityTest                     | Server |
-| Add City                 |   ✅    | Integration | CityServiceTest              | Server |
-| Add City                 |   ✅    | E2E         | CitiesTest                   | Server |
-| Add City                 |   ✅    | System      | CitiesTest                   | Server |
-| Add City                 |   ✅    | Unit        | City.service.test            | Client |
-| Add City                 |   ✅    | Unit        | CityFormPage.test            | Client |
-| Add City                 |   ✅    | Integration | CityForm.test                | Client |
-| Get Cities               |   ✅    | Unit        | CityMapperTest               | Server |
-| Get Cities               |   ✅    | Unit        | CityServiceTest              | Server |
-| Get Cities               |   ✅    | Unit        | CitySimpleDTOTest            | Server |
-| Get Cities               |   ✅    | Unit        | CityTest                     | Server |
-| Get Cities               |   ✅    | Integration | CityServiceTest              | Server |
-| Get Cities               |   ✅    | E2E         | CitiesTest                   | Server |
-| Get Cities               |   ✅    | System      | CitiesTest                   | Server |
-| Get Cities               |   ✅    | Unit        | City.service.test            | Client |
-| Get Cities               |   ✅    | Unit        | ExperienceFormPage.test      | Client |
-| Get Cities               |   ✅    | Integration | ExperienceForm.test          | Client |
-| Show user's experiences  |   ✅    | Unit        | ExperienceMapperTest         | Server |
-| Show user's experiences  |   ✅    | Unit        | UserServiceTest              | Server |
-| Show user's experiences  |   ✅    | Unit        | ExperienceSimpleDTOTest      | Server |
-| Show user's experiences  |   ✅    | Unit        | UserTest                     | Server |
-| Show user's experiences  |   ✅    | Unit        | ExperienceTest               | Server |
-| Show user's experiences  |   ✅    | Integration | UserServiceTest              | Server |
-| Show user's experiences  |   ✅    | E2E         | UsersTest                    | Server |
-| Show user's experiences  |   ✅    | System      | UsersTest                    | Server |
-| Show user's experiences  |   ✅    | Unit        | User.service.test            | Client |
-| Show user's experiences  |   ✅    | Unit        | UserPage.test                | Client |
-| Show user's experiences  |   ✅    | Integration | User.test                    | Client |
-| Show user's comments     |   ✅    | Unit        | CommentMapperTest            | Server |
-| Show user's comments     |   ✅    | Unit        | UserServiceTest              | Server |
-| Show user's comments     |   ✅    | Unit        | CommentSimpleDTOTest         | Server |
-| Show user's comments     |   ✅    | Unit        | UserTest                     | Server |
-| Show user's comments     |   ✅    | Unit        | CommentTest                  | Server |
-| Show user's comments     |   ✅    | Integration | UserServiceTest              | Server |
-| Show user's comments     |   ✅    | E2E         | UsersTest                    | Server |
-| Show user's comments     |   ✅    | System      | UsersTest                    | Server |
-| Show user's comments     |   ✅    | Unit        | User.service.test            | Client |
-| Show user's comments     |   ✅    | Unit        | UserPage.test                | Client |
-| Show user's comments     |   ✅    | Integration | User.test                    | Client |
-| Delete Experience        |   ✅    | Unit        | ExperienceMapperTest         | Server |
-| Delete Experience        |   ✅    | Unit        | ExperienceServiceTest        | Server |
-| Delete Experience        |   ✅    | Unit        | ExperienceDTOTest            | Server |
-| Delete Experience        |   ✅    | Unit        | ExperienceTest               | Server |
-| Delete Experience        |   ✅    | Integration | ExperienceServiceTest        | Server |
-| Delete Experience        |   ✅    | E2E         | ExperiencesTest              | Server |
-| Delete Experience        |   ✅    | System      | ExperiencesTest              | Server |
-| Delete Experience        |   ✅    | Unit        | Experience.service.test      | Client |
-| Delete Experience        |   ✅    | Unit        | UserPage.test                | Client |
-| Delete Experience        |   ✅    | Integration | User.test                    | Client |
-| Delete Comment           |   ✅    | Unit        | CommentMapperTest            | Server |
-| Delete Comment           |   ✅    | Unit        | CommentServiceTest           | Server |
-| Delete Comment           |   ✅    | Unit        | CommentDTOTest               | Server |
-| Delete Comment           |   ✅    | Unit        | CommentTest                  | Server |
-| Delete Comment           |   ✅    | Integration | CommentServiceTest           | Server |
-| Delete Comment           |   ✅    | E2E         | CommentsTest                 | Server |
-| Delete Comment           |   ✅    | System      | CommentsTest                 | Server |
-| Delete Comment           |   ✅    | Unit        | Comment.service.test         | Client |
-| Delete Comment           |   ✅    | Unit        | UserPage.test                | Client |
-| Delete Comment           |   ✅    | Integration | User.test                    | Client |
-| Delete User              |   ✅    | Unit        | UserMapperTest               | Server |
-| Delete Comment           |   ✅    | Unit        | UserServiceTest              | Server |
-| Delete Comment           |   ✅    | Unit        | UserDTOTest                  | Server |
-| Delete Comment           |   ✅    | Unit        | UserTest                     | Server |
-| Delete Comment           |   ✅    | Integration | UserServiceTest              | Server |
-| Delete Comment           |   ✅    | E2E         | UsersTest                    | Server |
-| Delete Comment           |   ✅    | System      | UsersTest                    | Server |
-| Delete Comment           |   ✅    | Unit        | User.service.test            | Client |
-| Delete Comment           |   ✅    | Unit        | UserPage.test                | Client |
-| Delete Comment           |   ✅    | Integration | User.test                    | Client |
+| Functional Requirement        | Tested | Test Type   | Test Class                   | Layer  |
+| ----------------------------- | :----: | ----------- | ---------------------------- | ------ |
+| Showing Experiences           |   ✅    | Unit        | ExperienceMapperTest         | Server |
+| Showing Experiences           |   ✅    | Unit        | ExperienceRestControllerTest | Server |
+| Showing Experiences           |   ✅    | Unit        | ExperienceServiceTest        | Server |
+| Showing Experiences           |   ✅    | Unit        | ExperienceSimpleDTOTest      | Server |
+| Showing Experiences           |   ✅    | Unit        | ExperienceTest               | Server |
+| Showing Experiences           |   ✅    | Integration | ExperienceServiceTest        | Server |
+| Showing Experiences           |   ✅    | E2E         | ExperiencesTest              | Server |
+| Showing Experiences           |   ✅    | System      | ExperiencesPageTest          | Server |
+| Showing Experiences           |   ✅    | Unit        | Experience.service.test      | Client |
+| Showing Experiences           |   ✅    | Unit        | Experience.test              | Client |
+| Showing Experiences           |   ✅    | Unit        | ExperiencesPage.test         | Client |
+| Showing Experiences           |   ✅    | Integration | Experiences.test             | Client |
+| Post Experience               |   ✅    | Unit        | ExperienceMapperTest         | Server |
+| Post Experience               |   ✅    | Unit        | ExperienceServiceTest        | Server |
+| Post Experience               |   ✅    | Unit        | ExperienceDTOTest            | Server |
+| Post Experience               |   ✅    | Unit        | ExperienceTest               | Server |
+| Post Experience               |   ✅    | Integration | ExperienceServiceTest        | Server |
+| Post Experience               |   ✅    | E2E         | ExperiencesTest              | Server |
+| Post Experience               |   ✅    | System      | ExperienceFormPageTest       | Server |
+| Post Experience               |   ✅    | Unit        | Experience.service.test      | Client |
+| Post Experience               |   ✅    | Unit        | ExperienceFormPage.test      | Client |
+| Post Experience               |   ✅    | Integration | ExperiencesForm.test         | Client |
+| Post Comment                  |   ✅    | Unit        | CommentMapperTest            | Server |
+| Post Comment                  |   ✅    | Unit        | ExperienceServiceTest        | Server |
+| Post Comment                  |   ✅    | Unit        | CommentDTOTest               | Server |
+| Post Comment                  |   ✅    | Unit        | CommentTest                  | Server |
+| Post Comment                  |   ✅    | Unit        | ExperienceTest               | Server |
+| Post Comment                  |   ✅    | Integration | ExperienceServiceTest        | Server |
+| Post Comment                  |   ✅    | E2E         | ExperiencesTest              | Server |
+| Post Comment                  |   ✅    | System      | ExperiencesTest              | Server |
+| Post Comment                  |   ✅    | Unit        | Comment.service.test         | Client |
+| Post Comment                  |   ✅    | Unit        | Comments.test                | Client |
+| Post Comment                  |   ✅    | Integration | Comments.test                | Client |
+| View detailed Experience      |   ✅    | Unit        | ExperienceMapperTest         | Server |
+| View detailed Experience      |   ✅    | Unit        | ExperienceServiceTest        | Server |
+| View detailed Experience      |   ✅    | Unit        | ExperienceDTOTest            | Server |
+| View detailed Experience      |   ✅    | Unit        | ExperienceTest               | Server |
+| View detailed Experience      |   ✅    | Integration | ExperienceServiceTest        | Server |
+| View detailed Experience      |   ✅    | E2E         | ExperiencesTest              | Server |
+| View detailed Experience      |   ✅    | System      | ExperiencesTest              | Server |
+| View detailed Experience      |   ✅    | Unit        | Experience.service.test      | Client |
+| View detailed Experience      |   ✅    | Unit        | DetailedExperiencePage.test  | Client |
+| View detailed Experience      |   ✅    | Integration | DetailedExperience.test      | Client |
+| SignUp                        |   ✅    | Unit        | UserMapperTest               | Server |
+| SignUp                        |   ✅    | Unit        | UserServiceTest              | Server |
+| SignUp                        |   ✅    | Unit        | UserDTOTest                  | Server |
+| SignUp                        |   ✅    | Unit        | UserTest                     | Server |
+| SignUp                        |   ✅    | Integration | UserServiceTest              | Server |
+| SignUp                        |   ✅    | E2E         | UsersTest                    | Server |
+| SignUp                        |   ✅    | System      | UsersTest                    | Server |
+| SignUp                        |   ✅    | Unit        | User.service.test            | Client |
+| SignUp                        |   ✅    | Unit        | UserFormPage.test            | Client |
+| SignUp                        |   ✅    | Integration | SignUp.test                  | Client |
+| Edit User                     |   ✅    | Unit        | UserMapperTest               | Server |
+| Edit User                     |   ✅    | Unit        | UserServiceTest              | Server |
+| Edit User                     |   ✅    | Unit        | UserDTOTest                  | Server |
+| Edit User                     |   ✅    | Unit        | UserTest                     | Server |
+| Edit User                     |   ✅    | Integration | UserServiceTest              | Server |
+| Edit User                     |   ✅    | E2E         | UsersTest                    | Server |
+| Edit User                     |   ✅    | System      | UsersTest                    | Server |
+| Edit User                     |   ✅    | Unit        | User.service.test            | Client |
+| Edit User                     |   ✅    | Unit        | UserFormPage.test            | Client |
+| Edit User                     |   ✅    | Integration | UserForm.test                | Client |
+| Log In                        |   ✅    | Unit        | Auth.service.test            | Client |
+| Log In                        |   ✅    | Unit        | LogInPage.test               | Client |
+| Log In                        |   ✅    | Integration | LogIn.test                   | Client |
+| Log Out                       |   ✅    | Unit        | Auth.service.test            | Client |
+| Log Out                       |   ✅    | Unit        | UserPage.test                | Client |
+| Log Out                       |   ✅    | Integration | Users.test                   | Client |
+| Add City                      |   ✅    | Unit        | CityMapperTest               | Server |
+| Add City                      |   ✅    | Unit        | CityServiceTest              | Server |
+| Add City                      |   ✅    | Unit        | CityDTOTest                  | Server |
+| Add City                      |   ✅    | Unit        | CityTest                     | Server |
+| Add City                      |   ✅    | Integration | CityServiceTest              | Server |
+| Add City                      |   ✅    | E2E         | CitiesTest                   | Server |
+| Add City                      |   ✅    | System      | CitiesTest                   | Server |
+| Add City                      |   ✅    | Unit        | City.service.test            | Client |
+| Add City                      |   ✅    | Unit        | CityFormPage.test            | Client |
+| Add City                      |   ✅    | Integration | CityForm.test                | Client |
+| Get Cities                    |   ✅    | Unit        | CityMapperTest               | Server |
+| Get Cities                    |   ✅    | Unit        | CityServiceTest              | Server |
+| Get Cities                    |   ✅    | Unit        | CitySimpleDTOTest            | Server |
+| Get Cities                    |   ✅    | Unit        | CityTest                     | Server |
+| Get Cities                    |   ✅    | Integration | CityServiceTest              | Server |
+| Get Cities                    |   ✅    | E2E         | CitiesTest                   | Server |
+| Get Cities                    |   ✅    | System      | CitiesTest                   | Server |
+| Get Cities                    |   ✅    | Unit        | City.service.test            | Client |
+| Get Cities                    |   ✅    | Unit        | ExperienceFormPage.test      | Client |
+| Get Cities                    |   ✅    | Integration | ExperienceForm.test          | Client |
+| Show user's experiences       |   ✅    | Unit        | ExperienceMapperTest         | Server |
+| Show user's experiences       |   ✅    | Unit        | UserServiceTest              | Server |
+| Show user's experiences       |   ✅    | Unit        | ExperienceSimpleDTOTest      | Server |
+| Show user's experiences       |   ✅    | Unit        | UserTest                     | Server |
+| Show user's experiences       |   ✅    | Unit        | ExperienceTest               | Server |
+| Show user's experiences       |   ✅    | Integration | UserServiceTest              | Server |
+| Show user's experiences       |   ✅    | E2E         | UsersTest                    | Server |
+| Show user's experiences       |   ✅    | System      | UsersTest                    | Server |
+| Show user's experiences       |   ✅    | Unit        | User.service.test            | Client |
+| Show user's experiences       |   ✅    | Unit        | UserPage.test                | Client |
+| Show user's experiences       |   ✅    | Integration | User.test                    | Client |
+| Show user's comments          |   ✅    | Unit        | CommentMapperTest            | Server |
+| Show user's comments          |   ✅    | Unit        | UserServiceTest              | Server |
+| Show user's comments          |   ✅    | Unit        | CommentSimpleDTOTest         | Server |
+| Show user's comments          |   ✅    | Unit        | UserTest                     | Server |
+| Show user's comments          |   ✅    | Unit        | CommentTest                  | Server |
+| Show user's comments          |   ✅    | Integration | UserServiceTest              | Server |
+| Show user's comments          |   ✅    | E2E         | UsersTest                    | Server |
+| Show user's comments          |   ✅    | System      | UsersTest                    | Server |
+| Show user's comments          |   ✅    | Unit        | User.service.test            | Client |
+| Show user's comments          |   ✅    | Unit        | UserPage.test                | Client |
+| Show user's comments          |   ✅    | Integration | User.test                    | Client |
+| Delete Experience             |   ✅    | Unit        | ExperienceMapperTest         | Server |
+| Delete Experience             |   ✅    | Unit        | ExperienceServiceTest        | Server |
+| Delete Experience             |   ✅    | Unit        | ExperienceDTOTest            | Server |
+| Delete Experience             |   ✅    | Unit        | ExperienceTest               | Server |
+| Delete Experience             |   ✅    | Integration | ExperienceServiceTest        | Server |
+| Delete Experience             |   ✅    | E2E         | ExperiencesTest              | Server |
+| Delete Experience             |   ✅    | System      | ExperiencesTest              | Server |
+| Delete Experience             |   ✅    | Unit        | Experience.service.test      | Client |
+| Delete Experience             |   ✅    | Unit        | UserPage.test                | Client |
+| Delete Experience             |   ✅    | Integration | User.test                    | Client |
+| Delete Comment                |   ✅    | Unit        | CommentMapperTest            | Server |
+| Delete Comment                |   ✅    | Unit        | CommentServiceTest           | Server |
+| Delete Comment                |   ✅    | Unit        | CommentDTOTest               | Server |
+| Delete Comment                |   ✅    | Unit        | CommentTest                  | Server |
+| Delete Comment                |   ✅    | Integration | CommentServiceTest           | Server |
+| Delete Comment                |   ✅    | E2E         | CommentsTest                 | Server |
+| Delete Comment                |   ✅    | System      | CommentsTest                 | Server |
+| Delete Comment                |   ✅    | Unit        | Comment.service.test         | Client |
+| Delete Comment                |   ✅    | Unit        | UserPage.test                | Client |
+| Delete Comment                |   ✅    | Integration | User.test                    | Client |
+| Delete User                   |   ✅    | Unit        | UserMapperTest               | Server |
+| Delete Comment                |   ✅    | Unit        | UserServiceTest              | Server |
+| Delete Comment                |   ✅    | Unit        | UserDTOTest                  | Server |
+| Delete Comment                |   ✅    | Unit        | UserTest                     | Server |
+| Delete Comment                |   ✅    | Integration | UserServiceTest              | Server |
+| Delete Comment                |   ✅    | E2E         | UsersTest                    | Server |
+| Delete Comment                |   ✅    | System      | UsersTest                    | Server |
+| Delete Comment                |   ✅    | Unit        | User.service.test            | Client |
+| Delete Comment                |   ✅    | Unit        | UserPage.test                | Client |
+| Delete Comment                |   ✅    | Integration | User.test                    | Client |
+| Filter Experiences            |   ✅    | Unit        | ExperiencesServiceTest       | Server |
+| Filter Experiences            |   ✅    | Integration | ExperiencesServiceTest       | Server |
+| Filter Experiences            |   ✅    | E2E         | ExperiencesTest              | Server |
+| Filter Experiences            |   ✅    | System      | ExperiencesPageTest          | Server |
+| Filter Experiences            |   ✅    | Unit        | Experience.service.test      | Client |
+| Filter Experiences            |   ✅    | Unit        | Basic.service.test           | Client |
+| Filter Experiences            |   ✅    | Unit        | Filter.test                  | Client |
+| Filter Experiences            |   ✅    | Integration | Experiences.test             | Client |
+| Display City information      |   ✅    | Unit        | CityServiceTest              | Server |
+| Display City information      |   ✅    | Unit        | CityDTOTest                  | Server |
+| Display City information      |   ✅    | Unit        | CityMapperTest               | Server |
+| Display City information      |   ✅    | Integration | CityServiceTest              | Server |
+| Display City information      |   ✅    | E2E         | CitiesTest                   | Server |
+| Display City information      |   ✅    | System      | CityPageTest                 | Server |
+| Display City information      |   ✅    | Unit        | Basic.service.test           | Client |
+| Display City information      |   ✅    | Unit        | CityPage.test                | Client |
+| Display City information      |   ✅    | Integration | DetailedCity.test            | Client |
+| Trending Cities               |   ✅    | Unit        | CityServiceTest              | Server |
+| Trending Cities               |   ✅    | Integration | CityServiceTest              | Server |
+| Trending Cities               |   ✅    | E2E         | CitiesTest                   | Server |
+| Trending Cities               |   ✅    | System      | CitiesPageTest               | Server |
+| Trending Cities               |   ✅    | Unit        | Basic.service.test           | Client |
+| Trending Cities               |   ✅    | Unit        | CitiesPage.test              | Client |
+| Trending Cities               |   ✅    | Integration | Cities.test                  | Client |
+| Upload experience multimedia  |   ✅    | Unit        | ExperienceMultimediaTest     | Server |
+| Upload experience multimedia  |   ✅    | Unit        | ExperienceMultimediaDTOTest  | Server |
+| Upload experience multimedia  |   ✅    | Unit        | MultimediaMapperTest         | Server |
+| Upload experience multimedia  |   ✅    | Unit        | ExperienceTest               | Server |
+| Upload experience multimedia  |   ✅    | Unit        | MultimediaServiceTest        | Server |
+| Upload experience multimedia  |   ✅    | Integration | MultimediaServiceTest        | Server |
+| Upload experience multimedia  |   ✅    | E2E         | ExperiencesTest              | Server |
+| Upload experience multimedia  |   ✅    | System      | ExperienceFormPageTest       | Server |
+| Upload experience multimedia  |   ✅    | Unit        | Basic.service.test           | Client |
+| Upload experience multimedia  |   ✅    | Unit        | Experience.service.test      | Client |
+| Upload experience multimedia  |   ✅    | Unit        | ExperienceFormPage.test      | Client |
+| Upload experience multimedia  |   ✅    | Integration | ExperiencesForm.test         | Client |
+| Upload profile image          |   ✅    | Unit        | UserImageTest                | Server |
+| Upload profile image          |   ✅    | Unit        | UserImageDTOTest             | Server |
+| Upload profile image          |   ✅    | Unit        | MultimediaMapperTest         | Server |
+| Upload profile image          |   ✅    | Unit        | UserTest                     | Server |
+| Upload profile image          |   ✅    | Unit        | MultimediaServiceTest        | Server |
+| Upload profile image          |   ✅    | Integration | MultimediaServiceTest        | Server |
+| Upload profile image          |   ✅    | E2E         | UsersTest                    | Server |
+| Upload profile image          |   ✅    | System      | UserPageTest                 | Server |
+| Upload profile image          |   ✅    | Unit        | Basic.service.test           | Client |
+| Upload profile image          |   ✅    | Unit        | User.service.test            | Client |
+| Upload profile image          |   ✅    | Unit        | ProfileImageDialog.test      | Client |
+| Upload profile image          |   ✅    | Integration | Users.test                   | Client |
+| Display experience multimedia |   ✅    | Unit        | ExperienceDTOTest            | Server |
+| Display experience multimedia |   ✅    | Unit        | MultimediaSimpleDTOTest      | Server |
+| Display experience multimedia |   ✅    | Unit        | MultimediaMapperTest         | Server |
+| Display experience multimedia |   ✅    | Unit        | ExperienceMapperTest         | Server |
+| Display experience multimedia |   ✅    | Unit        | MultimediaServiceTest        | Server |
+| Display experience multimedia |   ✅    | Integration | MultimediaServiceTest        | Server |
+| Display experience multimedia |   ✅    | E2E         | ExperiencesTest              | Server |
+| Display experience multimedia |   ✅    | System      | DetailedExperiencePageTest   | Server |
+| Display profile image         |   ✅    | Unit        | UserDTOTest                  | Server |
+| Display profile image         |   ✅    | Unit        | MultimediaSimpleDTOTest      | Server |
+| Display profile image         |   ✅    | Unit        | MultimediaMapperTest         | Server |
+| Display profile image         |   ✅    | Unit        | UserMapperTest               | Server |
+| Display profile image         |   ✅    | Unit        | MultimediaServiceTest        | Server |
+| Display profile image         |   ✅    | Integration | MultimediaServiceTest        | Server |
+| Display profile image         |   ✅    | E2E         | UsersTest                    | Server |
+| Display profile image         |   ✅    | System      | UserPageTest                 | Server |
+| Share Experience              |   ✅    | Unit        | ShareDialog.test             | Client |
+| Share Experience              |   ✅    | Unit        | MultimediaSimpleDTOTest      | Client |
+| Share Experience              |   ✅    | System      | DetailedExperiencePageTest   | Server |
 
 ---
 
@@ -571,9 +639,9 @@ Code coverage is measured independently for both application layers.
 
 Coverage summary:
 
-- Line coverage: 90 %
-- Branch coverage: 72 %
-- Classes covered: 49 / 49
+- Line coverage: 93 %
+- Branch coverage: 75 %
+- Classes covered: 60 / 60
 
 ---
 
@@ -583,17 +651,17 @@ Coverage summary:
 
 Coverage summary:
 
-- Statements: 94.48 %
-- Branches: 85.78 %
-- Functions: 92 %
-- Lines: 95.4 %
+- Statements: 91.69 %
+- Branches: 80.18 %
+- Functions: 95 %
+- Lines: 92.34 %
 
 ![Frontend Coverage](./images/shared_coverage.png)
 
 Coverage summary:
 
 - Statements: 100 %
-- Branches: 92 %
+- Branches: 96.66 %
 - Functions: 100 %
 - Lines: 100 %
 
@@ -623,12 +691,15 @@ The combination of automated testing, code coverage analysis and continuous inte
 
 
 ## 🌐 Deployment
+The application is currently deployed and publicly accessible at:
+
+**Live application:** [MyErasmusJourney](https://myerasmusjourney-app.livelycoast-08d4ed6b.germanywestcentral.azurecontainerapps.io)
 
 The application is packaged and distributed using Docker and Docker Compose. The backend and frontend are packaged together into a single Docker image, while Docker Compose is used to coordinate the application container and its MySQL database.
 
 The Docker Compose configuration defines the services required to run the application, including:
 
-- **Application:** contains both the React frontend and Spring Boot backend and exposes the application through port `8443`.
+- **Application:** contains both the React frontend and Spring Boot backend and exposes the application through port `8080`.
 - **MySQL database:** provides the persistent database required by the backend.
 - **Persistent volume:** stores the MySQL data so that the database contents are preserved when the application containers are restarted.
 

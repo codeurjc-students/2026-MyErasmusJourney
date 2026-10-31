@@ -40,7 +40,7 @@ This phase introduces the first usable version (MVP). Basic functionalities such
 
 - **Start date:** 2026-09-24
 - **Estimated deadline:** 2026-10-15  
-- **Actual completion date:** Not completed yet  
+- **Actual completion date:** 2026-10-31  
 
 Intermediate features are implemented, such as filtering, maps visualization, multimedia support, and improved user interaction. The application is deployed in a production-like environment with HTTPS support.
 
