@@ -5,6 +5,7 @@ import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.dto.CityDTO;
 import com.myerasmusjourney.backend.dto.CityFormDTO;
 import com.myerasmusjourney.backend.dto.CitySimpleDTO;
+import com.myerasmusjourney.backend.dto.LocationDTO;
 import com.myerasmusjourney.backend.mapper.CityMapper;
 import com.myerasmusjourney.backend.repository.CityRepository;
 import jakarta.transaction.Transactional;
@@ -29,6 +30,9 @@ public class CityService {
     @Autowired
     private CityMapper cityMapper;
 
+    @Autowired
+    private MapService mapService;
+
     private String formatName(String value){
         if(value == null || value.isEmpty()){
             return value;
@@ -48,7 +52,20 @@ public class CityService {
             if(c.getCountry().equals(countryName)) return new CityResult(cityMapper.toDTO(c, 0.0), false);
         }
 
-        City city = new City(cityName, countryName, cityFormDTO.description());
+        Double latitude;
+        Double longitude;
+
+        if (cityFormDTO.latitude() == null ||cityFormDTO.longitude() == null){
+            LocationDTO locationDTO = mapService.geoLocateCity(cityName, countryName);
+            longitude = locationDTO.longitude();
+            latitude = locationDTO.latitude();
+        }
+        else{
+            longitude = cityFormDTO.longitude();
+            latitude = cityFormDTO.latitude();
+        }
+
+        City city = new City(cityName, countryName, cityFormDTO.description(), longitude, latitude);
         City savedCity = cityRepository.save(city);
 
         return new CityResult(cityMapper.toDTO(savedCity, 0.0),true);
