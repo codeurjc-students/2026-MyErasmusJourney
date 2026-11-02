@@ -144,6 +144,5 @@ public class UserService {
     @Transactional
     public void addMultimedia(User user, UserImage userImage) {
         user.setProfileImage(userImage);
-        userRepository.save(user);
     }
 }
