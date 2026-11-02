@@ -53,9 +53,9 @@ public class CityServiceTest extends TestDataBase {
         if(cityRepository.count() > 0) cityRepository.deleteAll();
 
         List<City> cities = List.of(
-                new City("Madrid", "Spain", ""),
-                new City("Rome", "Italy", ""),
-                new City("Berlin", "Germany", "")
+                new City("Madrid", "Spain", "", -3.703507, 40.416782),
+                new City("Rome", "Italy", "", -3.703507, 40.416782),
+                new City("Berlin", "Germany", "", -3.703507, 40.416782)
         );
 
         cityRepository.saveAll(cities);
@@ -68,7 +68,31 @@ public class CityServiceTest extends TestDataBase {
 
     @Test
     void testAddCitySuccessfully() {
-        CityFormDTO cityForm = new CityFormDTO("Munich", "A city in Germany", "Germany");
+        CityFormDTO cityForm = new CityFormDTO("Munich", "A city in Germany", "Germany", -3.703507, 40.416782);
+
+        CityService.CityResult result = cityService.addCity(cityForm);
+
+        assertTrue(result.created());
+        assertNotNull(result.city());
+
+        CityDTO cityDTO = result.city();
+
+        assertNotNull(cityDTO.id());
+        assertEquals("Munich", cityDTO.name());
+        assertEquals("Germany", cityDTO.country());
+        assertEquals("A city in Germany", cityDTO.description());
+
+        City savedCity = cityRepository.findById(cityDTO.id()).orElse(null);
+
+        assertNotNull(savedCity);
+        assertEquals("Munich", savedCity.getName());
+        assertEquals("Germany", savedCity.getCountry());
+        assertEquals("A city in Germany", savedCity.getDescription());
+    }
+
+    @Test
+    void testAddCitySuccessfullyWithoutCoordinates() {
+        CityFormDTO cityForm = new CityFormDTO("Munich", "A city in Germany", "Germany", null,  null);
 
         CityService.CityResult result = cityService.addCity(cityForm);
 
@@ -92,9 +116,9 @@ public class CityServiceTest extends TestDataBase {
 
     @Test
     void testAddCityAlreadyExists() {
-        City existingCity = cityRepository.save(new City("Munich", "Germany", "Existing description"));
+        City existingCity = cityRepository.save(new City("Munich", "Germany", "Existing description", -3.703507, 40.416782));
 
-        CityFormDTO cityForm = new CityFormDTO("Munich", "New description", "Germany");
+        CityFormDTO cityForm = new CityFormDTO("Munich", "New description", "Germany", -3.703507, 40.416782);
 
         CityService.CityResult result = cityService.addCity(cityForm);
 
@@ -116,9 +140,9 @@ public class CityServiceTest extends TestDataBase {
 
     @Test
     void testAddCitySameNameDifferentCountry() {
-        City existingCity = cityRepository.save(new City("Munich", "Germany", "Munich in Germany"));
+        City existingCity = cityRepository.save(new City("Munich", "Germany", "Munich in Germany", -3.703507, 40.416782));
 
-        CityFormDTO cityForm = new CityFormDTO("Munich", "Another Munich", "United States");
+        CityFormDTO cityForm = new CityFormDTO("Munich", "Another Munich", "United States", -3.703507, 40.416782);
 
         CityService.CityResult result = cityService.addCity(cityForm);
 
