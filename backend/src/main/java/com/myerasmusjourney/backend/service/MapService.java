@@ -1,6 +1,6 @@
 package com.myerasmusjourney.backend.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 import com.myerasmusjourney.backend.config.GeoapifyProperties;
 import com.myerasmusjourney.backend.dto.LocationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +13,10 @@ public class MapService {
     @Autowired
     private GeoapifyProperties geoapifyProperties;
 
+    @Autowired
+    private RestClient restClient;
+
     public LocationDTO geoLocateCity(String city, String country) {
-        RestClient restClient = RestClient.create();
 
         JsonNode response = restClient.get()
                 .uri("https://api.geoapify.com/v1/geocode/search?city={city}&country={country}&lang=en&apiKey={apiKey}",

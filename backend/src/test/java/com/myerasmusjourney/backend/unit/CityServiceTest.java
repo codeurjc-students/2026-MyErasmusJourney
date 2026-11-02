@@ -6,9 +6,11 @@ import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.dto.CityDTO;
 import com.myerasmusjourney.backend.dto.CityFormDTO;
 import com.myerasmusjourney.backend.dto.CitySimpleDTO;
+import com.myerasmusjourney.backend.dto.LocationDTO;
 import com.myerasmusjourney.backend.mapper.CityMapper;
 import com.myerasmusjourney.backend.repository.CityRepository;
 import com.myerasmusjourney.backend.service.CityService;
+import com.myerasmusjourney.backend.service.MapService;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,6 +40,9 @@ public class CityServiceTest {
     @Mock
     private CityMapper cityMapper;
 
+    @Mock
+    private MapService mapService;
+
     @InjectMocks
     private CityService cityService;
 
@@ -60,6 +65,34 @@ public class CityServiceTest {
         assertNotNull(result.city());
 
         verify(cityRepository).findByName("Munich");
+        verify(cityRepository).save(any(City.class));
+        verify(cityMapper).toDTO(savedCity, 0.0);
+    }
+
+    @Test
+    void testAddCitySuccessfullyWithoutCoordinates() {
+        CityFormDTO cityForm = new CityFormDTO("Munich", "A city in Germany","Germany",  null,  null);
+
+        City savedCity = new City("Munich", "Germany", "A city in Germany", -3.703507, 40.416782);
+        savedCity.setId(1L);
+
+        CityDTO expectedDTO = new CityDTO(1L, "Munich", "A city in Germany", "Germany",  0.0, -3.703507, 40.416782, List.of());
+
+        LocationDTO locationDTO = new LocationDTO(-3.703507, 40.416782);
+
+        when(cityRepository.findByName("Munich")).thenReturn(List.of());
+        when(mapService.geoLocateCity(cityForm.name(), cityForm.country())).thenReturn(locationDTO);
+        when(cityRepository.save(any(City.class))).thenReturn(savedCity);
+        when(cityMapper.toDTO(savedCity, 0.0)).thenReturn(expectedDTO);
+
+
+        CityService.CityResult result = cityService.addCity(cityForm);
+
+        assertTrue(result.created());
+        assertNotNull(result.city());
+
+        verify(cityRepository).findByName("Munich");
+        verify(mapService).geoLocateCity(cityForm.name(), cityForm.country());
         verify(cityRepository).save(any(City.class));
         verify(cityMapper).toDTO(savedCity, 0.0);
     }
