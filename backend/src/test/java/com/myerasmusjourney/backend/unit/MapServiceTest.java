@@ -74,8 +74,8 @@ public class MapServiceTest {
         LocationDTO result = mapService.geoLocateCity("Madrid", "Spain");
 
         assertNotNull(result);
-        assertEquals(40.416782, result.longitude());
-        assertEquals(-3.703507, result.latitude());
+        assertEquals(40.416782, result.latitude());
+        assertEquals(-3.703507, result.longitude());
 
         server.verify();
     }

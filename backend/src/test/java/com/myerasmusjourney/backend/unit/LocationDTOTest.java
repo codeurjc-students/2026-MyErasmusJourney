@@ -12,7 +12,7 @@ public class LocationDTOTest {
 
     @Test
     void testLocationFormDTO() {
-        LocationDTO locationDTO = new LocationDTO(-1.541, 4.416782 );
+        LocationDTO locationDTO = new LocationDTO(4.416782, -1.541 );
         assertEquals(-1.541, locationDTO.longitude());
         assertEquals(4.416782, locationDTO.latitude());
     }
