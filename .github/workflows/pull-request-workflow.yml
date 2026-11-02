@@ -111,6 +111,7 @@ jobs:
             SPRING_PROFILES_ACTIVE: test
             ADMIN_EMAIL: testadmin@email.com
             ADMIN_PASSWORD: password
+            GEOAPIFY_API_KEY: ${{ secrets.GEOAPIFY_API_KEY }}
 
           run: |
             cd ../backend
