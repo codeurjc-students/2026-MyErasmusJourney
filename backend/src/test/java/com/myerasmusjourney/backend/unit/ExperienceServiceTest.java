@@ -237,7 +237,9 @@ public class ExperienceServiceTest {
         City city = new City(
                 "Madrid",
                 "Spain",
-                "Capital of Spain"
+                "Capital of Spain",
+                -3.703507,
+                40.416782
         );
         city.setId(1L);
 

@@ -20,7 +20,7 @@ public class CityDTOTest {
 
         List<ExperienceSimpleDTO> experiences = List.of(experience);
 
-        CityDTO city = new CityDTO(1L, "Madrid", "Capital of Spain", "Spain", 1.2, experiences);
+        CityDTO city = new CityDTO(1L, "Madrid", "Capital of Spain", "Spain", 1.2, -1.4, 192.1, experiences);
 
         assertEquals(1L, city.id());
         assertEquals("Madrid", city.name());
@@ -28,11 +28,13 @@ public class CityDTOTest {
         assertEquals("Spain", city.country());
         assertEquals(1.2, city.averageRating());
         assertEquals(experiences, city.experiences());
+        assertEquals(-1.4, city.longitude());
+        assertEquals(192.1, city.latitude());
     }
 
     @Test
     void testCityDTONullValues() {
-        CityDTO city = new CityDTO(null, null, null, null,  null, null);
+        CityDTO city = new CityDTO(null, null, null, null,  null, null, null, null);
 
         assertNull(city.id());
         assertNull(city.name());
@@ -40,15 +42,17 @@ public class CityDTOTest {
         assertNull(city.country());
         assertNull(city.averageRating());
         assertNull(city.experiences());
+        assertNull(city.longitude());
+        assertNull(city.latitude());
     }
 
     @Test
     void testCityDTOEquality() {
         List<ExperienceSimpleDTO> experiences = List.of();
 
-        CityDTO city1 = new CityDTO(1L, "Madrid", "Capital of Spain", "Spain", 3.4, experiences);
+        CityDTO city1 = new CityDTO(1L, "Madrid", "Capital of Spain", "Spain", 3.4, 0.0, 0.1, experiences);
 
-        CityDTO city2 = new CityDTO(1L, "Madrid", "Capital of Spain", "Spain", 3.4, experiences);
+        CityDTO city2 = new CityDTO(1L, "Madrid", "Capital of Spain", "Spain", 3.4, 0.0, 0.1, experiences);
 
         assertEquals(city1, city2);
         assertEquals(city1.hashCode(), city2.hashCode());
