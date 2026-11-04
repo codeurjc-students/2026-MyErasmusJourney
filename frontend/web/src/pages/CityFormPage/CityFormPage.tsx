@@ -3,7 +3,7 @@ import type { cityServiceProps } from "@shared/interfaces/cityServiceProps";
 import { API } from "../../api/client";
 import type { CityFormDTO } from "@shared/models/CityFormDTO";
 import { useNavigate } from "react-router-dom";
-import type { FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { ApiError } from "@shared/api/apiError";
 import { toast } from "sonner";
 import type { CityDTO } from "@shared/models/CityDTO";
@@ -12,6 +12,8 @@ export default function CityFormPage({ cityService = createCityService(API) }: c
 
 
     const navigate = useNavigate();
+    const [longitude, setLongitude] = useState<number|null>(null); 
+    const [latitude, setLatitude] = useState<number|null>(null); 
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -28,7 +30,9 @@ export default function CityFormPage({ cityService = createCityService(API) }: c
         const cityFormDTO: CityFormDTO = {
             name,
             country,
-            description
+            description,
+            longitude,
+            latitude
         };
 
         try {
@@ -48,6 +52,12 @@ export default function CityFormPage({ cityService = createCityService(API) }: c
                 toast.error("An unexpected error occurred");
             }
         }
+    }
+
+    async function handleGeoLocate(){
+        const geolocation = await cityService.geoLocate({ name: (document.getElementById("city") as HTMLInputElement).value, country: (document.getElementById("country") as HTMLInputElement).value });
+        setLatitude(geolocation.latitude);
+        setLongitude(geolocation.longitude);
     }
 
     return (
