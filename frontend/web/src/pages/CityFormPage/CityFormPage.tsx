@@ -7,6 +7,8 @@ import { useState, type FormEvent } from "react";
 import { ApiError } from "@shared/api/apiError";
 import { toast } from "sonner";
 import type { CityDTO } from "@shared/models/CityDTO";
+import type { MapMarker } from "@shared/models/MapMarker";
+import MapComponent from "../../components/Map/MapComponent";
 
 export default function CityFormPage({ cityService = createCityService(API) }: cityServiceProps) {
 
@@ -14,6 +16,8 @@ export default function CityFormPage({ cityService = createCityService(API) }: c
     const navigate = useNavigate();
     const [longitude, setLongitude] = useState<number|null>(null); 
     const [latitude, setLatitude] = useState<number|null>(null); 
+    const [zoom, setZoom] = useState<number>(2.6);
+    const [marks, setMarks] = useState<MapMarker[]>([]);
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -24,8 +28,6 @@ export default function CityFormPage({ cityService = createCityService(API) }: c
         const name = formData.get("city") as string;
         const country = formData.get("country") as string;
         const description = formData.get("description") as string;
-
-
 
         const cityFormDTO: CityFormDTO = {
             name,
@@ -55,9 +57,12 @@ export default function CityFormPage({ cityService = createCityService(API) }: c
     }
 
     async function handleGeoLocate(){
-        const geolocation = await cityService.geoLocate({ name: (document.getElementById("city") as HTMLInputElement).value, country: (document.getElementById("country") as HTMLInputElement).value });
+        const cityName = (document.getElementById("city") as HTMLInputElement).value;
+        const geolocation = await cityService.geoLocate({ name: cityName, country: (document.getElementById("country") as HTMLInputElement).value });
         setLatitude(geolocation.latitude);
         setLongitude(geolocation.longitude);
+        setZoom(7);
+        setMarks([{ latitude: geolocation.latitude, longitude: geolocation.longitude, title:cityName, rating:0, id:0 }]);
     }
 
     return (
@@ -88,12 +93,11 @@ export default function CityFormPage({ cityService = createCityService(API) }: c
                 </div>
 
                 <div className="w-full flex flex-col gap-3 items-center">
-                    <label htmlFor="mapPreview">
-                        Preview
-                    </label>
+                    
                     <div className="w-full flex justify-center overflow-hidden rounded-2xl">
-                        <img id="mapPreview" src="/images/available_soon.png" alt="City map preview" className="w-auto max-h-90 object-cover rounded-2xl" />
+                        <MapComponent latitude={latitude ?? 57} longitude={longitude ?? 15} zoom={zoom} marks={marks} markerType={"preview"}/>
                     </div>
+                    <button onClick={handleGeoLocate} type="button">Preview City</button>
                 </div>
             </form>
         </div>
