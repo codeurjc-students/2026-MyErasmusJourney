@@ -39,6 +39,10 @@ export function createCityService(api: ApiClient) {
     params.append("city", body.name);
     params.append("country", body.country);
 
+    if (params.toString()) {
+      url = `${url}?${params.toString()}`;
+    }
+
     return basicService.getMethod<{ latitude: number, longitude: number }>(url);
   }
 } 
