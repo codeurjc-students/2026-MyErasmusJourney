@@ -14,8 +14,8 @@ export default function CityFormPage({ cityService = createCityService(API) }: c
 
 
     const navigate = useNavigate();
-    const [longitude, setLongitude] = useState<number|null>(null); 
-    const [latitude, setLatitude] = useState<number|null>(null); 
+    const [longitude, setLongitude] = useState<number | null>(null);
+    const [latitude, setLatitude] = useState<number | null>(null);
     const [zoom, setZoom] = useState<number>(2.6);
     const [marks, setMarks] = useState<MapMarker[]>([]);
 
@@ -56,13 +56,20 @@ export default function CityFormPage({ cityService = createCityService(API) }: c
         }
     }
 
-    async function handleGeoLocate(){
+    async function handleGeoLocate() {
         const cityName = (document.getElementById("city") as HTMLInputElement).value;
-        const geolocation = await cityService.geoLocate({ name: cityName, country: (document.getElementById("country") as HTMLInputElement).value });
-        setLatitude(geolocation.latitude);
-        setLongitude(geolocation.longitude);
-        setZoom(7);
-        setMarks([{ latitude: geolocation.latitude, longitude: geolocation.longitude, title:cityName, rating:0, id:0 }]);
+        try {
+            const geolocation = await cityService.geoLocate({ name: cityName, country: (document.getElementById("country") as HTMLInputElement).value });
+            setLatitude(geolocation.latitude);
+            setLongitude(geolocation.longitude);
+            setZoom(7);
+            setMarks([{ latitude: geolocation.latitude, longitude: geolocation.longitude, title: cityName, rating: 0, id: 0 }]);
+        } catch (error) {
+            if (error instanceof ApiError && error.status >= 500) {
+                navigate("/error");
+                return;
+            }
+        }
     }
 
     return (
@@ -93,9 +100,9 @@ export default function CityFormPage({ cityService = createCityService(API) }: c
                 </div>
 
                 <div className="w-full flex flex-col gap-3 items-center">
-                    
+
                     <div className="w-full flex justify-center overflow-hidden rounded-2xl">
-                        <MapComponent latitude={latitude ?? 57} longitude={longitude ?? 15} zoom={zoom} marks={marks} markerType={"preview"}/>
+                        <MapComponent latitude={latitude ?? 57} longitude={longitude ?? 15} zoom={zoom} marks={marks} markerType={"preview"} />
                     </div>
                     <button onClick={handleGeoLocate} type="button">Preview City</button>
                 </div>
