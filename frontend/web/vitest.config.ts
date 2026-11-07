@@ -1,5 +1,6 @@
 import { defineConfig } from "vitest/config";
 import tsconfigPaths from "vite-tsconfig-paths";
+import { playwright } from "@vitest/browser-playwright";
 
 export default defineConfig({
   plugins: [tsconfigPaths()],
@@ -9,6 +10,14 @@ export default defineConfig({
     },
     environment: "jsdom",
     setupFiles: ["./tests/vitest.setup.ts"],
-    globals: true
+    globals: true,
+    browser: {
+      enabled: true,
+      provider: playwright(),
+      instances: [
+        { browser: "firefox" },
+      ],
+      headless: true,
+    },
   },
 });
