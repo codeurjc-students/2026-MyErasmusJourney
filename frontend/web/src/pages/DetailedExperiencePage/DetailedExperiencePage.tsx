@@ -41,6 +41,7 @@ const defaultExperienceService = createExperienceService(API);
 export default function DetailedExperiencePage({ experienceService = defaultExperienceService }: experienceServiceProps) {
 
     const [experience, setExperience] = useState<ExperienceDTO | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
     const { id } = useParams();
 
     const navigate = useNavigate();
@@ -50,6 +51,7 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
             try {
                 const data = await experienceService.getExperienceById(Number(id));
                 setExperience(data);
+                setIsLoading(false);
             } catch (error) {
                 if (error instanceof ApiError && ((error.status >= 500) || (error.status === 404))) {
                     console.error(error);
@@ -62,10 +64,21 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
         fetchExperience();
     }, [id, experienceService]);
 
-    if (!experience) {
+    if (isLoading || !experience) {
         return (
-            <div className="container mx-auto max-w-7xl flex justify-center">
-                <p>Loading experience...</p>
+            <div className="min-h-[60vh] flex items-center justify-center p-6" role="status">
+                <div className="flex flex-col items-center gap-4 text-center">
+                    <div className="w-12 h-12 border-4 border-[#D5E1EE] border-t-[#4A90D9] rounded-full animate-spin" />
+
+                    <div className="space-y-1">
+                        <h3 className="text-xl font-bold text-[#1E3A5F]">
+                            Discovering the experience...
+                        </h3>
+                        <p className="text-[#4A90C2]">
+                            We're gathering all the experience details for you.
+                        </p>
+                    </div>
+                </div>
             </div>
         );
     }

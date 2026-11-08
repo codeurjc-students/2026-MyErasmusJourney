@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { API } from "../../api/client";
 import { ApiError } from "@shared/api/apiError";
 import { toast } from "sonner";
+import LoadingComponent from "../Loading/LoadingComponent";
 
 interface CommentsProps {
     userComments: CommentSimpleDTO[] | undefined;
@@ -90,7 +91,7 @@ export default function UserComments({ userService = createUserService(API), com
             <h4 className="mb-6">Comments</h4>
             {loading
                 ? (
-                    <p>Loading comments...</p>
+                    <LoadingComponent description="Loading your comments..." />
                 ) : (
                     <div className="flex flex-col gap-4">
                         {comments.map((comment) => (

@@ -17,6 +17,7 @@ export default function ExperiencesPage({ experienceService = defaultExperienceS
 
     const [experiences, setExperiences] = useState<ExperienceSimpleDTO[]>([]);
     const [filters, setFilters] = useState<ExperienceFilters>({ page: 0 });
+    const [isLoading, setIsLoading] = useState(true);
     const [totalPages, setTotalPages] = useState(1);
     const navigate = useNavigate();
 
@@ -24,6 +25,7 @@ export default function ExperiencesPage({ experienceService = defaultExperienceS
         const fetchData = async () => {
             try {
                 const data = await experienceService.getAll(filters);
+                setIsLoading(false);
                 setExperiences(data.content || []);
                 setTotalPages(data.page.totalPages ?? 1);
             } catch (error) {
@@ -58,6 +60,26 @@ export default function ExperiencesPage({ experienceService = defaultExperienceS
                 page: (currentFilters.page ?? 0) + 1
             }));
         }
+    }
+
+
+    if (isLoading) {
+        return (
+            <div className="min-h-[60vh] flex items-center justify-center p-6" role="status">
+                <div className="flex flex-col items-center gap-4 text-center">
+                    <div className="w-12 h-12 border-4 border-[#D5E1EE] border-t-[#4A90D9] rounded-full animate-spin" />
+
+                    <div className="space-y-1">
+                        <h3 className="text-xl font-bold text-[#1E3A5F]">
+                            Gathering amazing experiences for you...
+                        </h3>
+                        <p className="text-[#4A90C2]">
+                            We are fetching the best experiences for you. This may take a few seconds.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (

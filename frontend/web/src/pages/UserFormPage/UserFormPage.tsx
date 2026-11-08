@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ApiError } from "@shared/api/apiError";
 import { useUserStore } from "@shared/stores/userStore";
 import { toast } from "sonner";
+import LoadingComponent from "@/components/Loading/LoadingComponent";
 
 interface UserFormPageProps {
     mode: "signup" | "edit";
@@ -68,13 +69,12 @@ export default function UserFormPage({ mode, userService = createUserService(API
 
         const fullName = formData.get("fullName") as string;
         const displayName = formData.get("displayName") as string;
-        const email = formData.get("email") as string;
         const studyLocation =
             (formData.get("studyLocation") as string).trim();
 
         const changedUserDTO: UserDTO = {
             id: userDTO.id,
-            email,
+            email: userDTO.email,
             displayName,
             fullName,
             studyLocation,
@@ -152,20 +152,18 @@ export default function UserFormPage({ mode, userService = createUserService(API
                 navigate("/error");
                 return;
             }
-            else if (error instanceof Error){
+            else if (error instanceof Error) {
                 console.error(`Error signing up: ${error}`);
                 toast.error(`Error signing up: ${error.message}`);
             }
-            
+
         }
     }
 
 
     if (loading) {
         return (
-            <div className="container mx-auto max-w-4xl p-6 text-center">
-                <p>Loading...</p>
-            </div>
+            <LoadingComponent />
         );
     }
 
@@ -224,17 +222,15 @@ export default function UserFormPage({ mode, userService = createUserService(API
                                 <label htmlFor="country">Destination Country</label>
                                 <input type="text" id="country" name="country" />
                             </div>
+
+                            {/* EMAIL */}
+                            <div className="flex flex-col gap-2">
+                                <label htmlFor="email">Email</label>
+                                <input type="email" id="email" name="email" required />
+                            </div>
                         </>
 
                     )}
-
-
-                    {/* EMAIL */}
-
-                    <div className="flex flex-col gap-2">
-                        <label htmlFor="email">Email</label>
-                        <input type="email" id="email" name="email" defaultValue={String(userDTO?.email ?? "")} required />
-                    </div>
 
 
                     {/* PASSWORD */}
