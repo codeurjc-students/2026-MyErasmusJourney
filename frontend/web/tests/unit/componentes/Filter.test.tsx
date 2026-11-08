@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, fireEvent, waitFor, } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 
 import Filter from "../../../src/components/Filter/Filter";
@@ -60,7 +60,8 @@ describe("Filter", () => {
             getAll: getAllMock,
             addCity: vi.fn(),
             getTrending: vi.fn(),
-            getCityById: vi.fn()
+            getCityById: vi.fn(),
+            geoLocate: vi.fn()
         };
 
         const experienceService: ExperienceService = {
@@ -80,16 +81,7 @@ describe("Filter", () => {
         };
     };
 
-    beforeEach(() => {
-        vi.clearAllMocks();
-        setFiltersMock = vi.fn();
-    });
-
-    afterEach(() => {
-        vi.restoreAllMocks();
-    });
-
-    it("should render the filter with cities and categories", async () => {
+    const renderFilter = async () => {
         const { cityService, experienceService } = createServices();
 
         render(
@@ -102,9 +94,26 @@ describe("Filter", () => {
             </MemoryRouter>
         );
 
-        expect(
-            screen.getByRole("heading", { name: "Tailor Your Exploration" })
-        ).toBeTruthy();
+        await screen.findByRole("status");
+
+        await waitFor(() => {
+            expect(screen.queryByRole("status")).not.toBeInTheDocument();
+        });
+    }
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+        setFiltersMock = vi.fn();
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
+    it("should render the filter with cities and categories", async () => {
+        await renderFilter();
+
+        expect(screen.getByRole("heading", { name: "Tailor Your Exploration" })).toBeTruthy();
 
         expect(
             screen.getByRole("button", {
@@ -155,17 +164,7 @@ describe("Filter", () => {
     });
 
     it("should collect the form data and call setFilters", async () => {
-        const { cityService, experienceService } = createServices();
-
-        render(
-            <MemoryRouter>
-                <Filter
-                    setFilters={setFiltersMock}
-                    cityService={cityService}
-                    experienceService={experienceService}
-                />
-            </MemoryRouter>
-        );
+        await renderFilter();
 
         await waitFor(() => {
             expect(screen.getByRole("option", { name: "Madrid" })).toBeTruthy();
@@ -199,10 +198,21 @@ describe("Filter", () => {
             screen.getByRole("checkbox", { name: "Culture" })
         );
 
+        const form = screen.getByRole("button", { name: /Find your next experiences/i }).closest("form")!;
+
+        const invalidFields = Array.from(
+            form.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(":invalid")
+        ).map(field => ({
+            name: field.name,
+            value: field.value,
+            validationMessage: field.validationMessage,
+        }));
+
+        console.log("Form validity:", form.checkValidity());
+        console.log("Invalid fields:", invalidFields);
+
         fireEvent.submit(
-            screen.getByRole("button", {
-                name: "Find your next experiences",
-            })
+            form
         );
 
         await waitFor(() => {
@@ -221,27 +231,14 @@ describe("Filter", () => {
     });
 
     it("should set undefined values when optional form fields are empty", async () => {
-        const { cityService, experienceService } = createServices();
-
-        render(
-            <MemoryRouter>
-                <Filter
-                    setFilters={setFiltersMock}
-                    cityService={cityService}
-                    experienceService={experienceService}
-                />
-            </MemoryRouter>
-        );
+        await renderFilter();
 
         await waitFor(() => {
             expect(screen.getByRole("option", { name: "Madrid" })).toBeTruthy();
         });
 
-        fireEvent.submit(
-            screen.getByRole("button", {
-                name: "Find your next experiences",
-            })
-        );
+        const form = screen.getByRole("button", { name: /Find your next experiences/i }).closest("form")!;
+        fireEvent.submit(form);
 
         await waitFor(() => {
             expect(setFiltersMock).toHaveBeenCalledTimes(1);
@@ -268,7 +265,8 @@ describe("Filter", () => {
             getAll: getAllMock,
             addCity: vi.fn(),
             getTrending: vi.fn(),
-            getCityById: vi.fn()
+            getCityById: vi.fn(),
+            geoLocate: vi.fn()
         };
 
         const experienceService: ExperienceService = {
@@ -314,7 +312,8 @@ describe("Filter", () => {
             getAll: getAllMock,
             addCity: vi.fn(),
             getTrending: vi.fn(),
-            getCityById: vi.fn()
+            getCityById: vi.fn(),
+            geoLocate: vi.fn()
         };
 
         const experienceService: ExperienceService = {
@@ -360,8 +359,8 @@ describe("Filter", () => {
             getAll: getAllMock,
             addCity: vi.fn(),
             getTrending: vi.fn(),
-            getCityById: vi.fn()
-
+            getCityById: vi.fn(),
+            geoLocate: vi.fn()
         };
 
         const experienceService: ExperienceService = {
@@ -407,7 +406,8 @@ describe("Filter", () => {
             getAll: getAllMock,
             addCity: vi.fn(),
             getTrending: vi.fn(),
-            getCityById: vi.fn()
+            getCityById: vi.fn(),
+            geoLocate: vi.fn()
         };
 
         const experienceService: ExperienceService = {
