@@ -8,6 +8,7 @@ import Comments from "../../components/Comments/Comments";
 import { ApiError } from "@shared/api/apiError";
 import ShareDialog from "@/components/ShareDialog/ShareDialog";
 import { APIURL } from "@/config/env";
+import LoadingComponent from "@/components/Loading/LoadingComponent";
 
 const categoryStyles: Record<string, string> = {
     STUDIES: "#4A90D9",
@@ -51,7 +52,6 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
             try {
                 const data = await experienceService.getExperienceById(Number(id));
                 setExperience(data);
-                setIsLoading(false);
             } catch (error) {
                 if (error instanceof ApiError && ((error.status >= 500) || (error.status === 404))) {
                     console.error(error);
@@ -61,25 +61,14 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
             }
         };
 
-        fetchExperience();
+        Promise.all([
+            fetchExperience()
+        ]).finally(() => setIsLoading(false));
     }, [id, experienceService]);
 
     if (isLoading || !experience) {
         return (
-            <div className="min-h-[60vh] flex items-center justify-center p-6" role="status">
-                <div className="flex flex-col items-center gap-4 text-center">
-                    <div className="w-12 h-12 border-4 border-[#D5E1EE] border-t-[#4A90D9] rounded-full animate-spin" />
-
-                    <div className="space-y-1">
-                        <h3 className="text-xl font-bold text-[#1E3A5F]">
-                            Discovering the experience...
-                        </h3>
-                        <p className="text-[#4A90C2]">
-                            We're gathering all the experience details for you.
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <LoadingComponent title="Discovering the experience..." description="We're gathering all the experience details for you." />
         );
     }
 
@@ -153,7 +142,7 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
                                                 ? (
                                                     <img src={`${APIURL}/multimedia/experiences/${multimedia.id}`} alt="Multimedia" className="w-full max-w-2xl max-h-[35vh] h-auto object-contain rounded-2xl" />
                                                 ) : (
-                                                    <video src={`${APIURL}/multimedia/experiences/${multimedia.id}`} controls preload="metadata" className="w-full max-w-2xl max-h-[35vh] h-auto object-contain rounded-2xl" data-testid="experience-video"/>
+                                                    <video src={`${APIURL}/multimedia/experiences/${multimedia.id}`} controls preload="metadata" className="w-full max-w-2xl max-h-[35vh] h-auto object-contain rounded-2xl" data-testid="experience-video" />
                                                 )
                                             }
                                         </div>

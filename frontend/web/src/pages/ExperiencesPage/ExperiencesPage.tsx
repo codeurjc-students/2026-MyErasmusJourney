@@ -24,6 +24,7 @@ export default function ExperiencesPage({ experienceService = defaultExperienceS
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setIsLoading(true);
                 const data = await experienceService.getAll(filters);
                 setIsLoading(false);
                 setExperiences(data.content || []);

@@ -77,9 +77,7 @@ export default function Filter({ setFilters, experienceService = createExperienc
         ]).finally(() => setIsLoading(false));
     }, []);
 
-    function filterExperiences(e: FormEvent<HTMLFormElement>) {
-        console.log("Filtering experiences...");
-        
+    function filterExperiences(e: FormEvent<HTMLFormElement>) {        
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);

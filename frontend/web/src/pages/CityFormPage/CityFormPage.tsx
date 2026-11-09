@@ -59,7 +59,9 @@ export default function CityFormPage({ cityService = createCityService(API) }: c
     async function handleGeoLocate() {
         const cityName = (document.getElementById("city") as HTMLInputElement).value;
         try {
+            console.log("Geolocating city...")
             const geolocation = await cityService.geoLocate({ name: cityName, country: (document.getElementById("country") as HTMLInputElement).value });
+            console.log(geolocation)
             setLatitude(geolocation.latitude);
             setLongitude(geolocation.longitude);
             setZoom(7);
