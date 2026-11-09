@@ -141,7 +141,7 @@ describe("LogInPage", () => {
       await screen.findByText("Error page")
     ).toBeInTheDocument();
   });
-
+  
   afterAll(() => {
     const setUser = useUserStore.getState().setUser;
     setUser(null);

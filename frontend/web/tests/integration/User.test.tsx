@@ -12,7 +12,7 @@ import type { UserSimpleDTO } from "@shared/models/UserSimpleDTO";
 
 import { APIURL } from "src/config/env";
 import UserPage from "src/pages/UserPage/UserPage";
-import { authenticateUser, authenticateUserToDelete, clearFetchAndUserStore } from "tests/testAuthentication";
+import { authenticateUser, authenticateUserToDelete, clearUserStore } from "tests/testAuthentication";
 import UserComments from "src/components/UserComments/UserComments";
 import { createExperienceService, type ExperienceService } from "@shared/services/experience.service";
 import UserExperiences from "src/components/UserExperiences/UserExperiences";
@@ -48,7 +48,7 @@ describe("UserPage", () => {
   });
 
   afterAll(() => {
-    clearFetchAndUserStore();
+    clearUserStore();
     cleanup();
   });
 

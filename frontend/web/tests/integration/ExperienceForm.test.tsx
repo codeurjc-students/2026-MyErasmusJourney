@@ -1,6 +1,6 @@
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import "@testing-library/jest-dom";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 import { createApiClient } from "@shared/api/apiClient";
@@ -10,14 +10,14 @@ import { useUserStore } from "@shared/stores/userStore";
 
 import { APIURL } from "src/config/env";
 import ExperienceFormPage from "src/pages/ExperienceFormPage/ExperienceFormPage";
-import { authenticateUser, clearFetchAndUserStore } from "tests/testAuthentication";
+import { authenticateUser, clearUserStore } from "tests/testAuthentication";
 import DetailedExperiencePage from "src/pages/DetailedExperiencePage/DetailedExperiencePage";
 import type { ExperienceFormDTO } from "@shared/models/ExperienceFormDTO";
 import { ApiError } from "@shared/api/apiError";
 import { toast } from "sonner";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
 import userEvent from "@testing-library/user-event";
+import imageUrl from "../exampleMultimedia/experienceExampleImage.jpg?url";
+import videoUrl from "../exampleMultimedia/experienceExampleVideo.mp4?url";
 
 // Real services pointing to the real backend (integration test, nothing is mocked)
 const testAPI = createApiClient(APIURL);
@@ -37,18 +37,28 @@ describe("ExperienceFormPage integration", () => {
 
   // Restore the original fetch and clear the user store
   afterAll(() => {
-    clearFetchAndUserStore();
+    clearUserStore();
   });
 
-  it("renders the form with real categories and cities from the backend", async () => {
+  async function renderExperienceForm() {
     render(
       <MemoryRouter initialEntries={["/experiences/new"]}>
         <Routes>
-          <Route path="/experiences/new" element={<ExperienceFormPage experienceService={testExperienceService} cityService={testCityService} />} />
-          <Route path="/log-in" element={<div>Log in page</div>} />
+          <Route path="/experiences/new" element={<ExperienceFormPage experienceService={testExperienceService} cityService={testCityService} />}/>
+          <Route path="/experiences/:id" element={<DetailedExperiencePage experienceService={testExperienceService}/>}/>
         </Routes>
       </MemoryRouter>
     );
+
+    await screen.findAllByRole("status");
+
+    await waitFor(() => {
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
+  }
+
+  it("renders the form with real categories and cities from the backend", async () => {
+    await renderExperienceForm();
 
     expect(await screen.findByRole("heading", { name: /new experience/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
@@ -90,23 +100,12 @@ describe("ExperienceFormPage integration", () => {
   });
 
   it("shows an alert and blocks submission when more than 3 categories are selected", async () => {
-    const alertSpy = vi
+    const warningSpy = vi
       .spyOn(toast, "warning")
-      .mockImplementation(() => { return "mock-toast-id" });
+      .mockImplementation(() => "mock-toast-id");
     const cities = await testCityService.getAll();
 
-    render(
-      <MemoryRouter initialEntries={["/experiences/new"]}>
-        <Routes>
-          <Route
-            path="/experiences/new"
-            element={
-              <ExperienceFormPage experienceService={testExperienceService} cityService={testCityService} />
-            }
-          />
-        </Routes>
-      </MemoryRouter>
-    );
+    await renderExperienceForm();
 
     await waitFor(() => {
       expect(screen.getByRole("checkbox", { name: /accommodation/i })).toBeInTheDocument();
@@ -118,9 +117,15 @@ describe("ExperienceFormPage integration", () => {
     fireEvent.change(screen.getByLabelText(/rating/i), {
       target: { value: 8.7 },
     });
-    fireEvent.change(screen.getByLabelText(/location/i), {
+
+    const locationInput = screen.getByLabelText(/location/i) as HTMLSelectElement;
+
+    fireEvent.change(locationInput, {
       target: { value: String(cities[0].id) },
     });
+
+    expect(locationInput.value).toBe(String(cities[0].id));
+
     fireEvent.change(screen.getByLabelText(/date/i), {
       target: { value: "2026-09-10" },
     });
@@ -134,17 +139,19 @@ describe("ExperienceFormPage integration", () => {
     fireEvent.click(checkboxList[2]);
     fireEvent.click(checkboxList[3]);
 
+    expect(screen.getByRole("button", { name: /publish/i })).toBeInTheDocument();
+
     fireEvent.click(screen.getByRole("button", { name: /publish/i }));
 
     const errorMessage = "No more than 3 categories are allowed for an experience";
 
     await waitFor(() => {
-      expect(alertSpy).toHaveBeenCalledWith(errorMessage);
+      expect(warningSpy).toHaveBeenCalledWith(errorMessage);
     });
   });
 
   it("shows an alert and blocks submission when date is not valid", async () => {
-    const alertSpy = vi
+    const warning = vi
       .spyOn(toast, "warning")
       .mockImplementation(() => { return "mock-toast-id" });
     const cities = await testCityService.getAll();
@@ -162,6 +169,9 @@ describe("ExperienceFormPage integration", () => {
       </MemoryRouter>
     );
 
+    const loading = await screen.findAllByText("Rendering the experience form...");
+    await waitForElementToBeRemoved(loading);
+
     await waitFor(() => {
       expect(screen.getByRole("checkbox", { name: /accommodation/i })).toBeInTheDocument();
     });
@@ -176,7 +186,7 @@ describe("ExperienceFormPage integration", () => {
       target: { value: String(cities[0].id) },
     });
     fireEvent.change(screen.getByLabelText(/date/i), {
-      target: { value: "2027-09-10" },
+      target: { value: "2028-09-10" },
     });
     fireEvent.change(screen.getByLabelText(/experience description/i), {
       target: { value: "A short trip with many activity categories." },
@@ -191,7 +201,7 @@ describe("ExperienceFormPage integration", () => {
     const errorMessage = "The experience cannot have a date after today";
 
     await waitFor(() => {
-      expect(alertSpy).toHaveBeenCalledWith(errorMessage);
+      expect(warning).toHaveBeenCalledWith(errorMessage);
     });
   });
 
@@ -199,22 +209,7 @@ describe("ExperienceFormPage integration", () => {
     const cities = await testCityService.getAll();
     const title = `Real Experience`;
 
-    render(
-      <MemoryRouter initialEntries={["/experiences/new"]}>
-        <Routes>
-          <Route
-            path="/experiences/new"
-            element={
-              <ExperienceFormPage
-                experienceService={testExperienceService}
-                cityService={testCityService}
-              />
-            }
-          />
-          <Route path="/experiences/:id" element={<DetailedExperiencePage />} />
-        </Routes>
-      </MemoryRouter>
-    );
+    await renderExperienceForm();
 
     await waitFor(() => {
       expect(screen.getByRole("checkbox", { name: /accommodation/i })).toBeInTheDocument();
@@ -239,6 +234,9 @@ describe("ExperienceFormPage integration", () => {
     fireEvent.click(screen.getByRole("checkbox", { name: /accommodation/i }));
 
     fireEvent.click(screen.getByRole("button", { name: /publish/i }));
+
+    const loading2 = await screen.findAllByRole("status");
+    await waitForElementToBeRemoved(loading2);
 
     await waitFor(() => {
       expect(screen.getByText(title)).toBeInTheDocument();
@@ -292,6 +290,9 @@ describe("ExperienceFormPage integration", () => {
       </MemoryRouter>
     );
 
+    const loading = await screen.findAllByText("Rendering the experience form...");
+    await waitForElementToBeRemoved(loading);
+
     await waitFor(() => {
       expect(screen.getByRole("checkbox", { name: /studies/i })).toBeInTheDocument();
     });
@@ -322,39 +323,21 @@ describe("ExperienceFormPage integration", () => {
   it("should create an experience and upload its multimedia successfully", async () => {
     const user = userEvent.setup();
 
-    // Real image used as the upload; wrapped in a jsdom File so the form input accepts it
-    const imagePath = resolve(
-      import.meta.dirname,
-      "../exampleMultimedia/experienceExampleImage.jpg"
-    );
+    const imageResponse = await fetch(imageUrl);
+    expect(imageResponse.ok).toBe(true);
+
+    const imageBlob = await imageResponse.blob();
 
     const image = new File(
-      [readFileSync(imagePath)],
+      [imageBlob],
       "experienceExampleImage.jpg",
-      {
-        type: "image/jpeg",
-      }
+      { type: "image/jpeg" }
     );
 
     const cities = await testCityService.getAll();
     const title = `Real Experience with Multimedia`;
 
-    render(
-      <MemoryRouter initialEntries={["/experiences/new"]}>
-        <Routes>
-          <Route
-            path="/experiences/new"
-            element={
-              <ExperienceFormPage
-                experienceService={testExperienceService}
-                cityService={testCityService}
-              />
-            }
-          />
-          <Route path="/experiences/:id" element={<DetailedExperiencePage />} />
-        </Routes>
-      </MemoryRouter>
-    );
+    await renderExperienceForm();
 
     await waitFor(() => {
       expect(screen.getByRole("checkbox", { name: /accommodation/i })).toBeInTheDocument();
@@ -393,6 +376,9 @@ describe("ExperienceFormPage integration", () => {
       })
     );
 
+    const loading2 = await screen.findAllByRole("status");
+    await waitForElementToBeRemoved(loading2);
+
     await waitFor(() => {
       expect(screen.getByText(title)).toBeInTheDocument();
     });
@@ -407,13 +393,13 @@ describe("ExperienceFormPage integration", () => {
     const user = userEvent.setup();
 
     // Real image used as the upload; wrapped in a jsdom File so the form input accepts it
-    const imagePath = resolve(
-      import.meta.dirname,
-      "../exampleMultimedia/experienceExampleVideo.mp4"
-    );
+    const videoResponse = await fetch(videoUrl);
+    expect(videoResponse.ok).toBe(true);
 
-    const image = new File(
-      [readFileSync(imagePath)],
+    const videoBlob = await videoResponse.blob();
+
+    const file = new File(
+      [videoBlob],
       "experienceExampleVideo.mp4",
       {
         type: "video/mp4",
@@ -423,21 +409,7 @@ describe("ExperienceFormPage integration", () => {
     const cities = await testCityService.getAll();
     const title = `Real Experience with Multimedia`;
 
-    render(
-      <MemoryRouter initialEntries={["/experiences/new"]}>
-        <Routes>
-          <Route
-            path="/experiences/new"
-            element={
-              <ExperienceFormPage
-                experienceService={testExperienceService}
-                cityService={testCityService}
-              />
-            }
-          />
-        </Routes>
-      </MemoryRouter>
-    );
+    await renderExperienceForm();
 
     await waitFor(() => {
       expect(screen.getByRole("checkbox", { name: /accommodation/i })).toBeInTheDocument();
@@ -468,7 +440,7 @@ describe("ExperienceFormPage integration", () => {
 
     expect(multimediaInput).not.toBeNull();
 
-    await user.upload(multimediaInput!, [image]);
+    await user.upload(multimediaInput!, [file]);
 
     fireEvent.click(
       screen.getByRole("button", {

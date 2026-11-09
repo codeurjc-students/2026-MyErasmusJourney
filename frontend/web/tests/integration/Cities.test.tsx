@@ -1,7 +1,7 @@
 import CitiesPage from "@/pages/CItiesPage/CitiesPage";
 import type { CitySimpleDTO } from "@shared/models/CitySimpleDTO";
 import { createCityService, type CityService } from "@shared/services/city.service";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { vi, describe, beforeEach, it, expect } from "vitest";
 import "@testing-library/jest-dom";
@@ -29,6 +29,10 @@ describe("CitiesPage", () => {
             </MemoryRouter>
         );
 
+        const loading = await screen.findByRole("status");
+        await waitForElementToBeRemoved(loading);
+        
+
         for (const city of responseData) {
             await waitFor(() => {
                 expect(screen.getByText(city.name)).toBeInTheDocument();
@@ -41,6 +45,7 @@ describe("CitiesPage", () => {
             addCity: testCityService.addCity,
             getAll: testCityService.getAll,
             getCityById: testCityService.getCityById,
+            geoLocate: testCityService.geoLocate,
             getTrending: async () => {
                 const response = await testAPI.get("/tests/500");
 
