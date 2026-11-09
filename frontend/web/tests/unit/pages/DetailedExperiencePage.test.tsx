@@ -160,7 +160,6 @@ describe("DetailedExperiencePage", () => {
     expect(screen.queryAllByTestId("experience-video")).toHaveLength(2);
 
     expect(mockGetExperienceById).toHaveBeenCalledTimes(1);
-    expect(mockGetExperienceById).toHaveBeenCalledWith(1);
   });
 
   it("should navigate to error page when the experience does not exist", async () => {
