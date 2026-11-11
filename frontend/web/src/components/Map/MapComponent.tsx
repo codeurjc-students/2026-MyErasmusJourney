@@ -1,9 +1,8 @@
-
-import { Map, Marker, Popup, setWorkerUrl } from 'maplibre-gl';
-import 'maplibre-gl/dist/maplibre-gl.css';
-import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
-import { useEffect, useRef } from 'react';
-import type { MapMarker } from '@shared/models/MapMarker';
+import { Map, Marker, Popup, setWorkerUrl } from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
+import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
+import { useEffect, useRef } from "react";
+import type { MapMarker } from "@shared/models/MapMarker";
 
 interface MapProps {
     latitude: number;
@@ -15,20 +14,35 @@ interface MapProps {
 
 setWorkerUrl(workerUrl);
 
-export default function MapComponent({ latitude, longitude, zoom, marks, markerType }: MapProps) {
+export default function MapComponent({
+    latitude,
+    longitude,
+    zoom,
+    marks,
+    markerType,
+}: MapProps) {
     const mapContainer = useRef<HTMLDivElement>(null);
     const mapRef = useRef<Map | null>(null);
     const markersRef = useRef<Marker[]>([]);
 
     const createMarker = (map: Map, mark: MapMarker): Marker => {
+        let marker: Marker;
         switch (markerType) {
             case "preview":
-                return createCircleMarker(map, mark);
+                marker = createCircleMarker(map, mark);
+                break;
             case "cities":
-                return createPopUpMarker(map, mark);
+                marker = createPopUpMarker(map, mark);
+                break;
             case "experiences":
-                return createPinMarker(map, mark);
+                marker = createPinMarker(map, mark);
+                break;
         }
+        const element = marker.getElement();
+        element.dataset.testid = "map-marker";
+        element.dataset.markerType = markerType;
+        element.setAttribute("aria-label", mark.title ?? "");
+        return marker;
     };
 
     function createPopUpMarker(map: Map, mark: MapMarker): Marker {
@@ -41,9 +55,12 @@ export default function MapComponent({ latitude, longitude, zoom, marks, markerT
     function createCircleMarker(map: Map, mark: MapMarker): Marker {
         const element = document.createElement("div");
 
-        element.className = "h-4 w-4 rounded-full bg-[#4A90D9] border-2 border-white shadow-md cursor-pointer";
+        element.className =
+            "h-4 w-4 rounded-full bg-[#4A90D9] border-2 border-white shadow-md cursor-pointer";
 
-        return new Marker({ element }).setLngLat([mark.longitude, mark.latitude]).addTo(map);
+        return new Marker({ element })
+            .setLngLat([mark.longitude, mark.latitude])
+            .addTo(map);
     }
 
     function createPinMarker(map: Map, mark: MapMarker): Marker {
@@ -57,15 +74,15 @@ export default function MapComponent({ latitude, longitude, zoom, marks, markerT
 
         const map = new Map({
             container: mapContainer.current,
-            style: '/map-styles/my-erasmus-map-styles.json',
+            style: "/map-styles/my-erasmus-map-styles.json",
             center: [longitude, latitude],
-            zoom
+            zoom,
         });
 
         mapRef.current = map;
 
         return () => {
-            markersRef.current.forEach(marker => marker.remove());
+            markersRef.current.forEach((marker) => marker.remove());
             markersRef.current = [];
 
             map.remove();
@@ -77,31 +94,30 @@ export default function MapComponent({ latitude, longitude, zoom, marks, markerT
     useEffect(() => {
         mapRef.current?.jumpTo({
             center: [longitude, latitude],
-            zoom
+            zoom,
         });
     }, [latitude, longitude, zoom]);
 
     // Update map markers
+    // Markers effect: no style gate
     useEffect(() => {
         const map = mapRef.current;
         if (!map) return;
 
-        const updateMarkers = () => {
-            markersRef.current.forEach(marker => marker.remove());
-            markersRef.current = [];
-
-            marks.forEach(mark => {
-                markersRef.current.push(createMarker(map, mark));
-            });
-        };
-
-        if (map.isStyleLoaded()) updateMarkers(); 
-        else map.once('load', updateMarkers);
-
-        return () => {map.off('load', updateMarkers);};
+        markersRef.current.forEach((marker) => marker.remove());
+        markersRef.current = marks.map((mark) => createMarker(map, mark));
     }, [marks, markerType]);
 
+    // Container with test hooks
     return (
-        <div ref={mapContainer} className="w-full h-[40vh] min-h-64 md:h-[50vh] lg:h-[60vh] rounded-xl overflow-hidden"/>
+        <div
+            ref={mapContainer}
+            data-testid="map"
+            data-latitude={latitude}
+            data-longitude={longitude}
+            data-zoom={zoom}
+            data-marker-count={marks.length}
+            className="w-full h-[40vh] min-h-64 md:h-[50vh] lg:h-[60vh] rounded-xl overflow-hidden"
+        />
     );
 }
