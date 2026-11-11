@@ -13,7 +13,7 @@ vi.mock("sonner", () => ({
 }));
 
 describe("ShareDialog", () => {
-    const experienceUrl = "http://localhost:63315/experiences/42";
+    const experienceUrl = "http://localhost:3000/experiences/42";
 
     let writeTextMock: ReturnType<typeof vi.fn>;
     let windowOpenMock: ReturnType<typeof vi.spyOn>;

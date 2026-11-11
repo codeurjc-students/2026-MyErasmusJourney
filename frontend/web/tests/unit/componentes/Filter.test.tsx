@@ -94,8 +94,6 @@ describe("Filter", () => {
             </MemoryRouter>
         );
 
-        await screen.findByRole("status");
-
         await waitFor(() => {
             expect(screen.queryByRole("status")).not.toBeInTheDocument();
         });

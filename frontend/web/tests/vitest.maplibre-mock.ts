@@ -22,6 +22,7 @@ vi.mock("maplibre-gl", () => {
         addLayer = vi.fn().mockReturnThis();
         getSource = vi.fn();
         flyTo = vi.fn().mockReturnThis();
+        jumpTo = vi.fn().mockReturnThis();
         easeTo = vi.fn().mockReturnThis();
         fitBounds = vi.fn().mockReturnThis();
         setCenter = vi.fn().mockReturnThis();
@@ -46,13 +47,47 @@ vi.mock("maplibre-gl", () => {
         remove = vi.fn();
     }
 
+    class MockLngLat {
+        lng: number;
+        lat: number;
+        constructor(lng: number, lat: number) {
+            this.lng = lng;
+            this.lat = lat;
+        }
+        toArray() {
+            return [this.lng, this.lat];
+        }
+    }
+
+    class MockLngLatBounds {
+        extend = vi.fn(() => this);
+        isEmpty = vi.fn(() => false);
+    }
+
+
     class MockNavigationControl { }
+    
+    const noop = vi.fn();
+
 
     const mod = {
         Map: MockMap,
         Marker: MockMarker,
         Popup: MockPopup,
         NavigationControl: MockNavigationControl,
+        LngLat: MockLngLat,
+        LngLatBounds: MockLngLatBounds,
+
+        // global config functions
+        setWorkerUrl: noop,
+        setWorkerCount: noop,
+        setMaxParallelImageRequests: noop,
+        setRTLTextPlugin: noop,
+        addProtocol: noop,
+        removeProtocol: noop,
+        prewarm: noop,
+        clearPrewarmedResources: noop,
     };
+
     return { ...mod, default: mod };
 });
