@@ -53,8 +53,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Install dependencies web
-        run: pnpm --filter web install
+      - name: Install Playwright browsers
+        run: pnpm --filter web exec playwright install --with-deps firefox
 
       - name: Run web unit tests
         run: pnpm --filter web test tests/unit
