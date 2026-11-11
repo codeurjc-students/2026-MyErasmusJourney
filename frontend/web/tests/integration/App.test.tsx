@@ -10,7 +10,7 @@ import type { UserSimpleDTO } from "@shared/models/UserSimpleDTO";
 
 import { APIURL } from "src/config/env";
 import App from "src/App";
-import { authenticateUser, clearUserStore } from "tests/browserTestAuthetication";
+import { authenticateUser, clearUserStore } from "tests/testAuthentication";
 
 const testAPI = createApiClient(APIURL);
 const testUserService = createUserService(testAPI);
