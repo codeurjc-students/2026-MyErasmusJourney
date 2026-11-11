@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
@@ -34,6 +34,22 @@ describe("CityFormPage", () => {
   afterAll(() => {
     clearUserStore();
   });
+
+  vi.mock("@/components/Map/MapComponent", () => ({
+    default: (props: any) => (
+      <div
+        data-testid="map"
+        data-latitude={props.latitude}
+        data-longitude={props.longitude}
+        data-zoom={props.zoom}
+        data-marker-type={props.markerType}
+        data-marks={JSON.stringify(props.marks)}
+      />
+    ),
+  }));
+
+  const getMarks = () =>
+    JSON.parse(screen.getByTestId("map").getAttribute("data-marks")!);
 
 
   it("should render the city form with all fields", () => {
@@ -429,5 +445,35 @@ describe("CityFormPage", () => {
     expect(
       await screen.findByText("Error page")
     ).toBeInTheDocument();
+  });
+
+  it("should show the geolocated city on the map when pressing preview", async () => {
+    render(
+      <MemoryRouter>
+        <CityFormPage cityService={testCityService} />
+      </MemoryRouter>
+    );
+
+    // Initial state: no markers, default view
+    expect(getMarks()).toHaveLength(0);
+    expect(screen.getByTestId("map")).toHaveAttribute("data-marker-type", "preview");
+
+    fireEvent.change(screen.getByLabelText(/city name/i), { target: { value: "Madrid" } });
+    fireEvent.change(screen.getByLabelText(/country/i), { target: { value: "Spain" } });
+    fireEvent.click(screen.getByRole("button", { name: /preview/i }));
+
+    await waitFor(() => expect(getMarks()).toHaveLength(1));
+
+    const [mark] = getMarks();
+    expect(mark.title).toBe("Madrid");
+    expect(mark.latitude).toBeGreaterThan(40);
+    expect(mark.latitude).toBeLessThan(41);
+    expect(mark.longitude).toBeGreaterThan(-4);
+    expect(mark.longitude).toBeLessThan(-3);
+
+    const map = screen.getByTestId("map");
+    expect(map).toHaveAttribute("data-zoom", "7");
+    expect(Number(map.getAttribute("data-latitude"))).toBeCloseTo(mark.latitude);
+    expect(Number(map.getAttribute("data-longitude"))).toBeCloseTo(mark.longitude);
   });
 });
