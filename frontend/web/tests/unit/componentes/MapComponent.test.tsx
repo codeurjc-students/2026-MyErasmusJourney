@@ -1,5 +1,4 @@
-
-import { render, act} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MapMarker } from "@shared/models/MapMarker";
 
@@ -9,50 +8,26 @@ const mapLibreMocks = vi.hoisted(() => ({
     mapInstances: [] as any[],
     markerInstances: [] as any[],
     popupInstances: [] as any[],
-    styleLoaded: true,
 }));
 
 vi.mock("maplibre-gl", () => {
     class MockMap {
         options: any;
-        styleLoaded: boolean;
-        listeners: Record<string, () => void> = {};
 
         jumpTo = vi.fn();
         remove = vi.fn();
-
-        isStyleLoaded = vi.fn(() => this.styleLoaded);
-
-        once = vi.fn((event: string, callback: () => void) => {
-            this.listeners[event] = callback;
-            return this;
-        });
-
-        off = vi.fn((event: string, callback: () => void) => {
-            if (this.listeners[event] === callback) {
-                delete this.listeners[event];
-            }
-            return this;
-        });
+        once = vi.fn();
+        off = vi.fn();
 
         constructor(options: any) {
             this.options = options;
-            this.styleLoaded = mapLibreMocks.styleLoaded;
             mapLibreMocks.mapInstances.push(this);
-        }
-
-        emit(event: string) {
-            const callback = this.listeners[event];
-
-            if (callback) {
-                delete this.listeners[event];
-                callback();
-            }
         }
     }
 
     class MockMarker {
         options: any;
+        element: HTMLElement;
         coordinates: number[] | undefined;
         popup: any;
 
@@ -66,11 +41,16 @@ vi.mock("maplibre-gl", () => {
             return this;
         });
 
+        // Real MapLibre returns the custom element if provided,
+        // otherwise it creates a default one.
+        getElement = vi.fn(() => this.element);
+
         addTo = vi.fn(() => this);
         remove = vi.fn();
 
         constructor(options?: any) {
             this.options = options;
+            this.element = options?.element ?? document.createElement("div");
             mapLibreMocks.markerInstances.push(this);
         }
     }
@@ -100,8 +80,6 @@ vi.mock("maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url", () => ({
     default: "mock-worker-url",
 }));
 
-// Adapt the import path to your project.
-
 const createMark = (
     latitude: number,
     longitude: number,
@@ -125,13 +103,10 @@ describe("MapComponent", () => {
         mapLibreMocks.mapInstances.length = 0;
         mapLibreMocks.markerInstances.length = 0;
         mapLibreMocks.popupInstances.length = 0;
-        mapLibreMocks.styleLoaded = true;
     });
 
     it("should initialize the map with the provided configuration", () => {
-        const { container } = render(
-            <MapComponent {...defaultProps} />
-        );
+        const { container } = render(<MapComponent {...defaultProps} />);
 
         expect(mapLibreMocks.mapInstances).toHaveLength(1);
 
@@ -145,17 +120,30 @@ describe("MapComponent", () => {
         });
     });
 
-    it("should update the map position when coordinates or zoom change", () => {
-        const { rerender } = render(
-            <MapComponent {...defaultProps} />
+    it("should expose the map state through data attributes", () => {
+        const marks = [createMark(40.4168, -3.7038, "Madrid")];
+
+        const { getByTestId } = render(
+            <MapComponent {...defaultProps} marks={marks} />
         );
+
+        const map = getByTestId("map");
+
+        expect(map).toHaveAttribute("data-latitude", "40.4168");
+        expect(map).toHaveAttribute("data-longitude", "-3.7038");
+        expect(map).toHaveAttribute("data-zoom", "10");
+        expect(map).toHaveAttribute("data-marker-count", "1");
+    });
+
+    it("should update the map position when coordinates or zoom change", () => {
+        const { rerender } = render(<MapComponent {...defaultProps} />);
 
         const map = mapLibreMocks.mapInstances[0];
 
         map.jumpTo.mockClear();
 
         rerender(
-            <MapComponent {...defaultProps} latitude={48.8566} longitude={2.3522} zoom={12}/>
+            <MapComponent {...defaultProps} latitude={48.8566} longitude={2.3522} zoom={12} />
         );
 
         expect(map.jumpTo).toHaveBeenCalledWith({
@@ -165,13 +153,9 @@ describe("MapComponent", () => {
     });
 
     it("should create popup markers for cities", () => {
-        const marks = [
-            createMark(40.4168, -3.7038, "Madrid"),
-        ];
+        const marks = [createMark(40.4168, -3.7038, "Madrid")];
 
-        render(
-            <MapComponent {...defaultProps} marks={marks} markerType="cities"/>
-        );
+        render(<MapComponent {...defaultProps} marks={marks} markerType="cities" />);
 
         expect(mapLibreMocks.markerInstances).toHaveLength(1);
         expect(mapLibreMocks.popupInstances).toHaveLength(1);
@@ -182,44 +166,27 @@ describe("MapComponent", () => {
         expect(marker.setLngLat).toHaveBeenCalledWith([-3.7038, 40.4168]);
         expect(popup.setText).toHaveBeenCalledWith("Madrid");
         expect(marker.setPopup).toHaveBeenCalledWith(popup);
-        expect(marker.addTo).toHaveBeenCalledWith(
-            mapLibreMocks.mapInstances[0]
-        );
+        expect(marker.addTo).toHaveBeenCalledWith(mapLibreMocks.mapInstances[0]);
     });
 
     it("should create popup markers for experiences", () => {
-        const marks = [
-            createMark(48.8566, 2.3522, "My Erasmus experience"),
-        ];
+        const marks = [createMark(48.8566, 2.3522, "My Erasmus experience")];
 
         render(
-            <MapComponent
-                {...defaultProps}
-                marks={marks}
-                markerType="experiences"
-            />
+            <MapComponent {...defaultProps} marks={marks} markerType="experiences" />
         );
 
         expect(mapLibreMocks.markerInstances).toHaveLength(1);
         expect(mapLibreMocks.popupInstances).toHaveLength(1);
-
-        expect(
-            mapLibreMocks.popupInstances[0].setText
-        ).toHaveBeenCalledWith("My Erasmus experience");
+        expect(mapLibreMocks.popupInstances[0].setText).toHaveBeenCalledWith(
+            "My Erasmus experience"
+        );
     });
 
     it("should create circular markers for preview", () => {
-        const marks = [
-            createMark(48.8566, 2.3522, "Preview city"),
-        ];
+        const marks = [createMark(48.8566, 2.3522, "Preview city")];
 
-        render(
-            <MapComponent
-                {...defaultProps}
-                marks={marks}
-                markerType="preview"
-            />
-        );
+        render(<MapComponent {...defaultProps} marks={marks} markerType="preview" />);
 
         expect(mapLibreMocks.markerInstances).toHaveLength(1);
         expect(mapLibreMocks.popupInstances).toHaveLength(0);
@@ -235,70 +202,64 @@ describe("MapComponent", () => {
         expect(marker.addTo).toHaveBeenCalled();
     });
 
-    it("should wait for the map style to load before creating markers", () => {
-        mapLibreMocks.styleLoaded = false;
+    it("should tag marker elements with test attributes", () => {
+        const marks = [createMark(40.4168, -3.7038, "Madrid")];
 
-        const marks = [
-            createMark(40.4168, -3.7038, "Madrid"),
-        ];
+        render(<MapComponent {...defaultProps} marks={marks} markerType="preview" />);
 
-        render(
-            <MapComponent
-                {...defaultProps}
-                marks={marks}
-            />
-        );
+        const element = mapLibreMocks.markerInstances[0].getElement();
+
+        expect(element.getAttribute("data-testid")).toBe("map-marker");
+        expect(element.getAttribute("data-marker-type")).toBe("preview");
+        expect(element.getAttribute("aria-label")).toBe("Madrid");
+    });
+
+    it("should use an empty aria-label when the mark has no title", () => {
+        const marks = [{ latitude: 1, longitude: 2 } as MapMarker];
+
+        render(<MapComponent {...defaultProps} marks={marks} />);
+
+        const element = mapLibreMocks.markerInstances[0].getElement();
+
+        expect(element.getAttribute("aria-label")).toBe("");
+    });
+
+    it("should create markers immediately without waiting for the style to load", () => {
+        const marks = [createMark(40.4168, -3.7038, "Madrid")];
+
+        render(<MapComponent {...defaultProps} marks={marks} />);
 
         const map = mapLibreMocks.mapInstances[0];
 
-        expect(map.once).toHaveBeenCalledWith(
-            "load",
-            expect.any(Function)
-        );
-
-        expect(mapLibreMocks.markerInstances).toHaveLength(0);
-
-        act(() => {
-            map.emit("load");
-        });
-
+        expect(map.once).not.toHaveBeenCalled();
         expect(mapLibreMocks.markerInstances).toHaveLength(1);
     });
 
     it("should remove previous markers when marks change", () => {
-        const firstMarks = [
-            createMark(40.4168, -3.7038, "Madrid"),
-        ];
+        const firstMarks = [createMark(40.4168, -3.7038, "Madrid")];
 
         const secondMarks = [
             createMark(48.8566, 2.3522, "Paris"),
-            createMark(52.5200, 13.4050, "Berlin"),
+            createMark(52.52, 13.405, "Berlin"),
         ];
 
         const { rerender } = render(
-            <MapComponent
-                {...defaultProps}
-                marks={firstMarks}
-            />
+            <MapComponent {...defaultProps} marks={firstMarks} />
         );
 
         const previousMarker = mapLibreMocks.markerInstances[0];
 
-        rerender(
-            <MapComponent
-                {...defaultProps}
-                marks={secondMarks}
-            />
-        );
+        rerender(<MapComponent {...defaultProps} marks={secondMarks} />);
 
         expect(previousMarker.remove).toHaveBeenCalledTimes(1);
         expect(mapLibreMocks.markerInstances).toHaveLength(3);
 
-        expect(mapLibreMocks.markerInstances[1].setLngLat)
-            .toHaveBeenCalledWith([2.3522, 48.8566]);
-
-        expect(mapLibreMocks.markerInstances[2].setLngLat)
-            .toHaveBeenCalledWith([13.4050, 52.5200]);
+        expect(mapLibreMocks.markerInstances[1].setLngLat).toHaveBeenCalledWith([
+            2.3522, 48.8566,
+        ]);
+        expect(mapLibreMocks.markerInstances[2].setLngLat).toHaveBeenCalledWith([
+            13.405, 52.52,
+        ]);
     });
 
     it("should remove markers and destroy the map when unmounted", () => {
@@ -307,12 +268,7 @@ describe("MapComponent", () => {
             createMark(48.8566, 2.3522, "Paris"),
         ];
 
-        const { unmount } = render(
-            <MapComponent
-                {...defaultProps}
-                marks={marks}
-            />
-        );
+        const { unmount } = render(<MapComponent {...defaultProps} marks={marks} />);
 
         const map = mapLibreMocks.mapInstances[0];
         const markers = [...mapLibreMocks.markerInstances];
