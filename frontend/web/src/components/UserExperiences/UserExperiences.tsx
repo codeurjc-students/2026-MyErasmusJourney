@@ -39,7 +39,7 @@ export default function UserExperiences({ userService = createUserService(API), 
         }
         try {
             const data = await userService.getExperiences(id);
-            setExperiences(data.reverse());
+            setExperiences(data.toReversed());
         } catch (error) {
             if (error instanceof ApiError && error.status >= 500) {
                 console.error(error);
@@ -55,7 +55,7 @@ export default function UserExperiences({ userService = createUserService(API), 
             fetchExperiences();
         }
         else {
-            setExperiences(userExperiences)
+            setExperiences(userExperiences.toReversed())
         }
         setLoading(false);
     }, [])
