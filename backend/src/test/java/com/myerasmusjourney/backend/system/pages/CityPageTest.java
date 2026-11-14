@@ -21,6 +21,10 @@ public class CityPageTest extends BaseSeleniumTest {
 
         linkToCitiesPage.click();
 
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div/div/div/aside/div/div[1]")
         ));
@@ -28,6 +32,10 @@ public class CityPageTest extends BaseSeleniumTest {
         WebElement linkToCity = driver.findElement(By.xpath("/html/body/div/div/div/aside/div/div[2]/a"));
 
         linkToCity.click();
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div/div/div/main/h3")

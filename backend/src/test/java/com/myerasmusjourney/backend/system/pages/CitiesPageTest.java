@@ -24,6 +24,10 @@ public class CitiesPageTest extends BaseSeleniumTest {
 
         linkToCitiesPage.click();
 
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div/div/div/aside/div/div[1]")
         ));

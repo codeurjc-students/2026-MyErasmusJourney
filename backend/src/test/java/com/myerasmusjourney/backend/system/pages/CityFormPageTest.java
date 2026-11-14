@@ -16,11 +16,16 @@ import static org.junit.Assert.assertTrue;
 @Tag("system")
 public class CityFormPageTest extends AuthenticatedSeleniumTest {
 
-    @Test
-    void testAddCity(){
+    private void renderCityForm(){
         authenticateAdminTest();
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
+
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("profileTitle")
@@ -30,9 +35,22 @@ public class CityFormPageTest extends AuthenticatedSeleniumTest {
 
         buttonToCityForm.click();
 
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("city")
         ));
+    }
+
+    @Test
+    void testAddCity(){
+        authenticateAdminTest();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        renderCityForm();
 
         WebElement name = driver.findElement(By.id("city"));
         WebElement country = driver.findElement(By.id("country"));
@@ -60,17 +78,7 @@ public class CityFormPageTest extends AuthenticatedSeleniumTest {
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("profileTitle")
-        ));
-
-        WebElement buttonToCityForm = driver.findElement(By.xpath("/html/body/div/div/div[1]/div[1]/div[2]/button[1]"));
-
-        buttonToCityForm.click();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("city")
-        ));
+        renderCityForm();
 
         // The map exists and the WebGL canvas was created
         WebElement map = wait.until(ExpectedConditions.presenceOfElementLocated(

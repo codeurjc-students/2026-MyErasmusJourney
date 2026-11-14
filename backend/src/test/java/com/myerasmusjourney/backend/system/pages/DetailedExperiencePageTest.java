@@ -29,6 +29,10 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
 
         linkToExperience.click();
 
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("experience-1")
         ));
@@ -36,6 +40,10 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
         WebElement linkToFirstExperience = driver.findElement(By.xpath("/html/body/div/div/div/main/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/a"));
 
         linkToFirstExperience.click();
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
     }
 
     @Test
@@ -76,7 +84,7 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
                 By.xpath("/html/body/div/div/div/aside/div[1]/div/div[2]")
         ));
 
-        WebElement newComment = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[1]/div/div[2]"));
+        WebElement newComment = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[1]/div/div[1]"));
         assertTrue(newComment.getText().contains("New comment"));
     }
 
