@@ -19,6 +19,10 @@ public class UserFormPageTest extends AuthenticatedSeleniumTest {
     void testUpdatingUser(){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("profileTitle")
         ));
@@ -27,18 +31,26 @@ public class UserFormPageTest extends AuthenticatedSeleniumTest {
 
         buttonToEdit.click();
 
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("studyLocation")
         ));
 
         WebElement fullName = driver.findElement(By.id("fullName"));
 
-        WebElement submitButton = driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/form/div[6]/button"));
+        WebElement submitButton = driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/form/div[5]/button"));
 
         fullName.clear();
         fullName.sendKeys("New user name");
 
         submitButton.click();
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("profileTitle")

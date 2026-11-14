@@ -15,11 +15,13 @@ import { Trash2Icon } from "lucide-react"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, AlertDialogTrigger, } from "../../../@/components/ui/alert-dialog"
 import ProfileImageDialog from "@/components/ProfileImageDialog/ProfileImageDialog";
 import { APIURL } from "@/config/env";
+import LoadingComponent from "@/components/Loading/LoadingComponent";
 
 export default function UserPage({ authService = createAuthService(API), userService = createUserService(API) }: authServiceProps & userServiceProps) {
 
     const [userDTO, setUserDTO] = useState<UserDTO | null>(null);
     const [imageUpdated, setImageUpdated] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
 
 
     const { user, setUser } = useUserStore();
@@ -46,6 +48,7 @@ export default function UserPage({ authService = createAuthService(API), userSer
                     {
                         const data: UserDTO = await userService.getUserById(user.id);
                         setUserDTO(data);
+                        setLoading(false);
                         
                         if (data.profileImage != null) setUser({id: data.id, displayName: data.displayName, email: data.email, userImageId: data.profileImage.id})
                         else setUser({id: data.id, displayName: data.displayName, email: data.email, userImageId: null})
@@ -91,6 +94,13 @@ export default function UserPage({ authService = createAuthService(API), userSer
                 console.error(error)
             }
         }
+    }
+
+    if (loading) {
+        return(<>
+            <LoadingComponent title="Obtaining your profile information..."
+                description="Your profile information will be shown in a few moments, please wait" />
+        </>)
     }
 
     return (<>

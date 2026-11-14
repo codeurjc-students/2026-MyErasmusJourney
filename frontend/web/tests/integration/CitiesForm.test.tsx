@@ -10,7 +10,7 @@ import { createCityService, type CityService } from "@shared/services/city.servi
 import { APIURL } from "src/config/env";
 
 import { useUserStore } from "@shared/stores/userStore";
-import { authenticateUser, clearFetchAndUserStore, } from "tests/testAuthentication";
+import { authenticateUser, clearUserStore, } from "tests/testAuthentication";
 import { toast } from "sonner";
 import type { CityFormDTO } from "@shared/models/CityFormDTO";
 import { ApiError } from "@shared/api/apiError";
@@ -32,8 +32,24 @@ describe("CityFormPage", () => {
   });
 
   afterAll(() => {
-    clearFetchAndUserStore();
+    clearUserStore();
   });
+
+  vi.mock("@/components/Map/MapComponent", () => ({
+    default: (props: any) => (
+      <div
+        data-testid="map"
+        data-latitude={props.latitude}
+        data-longitude={props.longitude}
+        data-zoom={props.zoom}
+        data-marker-type={props.markerType}
+        data-marks={JSON.stringify(props.marks)}
+      />
+    ),
+  }));
+
+  const getMarks = () =>
+    JSON.parse(screen.getByTestId("map").getAttribute("data-marks")!);
 
 
   it("should render the city form with all fields", () => {
@@ -63,13 +79,13 @@ describe("CityFormPage", () => {
     ).toBeInTheDocument();
 
     expect(
-      screen.getByAltText("City map preview")
+      screen.getByRole("button", { name: /preview/i })
     ).toBeInTheDocument();
   });
 
   it("should successfully submit the form with valid data and navigate to detailed city page", async () => {
 
-    const cityName = `VitestCity-${Date.now()}`;
+    const cityName = "Teruel";
 
     render(
       <MemoryRouter initialEntries={["/city-form"]}>
@@ -97,7 +113,7 @@ describe("CityFormPage", () => {
     fireEvent.change(
       screen.getByLabelText(/city description/i),
       {
-        target: { value: "A beautiful city created by an integration test." },
+        target: { value: "A beautiful city of Spain with much history." },
       }
     );
 
@@ -106,7 +122,11 @@ describe("CityFormPage", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/vitestcity/i)).toBeInTheDocument();
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/Teruel/i)).toBeInTheDocument();
     });
 
   });
@@ -188,7 +208,7 @@ describe("CityFormPage", () => {
   });
 
   it("should allow adding two cities with the same name but different countries", async () => {
-    const cityName = `VitestCity-${Date.now()}`;
+    const cityName = `Guadalajara`;
 
     // first city
     const firstRender = render(
@@ -228,9 +248,12 @@ describe("CityFormPage", () => {
       screen.getByRole("button", { name: /save city/i })
     );
 
+    await waitFor(() => {
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
 
     await waitFor(() => {
-      expect(screen.getByText(/vitestcity/i)).toBeInTheDocument();
+      expect(screen.getByText(/guadalajara/i)).toBeInTheDocument();
     });
 
     firstRender.unmount();
@@ -258,14 +281,14 @@ describe("CityFormPage", () => {
     fireEvent.change(
       screen.getByLabelText(/country/i),
       {
-        target: { value: "France" },
+        target: { value: "Mexico" },
       }
     );
 
     fireEvent.change(
       screen.getByLabelText(/city description/i),
       {
-        target: { value: "City in France." },
+        target: { value: "City in Mexico." },
       }
     );
 
@@ -274,7 +297,11 @@ describe("CityFormPage", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/vitestcity/i)).toBeInTheDocument();
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/guadalajara/i)).toBeInTheDocument();
     });
   });
 
@@ -293,7 +320,8 @@ describe("CityFormPage", () => {
       },
       getAll: testCityService.getAll,
       getTrending: testCityService.getTrending,
-      getCityById: testCityService.getCityById
+      getCityById: testCityService.getCityById,
+      geoLocate: testCityService.geoLocate,
     };
 
     render(
@@ -346,5 +374,106 @@ describe("CityFormPage", () => {
     expect(
       await screen.findByText("Error page")
     ).toBeInTheDocument();
+  });
+
+  it("should navigate to the error page when geolocating a city fails with an internal server error", async () => {
+    const testService: CityService = {
+      geoLocate: async (geolocate: { name: string; country: string }) => {
+        const response = await testAPI.get("/tests/500");
+
+        if (!response.ok) {
+          console.error("Error saving new city ")
+          console.error(geolocate)
+          throw new ApiError(response.status, await response.text());
+        }
+
+        return await response.json() as CityDTO;
+      },
+      getAll: testCityService.getAll,
+      getTrending: testCityService.getTrending,
+      getCityById: testCityService.getCityById,
+      addCity: testCityService.addCity,
+    };
+
+    render(
+      <MemoryRouter initialEntries={["/city-form"]}>
+        <Routes>
+          <Route
+            path="/city-form"
+            element={
+              <CityFormPage cityService={testService} />
+            }
+          />
+
+          <Route
+            path="/error"
+            element={<div>Error page</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    fireEvent.change(
+      screen.getByLabelText(/city name/i),
+      {
+        target: { value: "Madrid" },
+      }
+    );
+
+    fireEvent.change(
+      screen.getByLabelText(/country/i),
+      {
+        target: { value: "Spain" },
+      }
+    );
+
+    fireEvent.change(
+      screen.getByLabelText(/city description/i),
+      {
+        target: {
+          value: "A beautiful city created by an integration test.",
+        },
+      }
+    );
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /preview/i,
+      })
+    );
+
+    expect(
+      await screen.findByText("Error page")
+    ).toBeInTheDocument();
+  });
+
+  it("should show the geolocated city on the map when pressing preview", async () => {
+    render(
+      <MemoryRouter>
+        <CityFormPage cityService={testCityService} />
+      </MemoryRouter>
+    );
+
+    // Initial state: no markers, default view
+    expect(getMarks()).toHaveLength(0);
+    expect(screen.getByTestId("map")).toHaveAttribute("data-marker-type", "preview");
+
+    fireEvent.change(screen.getByLabelText(/city name/i), { target: { value: "Madrid" } });
+    fireEvent.change(screen.getByLabelText(/country/i), { target: { value: "Spain" } });
+    fireEvent.click(screen.getByRole("button", { name: /preview/i }));
+
+    await waitFor(() => expect(getMarks()).toHaveLength(1));
+
+    const [mark] = getMarks();
+    expect(mark.title).toBe("Madrid");
+    expect(mark.latitude).toBeGreaterThan(40);
+    expect(mark.latitude).toBeLessThan(41);
+    expect(mark.longitude).toBeGreaterThan(-4);
+    expect(mark.longitude).toBeLessThan(-3);
+
+    const map = screen.getByTestId("map");
+    expect(map).toHaveAttribute("data-zoom", "7");
+    expect(Number(map.getAttribute("data-latitude"))).toBeCloseTo(mark.latitude);
+    expect(Number(map.getAttribute("data-longitude"))).toBeCloseTo(mark.longitude);
   });
 });

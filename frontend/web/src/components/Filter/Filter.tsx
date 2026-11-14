@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { API } from "../../api/client";
 import "./Filter.css";
 import { toast } from "sonner";
+import LoadingComponent from "../Loading/LoadingComponent";
 
 interface filterProps {
     setFilters: (filters: ExperienceFilters) => void;
@@ -19,6 +20,7 @@ export default function Filter({ setFilters, experienceService = createExperienc
 
     const [cities, setCities] = useState<CitySimpleDTO[]>([]);
     const [categories, setCategories] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     const categoryNames: Record<string, string> = {
@@ -69,11 +71,13 @@ export default function Filter({ setFilters, experienceService = createExperienc
             }
         };
 
-        fetchCities();
-        fetchCategories();
+        Promise.all([
+            fetchCities(),
+            fetchCategories()
+        ]).finally(() => setIsLoading(false));
     }, []);
 
-    function filterExperiences(e: FormEvent<HTMLFormElement>) {
+    function filterExperiences(e: FormEvent<HTMLFormElement>) {        
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);
@@ -90,6 +94,14 @@ export default function Filter({ setFilters, experienceService = createExperienc
         const selectedCategories = formData.getAll("categories") as string[];
 
         setFilters({ minRating, maxRating, from, to, cityName, page: 0, categories: selectedCategories })
+    }
+
+    if (isLoading) {
+        return (
+            <>
+                <LoadingComponent description="Filter options are loading. Please wait a moment while we prepare the best experiences for you." />
+            </>
+        );
     }
 
     return (

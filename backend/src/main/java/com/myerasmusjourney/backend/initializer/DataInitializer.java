@@ -118,14 +118,14 @@ public class DataInitializer {
     }
 
     private void initiateCities(){
-        CityFormDTO cityFormDTO1 = new CityFormDTO("Copenhagen", "Capital of Denmark", "Denmark");
-        CityFormDTO cityFormDTO2 = new CityFormDTO("Paris", "Capital of France", "France");
-        CityFormDTO cityFormDTO3= new CityFormDTO("Rome", "Capital of Italy", "Italy");
-        CityFormDTO cityFormDTO4 = new CityFormDTO("Barcelona", "A lively Mediterranean city with beaches, culture and a large international student community.", "Spain");
-        CityFormDTO cityFormDTO5 = new CityFormDTO("Berlin", "A diverse European capital known for its history, culture and international atmosphere.", "Germany");
-        CityFormDTO cityFormDTO6 = new CityFormDTO("Amsterdam", "A student-friendly city known for its canals, cycling culture and international community.", "Netherlands");
-        CityFormDTO cityFormDTO7 = new CityFormDTO("Lisbon", "A sunny European capital with a growing international student community and affordable neighbourhoods.", "Portugal");
-        CityFormDTO cityFormDTO8 = new CityFormDTO("Prague", "A historic Central European city with a large student population and relatively affordable living costs.", "Czech Republic");
+        CityFormDTO cityFormDTO1 = new CityFormDTO("Copenhagen", "Capital of Denmark", "Denmark", null, null);
+        CityFormDTO cityFormDTO2 = new CityFormDTO("Paris", "Capital of France", "France", null, null);
+        CityFormDTO cityFormDTO3= new CityFormDTO("Rome", "Capital of Italy", "Italy", null, null);
+        CityFormDTO cityFormDTO4 = new CityFormDTO("Barcelona", "A lively Mediterranean city with beaches, culture and a large international student community.", "Spain", null, null);
+        CityFormDTO cityFormDTO5 = new CityFormDTO("Berlin", "A diverse European capital known for its history, culture and international atmosphere.", "Germany", null, null);
+        CityFormDTO cityFormDTO6 = new CityFormDTO("Amsterdam", "A student-friendly city known for its canals, cycling culture and international community.", "Netherlands", null, null);
+        CityFormDTO cityFormDTO7 = new CityFormDTO("Lisbon", "A sunny European capital with a growing international student community and affordable neighbourhoods.", "Portugal", null, null);
+        CityFormDTO cityFormDTO8 = new CityFormDTO("Prague", "A historic Central European city with a large student population and relatively affordable living costs.", "Czech Republic", null, null);
 
         CityDTO cityDTO = cityService.addCity(cityFormDTO1).city();
         citiesId.put(1L, cityDTO.id());

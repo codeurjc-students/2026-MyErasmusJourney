@@ -2,6 +2,7 @@ package com.myerasmusjourney.backend.controller;
 
 import com.myerasmusjourney.backend.dto.*;
 import com.myerasmusjourney.backend.service.CityService;
+import com.myerasmusjourney.backend.service.MapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,9 @@ public class CityRestController {
 
     @Autowired
     private CityService cityService;
+
+    @Autowired
+    private MapService mapService;
 
     @GetMapping("/")
     public Collection<CitySimpleDTO> getCities(){
@@ -39,6 +43,11 @@ public class CityRestController {
         if(!result.created()) return ResponseEntity.ok(result.city());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cityDTO.id()).toUri();
         return ResponseEntity.created(location).body(cityDTO);
+    }
+
+    @GetMapping("/geolocate")
+    public LocationDTO geolocateCity(@RequestParam(required = false) String city, @RequestParam(required = false) String country){
+        return mapService.geoLocateCity(city, country);
     }
 
 

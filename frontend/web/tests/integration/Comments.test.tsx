@@ -13,7 +13,7 @@ import type { UserSimpleDTO } from "@shared/models/UserSimpleDTO";
 
 import {
   authenticateUser,
-  clearFetchAndUserStore,
+  clearUserStore,
 } from "tests/testAuthentication";
 
 import { APIURL } from "src/config/env";
@@ -37,9 +37,8 @@ describe("Comments integration tests", () => {
   });
 
   afterAll(() => {
-    clearFetchAndUserStore();
+    clearUserStore();
   });
-
 
   it("should load comments from the real API", async () => {
 
@@ -53,16 +52,13 @@ describe("Comments integration tests", () => {
     );
 
     await waitFor(() => {
-      expect(
-        screen.queryByText("Enjoyed this experience?")
-      ).not.toBeInTheDocument();
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
     });
 
     expect(
       screen.getByPlaceholderText("Share your opinion...")
     ).toBeInTheDocument();
   });
-
 
   it("should post a comment using the real API", async () => {
 
@@ -74,6 +70,10 @@ describe("Comments integration tests", () => {
         />
       </MemoryRouter>
     );
+
+    await waitFor(() => {
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
 
     const input = await screen.findByPlaceholderText(
       "Share your opinion..."
@@ -100,7 +100,6 @@ describe("Comments integration tests", () => {
     });
   });
 
-
   it("should show login message when user is not authenticated", async () => {
 
     useUserStore.getState().setUser(null);
@@ -113,6 +112,10 @@ describe("Comments integration tests", () => {
         />
       </MemoryRouter>
     );
+
+    await waitFor(() => {
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
 
     await waitFor(() => {
       expect(

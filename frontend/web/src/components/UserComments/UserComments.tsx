@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { API } from "../../api/client";
 import { ApiError } from "@shared/api/apiError";
 import { toast } from "sonner";
+import LoadingComponent from "../Loading/LoadingComponent";
 
 interface CommentsProps {
     userComments: CommentSimpleDTO[] | undefined;
@@ -29,7 +30,7 @@ export default function UserComments({ userService = createUserService(API), com
 
     let id = 0;
 
-    const fetchExperiences = async () => {
+    const fetchComments = async () => {
         if (userId !== undefined) {
             id = userId;
         }
@@ -38,7 +39,7 @@ export default function UserComments({ userService = createUserService(API), com
         }
         try {
             const data = await userService.getComments(id);
-            setComments(data.reverse());
+            setComments(data.toReversed());
         } catch (error) {
             if (error instanceof ApiError && error.status >= 500) {
                 console.error(error);
@@ -57,7 +58,7 @@ export default function UserComments({ userService = createUserService(API), com
     async function handleDeleteComment(commentId: number) {
         try {
             await commentService.deleteComment(commentId);
-            fetchExperiences();
+            fetchComments();
         }
         catch (error) {
             if (error instanceof ApiError && error.status >= 500) {
@@ -77,10 +78,11 @@ export default function UserComments({ userService = createUserService(API), com
 
 
         if (userComments === undefined || userComments.length < 1) {
-            fetchExperiences();
+            fetchComments();
         }
         else {
-            setComments(userComments)
+
+            setComments(userComments.toReversed());
         }
         setLoading(false);
     }, [])
@@ -90,7 +92,7 @@ export default function UserComments({ userService = createUserService(API), com
             <h4 className="mb-6">Comments</h4>
             {loading
                 ? (
-                    <p>Loading comments...</p>
+                    <LoadingComponent description="Loading your comments..." />
                 ) : (
                     <div className="flex flex-col gap-4">
                         {comments.map((comment) => (

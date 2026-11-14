@@ -28,6 +28,10 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
 
         addExperienceButton.click();
 
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div/div/form/div[1]/div[2]/div/label[1]")
         ));
@@ -49,6 +53,10 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
         documentation.click();
         submit.click();
 
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div/div/div/main/div/div[2]/h3")
         ));
@@ -65,6 +73,10 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
 
         linkToExperience.click();
 
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("experience-1")
         ));
@@ -72,6 +84,10 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
         WebElement linkToFirstExperience = driver.findElement(By.xpath("/html/body/div/div/div/main/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/a"));
 
         linkToFirstExperience.click();
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div/div/div/main/div/div[2]/h3")
@@ -82,6 +98,10 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
 
         commentInput.sendKeys(descriptionContent);
         postButton.click();
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div/div/div/aside/div[1]/div/div[1]")
@@ -109,6 +129,10 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
     void testLogOutBtn(){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("profileTitle")
         ));
@@ -116,6 +140,10 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
         WebElement logOutButton = driver.findElement(By.xpath("/html/body/div/div/button"));
 
         logOutButton.click();
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.linkText("Log in")
@@ -127,6 +155,10 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
         authenticateDeleteUserTest();
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("profileTitle")
@@ -154,6 +186,10 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("profileTitle")
         ));
@@ -180,6 +216,10 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
         authenticateWithSpecificUser("exampleuser1@email.com");
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div/div/div[2]/div[1]/div/div/div[1]/p")
@@ -229,6 +269,10 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
         WebElement userLink = driver.findElement(By.xpath("/html/body/div/header/nav/div/a"));
 
         userLink.click();
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div/div/div[2]/div[2]/div/div[1]/div[1]/p")

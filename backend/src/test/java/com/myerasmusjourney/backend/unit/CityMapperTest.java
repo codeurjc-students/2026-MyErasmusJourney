@@ -30,7 +30,7 @@ public class CityMapperTest {
 
     @Test
     void testToDTO() {
-        City city = new City("Madrid", "Spain", "Capital of Spain");
+        City city = new City("Madrid", "Spain", "Capital of Spain", 1.2, -5.8);
         city.setId(1L);
 
         CityDTO result = cityMapper.toDTO(city, 0.0);
@@ -40,6 +40,8 @@ public class CityMapperTest {
         assertEquals("Madrid", result.name());
         assertEquals("Capital of Spain", result.description());
         assertEquals("Spain", result.country());
+        assertEquals(1.2, result.longitude());
+        assertEquals(-5.8, result.latitude());
     }
 
     @Test
@@ -54,21 +56,27 @@ public class CityMapperTest {
         City madrid = new City(
                 "Madrid",
                 "Spain",
-                "Capital of Spain"
+                "Capital of Spain",
+                -3.703507,
+                40.416782
         );
         madrid.setId(1L);
 
         City rome = new City(
                 "Rome",
                 "Italy",
-                "Capital of Italy"
+                "Capital of Italy",
+                -3.73507,
+                40.41682
         );
         rome.setId(2L);
 
         City berlin = new City(
                 "Berlin",
                 "Germany",
-                "Capital of Germany"
+                "Capital of Germany",
+                -3.70357,
+                40.16782
         );
         berlin.setId(3L);
 

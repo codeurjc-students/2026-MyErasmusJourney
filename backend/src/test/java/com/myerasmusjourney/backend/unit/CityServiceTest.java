@@ -6,9 +6,11 @@ import com.myerasmusjourney.backend.domain.Experience;
 import com.myerasmusjourney.backend.dto.CityDTO;
 import com.myerasmusjourney.backend.dto.CityFormDTO;
 import com.myerasmusjourney.backend.dto.CitySimpleDTO;
+import com.myerasmusjourney.backend.dto.LocationDTO;
 import com.myerasmusjourney.backend.mapper.CityMapper;
 import com.myerasmusjourney.backend.repository.CityRepository;
 import com.myerasmusjourney.backend.service.CityService;
+import com.myerasmusjourney.backend.service.MapService;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,17 +40,20 @@ public class CityServiceTest {
     @Mock
     private CityMapper cityMapper;
 
+    @Mock
+    private MapService mapService;
+
     @InjectMocks
     private CityService cityService;
 
     @Test
     void testAddCitySuccessfully() {
-        CityFormDTO cityForm = new CityFormDTO("Munich", "Germany", "A city in Germany");
+        CityFormDTO cityForm = new CityFormDTO("Munich", "Germany", "A city in Germany", -3.703507, 40.416782);
 
-        City savedCity = new City("Munich", "Germany", "A city in Germany");
+        City savedCity = new City("Munich", "Germany", "A city in Germany", -3.703507, 40.416782);
         savedCity.setId(1L);
 
-        CityDTO expectedDTO = new CityDTO(1L, "Munich", "Germany", "A city in Germany", 0.0, List.of());
+        CityDTO expectedDTO = new CityDTO(1L, "Munich", "Germany", "A city in Germany", 0.0, -3.703507, 40.416782, List.of());
 
         when(cityRepository.findByName("Munich")).thenReturn(List.of());
         when(cityRepository.save(any(City.class))).thenReturn(savedCity);
@@ -65,13 +70,41 @@ public class CityServiceTest {
     }
 
     @Test
-    void testAddCityAlreadyExists() {
-        CityFormDTO cityForm = new CityFormDTO("Munich","A city in Germany", "Germany");
+    void testAddCitySuccessfullyWithoutCoordinates() {
+        CityFormDTO cityForm = new CityFormDTO("Munich", "A city in Germany","Germany",  null,  null);
 
-        City existingCity = new City("Munich","Germany","Existing description");
+        City savedCity = new City("Munich", "Germany", "A city in Germany", -3.703507, 40.416782);
+        savedCity.setId(1L);
+
+        CityDTO expectedDTO = new CityDTO(1L, "Munich", "A city in Germany", "Germany",  0.0, -3.703507, 40.416782, List.of());
+
+        LocationDTO locationDTO = new LocationDTO(-3.703507, 40.416782);
+
+        when(cityRepository.findByName("Munich")).thenReturn(List.of());
+        when(mapService.geoLocateCity(cityForm.name(), cityForm.country())).thenReturn(locationDTO);
+        when(cityRepository.save(any(City.class))).thenReturn(savedCity);
+        when(cityMapper.toDTO(savedCity, 0.0)).thenReturn(expectedDTO);
+
+
+        CityService.CityResult result = cityService.addCity(cityForm);
+
+        assertTrue(result.created());
+        assertNotNull(result.city());
+
+        verify(cityRepository).findByName("Munich");
+        verify(mapService).geoLocateCity(cityForm.name(), cityForm.country());
+        verify(cityRepository).save(any(City.class));
+        verify(cityMapper).toDTO(savedCity, 0.0);
+    }
+
+    @Test
+    void testAddCityAlreadyExists() {
+        CityFormDTO cityForm = new CityFormDTO("Munich","A city in Germany", "Germany", -3.703507, 40.416782);
+
+        City existingCity = new City("Munich","Germany","Existing description", -3.703507, 40.416782);
         existingCity.setId(1L);
 
-        CityDTO expectedDTO = new CityDTO(1L,"Munich","Existing description", "Germany", 0.0, List.of());
+        CityDTO expectedDTO = new CityDTO(1L,"Munich","Existing description", "Germany", 0.0, -3.703507, 40.416782, List.of());
 
         when(cityRepository.findByName("Munich")).thenReturn(List.of(existingCity));
 
@@ -90,16 +123,15 @@ public class CityServiceTest {
 
     @Test
     void testAddCitySameNameDifferentCountry() {
-        CityFormDTO cityForm = new CityFormDTO("Munich", "United States", "Another Munich"
-        );
+        CityFormDTO cityForm = new CityFormDTO("Munich", "United States", "Another Munich", -3.703507, 40.416782);
 
-        City existingCity = new City("Munich", "Germany", "Munich in Germany");
+        City existingCity = new City("Munich", "Germany", "Munich in Germany", -3.703507, 40.416782);
         existingCity.setId(1L);
 
-        City savedCity = new City("Munich", "United States", "Another Munich");
+        City savedCity = new City("Munich", "United States", "Another Munich", -3.703507, 40.416782);
         savedCity.setId(2L);
 
-        CityDTO expectedDTO = new CityDTO(2L, "Munich", "United States", "Another Munich", 0.0, List.of());
+        CityDTO expectedDTO = new CityDTO(2L, "Munich", "United States", "Another Munich", 0.0, -3.703507, 40.416782, List.of());
 
         when(cityRepository.findByName("Munich")).thenReturn(List.of(existingCity));
 
@@ -126,9 +158,9 @@ public class CityServiceTest {
         User user = new User();
 
         List<City> cities = List.of(
-                new City("Madrid", "Spain", ""),
-                new City("Rome", "Italy", ""),
-                new City("Berlin", "Germany", "")
+                new City("Madrid", "Spain", "", -3.703507, 40.416782),
+                new City("Rome", "Italy", "", -3.703507, 40.416782),
+                new City("Berlin", "Germany", "", -3.703507, 40.416782)
         );
 
         List<Experience> experiences = List.of(
@@ -242,9 +274,9 @@ public class CityServiceTest {
     @Test
     void testGetCities() {
         List<City> cities = List.of(
-                new City("Madrid", "Spain", "Madrid description"),
-                new City("Rome", "Italy", "Rome description"),
-                new City("Berlin", "Germany", "Berlin description")
+                new City("Madrid", "Spain", "Madrid description", -3.703507, 40.416782),
+                new City("Rome", "Italy", "Rome description", -3.703507, 40.416782),
+                new City("Berlin", "Germany", "Berlin description", -3.703507, 40.416782)
         );
 
         List<CitySimpleDTO> expected = List.of(
@@ -284,10 +316,10 @@ public class CityServiceTest {
 
     @Test
     void testGetCity(){
-        City city = new City("Munich", "Germany", "City in Germany");
+        City city = new City("Munich", "Germany", "City in Germany", -3.703507, 40.416782);
         city.setId(1L);
 
-        CityDTO expected = new CityDTO(1L, "Munich", "City in Germany", "Germany", 0.0, List.of());
+        CityDTO expected = new CityDTO(1L, "Munich", "City in Germany", "Germany", 0.0, -3.703507, 40.416782, List.of());
 
         when(cityRepository.findById(1L)).thenReturn(Optional.of(city));
         when(cityRepository.findAverageRatingByCityId(1L)).thenReturn(0.0);

@@ -1,4 +1,6 @@
 import { API } from "@/api/client";
+import LoadingComponent from "@/components/Loading/LoadingComponent";
+import MapComponent from "@/components/Map/MapComponent";
 import { ApiError } from "@shared/api/apiError";
 import type { cityServiceProps } from "@shared/interfaces/cityServiceProps";
 import type { CitySimpleDTO } from "@shared/models/CitySimpleDTO";
@@ -12,6 +14,8 @@ export default function CitiesPage({ cityService = createCityService(API) }: cit
 
     const [trendingCities, setTrendingCities] = useState<CitySimpleDTO[]>([]);
 
+    const [loading, setLoading] = useState<boolean>(true);
+
     const navigate = useNavigate();
 
     const medalImages = ["/images/firstIcon.png", "/images/secondIcon.png", "/images/thirdIcon.png"];
@@ -21,6 +25,7 @@ export default function CitiesPage({ cityService = createCityService(API) }: cit
             try {
                 const citiesData = await cityService.getTrending();
                 setTrendingCities(citiesData);
+                setLoading(false);
             } catch (error) {
                 if (error instanceof ApiError && (error.status >= 500)) {
                     console.error(error);
@@ -34,13 +39,19 @@ export default function CitiesPage({ cityService = createCityService(API) }: cit
         fetchCities();
     }, [])
 
+    if (loading) {
+        return(<>
+            <LoadingComponent title="Obtaining cities" description="Gathering the cities with the greatest experiences"/>
+        </>)
+    }
+
 
     return (
         <div className="mx-auto w-[97%] max-w-none p-4 md:p-6">
             <div className="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-6 items-stretch">
                 <main className="w-full rounded-2xl bg-white shadow-xl p-4 md:p-6">
                     <h3 className="text-center mb-6">Cities</h3>
-                    <img src="/images/available_soon.png" alt="Available Soon" className="mainImage max-w-sm w-3/4 h-auto" />
+                    <MapComponent latitude={57} longitude={15} zoom={2.6} marks={[]} markerType="cities"/>
                 </main>
 
                 <aside className="w-full rounded-2xl bg-white shadow-xl p-5 md:p-6">

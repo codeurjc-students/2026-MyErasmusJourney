@@ -12,7 +12,7 @@ import type { UserSimpleDTO } from "@shared/models/UserSimpleDTO";
 
 import { APIURL } from "src/config/env";
 import UserPage from "src/pages/UserPage/UserPage";
-import { authenticateUser, authenticateUserToDelete, clearFetchAndUserStore } from "tests/testAuthentication";
+import { authenticateUser, authenticateUserToDelete, clearUserStore } from "tests/testAuthentication";
 import UserComments from "src/components/UserComments/UserComments";
 import { createExperienceService, type ExperienceService } from "@shared/services/experience.service";
 import UserExperiences from "src/components/UserExperiences/UserExperiences";
@@ -48,7 +48,7 @@ describe("UserPage", () => {
   });
 
   afterAll(() => {
-    clearFetchAndUserStore();
+    clearUserStore();
     cleanup();
   });
 
@@ -102,15 +102,26 @@ describe("UserPage", () => {
     },
   }));
 
-  it("renders the authenticated user's profile with real API data", async () => {
+  async function renderUserPage() {
+
     render(
       <MemoryRouter initialEntries={["/account"]}>
         <Routes>
+          <Route path="/" element={<div>Home page</div>} />
           <Route path="/account" element={<UserPage userService={testUserService} authService={testAuthService} />} />
           <Route path="/log-in" element={<div>Log in page</div>} />
         </Routes>
       </MemoryRouter>
     );
+
+    await screen.findAllByRole("status");
+    await waitFor(() => {
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    })
+  }
+
+  it("renders the authenticated user's profile with real API data", async () => {
+    await renderUserPage();
 
     expect(await screen.findByText("Profile")).toBeInTheDocument();
     expect(screen.getByText(/Displayed Name:/i)).toBeInTheDocument();
@@ -171,15 +182,7 @@ describe("UserPage", () => {
   });
 
   it("logs out and navigates back to the home page", async () => {
-    render(
-      <MemoryRouter initialEntries={["/account"]}>
-        <Routes>
-          <Route path="/" element={<div>Home page</div>} />
-          <Route path="/account" element={<UserPage userService={testUserService} authService={testAuthService} />} />
-          <Route path="/log-in" element={<div>Log in page</div>} />
-        </Routes>
-      </MemoryRouter>
-    );
+    await renderUserPage();
 
     fireEvent.click(await screen.findByRole("button", { name: /log out/i }));
 
@@ -198,6 +201,11 @@ describe("UserPage", () => {
       </MemoryRouter>
     );
 
+    await screen.findAllByRole("status");
+    await waitFor(() => {
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    })
+
     fireEvent.click(await screen.findByRole("button", { name: /add city/i }));
 
     expect(await screen.findByText("City Form")).toBeInTheDocument();
@@ -207,25 +215,7 @@ describe("UserPage", () => {
     authenticatedUser = await authenticateUserToDelete();
     useUserStore.getState().setUser(authenticatedUser);
 
-    render(
-      <MemoryRouter initialEntries={["/account"]}>
-        <Routes>
-          <Route
-            path="/account"
-            element={
-              <UserPage
-                authService={testAuthService}
-                userService={testUserService}
-              />
-            }
-          />
-          <Route
-            path="/"
-            element={<div>Home page</div>}
-          />
-        </Routes>
-      </MemoryRouter>
-    );
+    await renderUserPage();
 
     await waitFor(() => {
       expect(screen.getByText("Profile")).toBeInTheDocument();
@@ -325,6 +315,11 @@ describe("UserPage", () => {
       </MemoryRouter>
     );
 
+    await screen.findAllByRole("status");
+    await waitFor(() => {
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    })
+
     await waitFor(() => {
       expect(screen.getByText("Profile")).toBeInTheDocument();
     });
@@ -387,29 +382,7 @@ describe("UserPage", () => {
       authenticatedUser.id
     );
 
-    render(
-      <MemoryRouter initialEntries={["/account"]}>
-        <Routes>
-          <Route
-            path="/account"
-            element={
-              <UserPage
-                userService={testUserService}
-                authService={testAuthService}
-              />
-            }
-          />
-
-          <Route
-            path="/log-in"
-            element={<div>Log in page</div>}
-          />
-        </Routes>
-      </MemoryRouter>
-    );
-
-    expect(await screen.findByText("Experiences")).toBeInTheDocument();
-    expect(screen.queryByText("Loading experiences...")).not.toBeInTheDocument();
+    await renderUserPage();
 
     for (const experience of experiences) {
       expect(
@@ -428,31 +401,7 @@ describe("UserPage", () => {
       authenticatedUser.id
     );
 
-    render(
-      <MemoryRouter initialEntries={["/account"]}>
-        <Routes>
-
-          <Route
-            path="/account"
-            element={
-              <UserPage
-                userService={testUserService}
-                authService={testAuthService}
-              />
-            }
-          />
-
-          <Route
-            path="/log-in"
-            element={<div>Log in page</div>}
-          />
-
-        </Routes>
-      </MemoryRouter>
-    );
-
-    expect(await screen.findByText("Comments")).toBeInTheDocument();
-    expect(screen.queryByText("Loading comments...")).not.toBeInTheDocument();
+    await renderUserPage();
 
     for (const comment of comments) {
 
@@ -472,31 +421,7 @@ describe("UserPage", () => {
       authenticatedUser.id
     );
 
-    render(
-      <MemoryRouter initialEntries={["/account"]}>
-        <Routes>
-
-          <Route
-            path="/account"
-            element={
-              <UserPage
-                userService={testUserService}
-                authService={testAuthService}
-              />
-            }
-          />
-
-          <Route
-            path="/log-in"
-            element={<div>Log in page</div>}
-          />
-
-        </Routes>
-      </MemoryRouter>
-    );
-
-    expect(await screen.findByText("Comments")).toBeInTheDocument();
-    expect(screen.queryByText("Loading comments...")).not.toBeInTheDocument();
+    await renderUserPage();
 
     for (const comment of comments) {
 
@@ -522,26 +447,7 @@ describe("UserPage", () => {
 
     const experienceToDelete: ExperienceDTO = await experienceService.postExperience(experienceForm);
 
-    render(
-      <MemoryRouter initialEntries={["/account"]}>
-        <Routes>
-          <Route
-            path="/account"
-            element={
-              <UserPage
-                userService={testUserService}
-                authService={testAuthService}
-              />
-            }
-          />
-
-          <Route
-            path="/log-in"
-            element={<div>Log in page</div>}
-          />
-        </Routes>
-      </MemoryRouter>
-    );
+    await renderUserPage();
 
     expect(await screen.findByText("Experiences")).toBeInTheDocument();
 
@@ -577,26 +483,7 @@ describe("UserPage", () => {
 
     const experience = experiences[0];
 
-    render(
-      <MemoryRouter initialEntries={["/account"]}>
-        <Routes>
-          <Route
-            path="/account"
-            element={
-              <UserPage
-                userService={testUserService}
-                authService={testAuthService}
-              />
-            }
-          />
-
-          <Route
-            path="/log-in"
-            element={<div>Log in page</div>}
-          />
-        </Routes>
-      </MemoryRouter>
-    );
+    await renderUserPage();
 
     expect(
       await screen.findByText(experience.title)
@@ -721,26 +608,7 @@ describe("UserPage", () => {
 
     const commentToDelete = commentDTO;
 
-    render(
-      <MemoryRouter initialEntries={["/account"]}>
-        <Routes>
-          <Route
-            path="/account"
-            element={
-              <UserPage
-                userService={testUserService}
-                authService={testAuthService}
-              />
-            }
-          />
-
-          <Route
-            path="/log-in"
-            element={<div>Log in page</div>}
-          />
-        </Routes>
-      </MemoryRouter>
-    );
+    await renderUserPage();
 
     expect(await screen.findByText("Comments")).toBeInTheDocument();
 
@@ -830,13 +698,7 @@ describe("UserPage", () => {
   it("should render the change picture button with the dialog closed", async () => {
     authenticatedUser = await authenticateUser("exampleuser1@email.com");
 
-    render(
-      <MemoryRouter initialEntries={["/account"]}>
-        <Routes>
-          <Route path="/account" element={<UserPage userService={testUserService} />} />
-        </Routes>
-      </MemoryRouter>
-    );
+    await renderUserPage();
 
     await waitFor(() => {
       expect(screen.getByText("Profile")).toBeInTheDocument();
@@ -855,13 +717,7 @@ describe("UserPage", () => {
 
     authenticatedUser = await authenticateUser("exampleuser1@email.com");
 
-    render(
-      <MemoryRouter initialEntries={["/account"]}>
-        <Routes>
-          <Route path="/account" element={<UserPage userService={testUserService} />} />
-        </Routes>
-      </MemoryRouter>
-    );
+    await renderUserPage();
 
     await openDialog();
 
@@ -879,13 +735,7 @@ describe("UserPage", () => {
   it("should show a success notification and mark the image as updated after a successful upload", async () => {
     authenticatedUser = await authenticateUser("exampleuser1@email.com");
 
-    render(
-      <MemoryRouter initialEntries={["/account"]}>
-        <Routes>
-          <Route path="/account" element={<UserPage userService={testUserService} />} />
-        </Routes>
-      </MemoryRouter>
-    );
+    await renderUserPage();
 
     await selectImageAndUpload(createImage());
 
@@ -898,13 +748,7 @@ describe("UserPage", () => {
 
   it("should close the dialog after clicking Upload", async () => {
 
-    render(
-      <MemoryRouter initialEntries={["/account"]}>
-        <Routes>
-          <Route path="/account" element={<UserPage userService={testUserService} />} />
-        </Routes>
-      </MemoryRouter>
-    );
+    await renderUserPage();
 
     await selectImageAndUpload(createImage());
 
@@ -956,13 +800,7 @@ describe("UserPage", () => {
   it("should show an unsupported format notification when the API responds with 415", async () => {
     authenticatedUser = await authenticateUser("exampleuser2@email.com");
 
-    render(
-      <MemoryRouter initialEntries={["/account"]}>
-        <Routes>
-          <Route path="/account" element={<UserPage userService={testUserService} />} />
-        </Routes>
-      </MemoryRouter>
-    );
+    await renderUserPage();
 
     await selectImageAndUpload(createImage("document.txt", "plain/text"));
 

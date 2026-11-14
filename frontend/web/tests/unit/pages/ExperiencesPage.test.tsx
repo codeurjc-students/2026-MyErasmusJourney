@@ -26,8 +26,24 @@ const mockCityService: CityService = {
   addCity: vi.fn().mockResolvedValue([]),
   getAll: vi.fn().mockResolvedValue([]),
   getTrending: vi.fn().mockResolvedValue([]),
-  getCityById: vi.fn()
+  getCityById: vi.fn(),
+  geoLocate: vi.fn(),
 
+}
+
+const renderExperiencesPage = async (mockService: ExperienceService) => {
+  //render component (DOM virtual)
+    render(
+      <MemoryRouter>
+        <ExperiencesPage experienceService={mockService} cityService={mockCityService} />
+      </MemoryRouter>
+    );
+
+    await screen.findByRole("status");
+
+    await waitFor(() => {
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
 }
 
 const mockGetCategories = vi.fn().mockResolvedValue([]);
@@ -56,12 +72,7 @@ describe("ExperiencesPage", () => {
       addMultimedia: vi.fn(),
     };
 
-    //render component (DOM virtual)
-    render(
-      <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} cityService={mockCityService} />
-      </MemoryRouter>
-    );
+    await renderExperiencesPage(mockService);
 
     //assertions
     await waitFor(() => {
@@ -88,11 +99,7 @@ describe("ExperiencesPage", () => {
       addMultimedia: vi.fn(),
     };
 
-    render(
-      <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} cityService={mockCityService} />
-      </MemoryRouter>
-    );
+    await renderExperiencesPage(mockService);
 
     await waitFor(() => {
       expect(screen.queryAllByText("Title")).toHaveLength(0);
@@ -127,11 +134,7 @@ describe("ExperiencesPage", () => {
       addMultimedia: vi.fn(),
     };
 
-    render(
-      <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} cityService={mockCityService} />
-      </MemoryRouter>
-    );
+    await renderExperiencesPage(mockService);
 
     await waitFor(() => {
       const experiences = screen.queryAllByText(/^Title /i);
@@ -167,11 +170,7 @@ describe("ExperiencesPage", () => {
       addMultimedia: vi.fn(),
     };
 
-    render(
-      <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} cityService={mockCityService} />
-      </MemoryRouter>
-    );
+    await renderExperiencesPage(mockService);
 
     // wait for the experience title to appear
     const titleEl = await screen.findByText("Title 1");
@@ -210,12 +209,7 @@ describe("ExperiencesPage", () => {
       addMultimedia: vi.fn(),
     };
 
-    render(
-      <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} cityService={mockCityService} />
-      </MemoryRouter>
-    );
-
+    await renderExperiencesPage(mockService);
 
     await waitFor(() => {
 
@@ -318,11 +312,8 @@ describe("ExperiencesPage", () => {
       addMultimedia: vi.fn(),
     };
 
-    render(
-      <MemoryRouter>
-        <ExperiencesPage experienceService={mockService} cityService={mockCityService} />
-      </MemoryRouter>
-    );
+    await renderExperiencesPage(mockService);
+
 
     await waitFor(() => {
       const experiences = screen.queryAllByText(/^Title /i);

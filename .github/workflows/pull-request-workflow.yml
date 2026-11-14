@@ -42,6 +42,8 @@ jobs:
         working-directory: frontend
 
       - name: Run backend tests
+        env:
+          GEOAPIFY_API_KEY: ${{ secrets.GEOAPIFY_API_KEY }}
         run: mvn clean test
 
   frontend:
@@ -94,6 +96,9 @@ jobs:
 
         - name: Install dependencies
           run: pnpm install
+        
+        - name: Install Playwright browsers
+          run: pnpm --filter web exec playwright install --with-deps firefox
 
         - name: Create API REST package
           run: |
@@ -111,6 +116,7 @@ jobs:
             SPRING_PROFILES_ACTIVE: test
             ADMIN_EMAIL: testadmin@email.com
             ADMIN_PASSWORD: password
+            GEOAPIFY_API_KEY: ${{ secrets.GEOAPIFY_API_KEY }}
 
           run: |
             cd ../backend

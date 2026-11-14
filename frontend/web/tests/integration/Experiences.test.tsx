@@ -24,6 +24,11 @@ describe("Experiences", () => {
             </MemoryRouter>
         );
 
+        await screen.findAllByRole("status");
+        waitFor(() => {
+            expect(screen.queryByRole("status")).not.toBeInTheDocument();
+        });
+
         await waitFor(() => {
             expect(
                 screen.queryAllByText(/\d{4}-\d{2}-\d{2}/).length
@@ -87,8 +92,18 @@ describe("Experiences", () => {
             </MemoryRouter>
         );
 
+        await screen.findAllByRole("status");
+        waitFor(() => {
+            expect(screen.queryByRole("status")).not.toBeInTheDocument();
+        });
+
         await waitFor(() => {
             expect(screen.queryAllByText(/\d{4}-\d{2}-\d{2}/).length).toBeGreaterThan(0);
+        });
+
+        await screen.findAllByRole("status");
+        waitFor(() => {
+            expect(screen.queryByRole("status")).not.toBeInTheDocument();
         });
 
         expect(await screen.findByRole("option", { name: "All cities" })).toBeInTheDocument();
@@ -137,6 +152,16 @@ describe("Experiences", () => {
             </MemoryRouter>
         );
 
+
+        await screen.findByRole("status");
+        await waitFor(() => {
+            expect(screen.queryByRole("status")).not.toBeInTheDocument();
+        });
+
+        await waitFor(() => {
+            expect(screen.queryAllByText(/\d{4}-\d{2}-\d{2}/).length).toBeGreaterThan(0);
+        });
+        
         await screen.findByRole("checkbox", { name: "Studies" });
 
         fireEvent.change(screen.getByLabelText("At least"), {
@@ -151,13 +176,10 @@ describe("Experiences", () => {
             screen.getByRole("checkbox", { name: "Studies" })
         );
 
-        fireEvent.submit(
-            screen.getByRole("button", {
-                name: "Find your next experiences",
-            })
-        );
+        const form = screen.getByRole("button", { name: /Find your next experiences/i }).closest("form")!;
+        fireEvent.submit(form);
 
-        await waitFor(() => {
+        waitFor(() => {
             expect(requestedFilters.length).toBeGreaterThan(1);
         });
 
@@ -194,8 +216,17 @@ describe("Experiences", () => {
             </MemoryRouter>
         );
 
+        await screen.findByRole("status");
+        await waitFor(() => {
+            expect(screen.queryByRole("status")).not.toBeInTheDocument();
+        });
+
         await waitFor(() => {
             expect(screen.queryAllByText(/\d{4}-\d{2}-\d{2}/).length).toBeGreaterThan(0);
+        });
+
+        await waitFor(() => {
+            expect(screen.queryByRole("status")).not.toBeInTheDocument();
         });
 
         const citySelect = await screen.findByLabelText("City");
@@ -204,11 +235,13 @@ describe("Experiences", () => {
             target: { value: cities[0].name },
         });
 
-        fireEvent.submit(
-            screen.getByRole("button", {
-                name: "Find your next experiences",
-            })
-        );
+        const form = screen.getByRole("button", { name: /Find your next experiences/i }).closest("form")!;
+        fireEvent.submit(form);
+
+        await screen.findByRole("status");
+        waitFor(() => {
+            expect(screen.findByRole("status")).not.toBeInTheDocument();
+        });
 
         await waitFor(() => {
             const experienceCards = document.querySelectorAll(
@@ -239,7 +272,8 @@ describe("Experiences", () => {
             },
             addCity: testCityService.addCity,
             getTrending: testCityService.getTrending,
-            getCityById: testCityService.getCityById
+            getCityById: testCityService.getCityById,
+            geoLocate: testCityService.geoLocate,
         };
 
         render(
