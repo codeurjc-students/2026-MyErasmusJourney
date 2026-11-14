@@ -270,6 +270,10 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
 
         userLink.click();
 
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div/div/div[2]/div[2]/div/div[1]/div[1]/p")
         ));
