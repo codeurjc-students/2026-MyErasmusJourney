@@ -49,12 +49,16 @@ jobs:
             libegl1 \
             libgbm1
 
+      - name: Check WebGL stack (diagnostic)
+        run: xvfb-run -a -s "-screen 0 1920x1080x24" glxinfo -B
+
       - name: Run backend tests
         env:
           GEOAPIFY_API_KEY: ${{ secrets.GEOAPIFY_API_KEY }}
           LIBGL_ALWAYS_SOFTWARE: 1
-          MOZ_WEBRENDER: 1
-        run: mvn clean test
+          GALLIUM_DRIVER: llvmpipe
+          SELENIUM_HEADLESS: "false"
+        run: xvfb-run -a -s "-screen 0 1920x1080x24" mvn clean test
 
   frontend:
     needs: backend
