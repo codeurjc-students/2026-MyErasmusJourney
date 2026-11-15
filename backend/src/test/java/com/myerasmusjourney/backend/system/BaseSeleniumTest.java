@@ -64,8 +64,10 @@ public abstract class BaseSeleniumTest extends TestDataBase {
             options.addPreference("webgl.disabled", false);
             options.addPreference("webgl.enable-webgl2", true);
             options.addPreference("webgl.force-enabled", true);
-            options.addPreference("layers.acceleration.force-enabled", true);
+            options.addPreference("webgl.disable-fail-if-major-performance-caveat", true);
+
             options.addPreference("gfx.webrender.software", true);
+            options.addPreference("layers.acceleration.force-enabled", true);
             driver = new FirefoxDriver(options);
         } catch (Exception e) {
             e.printStackTrace();
