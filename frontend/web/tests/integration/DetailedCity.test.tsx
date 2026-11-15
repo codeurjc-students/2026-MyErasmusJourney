@@ -26,7 +26,6 @@ describe("CityPage", () => {
             </MemoryRouter>
         );
 
-        await screen.findAllByRole("status");
         await waitFor(() => {
             expect(screen.queryByRole("status")).not.toBeInTheDocument();
         })

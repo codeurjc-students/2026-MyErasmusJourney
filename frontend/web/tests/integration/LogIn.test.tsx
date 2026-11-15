@@ -5,7 +5,7 @@ import "@testing-library/jest-dom";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { APIURL } from "src/config/env";
 import UserPage from "src/pages/UserPage/UserPage";
-import { afterAll, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import LogInPage from "src/pages/LogInPage/LogInPage";
 import { createAuthService, type AuthService } from "@shared/services/auth.service";
 import { useUserStore } from "@shared/stores/userStore";
@@ -18,6 +18,12 @@ const testUserService = createUserService(testAPI);
 const testAuthService = createAuthService(testAPI);
 
 describe("LogInPage", () => {
+
+  beforeEach(() => {
+    const setUser = useUserStore.getState().setUser;
+    setUser(null);
+  })
+
 
   it("should successfully submit the form with valid data and render home page", async () => {
     render(
@@ -141,9 +147,4 @@ describe("LogInPage", () => {
       await screen.findByText("Error page")
     ).toBeInTheDocument();
   });
-  
-  afterAll(() => {
-    const setUser = useUserStore.getState().setUser;
-    setUser(null);
-  })
 });
