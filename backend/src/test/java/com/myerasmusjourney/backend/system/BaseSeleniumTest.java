@@ -61,6 +61,11 @@ public abstract class BaseSeleniumTest extends TestDataBase {
         try {
             FirefoxOptions options = new FirefoxOptions();
             options.addArguments("--headless");
+            options.addPreference("webgl.disabled", false);
+            options.addPreference("webgl.enable-webgl2", true);
+            options.addPreference("webgl.force-enabled", true);
+            options.addPreference("layers.acceleration.force-enabled", true);
+            options.addPreference("gfx.webrender.software", true);
             driver = new FirefoxDriver(options);
         } catch (Exception e) {
             e.printStackTrace();
