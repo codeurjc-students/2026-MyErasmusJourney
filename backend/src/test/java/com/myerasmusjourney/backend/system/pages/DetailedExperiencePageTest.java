@@ -71,7 +71,7 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
         goToExperience();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("/html/body/div/div/div/main/div/div[2]/h3")
+                By.xpath("/html/body/div/div/div/main/div/div[2]/input")
         ));
 
         WebElement commentInput = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[2]/input"));
