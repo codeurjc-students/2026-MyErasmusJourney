@@ -37,31 +37,9 @@ public class CityFormPageTest extends AuthenticatedSeleniumTest {
 
         buttonToCityForm.click();
 
-        Map<String, Object> webglInfo = (Map<String, Object>) ((JavascriptExecutor) driver)
-                .executeScript("""
-            const canvas = document.createElement('canvas');
-            const gl = canvas.getContext('webgl2');
-
-            if (!gl) {
-                return {
-                    supported: false,
-                    message: 'WebGL2 context could not be created'
-                };
-            }
-
-            return {
-                supported: true,
-                vendor: gl.getParameter(gl.VENDOR),
-                renderer: gl.getParameter(gl.RENDERER),
-                version: gl.getParameter(gl.VERSION)
-            };
-        """);
-
         wait.until(ExpectedConditions.invisibilityOfElementLocated(
                 By.cssSelector("[role='status']")
         ));
-
-        System.out.println("WebGL information: " + webglInfo);
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div/div/h3")
