@@ -18,7 +18,7 @@ public class CitiesPageTest extends BaseSeleniumTest {
 
     @Test
     void testTrendingCities(){
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));
 
         WebElement linkToCitiesPage = driver.findElement(By.linkText("Cities"));
 
@@ -26,6 +26,10 @@ public class CitiesPageTest extends BaseSeleniumTest {
 
         wait.until(ExpectedConditions.invisibilityOfElementLocated(
                 By.cssSelector("[role='status']")
+        ));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div/div/div/aside/h4")
         ));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(

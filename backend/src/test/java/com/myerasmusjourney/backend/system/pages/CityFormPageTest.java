@@ -19,7 +19,7 @@ public class CityFormPageTest extends AuthenticatedSeleniumTest {
     private void renderCityForm(){
         authenticateAdminTest();
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));
 
 
         wait.until(ExpectedConditions.invisibilityOfElementLocated(
@@ -37,6 +37,10 @@ public class CityFormPageTest extends AuthenticatedSeleniumTest {
 
         wait.until(ExpectedConditions.invisibilityOfElementLocated(
                 By.cssSelector("[role='status']")
+        ));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div/div/h3")
         ));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(

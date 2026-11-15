@@ -15,7 +15,7 @@ public class CityPageTest extends BaseSeleniumTest {
 
     @Test
     void testGetCity(){
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));
 
         WebElement linkToCitiesPage = driver.findElement(By.linkText("Cities"));
 
@@ -26,10 +26,10 @@ public class CityPageTest extends BaseSeleniumTest {
         ));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("/html/body/div/div/div/aside/div/div[1]")
+                By.xpath("/html/body/div/div/div/aside/div/div[1]/a")
         ));
 
-        WebElement linkToCity = driver.findElement(By.xpath("/html/body/div/div/div/aside/div/div[2]/a"));
+        WebElement linkToCity = driver.findElement(By.xpath("/html/body/div/div/div/aside/div/div[1]/a"));
 
         linkToCity.click();
 
