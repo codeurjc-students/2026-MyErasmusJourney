@@ -44,13 +44,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            libgl1-mesa-dri \
-            libglx-mesa0 \
-            libegl1 \
-            libgbm1
+            xvfb mesa-utils \
+            libgl1-mesa-dri libglx-mesa0 libegl1 libgbm1
 
       - name: Check WebGL stack (diagnostic)
-        run: xvfb-run -a -s "-screen 0 1920x1080x24" glxinfo -B
+        run: xvfb-run -a -s "-screen 0 1920x1080x24" glxinfo -B || true
 
       - name: Run backend tests
         env:
