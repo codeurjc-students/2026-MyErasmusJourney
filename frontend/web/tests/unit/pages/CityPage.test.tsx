@@ -34,6 +34,8 @@ describe("CityPage", () => {
             country: "Country 1",
             description: "Description 1",
             averageRating: 4.5,
+            latitude: 12.34,
+            longitude: 56.78,
             experiences: [{
                 id: 5,
                 title: "Experience 1",
@@ -53,6 +55,7 @@ describe("CityPage", () => {
             getAll: vi.fn(),
             getTrending: vi.fn(),
             getCityById: vi.fn().mockResolvedValue(responseData),
+            geoLocate: vi.fn(),
         };
 
         render(
@@ -77,6 +80,7 @@ describe("CityPage", () => {
             getAll: vi.fn(),
             getTrending: vi.fn(),
             getCityById: vi.fn().mockRejectedValue(error),
+            geoLocate: vi.fn(),
         };
 
         render(
@@ -101,6 +105,7 @@ describe("CityPage", () => {
             getAll: vi.fn(),
             getTrending: vi.fn(),
             getCityById: vi.fn().mockRejectedValue(error),
+            geoLocate: vi.fn(),
         };
 
         render(

@@ -9,7 +9,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,9 +20,12 @@ import static org.junit.Assert.assertEquals;
 @Tag("system")
 public class ExperiencesFormPageTest extends AuthenticatedSeleniumTest {
 
-    @Test
-    void testPostingExperience() {
+    private void renderExperienceForm(){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("profileTitle")
@@ -33,9 +35,20 @@ public class ExperiencesFormPageTest extends AuthenticatedSeleniumTest {
 
         buttonToAddExperience.click();
 
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("experienceFormTitle")
         ));
+    }
+
+    @Test
+    void testPostingExperience() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        renderExperienceForm();
 
         WebElement title = driver.findElement(By.id("title"));
         WebElement description = driver.findElement(By.id("description"));
@@ -64,20 +77,10 @@ public class ExperiencesFormPageTest extends AuthenticatedSeleniumTest {
     }
 
     @Test
-    void testPostingExperienceWithMultimedia() throws URISyntaxException, IOException {
+    void testPostingExperienceWithMultimedia() throws URISyntaxException {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("profileTitle")
-        ));
-
-        WebElement buttonToAddExperience = driver.findElement(By.xpath("/html/body/div/div/div[1]/div[1]/div[2]/button[3]"));
-
-        buttonToAddExperience.click();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.id("experienceFormTitle")
-        ));
+        renderExperienceForm();
 
         WebElement title = driver.findElement(By.id("title"));
         WebElement description = driver.findElement(By.id("description"));

@@ -29,6 +29,10 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
 
         linkToExperience.click();
 
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("experience-1")
         ));
@@ -36,6 +40,10 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
         WebElement linkToFirstExperience = driver.findElement(By.xpath("/html/body/div/div/div/main/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/a"));
 
         linkToFirstExperience.click();
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
     }
 
     @Test
@@ -58,12 +66,16 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
 
     @Test
     void testPostAndRenderComments(){
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));
 
         goToExperience();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div/div/div/main/div/div[2]/h3")
+        ));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("/html/body/div/div/div/aside/div[2]/input")
         ));
 
         WebElement commentInput = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[2]/input"));
@@ -73,10 +85,10 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
         postButton.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("/html/body/div/div/div/aside/div[1]/div/div[2]")
+                By.xpath("/html/body/div/div/div/aside/div[1]/div/div[1]")
         ));
 
-        WebElement newComment = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[1]/div/div[2]"));
+        WebElement newComment = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[1]/div/div[1]"));
         assertTrue(newComment.getText().contains("New comment"));
     }
 

@@ -7,8 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
+import io.restassured.response.Response;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Tag("e2e")
 public class CitiesTest extends AuthenticatedE2ETest {
@@ -19,6 +20,33 @@ public class CitiesTest extends AuthenticatedE2ETest {
         body.put("name", "Madrid");
         body.put("country", "Spain");
         body.put("description", "Capital of Spain");
+        body.put("longitude", -3.703507);
+        body.put("latitude", 40.416782);
+
+        obtainToken("testadmin@email.com");
+
+        Response response = given()
+                .cookie("AuthToken", this.token)
+                .contentType("application/json")
+                .body(body.toString())
+                .when()
+                .post("/api/v2/cities/");
+
+        double longitude = response.jsonPath().getDouble("longitude");
+        double latitude = response.jsonPath().getDouble("latitude");
+
+        assertEquals(-3.703507, longitude, 0.000001);
+        assertEquals(40.416782, latitude, 0.000001);
+    }
+
+    @Test
+    void testAddingCitySuccessfullyWithoutCoordinates() throws JSONException {
+        JSONObject body = new JSONObject();
+        body.put("name", "Valencia");
+        body.put("country", "Spain");
+        body.put("description", "City in Spain");
+        body.put("longitude", null);
+        body.put("latitude", null);
 
         obtainToken("testadmin@email.com");
 
@@ -32,7 +60,9 @@ public class CitiesTest extends AuthenticatedE2ETest {
                 .statusCode(201)
                 .body("id", greaterThan(0))
                 .body("name", equalTo(body.get("name")))
-                .body("country", equalTo(body.get("country")));
+                .body("country", equalTo(body.get("country")))
+                .body("longitude", notNullValue())
+                .body("latitude", notNullValue());
     }
 
     @Test
@@ -180,5 +210,22 @@ public class CitiesTest extends AuthenticatedE2ETest {
                 .get("/api/v2/cities/0")
                 .then()
                 .statusCode(404);
+    }
+
+    @Test
+    void testGeolocateCity() throws JSONException {
+
+        obtainToken("testadmin@email.com");
+
+        given()
+                .cookie("AuthToken", this.token)
+                .param("city", "Madrid")
+                .param("country", "Spain")
+                .when()
+                .get("/api/v2/cities/geolocate")
+                .then()
+                .statusCode(200)
+                .body("longitude", notNullValue())
+                .body("latitude", notNullValue());
     }
 }

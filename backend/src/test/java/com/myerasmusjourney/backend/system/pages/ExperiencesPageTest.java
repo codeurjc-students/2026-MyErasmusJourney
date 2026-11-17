@@ -30,9 +30,14 @@ public class ExperiencesPageTest extends BaseSeleniumTest {
 
         linkToExperience.click();
 
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("experience-1")
         ));
+
         for (int id = 1; id<7; id++){
             assertTrue(driver.findElement(By.id("experience-"+id)).isDisplayed());
         }
@@ -51,6 +56,10 @@ public class ExperiencesPageTest extends BaseSeleniumTest {
 
         linkToExperience.click();
 
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("/html/body/div/div/div/div/form/div[4]/div/label[7]/input")
         ));
@@ -58,6 +67,10 @@ public class ExperiencesPageTest extends BaseSeleniumTest {
         WebElement studies = driver.findElement(By.xpath("/html/body/div/div/div/div/form/div[4]/div/label[7]/input"));
 
         studies.click();
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector("[role='status']")
+        ));
 
         List<WebElement> experiences = driver.findElements(By.cssSelector("[id^='experience-']"));
 

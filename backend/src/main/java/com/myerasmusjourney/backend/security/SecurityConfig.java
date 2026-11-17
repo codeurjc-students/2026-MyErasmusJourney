@@ -75,6 +75,7 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.POST, "/api/v2/experiences/{id}/comments").hasRole("USER")
                     .requestMatchers(HttpMethod.POST, "/api/v2/experiences/{id}/multimedia").hasRole("USER")
                     .requestMatchers(HttpMethod.POST, "/api/v2/cities/").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.POST, "/api/v2/cities/geolocate").hasRole("ADMIN")
                     // PUBLIC ENDPOINTS
 					.anyRequest().permitAll()
 			);

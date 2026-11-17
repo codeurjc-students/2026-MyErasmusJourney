@@ -24,6 +24,8 @@ export default function ExperienceFormPage({ experienceService = createExperienc
 
     const [cities, setCities] = useState<CitySimpleDTO[]>([]);
 
+    const [loading, setLoading] = useState<boolean>(true);
+
     const { user } = useUserStore();
 
     const navigate = useNavigate();
@@ -57,8 +59,10 @@ export default function ExperienceFormPage({ experienceService = createExperienc
                 console.error(error)
             }
         }
-        fetchCategories();
-        fetchCities();
+        Promise.all([
+            fetchCategories(),
+            fetchCities()
+        ]).finally(() => setLoading(false));
     }, [])
 
     /** Turns a backend category (e.g. "FOOD_AND_DRINK") into a readable label. */
@@ -76,6 +80,7 @@ export default function ExperienceFormPage({ experienceService = createExperienc
      * file format, anything else shows a toast with the error message.
      */
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+        console.log("Submitting experience form...");
         event.preventDefault();
 
         const formData = new FormData(event.currentTarget);
@@ -91,7 +96,10 @@ export default function ExperienceFormPage({ experienceService = createExperienc
             ? Array.from(multimediaInput.files)
             : [];
 
+        console.log("Form data:", { title, description, dateValue, cityId, rating, categories, files });
+
         if (categories.length > 3) {
+            console.log("Too many categories selected:", categories);
             toast.warning("No more than 3 categories are allowed for an experience");
             return;
         }
@@ -101,7 +109,9 @@ export default function ExperienceFormPage({ experienceService = createExperienc
 
         date.setHours(0, 0, 0, 0);
         today.setHours(0, 0, 0, 0);
-        if (date > new Date()){
+        console.log("Selected date:", date, "Today:", today);
+        if (date > new Date()) {
+            console.log("Selected date is after today:", date);
             toast.warning("The experience cannot have a date after today");
             return;
         }
@@ -116,7 +126,7 @@ export default function ExperienceFormPage({ experienceService = createExperienc
         }
 
         for (const file of files) {
-            if(file.size > 16 * 1024 * 1024) { 
+            if (file.size > 16 * 1024 * 1024) {
                 toast.warning("File size exceeds the 16MB limit. Please upload smaller files.");
                 return;
             }
@@ -128,6 +138,7 @@ export default function ExperienceFormPage({ experienceService = createExperienc
             if (files.length > 0) {
                 await experienceService.addMultimedia(files, newExperience.id);
             }
+            console.log("Experience created successfully:", newExperience);
             navigate(`/experiences/${newExperience.id}`)
         }
         catch (error) {
@@ -147,6 +158,26 @@ export default function ExperienceFormPage({ experienceService = createExperienc
         }
 
     }
+
+    if (loading) {
+        return (
+            <div className="min-h-[60vh] flex items-center justify-center p-6" role="status">
+                <div className="flex flex-col items-center gap-4 text-center">
+                    <div className="w-12 h-12 border-4 border-[#D5E1EE] border-t-[#4A90D9] rounded-full animate-spin" />
+
+                    <div className="space-y-1">
+                        <h3 className="text-xl font-bold text-[#1E3A5F]">
+                            Rendering the experience form...
+                        </h3>
+                        <p className="text-[#4A90C2]">
+                            We're gathering all the necessary information to help you publish your experience. This may take a few seconds.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
 
     return (<>
         <div className="container mx-auto max-w-6xl rounded-3xl bg-white shadow-2xl p-6 md:p-10">
@@ -191,7 +222,7 @@ export default function ExperienceFormPage({ experienceService = createExperienc
                         </div>
                         <div className="flex flex-col gap-3">
                             <label htmlFor="date">Date</label>
-                            <input type="date" id="date" name="date"/>
+                            <input type="date" id="date" name="date" />
                         </div>
                     </div>
 

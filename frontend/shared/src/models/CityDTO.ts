@@ -7,4 +7,6 @@ export interface CityDTO {
     description: string;
     averageRating: number;
     experiences: ExperienceSimpleDTO[];
+    latitude: number;
+    longitude: number;
 }

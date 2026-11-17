@@ -8,6 +8,7 @@ import Comments from "../../components/Comments/Comments";
 import { ApiError } from "@shared/api/apiError";
 import ShareDialog from "@/components/ShareDialog/ShareDialog";
 import { APIURL } from "@/config/env";
+import LoadingComponent from "@/components/Loading/LoadingComponent";
 
 const categoryStyles: Record<string, string> = {
     STUDIES: "#4A90D9",
@@ -41,6 +42,7 @@ const defaultExperienceService = createExperienceService(API);
 export default function DetailedExperiencePage({ experienceService = defaultExperienceService }: experienceServiceProps) {
 
     const [experience, setExperience] = useState<ExperienceDTO | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
     const { id } = useParams();
 
     const navigate = useNavigate();
@@ -59,14 +61,14 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
             }
         };
 
-        fetchExperience();
+        Promise.all([
+            fetchExperience()
+        ]).finally(() => setIsLoading(false));
     }, [id, experienceService]);
 
-    if (!experience) {
+    if (isLoading || !experience) {
         return (
-            <div className="container mx-auto max-w-7xl flex justify-center">
-                <p>Loading experience...</p>
-            </div>
+            <LoadingComponent title="Discovering the experience..." description="We're gathering all the experience details for you." />
         );
     }
 
@@ -140,7 +142,7 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
                                                 ? (
                                                     <img src={`${APIURL}/multimedia/experiences/${multimedia.id}`} alt="Multimedia" className="w-full max-w-2xl max-h-[35vh] h-auto object-contain rounded-2xl" />
                                                 ) : (
-                                                    <video src={`${APIURL}/multimedia/experiences/${multimedia.id}`} controls preload="metadata" className="w-full max-w-2xl max-h-[35vh] h-auto object-contain rounded-2xl" data-testid="experience-video"/>
+                                                    <video src={`${APIURL}/multimedia/experiences/${multimedia.id}`} controls preload="metadata" className="w-full max-w-2xl max-h-[35vh] h-auto object-contain rounded-2xl" data-testid="experience-video" />
                                                 )
                                             }
                                         </div>

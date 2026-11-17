@@ -591,10 +591,6 @@ describe("UserFormPage", () => {
     ).toHaveValue("johndoe");
 
     expect(
-      screen.getByLabelText(/email/i)
-    ).toHaveValue("john@example.com");
-
-    expect(
       screen.getByLabelText(/study location/i)
     ).toHaveValue("Madrid, Spain");
 
@@ -662,14 +658,17 @@ describe("UserFormPage", () => {
       </MemoryRouter>
     );
 
+    await screen.findAllByRole("status");
+    
+    await waitFor(() => {
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
+
     const fullNameInput =
       await screen.findByLabelText(/full name/i);
 
     const displayNameInput =
       screen.getByLabelText(/public name/i);
-
-    const emailInput =
-      screen.getByLabelText(/email/i);
 
     const studyLocationInput =
       screen.getByLabelText(/study location/i);
@@ -680,10 +679,6 @@ describe("UserFormPage", () => {
 
     fireEvent.change(displayNameInput, {
       target: { value: "updatedName" },
-    });
-
-    fireEvent.change(emailInput, {
-      target: { value: "updated@example.com" },
     });
 
     fireEvent.change(studyLocationInput, {
@@ -703,7 +698,7 @@ describe("UserFormPage", () => {
           id: 1,
           fullName: "Updated Name",
           displayName: "updatedName",
-          email: "updated@example.com",
+          email: "john@example.com",
           studyLocation: "Paris, France",
           experiences: [],
           comments: [],
@@ -770,13 +765,10 @@ describe("UserFormPage", () => {
       </MemoryRouter>
     );
 
-    const emailInput =
-      await screen.findByLabelText(/email/i);
-
-    fireEvent.change(emailInput, {
-      target: {
-        value: "existing@example.com",
-      },
+    await screen.findAllByRole("status");
+    
+    await waitFor(() => {
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
     });
 
     fireEvent.click(

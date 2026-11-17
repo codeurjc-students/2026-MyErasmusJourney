@@ -19,6 +19,7 @@ services:
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-password}
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-default}
+      GEOAPIFY_API_KEY: ${GEOAPIFY_API_KEY:-your_api_key_here}
 
     depends_on:
       db:

@@ -35,7 +35,8 @@ describe("CityFormPage", () => {
       addCity: vi.fn(),
       getAll: vi.fn(),
       getTrending: vi.fn(),
-      getCityById: vi.fn()
+      getCityById: vi.fn(),
+      geoLocate: vi.fn()
     };
 
     render(
@@ -53,10 +54,6 @@ describe("CityFormPage", () => {
     expect(
       screen.getByRole("button", { name: /save city/i })
     ).toBeInTheDocument();
-
-    expect(
-      screen.getByAltText("City map preview")
-    ).toBeInTheDocument();
   });
 
   it("should successfully submit the form with valid data", async () => {
@@ -67,8 +64,8 @@ describe("CityFormPage", () => {
       addCity: mockAddCity,
       getAll: vi.fn(),
       getTrending: vi.fn(),
-      getCityById: vi.fn()
-
+      getCityById: vi.fn(),
+      geoLocate: vi.fn()
     };
 
     render(
@@ -98,6 +95,8 @@ describe("CityFormPage", () => {
         name: "Madrid",
         country: "Spain",
         description: "A beautiful city.",
+        longitude: null,
+        latitude: null
       });
 
       expect(mockAddCity).toHaveBeenCalledTimes(1);
@@ -105,7 +104,7 @@ describe("CityFormPage", () => {
   });
 
   it("should navigate to detailed city page after successfully adding the city", async () => {
-    const newCity: CityDTO = {id: 1, name: "Madrid", country: "Spain", description: "A beautiful city", averageRating: 0, experiences:[]}
+    const newCity: CityDTO = { id: 1, name: "Madrid", country: "Spain", description: "A beautiful city", averageRating: 0, experiences: [], latitude: 40.4168, longitude: -3.7038 };
 
     const mockAddCity = vi.fn().mockResolvedValue(newCity);
 
@@ -113,8 +112,8 @@ describe("CityFormPage", () => {
       addCity: mockAddCity,
       getAll: vi.fn(),
       getTrending: vi.fn(),
-      getCityById: vi.fn()
-
+      getCityById: vi.fn(),
+      geoLocate: vi.fn()
     };
 
     render(
@@ -154,8 +153,8 @@ describe("CityFormPage", () => {
       addCity: mockAddCity,
       getAll: vi.fn(),
       getTrending: vi.fn(),
-      getCityById: vi.fn()
-
+      getCityById: vi.fn(),
+      geoLocate: vi.fn()
     };
 
     render(
@@ -186,7 +185,8 @@ describe("CityFormPage", () => {
       addCity: mockAddCity,
       getAll: vi.fn(),
       getTrending: vi.fn(),
-      getCityById: vi.fn()
+      getCityById: vi.fn(),
+      geoLocate: vi.fn()
     };
 
     const warningSpy = vi
@@ -220,6 +220,8 @@ describe("CityFormPage", () => {
         name: "Madrid",
         country: "Spain",
         description: "A beautiful city.",
+        longitude: null,
+        latitude: null
       });
 
       expect(warningSpy).toHaveBeenCalledWith(errorMessage);
@@ -240,7 +242,8 @@ describe("CityFormPage", () => {
       addCity: mockAddCity,
       getAll: vi.fn(),
       getTrending: vi.fn(),
-      getCityById: vi.fn()
+      getCityById: vi.fn(),
+      geoLocate: vi.fn()
     };
 
     render(
@@ -270,6 +273,92 @@ describe("CityFormPage", () => {
         name: "Madrid",
         country: "Spain",
         description: "A beautiful city.",
+        longitude: null,
+        latitude: null
+      });
+      expect(mockNavigate).toHaveBeenCalledWith("/error");
+    });
+
+  });
+
+  it("should successfully submit the geolocation data", async () => {
+
+    const mockGeolocateCity = vi.fn().mockResolvedValue({});
+
+    const mockCityService: CityService = {
+      addCity: vi.fn(),
+      getAll: vi.fn(),
+      getTrending: vi.fn(),
+      getCityById: vi.fn(),
+      geoLocate: mockGeolocateCity
+    };
+
+    render(
+      <MemoryRouter>
+        <CityFormPage cityService={mockCityService} />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText(/city name/i), {
+      target: { value: "Madrid" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/country/i), {
+      target: { value: "Spain" },
+    });
+
+    fireEvent.click(
+      screen.getByRole("button", { name: /preview/i })
+    );
+
+    await waitFor(() => {
+      expect(mockGeolocateCity).toHaveBeenCalledWith({
+        name: "Madrid",
+        country: "Spain",
+      });
+
+      expect(mockGeolocateCity).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it("should redirect to error page when gelocating the city causes internal error", async () => {
+
+    const errorMessage = "City couldn't be geolocated";
+
+    const mockGeolocateCity = vi
+      .fn()
+      .mockRejectedValue(new ApiError(500, errorMessage));
+
+    const mockCityService: CityService = {
+      addCity: vi.fn(),
+      getAll: vi.fn(),
+      getTrending: vi.fn(),
+      getCityById: vi.fn(),
+      geoLocate: mockGeolocateCity
+    };
+
+    render(
+      <MemoryRouter>
+        <CityFormPage cityService={mockCityService} />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText(/city name/i), {
+      target: { value: "Madrid" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/country/i), {
+      target: { value: "Spain" },
+    });
+
+    fireEvent.click(
+      screen.getByRole("button", { name: /preview/i })
+    );
+
+    await waitFor(() => {
+      expect(mockGeolocateCity).toHaveBeenCalledWith({
+        name: "Madrid",
+        country: "Spain"
       });
       expect(mockNavigate).toHaveBeenCalledWith("/error");
     });

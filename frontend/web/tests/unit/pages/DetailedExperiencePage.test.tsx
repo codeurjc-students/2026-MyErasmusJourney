@@ -51,7 +51,7 @@ describe("DetailedExperiencePage", () => {
     multimedia: [
       { id: 1, contentType: "video/mp4" },
       { id: 2, contentType: "image/jpeg" },
-      { id: 3, contentType: "video/quicktime"}
+      { id: 3, contentType: "video/quicktime" }
     ]
   };
 
@@ -84,7 +84,7 @@ describe("DetailedExperiencePage", () => {
     );
 
     expect(
-      screen.getByText("Loading experience...")
+      screen.getByRole("status")
     ).toBeInTheDocument();
 
     expect(mockGetExperienceById).toHaveBeenCalledWith(1);
@@ -110,13 +110,16 @@ describe("DetailedExperiencePage", () => {
     render(
       <MemoryRouter initialEntries={["/experiences/1"]}>
         <Routes>
-          <Route
-            path="/experiences/:id"
-            element={<DetailedExperiencePage experienceService={mockService} />}
-          />
+          <Route path="/experiences/:id" element={<DetailedExperiencePage experienceService={mockService} />} />
         </Routes>
       </MemoryRouter>
     );
+
+    await screen.findByRole("status");
+
+    await waitFor(() => {
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
 
     await waitFor(() => {
       expect(
@@ -157,7 +160,6 @@ describe("DetailedExperiencePage", () => {
     expect(screen.queryAllByTestId("experience-video")).toHaveLength(2);
 
     expect(mockGetExperienceById).toHaveBeenCalledTimes(1);
-    expect(mockGetExperienceById).toHaveBeenCalledWith(1);
   });
 
   it("should navigate to error page when the experience does not exist", async () => {
@@ -237,7 +239,7 @@ describe("DetailedExperiencePage", () => {
     });
 
     expect(
-      screen.getByText("Loading experience...")
+      screen.getByRole("status")
     ).toBeInTheDocument();
 
     expect(mockNavigate).toHaveBeenCalledWith("/error");

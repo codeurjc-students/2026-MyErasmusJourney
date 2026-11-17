@@ -9,6 +9,7 @@ import { useUserStore } from "@shared/stores/userStore";
 import { Link, useNavigate } from "react-router-dom";
 import { ApiError } from "@shared/api/apiError";
 import { APIURL } from "@/config/env";
+import LoadingComponent from "../Loading/LoadingComponent";
 
 interface ExperienceIdProps {
     experienceId: number;
@@ -23,6 +24,8 @@ export default function Comments({ experienceService = createExperienceService(A
 
     const [comments, setComments] = useState<CommentSimpleDTO[]>([]);
 
+    const [loading, setLoading] = useState<boolean>(true);
+
     const navigate = useNavigate();
 
     function onChange(e: ChangeEvent<HTMLInputElement>) {
@@ -32,8 +35,8 @@ export default function Comments({ experienceService = createExperienceService(A
     async function getComments() {
         try {
             const data = await experienceService.getCommentsByExperienceId(experienceId);
-
-            setComments(data);
+            setComments(data.reverse());
+            setLoading(false);
         } catch (error) {
             if (error instanceof ApiError && error.status >= 500) {
                 console.error(error);
@@ -73,6 +76,11 @@ export default function Comments({ experienceService = createExperienceService(A
         fetchData();
     }, [])
 
+    if (loading) {
+        return(<>
+            <LoadingComponent description="Loading comments..." />
+        </>)
+    }
 
     return (<>
         <div className="flex flex-col flex-1 min-h-0">

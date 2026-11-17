@@ -28,12 +28,14 @@ public class CityTest {
 
     @Test
     void testConstructor() {
-        City city = new City("Madrid", "Spain", "Capital of Spain");
+        City city = new City("Madrid", "Spain", "Capital of Spain", -3.703507, 40.416782);
 
         assertNull(city.getId());
         assertEquals("Madrid", city.getName());
         assertEquals("Spain", city.getCountry());
         assertEquals("Capital of Spain", city.getDescription());
+        assertEquals(-3.703507, city.getLongitude());
+        assertEquals(40.416782, city.getLatitude());
 
         assertNotNull(city.getExperiences());
         assertTrue(city.getExperiences().isEmpty());
