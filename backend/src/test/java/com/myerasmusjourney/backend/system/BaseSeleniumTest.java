@@ -60,7 +60,18 @@ public abstract class BaseSeleniumTest extends TestDataBase {
     protected void startWebDriver(){
         try {
             FirefoxOptions options = new FirefoxOptions();
-            options.addArguments("--headless");
+
+            boolean headless = !"false".equalsIgnoreCase(System.getenv("SELENIUM_HEADLESS"));
+            if (headless) {
+                options.addArguments("--headless");
+            }
+            options.addArguments("--width=1920", "--height=1080");
+
+            options.addPreference("webgl.disabled", false);
+            options.addPreference("webgl.force-enabled", true);
+            options.addPreference("webgl.enable-webgl2", true);
+            options.addPreference("webgl.disable-fail-if-major-performance-caveat", true);
+
             driver = new FirefoxDriver(options);
         } catch (Exception e) {
             e.printStackTrace();

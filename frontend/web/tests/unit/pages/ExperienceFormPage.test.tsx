@@ -29,6 +29,18 @@ describe("ExperienceFormPage", () => {
     vi.restoreAllMocks();
   });
 
+  const renderExperienceFormPage = async (mockExperienceService: any, mockCityService: any) => {
+    render(
+      <ExperienceFormPage experienceService={mockExperienceService as any} cityService={mockCityService as any} />
+    );
+
+    await screen.findByRole("status");
+
+    await waitFor(() => {
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
+  }
+
   it("renders the experience form and all required fields", async () => {
     const mockExperienceService = {
       getCategories: vi.fn().mockResolvedValue(["ART", "SPORT", "TRAVEL", "FOOD"]),
@@ -42,14 +54,7 @@ describe("ExperienceFormPage", () => {
       ]),
     };
 
-    render(
-      <MemoryRouter>
-        <ExperienceFormPage
-          experienceService={mockExperienceService as any}
-          cityService={mockCityService as any}
-        />
-      </MemoryRouter>
-    );
+    await renderExperienceFormPage(mockExperienceService, mockCityService);
 
     expect(screen.getByRole("heading", { name: /new experience/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
@@ -57,7 +62,9 @@ describe("ExperienceFormPage", () => {
     expect(screen.getByLabelText(/location/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/date/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/experience description/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /publish/i })).toBeInTheDocument();
+
+    const form = screen.getByRole("button", { name: /publish/i }).closest("form")!;
+    fireEvent.submit(form);
 
     await waitFor(() => {
       expect(mockExperienceService.getCategories).toHaveBeenCalledTimes(1);
@@ -104,14 +111,7 @@ describe("ExperienceFormPage", () => {
       ]),
     };
 
-    render(
-      <MemoryRouter>
-        <ExperienceFormPage
-          experienceService={mockExperienceService as any}
-          cityService={mockCityService as any}
-        />
-      </MemoryRouter>
-    );
+    await renderExperienceFormPage(mockExperienceService, mockCityService);
 
     await waitFor(() => {
       expect(screen.getByText("ART HISTORY")).toBeInTheDocument();
@@ -135,14 +135,7 @@ describe("ExperienceFormPage", () => {
       getAll: vi.fn().mockResolvedValue([{ id: 1, name: "Madrid", country: "Spain" }]),
     };
 
-    render(
-      <MemoryRouter>
-        <ExperienceFormPage
-          experienceService={mockExperienceService as any}
-          cityService={mockCityService as any}
-        />
-      </MemoryRouter>
-    );
+    await renderExperienceFormPage(mockExperienceService, mockCityService);
 
     await waitFor(() => {
       expect(screen.getAllByRole("checkbox")).toHaveLength(4);
@@ -170,7 +163,7 @@ describe("ExperienceFormPage", () => {
   });
 
   it("shows an alert and blocks submission when date is not valid", async () => {
-     const alertSpy = vi
+    const alertSpy = vi
       .spyOn(toast, "warning")
       .mockImplementation(() => { return "mock-toast-id" });
     const mockExperienceService = {
@@ -182,14 +175,7 @@ describe("ExperienceFormPage", () => {
       getAll: vi.fn().mockResolvedValue([{ id: 1, name: "Madrid", country: "Spain" }]),
     };
 
-    render(
-      <MemoryRouter>
-        <ExperienceFormPage
-          experienceService={mockExperienceService as any}
-          cityService={mockCityService as any}
-        />
-      </MemoryRouter>
-    );
+    await renderExperienceFormPage(mockExperienceService, mockCityService);
 
     await waitFor(() => {
       expect(screen.getAllByRole("checkbox")).toHaveLength(4);
@@ -225,14 +211,7 @@ describe("ExperienceFormPage", () => {
       getAll: vi.fn().mockResolvedValue([{ id: 7, name: "Lisbon", country: "Portugal" }]),
     };
 
-    render(
-      <MemoryRouter>
-        <ExperienceFormPage
-          experienceService={mockExperienceService as any}
-          cityService={mockCityService as any}
-        />
-      </MemoryRouter>
-    );
+    await renderExperienceFormPage(mockExperienceService, mockCityService);
 
     await waitFor(() => {
       expect(screen.getAllByRole("checkbox")).toHaveLength(2);
@@ -278,14 +257,7 @@ describe("ExperienceFormPage", () => {
       getAll: vi.fn().mockResolvedValue([{ id: 1, name: "Madrid", country: "Spain" }]),
     };
 
-    render(
-      <MemoryRouter>
-        <ExperienceFormPage
-          experienceService={mockExperienceService as any}
-          cityService={mockCityService as any}
-        />
-      </MemoryRouter>
-    );
+    await renderExperienceFormPage(mockExperienceService, mockCityService);
 
     await waitFor(() => {
       expect(screen.getAllByRole("checkbox")).toHaveLength(1);
@@ -318,14 +290,7 @@ describe("ExperienceFormPage", () => {
       getAll: vi.fn().mockResolvedValue([{ id: 1, name: "Madrid", country: "Spain" }]),
     };
 
-    render(
-      <MemoryRouter>
-        <ExperienceFormPage
-          experienceService={mockExperienceService as any}
-          cityService={mockCityService as any}
-        />
-      </MemoryRouter>
-    );
+    await renderExperienceFormPage(mockExperienceService, mockCityService);
 
     await waitFor(() => {
       expect(screen.getAllByRole("checkbox")).toHaveLength(1);

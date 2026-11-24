@@ -13,7 +13,7 @@ import type { UserSimpleDTO } from "@shared/models/UserSimpleDTO";
 
 import {
   authenticateUser,
-  clearFetchAndUserStore
+  clearUserStore
 } from "tests/testAuthentication";
 
 import { APIURL } from "src/config/env";
@@ -56,32 +56,30 @@ describe("DetailedExperiencePage", () => {
 
 
   async function openShareDialog() {
-    render(
-      <MemoryRouter initialEntries={["/experiences/1"]}>
-        <Routes>
-          <Route
-            path="/experiences/:id"
-            element={
-              <DetailedExperiencePage
-                experienceService={testExperienceService}
-              />
-            }
-          />
-        </Routes>
-      </MemoryRouter>
-    );
-
-    await waitFor(() => {
-      expect(
-        screen.queryByText("Loading experience...")
-      ).not.toBeInTheDocument();
-    });
+    await renderExperience();
 
     fireEvent.click(
       screen.getByRole("button", {
         name: /share experience/i,
       })
     );
+  }
+
+  async function renderExperience() {
+    render(
+      <MemoryRouter initialEntries={["/experiences/1"]}>
+        <Routes>
+          <Route path="/experiences/:id" element={<DetailedExperiencePage experienceService={testExperienceService} />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await screen.findAllByRole("status");
+
+    await waitFor(() => {
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
+    
   }
 
 
@@ -95,33 +93,12 @@ describe("DetailedExperiencePage", () => {
   });
 
   afterAll(() => {
-    clearFetchAndUserStore();
+    clearUserStore();
   });
 
 
   it("should load and display an existing experience", async () => {
-
-    render(
-      <MemoryRouter initialEntries={["/experiences/1"]}>
-        <Routes>
-          <Route
-            path="/experiences/:id"
-            element={
-              <DetailedExperiencePage
-                experienceService={testExperienceService}
-              />
-            }
-          />
-        </Routes>
-      </MemoryRouter>
-    );
-
-    await waitFor(() => {
-      expect(
-        screen.queryByText("Loading experience...")
-      ).not.toBeInTheDocument();
-    });
-
+    await renderExperience();
     expect(
       screen.getByRole("heading", { level: 3 })
     ).toBeInTheDocument();
@@ -132,26 +109,7 @@ describe("DetailedExperiencePage", () => {
 
     const experience: ExperienceDTO = await testExperienceService.getExperienceById(1);
 
-    render(
-      <MemoryRouter initialEntries={["/experiences/1"]}>
-        <Routes>
-          <Route
-            path="/experiences/:id"
-            element={
-              <DetailedExperiencePage
-                experienceService={testExperienceService}
-              />
-            }
-          />
-        </Routes>
-      </MemoryRouter>
-    );
-
-    await waitFor(() => {
-      expect(
-        screen.queryByText("Loading experience...")
-      ).not.toBeInTheDocument();
-    });
+    await renderExperience();
 
     expect(screen.getByRole("heading", { level: 3 })).toBeInTheDocument();
 
@@ -173,7 +131,6 @@ describe("DetailedExperiencePage", () => {
 
     expect(await screen.findByRole("heading", { level: 4 })).toBeInTheDocument();
   });
-
 
   it("should navigate to available-soon when the experience does not exist", async () => {
 

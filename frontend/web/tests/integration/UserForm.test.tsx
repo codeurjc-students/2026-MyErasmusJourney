@@ -9,7 +9,7 @@ import { useUserStore } from "@shared/stores/userStore";
 import type { UserSimpleDTO } from "@shared/models/UserSimpleDTO";
 
 import { APIURL } from "src/config/env";
-import { authenticateUser, clearFetchAndUserStore } from "tests/testAuthentication";
+import { authenticateUser, clearUserStore } from "tests/testAuthentication";
 import UserFormPage from "src/pages/UserFormPage/UserFormPage";
 import type { UserDTO } from "@shared/models/UserDTO";
 import UserPage from "src/pages/UserPage/UserPage";
@@ -29,7 +29,7 @@ describe("UserFormPage", () => {
     });
 
     afterAll(() => {
-        clearFetchAndUserStore();
+        clearUserStore();
         cleanup();
     });
 
@@ -51,13 +51,11 @@ describe("UserFormPage", () => {
         const fullNameInput = screen.getByLabelText(/full name/i) as HTMLInputElement;
         const displayNameInput = screen.getByLabelText(/public name/i) as HTMLInputElement;
         const studyLocationInput = screen.getByLabelText(/study location/i) as HTMLInputElement;
-        const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
         const submitButton = screen.getByRole("button", { name: /save changes/i });
 
         expect(fullNameInput).toHaveValue(String(user.fullName));
         expect(displayNameInput).toHaveValue(String(user.displayName));
         expect(studyLocationInput).toHaveValue(String(user.studyLocation));
-        expect(emailInput).toHaveValue(String(user.email));
         expect(submitButton).toBeInTheDocument();
 
     })
@@ -81,12 +79,10 @@ describe("UserFormPage", () => {
         const fullNameInput = screen.getByLabelText(/full name/i) as HTMLInputElement;
         const displayNameInput = screen.getByLabelText(/public name/i) as HTMLInputElement;
         const studyLocationInput = screen.getByLabelText(/study location/i) as HTMLInputElement;
-        const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
         const submitButton = screen.getByRole("button", { name: /save changes/i });
 
         fireEvent.change(fullNameInput, { target: { value: "New name" } });
         fireEvent.change(displayNameInput, { target: { value: String(user.displayName) } });
-        fireEvent.change(emailInput, { target: { value: String(user.email) } });
         fireEvent.change(studyLocationInput, { target: { value: String(user.studyLocation) } });
 
         fireEvent.click(submitButton);
@@ -136,12 +132,10 @@ describe("UserFormPage", () => {
         const fullNameInput = screen.getByLabelText(/full name/i) as HTMLInputElement;
         const displayNameInput = screen.getByLabelText(/public name/i) as HTMLInputElement;
         const studyLocationInput = screen.getByLabelText(/study location/i) as HTMLInputElement;
-        const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
         const submitButton = screen.getByRole("button", { name: /save changes/i });
 
         fireEvent.change(fullNameInput, { target: { value: "New name" } });
         fireEvent.change(displayNameInput, { target: { value: String(user.displayName) } });
-        fireEvent.change(emailInput, { target: { value: String(user.email) } });
         fireEvent.change(studyLocationInput, { target: { value: String(user.studyLocation) } });
 
         fireEvent.click(submitButton);

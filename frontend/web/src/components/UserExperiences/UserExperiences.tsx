@@ -9,6 +9,7 @@ import { createExperienceService } from "@shared/services/experience.service";
 import type { experienceServiceProps } from "@shared/interfaces/experienceServiceProps";
 import { ApiError } from "@shared/api/apiError";
 import { toast } from "sonner";
+import LoadingComponent from "../Loading/LoadingComponent";
 
 interface experiencesProps {
     userExperiences: ExperienceSimpleDTO[] | undefined;
@@ -38,7 +39,7 @@ export default function UserExperiences({ userService = createUserService(API), 
         }
         try {
             const data = await userService.getExperiences(id);
-            setExperiences(data.reverse());
+            setExperiences(data.toReversed());
         } catch (error) {
             if (error instanceof ApiError && error.status >= 500) {
                 console.error(error);
@@ -54,7 +55,7 @@ export default function UserExperiences({ userService = createUserService(API), 
             fetchExperiences();
         }
         else {
-            setExperiences(userExperiences)
+            setExperiences(userExperiences.toReversed())
         }
         setLoading(false);
     }, [])
@@ -84,7 +85,7 @@ export default function UserExperiences({ userService = createUserService(API), 
             <h4 className="mb-6">Experiences</h4>
             {loading
                 ? (
-                    <p>Loading experiences...</p>
+                    <LoadingComponent description="Loading your experiences..." />
                 ) : (
                     <div className="flex flex-col gap-4">
                         {experiences.map((experience) => (

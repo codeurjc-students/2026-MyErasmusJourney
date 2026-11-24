@@ -4,8 +4,8 @@ import type { UserDTO } from "../models/UserDTO";
 import type { UserSimpleDTO } from "../models/UserSimpleDTO";
 import { type BasicService, createBasicService } from "./basicService";
 import type { UserImageDTO } from "../models/UserImageDTO";
-import type { ExperienceSimpleDTO } from "@shared/models/ExperienceSimpleDTO";
-import type { CommentSimpleDTO } from "@shared/models/CommentSimpleDTO";
+import type { ExperienceSimpleDTO } from "../models/ExperienceSimpleDTO";
+import type { CommentSimpleDTO } from "../models/CommentSimpleDTO";
 
 export type UserService = ReturnType<typeof createUserService>;
 

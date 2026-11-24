@@ -3,15 +3,21 @@ import type { cityServiceProps } from "@shared/interfaces/cityServiceProps";
 import { API } from "../../api/client";
 import type { CityFormDTO } from "@shared/models/CityFormDTO";
 import { useNavigate } from "react-router-dom";
-import type { FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { ApiError } from "@shared/api/apiError";
 import { toast } from "sonner";
 import type { CityDTO } from "@shared/models/CityDTO";
+import type { MapMarker } from "@shared/models/MapMarker";
+import MapComponent from "../../components/Map/MapComponent";
 
 export default function CityFormPage({ cityService = createCityService(API) }: cityServiceProps) {
 
 
     const navigate = useNavigate();
+    const [longitude, setLongitude] = useState<number | null>(null);
+    const [latitude, setLatitude] = useState<number | null>(null);
+    const [zoom, setZoom] = useState<number>(2.6);
+    const [marks, setMarks] = useState<MapMarker[]>([]);
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -23,12 +29,12 @@ export default function CityFormPage({ cityService = createCityService(API) }: c
         const country = formData.get("country") as string;
         const description = formData.get("description") as string;
 
-
-
         const cityFormDTO: CityFormDTO = {
             name,
             country,
-            description
+            description,
+            longitude,
+            latitude
         };
 
         try {
@@ -46,6 +52,24 @@ export default function CityFormPage({ cityService = createCityService(API) }: c
                 toast.error(error.message);
             } else {
                 toast.error("An unexpected error occurred");
+            }
+        }
+    }
+
+    async function handleGeoLocate() {
+        const cityName = (document.getElementById("city") as HTMLInputElement).value;
+        try {
+            console.log("Geolocating city...")
+            const geolocation = await cityService.geoLocate({ name: cityName, country: (document.getElementById("country") as HTMLInputElement).value });
+            console.log(geolocation)
+            setLatitude(geolocation.latitude);
+            setLongitude(geolocation.longitude);
+            setZoom(7);
+            setMarks([{ latitude: geolocation.latitude, longitude: geolocation.longitude, title: cityName, rating: 0, id: 0 }]);
+        } catch (error) {
+            if (error instanceof ApiError && error.status >= 500) {
+                navigate("/error");
+                return;
             }
         }
     }
@@ -78,12 +102,11 @@ export default function CityFormPage({ cityService = createCityService(API) }: c
                 </div>
 
                 <div className="w-full flex flex-col gap-3 items-center">
-                    <label htmlFor="mapPreview">
-                        Preview
-                    </label>
+
                     <div className="w-full flex justify-center overflow-hidden rounded-2xl">
-                        <img id="mapPreview" src="/images/available_soon.png" alt="City map preview" className="w-auto max-h-90 object-cover rounded-2xl" />
+                        <MapComponent latitude={latitude ?? 57} longitude={longitude ?? 15} zoom={zoom} marks={marks} markerType={"preview"} />
                     </div>
+                    <button onClick={handleGeoLocate} type="button">Preview City</button>
                 </div>
             </form>
         </div>

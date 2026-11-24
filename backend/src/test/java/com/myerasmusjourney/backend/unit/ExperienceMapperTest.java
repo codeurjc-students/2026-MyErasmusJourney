@@ -38,8 +38,8 @@ public class ExperienceMapperTest {
         User author1 = new User("author1","author1", "author1@email.com", "password", null, null);
         User author2 = new User("author2","author2", "author2@email.com", "password", null, null);
 
-        City city1 = new City("Madrid", "Spain", "description");
-        City city2 = new City("Toledo", "Spain", "description");
+        City city1 = new City("Madrid", "Spain", "description", -3.703507, 40.416782);
+        City city2 = new City("Toledo", "Spain", "description", -3.703507, 40.416782);
 
 
 
@@ -84,7 +84,7 @@ public class ExperienceMapperTest {
 
     @Test
     void testToDTO(){
-        City city = new City("Madrid", "Spain", "description");
+        City city = new City("Madrid", "Spain", "description", -3.703507, 40.416782);
         User user = new User("test", "test", "test@gmail.com", "password", "valencia", "spain");
         Experience exp = new Experience("Title", "Description", 6.8F, null, List.of("Gastronomy", "Documentation"), city, user);
         Comment comment = new Comment("test comment", user, exp);

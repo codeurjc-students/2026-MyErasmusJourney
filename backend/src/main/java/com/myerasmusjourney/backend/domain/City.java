@@ -18,15 +18,23 @@ public class City {
 
     private String description;
 
+    @Column(nullable = false)
+    private Double latitude;
+
+    @Column(nullable = false)
+    private Double longitude;
+
     @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Experience> experiences = new LinkedList<>();
 
     public City(){}
 
-    public City(String name, String country, String description){
+    public City(String name, String country, String description, Double longitude, Double latitude){
         this.country = country;
         this.name = name;
         this.description = description;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     public Long getId() {
@@ -71,5 +79,21 @@ public class City {
 
     public void addExperience(Experience experience){
         this.experiences.add(experience);
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }

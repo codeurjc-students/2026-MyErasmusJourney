@@ -29,6 +29,12 @@ describe("CitiesPage", () => {
             </MemoryRouter>
         );
 
+        await waitFor(() => {
+            expect(screen.queryByRole("status")).not.toBeInTheDocument();
+        });
+
+
+
         for (const city of responseData) {
             await waitFor(() => {
                 expect(screen.getByText(city.name)).toBeInTheDocument();
@@ -41,6 +47,7 @@ describe("CitiesPage", () => {
             addCity: testCityService.addCity,
             getAll: testCityService.getAll,
             getCityById: testCityService.getCityById,
+            geoLocate: testCityService.geoLocate,
             getTrending: async () => {
                 const response = await testAPI.get("/tests/500");
 
