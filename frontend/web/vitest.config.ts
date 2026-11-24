@@ -38,7 +38,7 @@ export default defineConfig({
                 ],
               },
             }),
-            instances: [{ browser: "firefox" }],
+            instances: [{ browser: "chromium" }],
           },
         },
       },
