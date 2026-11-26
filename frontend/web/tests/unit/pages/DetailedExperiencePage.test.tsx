@@ -41,9 +41,6 @@ describe("DetailedExperiencePage", () => {
       id: 1,
       name: "Madrid",
       country: "Spain",
-      latitude: 0.0,
-      longitude: 0.0,
-      averageRating:8.5
     },
     author: {
       id: 1,
