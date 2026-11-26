@@ -93,6 +93,10 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
                 By.xpath("/html/body/div/div/div/main/div/div[2]/h3")
         ));
 
+        String oldestComment = "/html/body/div/div/div/aside/div[1]/div/div[1]/p";
+
+        if (driver.findElement(By.xpath("/html/body/div/div/div/aside/div[1]/div/div[1]/p")).isDisplayed()) oldestComment = "/html/body/div/div/div/aside/div[1]/div/div[2]/p";
+
         WebElement commentInput = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[2]/input"));
         WebElement postButton = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[2]/button"));
 
@@ -104,7 +108,7 @@ public class UserPageTest extends AuthenticatedSeleniumTest {
         ));
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("/html/body/div/div/div/aside/div[1]/div/div[1]")
+                By.xpath(oldestComment)
         ));
     }
 

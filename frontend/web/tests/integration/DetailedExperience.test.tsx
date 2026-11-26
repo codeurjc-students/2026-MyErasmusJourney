@@ -124,9 +124,9 @@ describe("DetailedExperiencePage", () => {
         (multimedia) => multimedia.contentType.startsWith("image/")
       ).length;
 
-      expect(screen.queryAllByRole("img", { name: "Multimedia" })).toHaveLength(expectedVideo);
+      expect(screen.queryAllByRole("img", { name: "Experience image" })).toHaveLength(expectedImage);
 
-      expect(screen.queryAllByTestId("experience-video")).toHaveLength(expectedImage);
+      expect(screen.queryAllByTestId("experience-video")).toHaveLength(expectedVideo);
     }
 
     expect(await screen.findByRole("heading", { level: 4 })).toBeInTheDocument();

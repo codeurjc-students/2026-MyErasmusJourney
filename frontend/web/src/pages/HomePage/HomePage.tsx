@@ -24,7 +24,7 @@ export default function HomePage(){
                         <img className="max-w-full h-auto" src="/images/compass.png" alt="opened book with a quill inside a compass"/>
                     </div>
                     <div className="col-span-2">
-                        <h4>Write an <br/> adventure</h4>
+                        <h4><Link to="/experiences/new">Write an <br/> adventure</Link></h4>
                     </div>
                 </div>
                 <p className="mt-4">
@@ -38,7 +38,7 @@ export default function HomePage(){
                         <img className="max-w-full h-auto" src="/images/globe.png" alt="opened book with a quill inside a compass"/>
                     </div>
                     <div className="col-span-2">
-                        <h4>Explore destinations</h4>
+                        <h4><Link to="/cities">Explore destinations</Link></h4>
                     </div>
                 </div>
                 <p className="mt-4">
@@ -52,7 +52,7 @@ export default function HomePage(){
                         <img className="max-w-full h-auto" src="/images/book.png" alt="opened book with a quill inside a compass"/>
                     </div>
                     <div className="col-span-2">
-                        <h4>Look at other journeys</h4>
+                        <h4><Link to="/experiences">Look at other journeys</Link></h4>
                     </div>
                 </div>
                 <p className="mt-4">

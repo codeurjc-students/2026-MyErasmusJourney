@@ -155,7 +155,7 @@ describe("DetailedExperiencePage", () => {
       screen.getByText("Gastronomy")
     ).toBeInTheDocument();
 
-    expect(screen.queryAllByRole("img", { name: "Multimedia" })).toHaveLength(1);
+    expect(screen.queryAllByRole("img", { name: "Experience image" })).toHaveLength(1);
 
     expect(screen.queryAllByTestId("experience-video")).toHaveLength(2);
 

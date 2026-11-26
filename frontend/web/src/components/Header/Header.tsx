@@ -10,7 +10,7 @@ export default function Header(){
     return (<>
         <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <Link to="/">
-                <img src="/images/logo.png" alt="Logo" />
+                <img src="/images/header_logo.png" alt="Logo" />
             </Link>
 
             <nav className="flex flex-wrap gap-4 items-center justify-center md:justify-end">

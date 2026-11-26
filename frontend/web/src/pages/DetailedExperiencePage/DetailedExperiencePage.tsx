@@ -9,6 +9,7 @@ import { ApiError } from "@shared/api/apiError";
 import ShareDialog from "@/components/ShareDialog/ShareDialog";
 import { APIURL } from "@/config/env";
 import LoadingComponent from "@/components/Loading/LoadingComponent";
+import MediaCarousel from "@/components/MediaCarousel/MediaCarousel";
 
 const categoryStyles: Record<string, string> = {
     STUDIES: "#4A90D9",
@@ -136,17 +137,7 @@ export default function DetailedExperiencePage({ experienceService = defaultExpe
                         {experience.multimedia != null
                             ? (
                                 <div className="flex flex-wrap justify-center items-center gap-6 mt-6">
-                                    {experience.multimedia.map((multimedia) => (
-                                        <div className="w-full sm:w-[45%] flex justify-center">
-                                            {multimedia.contentType.includes("image")
-                                                ? (
-                                                    <img src={`${APIURL}/multimedia/experiences/${multimedia.id}`} alt="Multimedia" className="w-full max-w-2xl max-h-[35vh] h-auto object-contain rounded-2xl" />
-                                                ) : (
-                                                    <video src={`${APIURL}/multimedia/experiences/${multimedia.id}`} controls preload="metadata" className="w-full max-w-2xl max-h-[35vh] h-auto object-contain rounded-2xl" data-testid="experience-video" />
-                                                )
-                                            }
-                                        </div>
-                                    ))}
+                                    <MediaCarousel multimedia={experience.multimedia}/>
                                 </div>
                             ) : (
                                 null
