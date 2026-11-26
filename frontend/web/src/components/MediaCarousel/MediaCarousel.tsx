@@ -50,7 +50,7 @@ export default function MediaCarousel({ multimedia } : MediaCarouselProps) {
                         {media.contentType.includes("image") ? (
                             <img src={`${APIURL}/multimedia/experiences/${media.id}`} alt={"Experience image"} className="h-full w-full object-contain"/>
                         ) : (
-                            <video src={`${APIURL}/multimedia/experiences/${media.id}`} controls playsInline preload="metadata" className="h-full w-full object-contain"/>
+                            <video data-testid="experience-video" src={`${APIURL}/multimedia/experiences/${media.id}`} controls playsInline preload="metadata" className="h-full w-full object-contain"/>
                         )}
                     </div>
                 ))}
