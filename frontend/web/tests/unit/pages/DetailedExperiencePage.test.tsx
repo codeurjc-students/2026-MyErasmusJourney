@@ -41,6 +41,9 @@ describe("DetailedExperiencePage", () => {
       id: 1,
       name: "Madrid",
       country: "Spain",
+      latitude: 0.0,
+      longitude: 0.0,
+      averageRating:8.5
     },
     author: {
       id: 1,
@@ -155,7 +158,7 @@ describe("DetailedExperiencePage", () => {
       screen.getByText("Gastronomy")
     ).toBeInTheDocument();
 
-    expect(screen.queryAllByRole("img", { name: "Multimedia" })).toHaveLength(1);
+    expect(screen.queryAllByRole("img", { name: "Experience image" })).toHaveLength(1);
 
     expect(screen.queryAllByTestId("experience-video")).toHaveLength(2);
 
