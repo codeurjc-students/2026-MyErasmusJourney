@@ -58,10 +58,16 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
         ));
 
         Assertions.assertTrue(
-                driver.findElement(By.xpath("/html/body/div/div/div/main/div/div[4]/div[1]/img")).isDisplayed()
+                driver.findElement(By.xpath("/html/body/div/div/div/main/div/div[4]")).isDisplayed()
                 &&
-                driver.findElement(By.xpath("/html/body/div/div/div/main/div/div[4]/div[2]/video")).isDisplayed()
+                driver.findElement(By.xpath("/html/body/div/div/div/main/div/div[4]/div/div[1]/div[1]/img")).isDisplayed()
         );
+
+        WebElement nextButton = driver.findElement(By.xpath("/html/body/div/div/div/main/div/div[4]/div/button"));
+
+        nextButton.click();
+
+        assertTrue(driver.findElement(By.xpath("/html/body/div/div/div/main/div/div[4]/div/div[1]/div[2]/video")).isDisplayed());
     }
 
     @Test
@@ -81,14 +87,18 @@ public class DetailedExperiencePageTest extends AuthenticatedSeleniumTest {
         WebElement commentInput = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[2]/input"));
         WebElement postButton = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[2]/button"));
 
+        String oldestComment = "/html/body/div/div/div/aside/div[1]/div/div[1]/p";
+
+        if (driver.findElement(By.xpath("/html/body/div/div/div/aside/div[1]/div/div[1]/p")).isDisplayed()) oldestComment = "/html/body/div/div/div/aside/div[1]/div/div[2]/p";
+
         commentInput.sendKeys("New comment");
         postButton.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("/html/body/div/div/div/aside/div[1]/div/div[1]")
+                By.xpath(oldestComment)
         ));
 
-        WebElement newComment = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[1]/div/div[1]"));
+        WebElement newComment = driver.findElement(By.xpath("/html/body/div/div/div/aside/div[1]/div/div[1]/p"));
         assertTrue(newComment.getText().contains("New comment"));
     }
 
