@@ -268,7 +268,10 @@ public class ExperienceServiceTest {
                 city.getId(),
                 city.getName(),
                 city.getDescription(),
-                city.getCountry()
+                city.getCountry(),
+                null,
+                city.getLatitude(),
+                city.getLongitude()
         );
 
         UserSimpleDTO userDTO = new UserSimpleDTO(

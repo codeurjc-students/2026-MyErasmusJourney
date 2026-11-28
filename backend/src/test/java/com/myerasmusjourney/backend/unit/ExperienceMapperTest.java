@@ -90,7 +90,7 @@ public class ExperienceMapperTest {
         Comment comment = new Comment("test comment", user, exp);
         exp.addComment(comment);
 
-        CitySimpleDTO citySimpleDTO = new CitySimpleDTO(null, "Madrid", "description", "Spain");
+        CitySimpleDTO citySimpleDTO = new CitySimpleDTO(null, "Madrid", "description", "Spain", null, 40.416782, -3.703507);
         UserSimpleDTO userSimpleDTO = new UserSimpleDTO(null, "test", "test@gmail.com", null);
         CommentSimpleDTO commentSimpleDTO = new CommentSimpleDTO(null,LocalDate.now(), "test comment", "test", null,null);
         ExperienceDTO dto = new ExperienceDTO(null, LocalDate.now(), 6.8F, "Title", "Description",  List.of(Category.Gastronomy, Category.Documentation), citySimpleDTO, userSimpleDTO, List.of(commentSimpleDTO), List.of());

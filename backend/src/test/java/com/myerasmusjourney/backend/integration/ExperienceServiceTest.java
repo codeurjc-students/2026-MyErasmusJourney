@@ -332,15 +332,6 @@ public class ExperienceServiceTest extends TestDataBase {
                 user
         );
 
-        savedExperience.setDate(formDTO.date());
-
-        CitySimpleDTO cityDTO = new CitySimpleDTO(
-                city.getId(),
-                city.getName(),
-                city.getDescription(),
-                city.getCountry()
-        );
-
         UserSimpleDTO userDTO = new UserSimpleDTO(
                 user.getId(),
                 user.getDisplayName(),
@@ -348,7 +339,19 @@ public class ExperienceServiceTest extends TestDataBase {
                 null
         );
 
+        savedExperience.setDate(formDTO.date());
+
         ExperienceDTO result = experienceService.createExperience(formDTO);
+
+        CitySimpleDTO cityDTO = new CitySimpleDTO(
+                city.getId(),
+                city.getName(),
+                city.getDescription(),
+                city.getCountry(),
+                null,
+                city.getLatitude(),
+                city.getLongitude()
+        );
 
         ExperienceDTO expectedDTO = new ExperienceDTO(
                 result.id(),

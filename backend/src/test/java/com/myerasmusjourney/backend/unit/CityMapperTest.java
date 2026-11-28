@@ -93,6 +93,60 @@ public class CityMapperTest {
             assertEquals(id, dto.id());
             assertEquals(cities.get(i).getName(), dto.name());
             assertEquals(cities.get(i).getCountry(), dto.country());
+            assertEquals(cities.get(i).getLongitude(), dto.longitude());
+            assertEquals(cities.get(i).getLatitude(), dto.latitude());
+            assertNull(dto.averageRating());
+            id += 1;
+            i ++;
+        }
+    }
+
+    @Test
+    void testToSimpleDTOsWithRatings() {
+        City madrid = new City(
+                "Madrid",
+                "Spain",
+                "Capital of Spain",
+                -3.703507,
+                40.416782
+        );
+        madrid.setId(1L);
+
+        City rome = new City(
+                "Rome",
+                "Italy",
+                "Capital of Italy",
+                -3.73507,
+                40.41682
+        );
+        rome.setId(2L);
+
+        City berlin = new City(
+                "Berlin",
+                "Germany",
+                "Capital of Germany",
+                -3.70357,
+                40.16782
+        );
+        berlin.setId(3L);
+
+        List<City> cities = List.of(madrid, rome, berlin);
+        List<Double> ratings = List.of(1.2, 4.7, 7.6);
+
+        Collection<CitySimpleDTO> result = cityMapper.toSimpleDTOs(cities, ratings);
+
+        assertNotNull(result);
+        assertEquals(3, result.size());
+
+        long id = 1L;
+        int i = 0;
+        for(CitySimpleDTO dto: result){
+            assertEquals(id, dto.id());
+            assertEquals(cities.get(i).getName(), dto.name());
+            assertEquals(cities.get(i).getCountry(), dto.country());
+            assertEquals(cities.get(i).getLongitude(), dto.longitude());
+            assertEquals(cities.get(i).getLatitude(), dto.latitude());
+            assertEquals(ratings.get(i), dto.averageRating());
             id += 1;
             i ++;
         }

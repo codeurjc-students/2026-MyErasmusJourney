@@ -277,7 +277,7 @@ public class CityServiceTest extends TestDataBase {
 
         experienceRepository.saveAll(experiences);
 
-        List<CitySimpleDTO> expectedList = cityMapper.toSimpleDTOs(List.of(madrid, rome, berlin));
+        List<CitySimpleDTO> expectedList = cityMapper.toSimpleDTOs(List.of(madrid, rome, berlin), List.of(8.5, 7.0, 8.5));
 
         List<CitySimpleDTO> resultList = cityService.getTrendingCities();
 
@@ -300,17 +300,28 @@ public class CityServiceTest extends TestDataBase {
         assertTrue(cities.stream()
                 .anyMatch(city ->
                         city.name().equals("Madrid") &&
-                                city.country().equals("Spain")));
+                        city.country().equals("Spain") &&
+                        city.averageRating() != null &&
+                        city.longitude() != null &&
+                        city.latitude() != null
+                )
+        );
 
         assertTrue(cities.stream()
                 .anyMatch(city ->
                         city.name().equals("Rome") &&
-                                city.country().equals("Italy")));
+                        city.country().equals("Italy")&&
+                        city.averageRating() != null &&
+                        city.longitude() != null &&
+                        city.latitude() != null));
 
         assertTrue(cities.stream()
                 .anyMatch(city ->
                         city.name().equals("Berlin") &&
-                                city.country().equals("Germany")));
+                        city.country().equals("Germany")&&
+                        city.averageRating() != null &&
+                        city.longitude() != null &&
+                        city.latitude() != null));
     }
 
     @Test

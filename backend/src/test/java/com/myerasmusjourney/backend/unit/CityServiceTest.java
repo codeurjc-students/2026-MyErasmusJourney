@@ -254,14 +254,17 @@ public class CityServiceTest {
         );
 
         List<CitySimpleDTO> expected = List.of(
-                new CitySimpleDTO(null, "Madrid", "", "Spain"),
-                new CitySimpleDTO(null, "Rome", "", "Italy"),
-                new CitySimpleDTO(null, "Berlin", "", "Germany")
+                new CitySimpleDTO(null, "Madrid", "", "Spain", 8.5, 40.416782, -3.703507),
+                new CitySimpleDTO(null, "Rome", "", "Italy", 7.0, 40.416782, -3.703507),
+                new CitySimpleDTO(null, "Berlin", "", "Germany", 8.5, 40.416782, -3.703507)
         );
+
+        List<Double> ratings = List.of(8.5, 7.5, 8.5);
 
         when(cityRepository.findAll()).thenReturn(cities);
         when(cityRepository.findRecentExperiencesOfCity(any(String.class), any(String.class), any(LocalDate.class), any(LocalDate.class))).thenReturn(experiences);
-        when (cityMapper.toSimpleDTOs(cities)).thenReturn(expected);
+        when(cityRepository.findAverageRatingByCityId(null)).thenReturn(8.5, 7.5, 8.5);
+        when(cityMapper.toSimpleDTOs(cities, ratings)).thenReturn(expected);
 
         List<CitySimpleDTO> result = cityService.getTrendingCities();
 
@@ -269,6 +272,11 @@ public class CityServiceTest {
         for(int i = 0; i < expected.size(); i++){
             assertEquals(expected.get(i), result.get(i));
         }
+
+        verify(cityRepository).findAll();
+        verify(cityRepository, atLeastOnce()).findRecentExperiencesOfCity(any(String.class), any(String.class), any(LocalDate.class), any(LocalDate.class));
+        verify(cityRepository, atLeastOnce()).findAverageRatingByCityId(null);
+        verify(cityMapper).toSimpleDTOs(cities, ratings);
     }
 
     @Test
@@ -279,14 +287,17 @@ public class CityServiceTest {
                 new City("Berlin", "Germany", "Berlin description", -3.703507, 40.416782)
         );
 
+        List<Double> ratings = List.of(1.5, 6.4, 8.9);
+
         List<CitySimpleDTO> expected = List.of(
-                new CitySimpleDTO(null, "Madrid", "", "Spain"),
-                new CitySimpleDTO(null, "Rome","",  "Italy"),
-                new CitySimpleDTO(null, "Berlin", "", "Germany")
+                new CitySimpleDTO(null, "Madrid", "", "Spain", 1.5, 40.416782, -3.703507),
+                new CitySimpleDTO(null, "Rome","",  "Italy", 6.4, 40.416782, -3.703507),
+                new CitySimpleDTO(null, "Berlin", "", "Germany", 8.9, 40.416782, -3.703507)
         );
 
         when(cityRepository.findAll()).thenReturn(cities);
-        when(cityMapper.toSimpleDTOs(cities)).thenReturn(expected);
+        when(cityRepository.findAverageRatingByCityId(null)).thenReturn(1.5, 6.4, 8.9);
+        when(cityMapper.toSimpleDTOs(cities, ratings)).thenReturn(expected);
 
         Collection<CitySimpleDTO> result = cityService.getCities();
 
@@ -294,7 +305,8 @@ public class CityServiceTest {
         assertEquals(expected, result);
 
         verify(cityRepository).findAll();
-        verify(cityMapper).toSimpleDTOs(cities);
+        verify(cityRepository, atLeastOnce()).findAverageRatingByCityId(null);
+        verify(cityMapper).toSimpleDTOs(cities, ratings);
     }
 
     @Test
@@ -303,7 +315,7 @@ public class CityServiceTest {
         List<CitySimpleDTO> expected = List.of();
 
         when(cityRepository.findAll()).thenReturn(cities);
-        when(cityMapper.toSimpleDTOs(cities)).thenReturn(expected);
+        when(cityMapper.toSimpleDTOs(cities, List.of())).thenReturn(expected);
 
         Collection<CitySimpleDTO> result = cityService.getCities();
 
@@ -311,7 +323,7 @@ public class CityServiceTest {
         assertTrue(result.isEmpty());
 
         verify(cityRepository).findAll();
-        verify(cityMapper).toSimpleDTOs(cities);
+        verify(cityMapper).toSimpleDTOs(cities, List.of());
     }
 
     @Test

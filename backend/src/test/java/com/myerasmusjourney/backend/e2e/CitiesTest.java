@@ -169,7 +169,10 @@ public class CitiesTest extends AuthenticatedE2ETest {
                 .body("[0].id", notNullValue())
                 .body("[0].name", notNullValue())
                 .body("[0].country", notNullValue())
-                .body("[0].description", notNullValue());
+                .body("[0].description", notNullValue())
+                .body("[0].longitude", notNullValue())
+                .body("[0].latitude", notNullValue())
+                .body("[0].averageRating", greaterThanOrEqualTo(0.0F));
     }
 
     @Test
@@ -184,7 +187,10 @@ public class CitiesTest extends AuthenticatedE2ETest {
                 .body("[0].id", notNullValue())
                 .body("[0].name", notNullValue())
                 .body("[0].country", notNullValue())
-                .body("[0].description", notNullValue());
+                .body("[0].description", notNullValue())
+                .body("[0].longitude", notNullValue())
+                .body("[0].latitude", notNullValue())
+                .body("[0].averageRating", greaterThanOrEqualTo(0.0F));
     }
 
     @Test

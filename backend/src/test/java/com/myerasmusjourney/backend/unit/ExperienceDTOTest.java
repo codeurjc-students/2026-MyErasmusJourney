@@ -21,7 +21,7 @@ public class ExperienceDTOTest {
 
     @Test
     void testDTOCreation() {
-        CitySimpleDTO citySimpleDTO = new CitySimpleDTO(1L, "Madrid", "Description", "Spain");
+        CitySimpleDTO citySimpleDTO = new CitySimpleDTO(1L, "Madrid", "Description", "Spain", null, 3.703507, -40.25);
         ExperienceDTO exp = new ExperienceDTO(3L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1", List.of(Category.Culture, Category.Transportation), citySimpleDTO, null, List.of(), List.of());
         assertNotNull(exp);
         assertEquals(3L, exp.id());
@@ -52,7 +52,7 @@ public class ExperienceDTOTest {
     @Test
     void testComparingDTOs() {
         UserSimpleDTO userSimpleDTO = new UserSimpleDTO(2L, "Test", "test@gamil.com", null);
-        CitySimpleDTO citySimpleDTO = new CitySimpleDTO(1L, "Madrid", "Description", "Spain");
+        CitySimpleDTO citySimpleDTO = new CitySimpleDTO(1L, "Madrid", "Description", "Spain", 1.4, 3.703507, -40.25);
 
         ExperienceDTO exp = new ExperienceDTO(3L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1", List.of(Category.Culture, Category.Transportation), citySimpleDTO, userSimpleDTO, List.of(), List.of());
         ExperienceDTO exp2 = new ExperienceDTO(3L, LocalDate.of(2024, 3, 26), 6.8F, "Titulo1", "Descripción1", List.of(Category.Culture, Category.Transportation), citySimpleDTO, userSimpleDTO, List.of(), List.of());
