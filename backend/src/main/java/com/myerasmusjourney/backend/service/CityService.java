@@ -73,7 +73,13 @@ public class CityService {
 
     public Collection<CitySimpleDTO> getCities() {
         List<City> cities = cityRepository.findAll();
-        return cityMapper.toSimpleDTOs(cities);
+        List<Double>cityRatings = new LinkedList<>();
+        for (City city: cities){
+            Double rating = cityRepository.findAverageRatingByCityId(city.getId());
+            if (rating != null) cityRatings.add(rating);
+            else cityRatings.add(0.0);
+        }
+        return cityMapper.toSimpleDTOs(cities, cityRatings);
     }
 
     @Transactional

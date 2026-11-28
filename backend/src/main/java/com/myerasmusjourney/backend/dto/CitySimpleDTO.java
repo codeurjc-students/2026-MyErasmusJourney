@@ -4,5 +4,8 @@ public record CitySimpleDTO (
     Long id,
     String name,
     String description,
-    String country
+    String country,
+    Double averageRating,
+    Double latitude,
+    Double longitude
 ){}
