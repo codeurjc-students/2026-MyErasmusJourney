@@ -146,10 +146,16 @@ public class CityService {
         }
         trendingCities.sort(Map.Entry.<Double, City>comparingByKey().reversed());
 
-        if(trendingCities.size()>7) {
-            return cityMapper.toSimpleDTOs(trendingCities.stream().map(Map.Entry::getValue).toList().subList(0,7));
+        List<Double> cityRatings = new LinkedList<>();
+
+        for (Map.Entry<Double, City> entry: trendingCities){
+            cityRatings.add(cityRepository.findAverageRatingByCityId(entry.getValue().getId()));
         }
 
-        return cityMapper.toSimpleDTOs(trendingCities.stream().map(Map.Entry::getValue).toList());
+        if(trendingCities.size()>7) {
+            return cityMapper.toSimpleDTOs(trendingCities.stream().map(Map.Entry::getValue).toList().subList(0,7), cityRatings.subList(0, 7));
+        }
+
+        return cityMapper.toSimpleDTOs(trendingCities.stream().map(Map.Entry::getValue).toList(), cityRatings);
     }
 }
