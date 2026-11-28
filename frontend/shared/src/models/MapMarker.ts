@@ -3,5 +3,5 @@ export interface MapMarker {
     longitude: number;
     title: string;
     rating: number;
-    id: number;
+    link: string;
 }
