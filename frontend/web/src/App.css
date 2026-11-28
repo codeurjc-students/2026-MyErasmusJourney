@@ -97,6 +97,14 @@ button {
   max-width: 100%;
 }
 
+.my-erasmus-popup .maplibregl-popup-content {
+    width: fit-content;
+    max-width: calc(100vw - 2rem);
+    border-radius: 1.25rem;
+    padding: 0.75rem;
+    box-shadow: 0 0.25rem 0.75rem rgba(30, 58, 95, 0.2);
+}
+
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: "Inter Variable", sans-serif;

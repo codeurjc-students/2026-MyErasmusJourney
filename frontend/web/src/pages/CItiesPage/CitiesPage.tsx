@@ -4,6 +4,7 @@ import MapComponent from "@/components/Map/MapComponent";
 import { ApiError } from "@shared/api/apiError";
 import type { cityServiceProps } from "@shared/interfaces/cityServiceProps";
 import type { CitySimpleDTO } from "@shared/models/CitySimpleDTO";
+import type { MapMarker } from "@shared/models/MapMarker";
 import { createCityService } from "@shared/services/city.service";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,12 +17,41 @@ export default function CitiesPage({ cityService = createCityService(API) }: cit
 
     const [loading, setLoading] = useState<boolean>(true);
 
+    const [marks, setMarks] = useState<MapMarker[]>([]);
+
     const navigate = useNavigate();
 
     const medalImages = ["/images/firstIcon.png", "/images/secondIcon.png", "/images/thirdIcon.png"];
 
     useEffect(() => {
         const fetchCities = async () => {
+            try {
+                const citiesData = await cityService.getAll();
+                let markers: MapMarker[] = []
+                for (let i = 0; i < citiesData.length; i++) {
+                    let city: CitySimpleDTO | undefined = citiesData.at(i);
+                    if (city != undefined) {
+                        markers[i] = {
+                            title: city.name,
+                            latitude: city.latitude,
+                            longitude: city.longitude,
+                            rating: city.averageRating,
+                            link: `/cities/${city.id}`
+                        }
+                    }
+                }
+                setMarks(markers);
+            } catch (error) {
+                if (error instanceof ApiError && (error.status >= 500)) {
+                    console.error(error);
+                    navigate("/error");
+                    return;
+                }
+                console.error("Error fetching trending cities:", error);
+            }
+        }
+
+        const fetchTrendingCities = async () => {
             try {
                 const citiesData = await cityService.getTrending();
                 setTrendingCities(citiesData);
@@ -35,13 +65,13 @@ export default function CitiesPage({ cityService = createCityService(API) }: cit
                 console.error("Error fetching trending cities:", error);
             }
         }
-
         fetchCities();
+        fetchTrendingCities();
     }, [])
 
     if (loading) {
-        return(<>
-            <LoadingComponent title="Obtaining cities" description="Gathering the cities with the greatest experiences"/>
+        return (<>
+            <LoadingComponent title="Obtaining cities" description="Gathering the cities with the greatest experiences" />
         </>)
     }
 
@@ -51,7 +81,7 @@ export default function CitiesPage({ cityService = createCityService(API) }: cit
             <div className="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-6 items-stretch">
                 <main className="w-full rounded-2xl bg-white shadow-xl p-4 md:p-6">
                     <h3 className="text-center mb-6">Cities</h3>
-                    <MapComponent latitude={57} longitude={15} zoom={2.6} marks={[]} markerType="cities"/>
+                    <MapComponent latitude={57} longitude={15} zoom={2.6} marks={marks} markerType="cities" />
                 </main>
 
                 <aside className="w-full rounded-2xl bg-white shadow-xl p-5 md:p-6">
